@@ -2,21 +2,24 @@
 import os
 from pico2d import *
 
-# Global Constants
+# Global : Constants
 false = False
 true = True
+
+# Global : Variables
 running = true
 
+sprite_list = {}                                # 스프라이트는 이름으로 구분된다.
+instance_list = []                              # 개체는 순서가 있다.
+instance_iterator = (i for i in instance_list)  # 객체의 반복기를 저장한다.
 
-class null:
-    def __bool__(self):
-        return false
+# Global : Functions
+def instance_iter_update(list = instance_list): # Update a iterator of instance list.
+    global instance_iterator
+    instance_iterator = (i for i in list)
 
-    def __abs__(self):
-        return 0
-
-
-class gravitons:
+# Object : Gravitons
+class graviton:
     name = "None"
 
     depth = 0
@@ -25,7 +28,7 @@ class gravitons:
     gravity_current = 0
     gravity = 0
 
-    sprite = null
+    sprite = None
 
     def __init__(self, ndepth = 0, nx = 0, ny = 0):
         self.depth = ndepth
@@ -34,40 +37,54 @@ class gravitons:
     def __str__(self):
         return self.name
 
+    def event_step(self):
+        pass
 
+    def event_draw(self):
+        pass
+
+# Main : Canvas Settings
 open_canvas()
 show_cursor()
 
-# Event
-def handle_events():
-    global running
-    global x
-    anevents = get_events()
-    for event in anevents:
-        if event.type == SDL_QUIT:
+# Event : Global
+def event_global():
+    global events, running
+
+    for event in events:
+        if (event.type == SDL_QUIT):
             running = False
-        elif event.type == SDL_KEYDOWN:
-            if event.key == SDLK_RIGHT:
-                x += 20
-            elif event.key == SDLK_LEFT:
-                x -= 20
-            elif event.key == SDLK_ESCAPE:
-                running = False
+        elif (event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE):
+            running = False
 
-# MAIN
-grass = load_image('grass.png')
-character = load_image('run_animation.png')
+    return running
 
-x = 0
-frame = 0
+
+# Main : Load Sprites
+#grass = load_image('grass.png')
+#character = load_image('run_animation.png')
+
 while running:
     clear_canvas()
-    grass.draw(400, 30)
-    character.clip_draw(frame * 100, 0, 100, 100, x, 90)
-    update_canvas()
-    frame = (frame + 1) % 8
+
+    events = get_events()
+    if not event_global():
+        break
+
+    if instance_list.__sizeof__() > 0:
+        instance_iter_update()
+        for inst in instance_iterator:
+            if inst.sprite != None:
+                inst.sprite.event_step()
+
+        for inst in instance_iterator:
+            inst.event_draw()
+        update_canvas()
+
+    #grass.draw(400, 30)
+    #character.clip_draw(frame * 100, 0, 100, 100, x, 90)
 
     delay(0.05)
-    handle_events()
+
 
 close_canvas()
