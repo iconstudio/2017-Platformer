@@ -1,6 +1,7 @@
 
 from pico2d import *
 import math
+import random
 
 # Global : Constants
 false = False
@@ -31,6 +32,12 @@ def instance_iter_update(list = instance_list): # Update the iterator of a insta
     global instance_iterator
     instance_iterator = (i for i in list)
 
+def irandom(n):
+    return random.randint(0, int(n))
+
+def irandom_range(n1, n2):
+    return random.randint(int(n1), int(n2))
+
 # Object : Gravitons
 class graviton:
     name = "None"
@@ -43,7 +50,7 @@ class graviton:
     gravity_current = 0
     gravity = 0
 
-    def __init__(self, ndepth = int(0), nvis = true, nx = int(0), ny = int(0)):
+    def __init__(self, ndepth = int(0), nx = int(0), ny = int(0)):
         self.depth = ndepth
         self.x, self.y = nx, ny
 
@@ -57,8 +64,8 @@ class graviton:
         pass
 
 # Object : Functions
-def instance_create(Ty, depth = int(0), vis = false, x = int(0), y = int(0)):
-    return Ty(depth, vis, x, y)
+def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
+    return Ty(depth, x, y)
 
 # Main : Canvas Settings
 open_canvas()
@@ -84,7 +91,7 @@ def event_global():
 while running:
     clear_canvas()
 
-    instance_create(graviton, 0, true, 10, 100)
+    instance_create(graviton, 0, 10, 100)
 
     events = get_events()
     if not event_global():
@@ -93,8 +100,7 @@ while running:
     if instance_list.__sizeof__() > 0:
         instance_iter_update()
         for inst in instance_iterator:
-            if inst.sprite != None:
-                inst.sprite.event_step()
+            inst.sprite.event_step()
 
         for inst in instance_iterator:
             inst.event_draw()
