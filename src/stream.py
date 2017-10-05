@@ -20,7 +20,10 @@ class gravitons:
 
     depth = 0
     x, y = 0, 0
+
+    gravity_current = 0
     gravity = 0
+
     sprite = null
 
     def __init__(self, ndepth = 0, nx = 0, ny = 0):
@@ -33,6 +36,11 @@ class gravitons:
 open_canvas()
 show_cursor()
 
+while (true):
+    pass
+
 
 #grass = load_image('grass.png')
 #character = load_image('run_animation.png')
+
+close_canvas()
