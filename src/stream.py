@@ -13,7 +13,7 @@ running = true
 sprite_list = {}                                # 스프라이트는 이름으로 구분된다.
 instance_list = []                              # 개체는 순서가 있다.
 instance_iterator = (i for i in instance_list)  # 객체의 반복기를 저장한다.
-instance_list_a = {}                 #
+#event_queue = []                               # 이벤트 목록
 
 # Global : Functions
 def sqr(v):
@@ -37,6 +37,22 @@ def irandom(n):
 
 def irandom_range(n1, n2):
     return random.randint(int(n1), int(n2))
+
+# Object : Game
+class game:
+    width = 960
+    height = 540
+
+    def __init__(self, nw = int(960), nh = int(540)):
+        self.width = nw
+        self.height = nh
+
+    def __del__(self):
+        close_canvas()
+
+    def begin(self):
+        open_canvas(self.width, self.height, true)
+        show_cursor()
 
 # Object : Gravitons
 class graviton:
@@ -67,15 +83,15 @@ class graviton:
 def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
     return Ty(depth, x, y)
 
-# Main : Canvas Settings
-open_canvas()
-show_cursor()
+# Main : Game Settings
+Game = game()
+Game.begin()
 
 # Event : Global
 def event_global():
-    global events, running
+    global event_queue, running
 
-    for event in events:
+    for event in event_queue:
         if (event.type == SDL_QUIT):
             running = False
         elif (event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE):
@@ -83,17 +99,10 @@ def event_global():
 
     return running
 
-
-# Main : Load Sprites
-#grass = load_image('grass.png')
-#character = load_image('run_animation.png')
-
 while running:
     clear_canvas()
 
-    instance_create(graviton, 0, 10, 100)
-
-    events = get_events()
+    event_queue = get_events()
     if not event_global():
         break
 
@@ -109,7 +118,6 @@ while running:
     #grass.draw(400, 30)
     #character.clip_draw(frame * 100, 0, 100, 100, x, 90)
 
-    delay(0.05)
+    delay(0.03)
 
-
-close_canvas()
+del Game
