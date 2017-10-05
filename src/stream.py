@@ -1,6 +1,6 @@
 
-import os
 from pico2d import *
+import math
 
 # Global : Constants
 false = False
@@ -12,15 +12,30 @@ running = true
 sprite_list = {}                                # 스프라이트는 이름으로 구분된다.
 instance_list = []                              # 개체는 순서가 있다.
 instance_iterator = (i for i in instance_list)  # 객체의 반복기를 저장한다.
+instance_list_a = {}                 #
 
 # Global : Functions
-def instance_iter_update(list = instance_list): # Update a iterator of instance list.
+def sqr(v):
+    return v * v
+
+def degtorad(degree):
+    return degree * math.pi / 180
+
+def radtodeg(radian):
+    return radian * 180 / math.pi
+
+def point_distance(x1, y1, x2, y2):
+    return math.hypot((x2 - x1), (y2 - y1))
+
+def instance_iter_update(list = instance_list): # Update the iterator of a instance list.
     global instance_iterator
     instance_iterator = (i for i in list)
 
 # Object : Gravitons
 class graviton:
     name = "None"
+    sprite = None
+    visible = true
 
     depth = 0
     x, y = 0, 0
@@ -28,9 +43,7 @@ class graviton:
     gravity_current = 0
     gravity = 0
 
-    sprite = None
-
-    def __init__(self, ndepth = 0, nx = 0, ny = 0):
+    def __init__(self, ndepth = int(0), nvis = true, nx = int(0), ny = int(0)):
         self.depth = ndepth
         self.x, self.y = nx, ny
 
@@ -42,6 +55,10 @@ class graviton:
 
     def event_draw(self):
         pass
+
+# Object : Functions
+def instance_create(Ty, depth = int(0), vis = false, x = int(0), y = int(0)):
+    return Ty(depth, vis, x, y)
 
 # Main : Canvas Settings
 open_canvas()
@@ -66,6 +83,8 @@ def event_global():
 
 while running:
     clear_canvas()
+
+    instance_create(graviton, 0, true, 10, 100)
 
     events = get_events()
     if not event_global():
