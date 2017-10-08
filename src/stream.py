@@ -9,7 +9,7 @@ true = True
 
 # Global : Variables
 running = true
-
+c = c_float()
 sprite_list = {}                                # 스프라이트는 이름으로 구분된다.
 instance_list = []                              # 개체는 순서가 있다.
 instance_iterator = (i for i in instance_list)  # 객체의 반복기를 저장한다.
@@ -42,6 +42,7 @@ def irandom_range(n1, n2):
 class game:
     width = 960
     height = 540
+    dgan = 0.05
 
     def __init__(self, nw = int(960), nh = int(540)):
         self.width = nw
@@ -55,7 +56,7 @@ class game:
         show_cursor()
 
 # Object : Sprites
-class sprite():
+class sprite:
     number = 0
 
     def __init__(self, filepath, number):
@@ -65,8 +66,8 @@ class sprite():
         self.number = number
         # size of each index
         try:
-            self.width = self.__data__.w / number
-            self.height = self.__data__.h / number
+            self.width = int(self.__data__.w / number)
+            self.height = int(self.__data__.h / number)
 
             tempTy = type(number)
             if tempTy != int and tempTy != float:
@@ -74,11 +75,11 @@ class sprite():
         except ZeroDivisionError:
             raise RuntimeError("스프라이트의 갯수는 0개가 될 수 없습니다.")
 
-    def draw(self, index, x, y, xscale = int(1), yscale = int(1), rot = float(0.0)):
+    def draw(self, index, x, y, xscale = float(1), yscale = float(1), rot = float(0.0)):
         if rot != 0.0: # pico2d does not support scaling + rotating draw.
-            self.__data__.rotate_draw(rot, x, y, self.width * xscale, self.height * yscale)
+            self.__data__.rotate_draw(rot, x, y, int(self.width * xscale), int(self.height * yscale))
         else:
-            self.__data__.clip_draw(index * self.width, 0, self.width, self.height, x, y, self.width * xscale, self.height * yscale)
+            self.__data__.clip_draw(int(index * self.width), 0, self.width, self.height, x, y, int(self.width * xscale), int(self.height * yscale))
 
 # Object : Gravitons
 class graviton(object):
@@ -102,14 +103,20 @@ class graviton(object):
     def __str__(self):
         return self.name
 
-    def draw_self(self):
+    # Below methods are common-functions for all object that inherites graviton.
+    def draw_self(self): # Simply draws its sprite on its position.
         if (self.sprite_index != None and type(self.sprite_index) == sprite):
             draw_sprite(self.sprite_index, self.image_index, self.x, self.y)
 
-    def event_step(self):
+    def event_step(self): # The basic machanism of objects.
+        """
+        event_step()
+
+        :return: nothing
+        """
         pass
 
-    def event_draw(self):
+    def event_draw(self): # This will be working for drawing.
         self.draw_self()
 
 # Object : Functions
@@ -118,8 +125,8 @@ def sprite_load(filepath, name = str("default"), number = int(1)):
     sprite_list[name] = new
     return new
 
-def draw_sprite(sprite, index, x = int(0), y = int(0), xscale = int(1), yscale = int(1), rot = float(0.0)):
-    sprite.draw(index, x, y, xscale, yscale, rot)
+def draw_sprite(spr, index, x = int(0), y = int(0), xscale = float(1), yscale = float(1), rot = float(0.0)):
+    spr.draw(index, x, y, xscale, yscale, rot)
 
 def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
     tempObj = Ty(depth, x, y)
@@ -132,7 +139,7 @@ Game = game()
 Game.begin()
 
 test = sprite_load("test.png", "ball", 1)
-testo = instance_create(graviton)
+testo = instance_create(graviton, 0, 300, 200)
 testo.sprite_index = test
 
 # Event : Global
@@ -157,16 +164,17 @@ while running:
     if len(instance_list) > 0:
         #print(instance_list.__len__())
         instance_iter_update()
-        for inst in instance_iterator:
+        for inst in instance_list:
             inst.event_step()
 
-        for inst in instance_iterator:
-            inst.event_draw()
+        for inst in instance_list:
+            if inst.visible:
+                inst.event_draw()
         update_canvas()
 
     #grass.draw(400, 30)
     #character.clip_draw(frame * 100, 0, 100, 100, x, 90)
 
-    delay(0.03)
+    delay(0.05)
 
 del Game
