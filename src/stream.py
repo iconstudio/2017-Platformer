@@ -2,17 +2,20 @@
 from pico2d import *
 import math
 import random
+import collections
 
 # Global : Constants
 false = False
 true = True
 
 # Global : Variables
-running = true
-c = c_float()
+running = true                                  # 전역 진행 변수
+
 sprite_list = {}                                # 스프라이트는 이름으로 구분된다.
+instance_last = None                            # 마지막 개체
 instance_list = []                              # 개체는 순서가 있다.
-instance_iterator = (i for i in instance_list)  # 객체의 반복기를 저장한다.
+instance_draw_list = []                         # 개체 그리기 목록
+instance_update = false                         # 개체 반복기 갱신 여부
 #event_queue = []                               # 이벤트 목록
 
 # Global : Functions
@@ -27,10 +30,6 @@ def radtodeg(radian):
 
 def point_distance(x1, y1, x2, y2):
     return math.hypot((x2 - x1), (y2 - y1))
-
-def instance_iter_update(list = instance_list): # Update the iterator of a instance list.
-    global instance_iterator
-    instance_iterator = (i for i in list)
 
 def irandom(n):
     return random.randint(0, int(n))
@@ -54,6 +53,54 @@ class game:
     def begin(self):
         open_canvas(self.width, self.height, true)
         show_cursor()
+
+        self.__draw_update__ = false
+
+    # Proceed instance
+    def instance_draw_update(self):
+        global instance_draw_list
+        if self.__draw_update__:
+            del instance_draw_list
+            self.__draw_update__ = false
+            instance_draw_list = []
+
+        for inst in instance_list:
+            instance_draw_list.append(inst)
+
+    # Event : Global
+    def event_global(self):
+        global event_queue, running
+
+        for event in event_queue:
+            if (event.type == SDL_QUIT):
+                running = False
+            elif (event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE):
+                running = False
+
+        return running
+
+    # Main Procedure
+    def process(self):
+        while running:
+            global event_queue
+            clear_canvas()
+
+            event_queue = get_events()
+            if not self.event_global():
+                break
+
+            if len(instance_list) > 0:
+                for inst in instance_list:
+                    inst.event_step()
+
+                self.instance_draw_update()
+                for inst in instance_draw_list:
+                    if inst.visible:
+                        inst.event_draw()
+                update_canvas()
+
+            delay(self.dgan)
+
 
 # Object : Sprites
 class sprite:
@@ -84,6 +131,7 @@ class sprite:
 # Object : Gravitons
 class graviton(object):
     name = "None"
+    next = None
 
     sprite_index = None
     image_index = float(0)
@@ -93,6 +141,7 @@ class graviton(object):
     depth = 0
 
     x, y = 0, 0
+    xVel, yVel = 0, 0
     gravity_current = 0
     gravity = 0
 
@@ -109,11 +158,6 @@ class graviton(object):
             draw_sprite(self.sprite_index, self.image_index, self.x, self.y)
 
     def event_step(self): # The basic machanism of objects.
-        """
-        event_step()
-
-        :return: nothing
-        """
         pass
 
     def event_draw(self): # This will be working for drawing.
@@ -129,10 +173,17 @@ def draw_sprite(spr, index, x = int(0), y = int(0), xscale = float(1), yscale = 
     spr.draw(index, x, y, xscale, yscale, rot)
 
 def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
-    tempObj = Ty(depth, x, y)
-    instance_list.append(tempObj)
+    global instance_update, instance_last
 
-    return tempObj
+    temp = Ty(depth, x, y)
+    if instance_last != None and isinstance(instance_last, graviton):
+        instance_last.next = temp
+
+    instance_last = temp
+    instance_list.append(instance_last)
+    instance_update = true
+
+    return instance_last
 
 # Main : Game Settings
 Game = game()
@@ -142,39 +193,6 @@ test = sprite_load("test.png", "ball", 1)
 testo = instance_create(graviton, 0, 300, 200)
 testo.sprite_index = test
 
-# Event : Global
-def event_global():
-    global event_queue, running
-
-    for event in event_queue:
-        if (event.type == SDL_QUIT):
-            running = False
-        elif (event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE):
-            running = False
-
-    return running
-
-while running:
-    clear_canvas()
-
-    event_queue = get_events()
-    if not event_global():
-        break
-
-    if len(instance_list) > 0:
-        #print(instance_list.__len__())
-        instance_iter_update()
-        for inst in instance_list:
-            inst.event_step()
-
-        for inst in instance_list:
-            if inst.visible:
-                inst.event_draw()
-        update_canvas()
-
-    #grass.draw(400, 30)
-    #character.clip_draw(frame * 100, 0, 100, 100, x, 90)
-
-    delay(0.05)
+Game.process()
 
 del Game
