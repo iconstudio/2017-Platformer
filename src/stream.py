@@ -7,6 +7,8 @@ import collections
 # Global : Constants
 false = False
 true = True
+scr_defw = 608
+scr_defh = 352
 
 # Global : Variables
 running = true                                  # 전역 진행 변수
@@ -14,6 +16,7 @@ running = true                                  # 전역 진행 변수
 sprite_list = {}                                # 스프라이트는 이름으로 구분된다.
 instance_last = None                            # 마지막 개체
 instance_list = []                              # 개체는 순서가 있다.
+instance_list_spec = [[]]                       # 객체 종류 별 목록
 instance_draw_list = []                         # 개체 그리기 목록
 instance_update = false                         # 개체 반복기 갱신 여부
 #event_queue = []                               # 이벤트 목록
@@ -21,6 +24,14 @@ instance_update = false                         # 개체 반복기 갱신 여부
 # Global : Functions
 def sqr(v):
     return v * v
+
+def sign(x):
+    ret = 0
+    if x > 0:
+        ret = 1
+    elif x < 0:
+        ret = - 1
+    return ret
 
 def degtorad(degree):
     return degree * math.pi / 180
@@ -39,11 +50,11 @@ def irandom_range(n1, n2):
 
 # Object : Game
 class game:
-    width = 960
-    height = 540
+    width = scr_defw
+    height = scr_defh
     dgan = 0.05
 
-    def __init__(self, nw = int(960), nh = int(540)):
+    def __init__(self, nw = int(scr_defw), nh = int(scr_defh)):
         self.width = nw
         self.height = nh
 
@@ -63,9 +74,8 @@ class game:
             del instance_draw_list
             self.__draw_update__ = false
             instance_draw_list = []
-
-        for inst in instance_list:
-            instance_draw_list.append(inst)
+            for inst in instance_list:
+                instance_draw_list.append(inst)
 
     # Event : Global
     def event_global(self):
@@ -100,7 +110,6 @@ class game:
                 update_canvas()
 
             delay(self.dgan)
-
 
 # Object : Sprites
 class sprite:
@@ -158,6 +167,15 @@ class graviton(object):
             draw_sprite(self.sprite_index, self.image_index, self.x, self.y)
 
     def event_step(self): # The basic machanism of objects.
+        if self.xVel != 0:
+            xc = self.x + self.xVel + sign(self.xVel)
+
+        if self.yVel < 0:
+            yc = self.y + self.yVel - 1
+        else:
+            yc = self.y + self.yVel + 1
+
+
         pass
 
     def event_draw(self): # This will be working for drawing.
@@ -189,9 +207,7 @@ def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
 Game = game()
 Game.begin()
 
-test = sprite_load("test.png", "ball", 1)
 testo = instance_create(graviton, 0, 300, 200)
-testo.sprite_index = test
 
 Game.process()
 
