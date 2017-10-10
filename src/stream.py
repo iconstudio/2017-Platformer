@@ -16,7 +16,17 @@ running = true                                  # 전역 진행 변수
 sprite_list = {}                                # 스프라이트는 이름으로 구분된다.
 instance_last = None                            # 마지막 개체
 instance_list = []                              # 개체는 순서가 있다.
-instance_list_spec = [[]]                       # 객체 종류 별 목록
+'''
+        <List> instance_list_spec:
+
+            목적: 객체를 종류 별로 담기 위한 리스트
+            용법:
+                instance_list_spec[객체 이름] = []
+                instance_list_spec[객체 이름].append(객체 ID)
+
+            비고: 객체 이름 외에도 "Solid", "Particle" 등의 구별자 사용.
+'''
+instance_list_spec = {}                         # 객체 종류 별 목록
 instance_draw_list = []                         # 개체 그리기 목록
 instance_update = false                         # 개체 반복기 갱신 여부
 #event_queue = []                               # 이벤트 목록
