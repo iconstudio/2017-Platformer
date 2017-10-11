@@ -2,7 +2,13 @@
 from pico2d import *
 import math
 import random
+import types
+import ctypes
 import collections
+"""
+        수정 사항:
+            1. pico2d.py 의 open_canvas 함수 수정 (창 핸들 반환)
+"""
 
 # Global : Constants
 false = False
@@ -28,7 +34,7 @@ instance_list = []                              # 개체는 순서가 있다.
 '''
 instance_list_spec = {}                         # 객체 종류 별 목록
 instance_draw_list = []                         # 개체 그리기 목록
-instance_update = false                         # 개체 반복기 갱신 여부
+instance_update = false                         # 개체 갱신 여부
 #event_queue = []                               # 이벤트 목록
 
 # Global : Functions
@@ -59,7 +65,8 @@ def irandom_range(n1, n2):
     return random.randint(int(n1), int(n2))
 
 # Object : Game
-class game:
+class __Game:
+    hwnd = None
     width = scr_defw
     height = scr_defh
     dgan = 0.05
@@ -72,17 +79,20 @@ class game:
         close_canvas()
 
     def begin(self):
-        open_canvas(self.width, self.height, true)
+        self.hwnd = open_canvas(self.width, self.height, true)
+        SDL_SetWindowSize(self.hwnd, scr_defw * 2, scr_defh * 2)
+        #tx, ty = 0, 0
+        #SDL_GetWindowPosition(self.hwnd, ctypes.pointer(tx), ctypes.pointer(ty))
+        #SDL_SetWindowPosition(self.hwnd, ctypes.c_long(tx - (scr_defw / 2)), ctypes.c_long(ty - (scr_defh / 2)))
         show_cursor()
-
-        self.__draw_update__ = false
+        hide_lattice()
 
     # Proceed instance
     def instance_draw_update(self):
-        global instance_draw_list
-        if self.__draw_update__:
+        global instance_draw_list, instance_update
+        if instance_update:
             del instance_draw_list
-            self.__draw_update__ = false
+            instance_update = false
             instance_draw_list = []
             for inst in instance_list:
                 instance_draw_list.append(inst)
@@ -123,7 +133,7 @@ class game:
             delay(self.dgan)
 
 # Object : Sprites
-class sprite:
+class __Sprite(object):
     number = 0
 
     def __init__(self, filepath, number):
@@ -149,10 +159,11 @@ class sprite:
             self.__data__.clip_draw(int(index * self.width), 0, self.width, self.height, x, y, int(self.width * xscale), int(self.height * yscale))
 
 def place_free(dx, dy):
-    clist = instance_list_spec["Solid"]; # 고체 개체 목록 불러오기
+    #clist = instance_list_spec["Solid"]; # 고체 개체 목록 불러오기
+    return true
 
 # Object : Gravitons
-class graviton(object):
+class __Graviton(object):
     name = "None"
     next = None
 
@@ -192,7 +203,7 @@ class graviton(object):
         self.onAir = false
 
     def draw_self(self): # Simply draws its sprite on its position.
-        if (self.sprite_index != None and type(self.sprite_index) == sprite):
+        if (self.sprite_index != None):
             draw_sprite(self.sprite_index, self.image_index, self.x, self.y)
 
     def event_step(self): # The basic machanism of objects.
@@ -204,9 +215,9 @@ class graviton(object):
                 self.collide()
 
         if self.yVel < 0:
-            yc = self.y - self.yVel - 1
-        else:
             yc = self.y - self.yVel + 1
+        else:
+            yc = self.y - self.yVel - 1
 
         if place_free(self.x, yc):
             self.y -= self.yVel                     # let it moves first.
@@ -223,26 +234,27 @@ class graviton(object):
         self.draw_self()
 
 # Object : Solid Objects
-class solid(graviton):
+class __Solid(__Graviton):
     # reset some inherited variables
     name = "Solid"
+    step_enable = false
     gravity_default = 0
     xFric, yFric = 0, 0
 
 # Object : Functions
-def sprite_load(filepath, name = str("default"), number = int(1)):
-    new = sprite(filepath, number)
+def sprite_load(filepath: str, name = str("default"), number = int(1)):
+    new = __Sprite(filepath, number)
     sprite_list[name] = new
     return new
 
-def draw_sprite(spr, index, x = int(0), y = int(0), xscale = float(1), yscale = float(1), rot = float(0.0)):
+def draw_sprite(spr: __Sprite, index, x = int(0), y = int(0), xscale = float(1), yscale = float(1), rot = float(0.0)):
     spr.draw(index, x, y, xscale, yscale, rot)
 
 def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
-    global instance_update, instance_last
+    global Game, instance_update, instance_last
 
     temp = Ty(depth, x, y)
-    if instance_last != None and isinstance(instance_last, graviton):
+    if instance_last != None and isinstance(__Graviton, instance_last):
         instance_last.next = temp
 
     instance_last = temp
@@ -252,16 +264,16 @@ def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
     return instance_last
 
 # Main : Game Settings
-Game = game()
+Game = __Game()
 Game.begin()
 
 # Definitions of Special Objects ( Need a canvas )
-sMineBrick = sprite_load("~\res\img\brick_mine_0", "sMineBrick")
-class oMineBrick(solid):
+sMineBrick = sprite_load("..\\res\\img\\theme\\brick_mine_0.png", "MineBrick")
+class oMineBrick(__Solid):
     name = "Brick of Mine"
     sprite_index = sMineBrick
 
-testo = instance_create(oMineBrick, 0, 300, 200)
+testo = instance_create(oMineBrick, 0, 200, 100)
 
 Game.process()
 
