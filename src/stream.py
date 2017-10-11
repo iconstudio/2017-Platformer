@@ -111,7 +111,8 @@ class game:
 
             if len(instance_list) > 0:
                 for inst in instance_list:
-                    inst.event_step()
+                    if inst.step_enable:
+                        inst.event_step()
 
                 self.instance_draw_update()
                 for inst in instance_draw_list:
@@ -155,17 +156,22 @@ class graviton(object):
     name = "None"
     next = None
 
+    # Properties of sprite
     sprite_index = None
     image_index = float(0)
     image_speed = float(0)
-
     visible = true
     depth = 0
 
+    # for optimization
+    step_enable = true
+
     x, y = 0, 0
     xVel, yVel = 0, 0
+    xFric, yFric = 0.4, 1
     gravity_default = 0.4
     gravity = 0
+    onAir = false
 
     def __init__(self, ndepth = int(0), nx = int(0), ny = int(0)):
         self.depth = ndepth
@@ -174,7 +180,17 @@ class graviton(object):
     def __str__(self):
         return self.name
 
+    def __del__(self):
+        global instance_last, instance_list, instance_list_spec, instance_draw_list, instance_update
+
     # Below methods are common-functions for all object that inherites graviton.
+    def collide(self):
+        self.xVel = 0
+
+    def thud(self):
+        self.yVel = 0
+        self.onAir = false
+
     def draw_self(self): # Simply draws its sprite on its position.
         if (self.sprite_index != None and type(self.sprite_index) == sprite):
             draw_sprite(self.sprite_index, self.image_index, self.x, self.y)
@@ -182,21 +198,36 @@ class graviton(object):
     def event_step(self): # The basic machanism of objects.
         if self.xVel != 0:
             xc = self.x + self.xVel + sign(self.xVel)
+            if place_free(xc, self.y):
+                self.x += self.xVel
+            else:
+                self.collide()
 
         if self.yVel < 0:
-            yc = self.y + self.yVel - 1
+            yc = self.y - self.yVel - 1
         else:
-            yc = self.y + self.yVel + 1
+            yc = self.y - self.yVel + 1
 
         if place_free(self.x, yc):
+            self.y -= self.yVel                     # let it moves first.
             self.gravity = self.gravity_default
-            yVel += self.gravity
-            
-
-        pass
+            self.yVel += self.gravity
+            self.onAir = true
+        else:
+            self.gravity = 0
+            if self.xVel != 0:                      # horizontal friction works only when it is on the ground
+                self.xVel *= self.xFric
+            self.thud()
 
     def event_draw(self): # This will be working for drawing.
         self.draw_self()
+
+# Object : Solid Objects
+class solid(graviton):
+    # reset some inherited variables
+    name = "Solid"
+    gravity_default = 0
+    xFric, yFric = 0, 0
 
 # Object : Functions
 def sprite_load(filepath, name = str("default"), number = int(1)):
@@ -224,7 +255,13 @@ def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
 Game = game()
 Game.begin()
 
-testo = instance_create(graviton, 0, 300, 200)
+# Definitions of Special Objects ( Need a canvas )
+sMineBrick = sprite_load("~\res\img\brick_mine_0", "sMineBrick")
+class oMineBrick(solid):
+    name = "Brick of Mine"
+    sprite_index = sMineBrick
+
+testo = instance_create(oMineBrick, 0, 300, 200)
 
 Game.process()
 
