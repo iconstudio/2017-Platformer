@@ -147,6 +147,9 @@ class sprite:
         else:
             self.__data__.clip_draw(int(index * self.width), 0, self.width, self.height, x, y, int(self.width * xscale), int(self.height * yscale))
 
+def place_free(dx, dy):
+    clist = instance_list_spec["Solid"]; # 고체 개체 목록 불러오기
+
 # Object : Gravitons
 class graviton(object):
     name = "None"
@@ -161,7 +164,7 @@ class graviton(object):
 
     x, y = 0, 0
     xVel, yVel = 0, 0
-    gravity_current = 0
+    gravity_default = 0.4
     gravity = 0
 
     def __init__(self, ndepth = int(0), nx = int(0), ny = int(0)):
@@ -185,6 +188,10 @@ class graviton(object):
         else:
             yc = self.y + self.yVel + 1
 
+        if place_free(self.x, yc):
+            self.gravity = self.gravity_default
+            yVel += self.gravity
+            
 
         pass
 
