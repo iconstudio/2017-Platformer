@@ -13,8 +13,9 @@ import collections
 # Global : Constants
 false = False
 true = True
-scr_defw = 608
-scr_defh = 352
+scr_defw = 320
+scr_defh = 180
+scr_scale = 1
 
 # Global : Variables
 running = true                                  # 전역 진행 변수
@@ -38,6 +39,7 @@ instance_update = false                         # 개체 갱신 여부
 #event_queue = []                               # 이벤트 목록
 
 # Global : Functions
+# arithmetics
 def sqr(v):
     return v * v
 
@@ -58,11 +60,20 @@ def radtodeg(radian):
 def point_distance(x1, y1, x2, y2):
     return math.hypot((x2 - x1), (y2 - y1))
 
+# integer random
 def irandom(n):
     return random.randint(0, int(n))
 
+# integer random in range
 def irandom_range(n1, n2):
     return random.randint(int(n1), int(n2))
+
+# get percentage of ratio to x1, else then x2
+def distribute(x1, x2, ratio):
+    if irandom(100) <= ratio * 100:
+        return x1
+    else:
+        return x2
 
 # Object : Game
 class __Game:
@@ -70,6 +81,23 @@ class __Game:
     width = scr_defw
     height = scr_defh
     dgan = 0.05
+
+    class __Camera:
+        x, y = 0, 0
+        width, height = scr_defw, scr_defh
+
+        def set_pos(self, x:float = None, y:float = None):
+            if x != None:
+                self.x = x
+            if y != None:
+                self.y = y
+
+        def add_pos(self, x:float = None, y:float = None):
+            if x != None:
+                self.x += x
+            if y != None:
+                self.y += y
+    camera = __Camera()
 
     def __init__(self, nw = int(scr_defw), nh = int(scr_defh)):
         self.width = nw
@@ -80,10 +108,16 @@ class __Game:
 
     def begin(self):
         self.hwnd = open_canvas(self.width, self.height, true)
-        SDL_SetWindowSize(self.hwnd, scr_defw * 2, scr_defh * 2)
-        #tx, ty = 0, 0
-        #SDL_GetWindowPosition(self.hwnd, ctypes.pointer(tx), ctypes.pointer(ty))
-        #SDL_SetWindowPosition(self.hwnd, ctypes.c_long(tx - (scr_defw / 2)), ctypes.c_long(ty - (scr_defh / 2)))
+        SDL_SetWindowTitle(self.hwnd, ("Vampire Exodus").encode("UTF-8"))
+        SDL_SetWindowSize(self.hwnd, scr_defw * scr_scale, scr_defh * scr_scale)
+
+        x, y = ctypes.c_int(), ctypes.c_int()
+        SDL_GetWindowPosition(self.hwnd, ctypes.byref(x), ctypes.byref(y))
+        x, y = x.value, y.value
+        vscl = scr_scale * 2
+        dx, dy = int(x - scr_defw * scr_scale / vscl), int(y - scr_defh * scr_scale / vscl)
+
+        SDL_SetWindowPosition(self.hwnd, c_int(dx), c_int(dy))
         show_cursor()
         hide_lattice()
 
@@ -154,9 +188,9 @@ class __Sprite(object):
 
     def draw(self, index, x, y, xscale = float(1), yscale = float(1), rot = float(0.0)):
         if rot != 0.0: # pico2d does not support scaling + rotating draw.
-            self.__data__.rotate_draw(rot, x, y, int(self.width * xscale), int(self.height * yscale))
+            self.__data__.rotate_draw(rot, x * scr_scale, y * scr_scale, int(self.width * xscale) * scr_scale,  int(self.height * yscale) * scr_scale)
         else:
-            self.__data__.clip_draw(int(index * self.width), 0, self.width, self.height, x, y, int(self.width * xscale), int(self.height * yscale))
+            self.__data__.clip_draw(int(index * self.width), 0, self.width, self.height, x * scr_scale, y * scr_scale, int(self.width * xscale) * scr_scale, int(self.height * yscale) * scr_scale)
 
 def place_free(dx, dy):
     #clist = instance_list_spec["Solid"]; # 고체 개체 목록 불러오기
@@ -241,6 +275,16 @@ class __Solid(__Graviton):
     gravity_default = 0
     xFric, yFric = 0, 0
 
+    def __init__(self):
+        super().__init__()
+        if instance_list_spec["Solid"] is None:
+            instance_list_spec["Solid"] = []
+
+# Main : Game Settings
+Game = __Game()
+Game.begin()
+Camera = Game.camera
+
 # Object : Functions
 def sprite_load(filepath: str, name = str("default"), number = int(1)):
     new = __Sprite(filepath, number)
@@ -263,15 +307,18 @@ def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
 
     return instance_last
 
-# Main : Game Settings
-Game = __Game()
-Game.begin()
-
 # Definitions of Special Objects ( Need a canvas )
-sMineBrick = sprite_load("..\\res\\img\\theme\\brick_mine_0.png", "MineBrick")
+sMineBrick_0 = sprite_load("..\\res\\img\\theme\\brick_mine_0.png", "MineBrick1")
+sMineBrick_1 = sprite_load("..\\res\\img\\theme\\brick_mine_1.png", "MineBrick2")
+sMineBrick_b = sprite_load("..\\res\\img\\theme\\brick_mine_bot.png", "MineBrickB")
 class oMineBrick(__Solid):
     name = "Brick of Mine"
-    sprite_index = sMineBrick
+    sprite_index = distribute(sMineBrick_0, sMineBrick_1, 0.9)
+
+    def __init__(self):
+        super().__init__()
+        if instance_list_spec[self.name] is None:
+            instance_list_spec[self.name] = []
 
 testo = instance_create(oMineBrick, 0, 200, 100)
 
