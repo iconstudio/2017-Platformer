@@ -275,8 +275,8 @@ class __Solid(__Graviton):
     gravity_default = 0
     xFric, yFric = 0, 0
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
         if instance_list_spec["Solid"] is None:
             instance_list_spec["Solid"] = []
 
