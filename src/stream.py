@@ -38,6 +38,13 @@ instance_draw_list = []                         # 개체 그리기 목록
 instance_update = false                         # 개체 갱신 여부
 #event_queue = []                               # 이벤트 목록
 
+ID_SOLID = "Solid"
+ID_PARTICLE = "Particle"
+ID_DOODAD = "Doodad"
+instance_list_spec[ID_SOLID] = []
+instance_list_spec[ID_PARTICLE] = []
+instance_list_spec[ID_DOODAD] = []
+
 # Global : Functions
 # arithmetics
 def sqr(v):
@@ -83,7 +90,8 @@ class __Game:
     dgan = 0.05
 
     class __Camera:
-        x, y = 0, 0
+        x:float = 0
+        y:float = 0
         width, height = scr_defw, scr_defh
 
         def set_pos(self, x:float = None, y:float = None):
@@ -199,6 +207,7 @@ def place_free(dx, dy):
 # Object : Gravitons
 class __Graviton(object):
     name = "None"
+    identify = ""
     next = None
 
     # Properties of sprite
@@ -221,6 +230,10 @@ class __Graviton(object):
     def __init__(self, ndepth = int(0), nx = int(0), ny = int(0)):
         self.depth = ndepth
         self.x, self.y = nx, ny
+
+        global instance_list_spec
+        if self.identify != "":
+            instance_list_spec[self.identify].append(self)
 
     def __str__(self):
         return self.name
@@ -248,15 +261,15 @@ class __Graviton(object):
             else:
                 self.collide()
 
-        if self.yVel < 0:
-            yc = self.y - self.yVel + 1
-        else:
-            yc = self.y - self.yVel - 1
+        if self.yVel > 0:   # Going up higher
+            yc = self.y + self.yVel + 1
+        else:               # Going down
+            yc = self.y + self.yVel - 1
 
         if place_free(self.x, yc):
-            self.y -= self.yVel                     # let it moves first.
+            self.y += self.yVel                     # let it moves first.
             self.gravity = self.gravity_default
-            self.yVel += self.gravity
+            self.yVel -= self.gravity
             self.onAir = true
         else:
             self.gravity = 0
@@ -271,14 +284,13 @@ class __Graviton(object):
 class __Solid(__Graviton):
     # reset some inherited variables
     name = "Solid"
+    identify = ID_SOLID
     step_enable = false
     gravity_default = 0
     xFric, yFric = 0, 0
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
-        if instance_list_spec["Solid"] is None:
-            instance_list_spec["Solid"] = []
 
 # Main : Game Settings
 Game = __Game()
@@ -317,11 +329,6 @@ sMineBrick_b = sprite_load("..\\res\\img\\theme\\brick_mine_bot.png", "MineBrick
 class oMineBrick(__Solid):
     name = "Brick of Mine"
     sprite_index = distribute(sMineBrick_0, sMineBrick_1, 0.9)
-
-    def __init__(self):
-        super().__init__()
-        if instance_list_spec[self.name] is None:
-            instance_list_spec[self.name] = []
 
 testo = instance_create(oMineBrick, 0, 100, 100)
 
