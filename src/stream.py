@@ -297,7 +297,10 @@ def draw_sprite(spr: __Sprite, index, x = int(0), y = int(0), xscale = float(1),
 def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
     global Game, instance_update, instance_last
 
-    temp = Ty(depth, x, y)
+    temp = Ty.__new__(Ty)
+    temp.depth = depth
+    temp.x = x
+    temp.y = y
     if instance_last != None and isinstance(__Graviton, instance_last):
         instance_last.next = temp
 
@@ -320,7 +323,7 @@ class oMineBrick(__Solid):
         if instance_list_spec[self.name] is None:
             instance_list_spec[self.name] = []
 
-testo = instance_create(oMineBrick, 0, 200, 100)
+testo = instance_create(oMineBrick, 0, 100, 100)
 
 Game.process()
 
