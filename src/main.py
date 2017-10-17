@@ -6,11 +6,6 @@ import game
 
 name = "main_state"
 
-'''
-        수정 사항:
-            1. pico2d.py 의 open_canvas 함수 수정 (창 핸들 반환)
-'''
-
 # Global : Constants
 false = False
 true = True
