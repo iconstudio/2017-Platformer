@@ -2,7 +2,7 @@
 from pico2d import *
 import math
 import random
-import types
+import functions
 import ctypes
 import collections
 """
@@ -14,7 +14,7 @@ import collections
 false = False
 true = True
 scr_defw = 320
-scr_defh = 180
+scr_defh = 240
 scr_scale = 1
 
 # Global : Variables
@@ -44,43 +44,6 @@ ID_DOODAD = "Doodad"
 instance_list_spec[ID_SOLID] = []
 instance_list_spec[ID_PARTICLE] = []
 instance_list_spec[ID_DOODAD] = []
-
-# Global : Functions
-# arithmetics
-def sqr(v):
-    return v * v
-
-def sign(x):
-    ret = 0
-    if x > 0:
-        ret = 1
-    elif x < 0:
-        ret = - 1
-    return ret
-
-def degtorad(degree):
-    return degree * math.pi / 180
-
-def radtodeg(radian):
-    return radian * 180 / math.pi
-
-def point_distance(x1, y1, x2, y2):
-    return math.hypot((x2 - x1), (y2 - y1))
-
-# integer random
-def irandom(n):
-    return random.randint(0, int(n))
-
-# integer random in range
-def irandom_range(n1, n2):
-    return random.randint(int(n1), int(n2))
-
-# get percentage of ratio to x1, else then x2
-def distribute(x1, x2, ratio):
-    if irandom(100) <= ratio * 100:
-        return x1
-    else:
-        return x2
 
 # Object : Game
 class __Game:
@@ -126,7 +89,8 @@ class __Game:
         dx, dy = int(x - scr_defw * scr_scale / vscl), int(y - scr_defh * scr_scale / vscl)
 
         SDL_SetWindowPosition(self.hwnd, c_int(dx), c_int(dy))
-        show_cursor()
+        SDL_SetWindowFullscreen(self.hwnd, ctypes.c_bool(True))
+        hide_cursor()
         hide_lattice()
 
     # Proceed instance
@@ -201,8 +165,17 @@ class __Sprite(object):
             self.__data__.clip_draw(int(index * self.width), 0, self.width, self.height, x * scr_scale, y * scr_scale, int(self.width * xscale) * scr_scale, int(self.height * yscale) * scr_scale)
 
 def place_free(dx, dy):
-    #clist = instance_list_spec["Solid"]; # 고체 개체 목록 불러오기
-    return true
+    clist = instance_list_spec["Solid"] # 고체 개체 목록 불러오기
+    length = len(clist)
+    if length > 0:
+        for inst in clist:
+            tempspr:__Sprite = inst.sprite_index
+            if functions.point_in_rectangle(dx, dy, inst.x - tempspr.width / 2, inst.y - tempspr.height / 2, inst.x + tempspr.width / 2, inst.y + tempspr.height / 2):
+                return true;
+
+        return true
+    else:
+        return false
 
 # Object : Gravitons
 class __Graviton(object):
@@ -255,7 +228,7 @@ class __Graviton(object):
 
     def event_step(self): # The basic machanism of objects.
         if self.xVel != 0:
-            xc = self.x + self.xVel + sign(self.xVel)
+            xc = self.x + self.xVel + functions.sign(self.xVel)
             if place_free(xc, self.y):
                 self.x += self.xVel
             else:
@@ -322,13 +295,14 @@ def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
 
     return instance_last
 
+# TODO: Definite more objects.
 # Definitions of Special Objects ( Need a canvas )
 sMineBrick_0 = sprite_load("..\\res\\img\\theme\\brick_mine_0.png", "MineBrick1")
 sMineBrick_1 = sprite_load("..\\res\\img\\theme\\brick_mine_1.png", "MineBrick2")
 sMineBrick_b = sprite_load("..\\res\\img\\theme\\brick_mine_bot.png", "MineBrickB")
 class oMineBrick(__Solid):
     name = "Brick of Mine"
-    sprite_index = distribute(sMineBrick_0, sMineBrick_1, 0.9)
+    sprite_index = functions.distribute(sMineBrick_0, sMineBrick_1, 0.9)
 
 testo = instance_create(oMineBrick, 0, 100, 100)
 
