@@ -1,6 +1,10 @@
+from pico2d import *
+import math
+import random
+import ctypes
+import collections
 
 # Global : Functions
-
 # arithmetics
 def sqr(v):
     return v * v
