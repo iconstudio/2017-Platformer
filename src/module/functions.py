@@ -1,6 +1,6 @@
 from pico2d import *
-import math
 from random import *
+import math
 import ctypes
 import collections
 
@@ -108,6 +108,7 @@ class Sprite(object):
             self.__data__.clip_draw(int(index * self.width), 0, self.width, self.height, x, y, int(self.width * xscale), int(self.height * yscale))
 
 def sprite_load(filepath: str, name = str("default"), number = int(1)):
+    global sprite_list
     new = Sprite(filepath, number)
     sprite_list[name] = new
     return new
