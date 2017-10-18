@@ -1,15 +1,16 @@
 from pico2d import *
-from .module import functions
+from functions import *
 
 import framework
 import main
 
 name = "begin_state"
+logo_time = 0
 
 def enter():
     global image
-    open_canvas()
-    image = load_image("kpu_credit.png")
+    open_canvas(screen_width, screen_height, true)
+    image = load_image("..\\res\\img\\kpu_credit.png")
 
 def exit():
     if logo_time > 10:
@@ -22,16 +23,14 @@ def update():
     if (logo_time > 1.0):
         logo_time = 0
         framework.push_state(main)
-    delay(0.01)
     logo_time += 0.01
-    pass
+    delay(0.01)
 
 def draw():
     global image
     clear_canvas()
-    image.draw(400, 300)
+    image.draw(screen_width / 2, screen_height / 2)
     update_canvas()
-    pass
 
 def handle_events():
     events = get_events()
@@ -41,7 +40,6 @@ def handle_events():
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 framework.quit()
-    pass
 
 def pause():
     pass
