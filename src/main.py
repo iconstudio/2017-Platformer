@@ -8,6 +8,7 @@ name = "main_state"
 
 def enter():
     open_canvas(screen_width, screen_height, true)
+    framework.push_state(game)
     pass
 
 def exit():

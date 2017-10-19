@@ -34,96 +34,6 @@ instance_list_spec[ID_DOODAD] = []
 instance_list_spec[ID_DMG_PLAYER] = []
 instance_list_spec[ID_DMG_ENEMY] = []
 
-def enter():
-    hwnd = open_canvas(screen_width, screen_height, true)
-    SDL_SetWindowTitle(hwnd, ctypes.c_char_p("Vampire Exodus".encode("UTF-8")))
-    SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
-
-    # x, y = ctypes.c_int(), ctypes.c_int()
-    # SDL_GetWindowPosition(self.hwnd, ctypes.byref(x), ctypes.byref(y))
-    # x, y = x.value, y.value
-    # vscl = screen_scale * 2
-    # dx, dy = int(x - scr_defw * screen_scale / vscl), int(y - scr_defh * screen_scale / vscl)
-
-    # SDL_SetWindowPosition(self.hwnd, c_int(dx), c_int(dy))
-    # SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
-    hide_cursor()
-    hide_lattice()
-
-    # TODO: Definite more objects.
-    # Definitions of Special Objects ( Need a canvas )
-    sMineBrick_0 = sprite_load("..\\res\\img\\theme\\brick_mine_0.png", "MineBrick1")
-    sMineBrick_1 = sprite_load("..\\res\\img\\theme\\brick_mine_1.png", "MineBrick2")
-    sMineBrick_b = sprite_load("..\\res\\img\\theme\\brick_mine_bot.png", "MineBrickB")
-
-    class oMineBrick(__Solid):
-        name = "Brick of Mine"
-        sprite_index = distribute(sMineBrick_0, sMineBrick_1, 0.9)
-
-    testo = instance_create(oMineBrick, 0, 100, 100)
-    instance_create(__Graviton, 0, 100, 300)
-    pass
-
-def exit():
-    close_canvas()
-    pass
-
-def update():
-    if len(instance_list) > 0:
-        for inst in instance_list:
-            if inst.step_enable:
-                inst.event_step()
-    delay(0.01)
-    pass
-
-def draw():
-    instance_draw_update()
-    for inst in instance_draw_list:
-        if inst.visible:
-            inst.event_draw()
-    update_canvas()
-    pass
-
-def instance_draw_update():
-    global instance_draw_list, instance_update
-    if instance_update:
-        del instance_draw_list
-        instance_update = false
-        instance_draw_list = []
-        for inst in instance_list:
-            instance_draw_list.append(inst)
-
-def handle_events():
-    global event_queue
-    clear_canvas()
-
-    event_queue = get_events()
-    for event in event_queue:
-        if (event.type == SDL_QUIT):
-            framework.quit()
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-            framework.quit()
-    delay(0.01)
-
-def pause():
-    pass
-
-def resume():
-    pass
-
-def place_free(dx, dy):
-    clist = instance_list_spec["Solid"] # 고체 개체 목록 불러오기
-    length = len(clist)
-    if length > 0:
-        for inst in clist:
-            tempspr:Sprite = inst.sprite_index
-            if point_in_rectangle(dx, dy, inst.x - tempspr.width / 2, inst.y - tempspr.height / 2, inst.x + tempspr.width / 2, inst.y + tempspr.height / 2):
-                return true
-
-        return true
-    else:
-        return false
-
 # Object : Gravitons
 class __Graviton(object):
     name = "None"
@@ -228,3 +138,94 @@ def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
     instance_update = true
 
     return instance_last
+
+def place_free(dx, dy):
+    global instance_list_spec
+    clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
+    length = len(clist)
+    if length > 0:
+        for inst in clist:
+            tempspr: Sprite = inst.sprite_index
+            if point_in_rectangle(dx, dy, inst.x - tempspr.width / 2, inst.y - tempspr.height / 2,
+                                      inst.x + tempspr.width / 2, inst.y + tempspr.height / 2):
+                return true
+    else:
+        return false
+
+class oMineBrick(__Solid):
+    name = "Brick of Mine"
+    sprite_index = distribute(sprite_get("MineBrick1"), sprite_get("MineBrick2"), 0.9)
+
+def enter():
+    global hwnd
+    hwnd = open_canvas(screen_width, screen_height, true)
+    SDL_SetWindowTitle(hwnd, ctypes.c_char_p("Vampire Exodus".encode("UTF-8")))
+    SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
+
+    # x, y = ctypes.c_int(), ctypes.c_int()
+    # SDL_GetWindowPosition(self.hwnd, ctypes.byref(x), ctypes.byref(y))
+    # x, y = x.value, y.value
+    # vscl = screen_scale * 2
+    # dx, dy = int(x - scr_defw * screen_scale / vscl), int(y - scr_defh * screen_scale / vscl)
+
+    # SDL_SetWindowPosition(self.hwnd, c_int(dx), c_int(dy))
+    # SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
+    hide_cursor()
+    hide_lattice()
+
+    # TODO: Definite more objects.
+    # Definitions of Special Objects ( Need a canvas )
+    sprite_load("..\\res\\img\\theme\\brick_mine_0.png", "MineBrick1")
+    sprite_load("..\\res\\img\\theme\\brick_mine_1.png", "MineBrick2")
+    sprite_load("..\\res\\img\\theme\\brick_mine_bot.png", "MineBrickB")
+
+    testo = instance_create(oMineBrick, 0, 100, 100)
+    instance_create(__Graviton, 0, 100, 300)
+    pass
+
+def exit():
+    close_canvas()
+    pass
+
+def update():
+    if len(instance_list) > 0:
+        for inst in instance_list:
+            if inst.step_enable:
+                inst.event_step()
+    delay(0.01)
+    pass
+
+def draw():
+    instance_draw_update()
+    for inst in instance_draw_list:
+        if inst.visible:
+            inst.event_draw()
+    update_canvas()
+    pass
+
+def instance_draw_update():
+    global instance_draw_list, instance_update
+    if instance_update:
+        del instance_draw_list
+        instance_update = false
+        instance_draw_list = []
+        for inst in instance_list:
+            instance_draw_list.append(inst)
+
+def handle_events():
+    global event_queue
+    clear_canvas()
+
+    event_queue = get_events()
+    for event in event_queue:
+        if (event.type == SDL_QUIT):
+            framework.quit()
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
+            framework.quit()
+    delay(0.01)
+
+def pause():
+    pass
+
+def resume():
+    pass

@@ -8,7 +8,7 @@ __all__ = [
     "false", "true", "screen_width", "screen_height", "screen_scale",
     "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle", "irandom", "irandom_range", "distribute",
     "Camera", "Sprite", "sprite_list",
-    "sprite_load", "draw_sprite"
+    "sprite_load", "sprite_get", "draw_sprite"
 ]
 
 # Global : Constants
@@ -34,10 +34,10 @@ def sign(x):
         ret = - 1
     return ret
 
-def degtorad(degree):
+def degtorad(degree:float):
     return degree * math.pi / 180
 
-def radtodeg(radian):
+def radtodeg(radian:float):
     return radian * 180 / math.pi
 
 def point_distance(x1, y1, x2, y2):
@@ -55,7 +55,7 @@ def irandom_range(n1, n2):
     return random.randint(int(n1), int(n2))
 
 # get percentage of ratio to x1, else then x2
-def distribute(x1, x2, ratio):
+def distribute(x1, x2, ratio:float):
     if irandom(100) <= ratio * 100:
         return x1
     else:
@@ -107,11 +107,15 @@ class Sprite(object):
         else:
             self.__data__.clip_draw(int(index * self.width), 0, self.width, self.height, x, y, int(self.width * xscale), int(self.height * yscale))
 
-def sprite_load(filepath: str, name = str("default"), number = int(1)):
+def sprite_load(filepath:str, name = str("default"), number = int(1)):
     global sprite_list
     new = Sprite(filepath, number)
     sprite_list[name] = new
     return new
+
+def sprite_get(name:str):
+    global sprite_list
+    return sprite_list[name]
 
 def draw_sprite(spr:Sprite, index, x = int(0), y = int(0), xscale = float(1), yscale = float(1), rot = float(0.0)):
     spr.draw(index, x, y, xscale, yscale, rot)
