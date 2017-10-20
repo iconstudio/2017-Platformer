@@ -14,8 +14,8 @@ __all__ = [
 # Global : Constants
 false = False
 true = True
-screen_width:int = 640
-screen_height:int = 360
+screen_width:int = 800
+screen_height:int = 450
 screen_scale:int = 1
 
 # Global : Variables 1

@@ -130,9 +130,9 @@ def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
     temp.depth = depth
     temp.x = x
     temp.y = y
-    if instance_last != None and isinstance(__Graviton, instance_last):
-        instance_last.next = temp
 
+    if instance_last != None:
+        instance_last.next = temp
     instance_last = temp
     instance_list.append(instance_last)
     instance_update = true
@@ -152,9 +152,12 @@ def place_free(dx, dy):
     else:
         return false
 
-class oMineBrick(__Solid):
+class oBrick(__Solid):
     name = "Brick of Mine"
-    sprite_index = distribute(sprite_get("MineBrick1"), sprite_get("MineBrick2"), 0.9)
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_index = sprite_get("CastleBrick")
+        self.image_index = irandom_range(0, 3);
 
 def enter():
     global hwnd
@@ -175,12 +178,17 @@ def enter():
 
     # TODO: Definite more objects.
     # Definitions of Special Objects ( Need a canvas )
-    sprite_load("..\\res\\img\\theme\\brick_mine_0.png", "MineBrick1")
-    sprite_load("..\\res\\img\\theme\\brick_mine_1.png", "MineBrick2")
-    sprite_load("..\\res\\img\\theme\\brick_mine_bot.png", "MineBrickB")
+    sprite_load("..\\res\\img\\theme\\brick_castle.png", "CastleBrick", 4)
+    #sprite_load("..\\res\\img\\theme\\brick_mine_0.png", "MineBrick1")
+    #sprite_load("..\\res\\img\\theme\\brick_mine_1.png", "MineBrick2")
+    #sprite_load("..\\res\\img\\theme\\brick_mine_bot.png", "MineBrickB")
 
-    testo = instance_create(oMineBrick, 0, 100, 100)
-    instance_create(__Graviton, 0, 100, 300)
+    testo = instance_create(oBrick, 0, 100, 100)
+    instance_create(oBrick, 0, 100, 200)
+    instance_create(oBrick, 0, 100, 300)
+    instance_create(oBrick, 0, 200, 100)
+    instance_create(oBrick, 0, 300, 100)
+    instance_create(oBrick, 0, 400, 400)
     pass
 
 def exit():
@@ -196,6 +204,7 @@ def update():
     pass
 
 def draw():
+    clear_canvas()
     instance_draw_update()
     for inst in instance_draw_list:
         if inst.visible:
@@ -214,15 +223,12 @@ def instance_draw_update():
 
 def handle_events():
     global event_queue
-    clear_canvas()
-
     event_queue = get_events()
     for event in event_queue:
         if (event.type == SDL_QUIT):
             framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             framework.quit()
-    delay(0.01)
 
 def pause():
     pass
