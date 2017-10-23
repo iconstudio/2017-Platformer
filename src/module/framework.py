@@ -30,6 +30,7 @@ def push_state(state):
     if (len(stack) > 0):
         stack[-1].pause()
     stack.append(state)
+    print(": " + state.name + " begins")
     state.enter()
 
 def pop_state():

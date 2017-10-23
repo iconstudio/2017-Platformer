@@ -3,65 +3,172 @@ from functions import *
 
 import framework
 
+__all__ = [
+    "name", "hwnd", "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "sprite_list",
+    "Sprite", "Graviton", "__Solid"
+] + framework.__all__
+
 name = "game_state"
 
 # Global : Variables 2
-instance_last:object= None                          # 마지막 개체
-instance_list:list = []                             # 개체는 순서가 있다.
+global spririte_list
+instance_last = None            # 마지막 개체
+instance_list: list = []        # 개체는 순서가 있다.
 """
-        <List> instance_list_spec:
+            <List> instance_list_spec:
 
-            목적: 객체를 종류 별로 담기 위한 리스트
-            용법:
-                instance_list_spec[객체 이름] = []
-                instance_list_spec[객체 이름].append(객체 ID)
+                목적: 객체를 종류 별로 담기 위한 리스트
+                용법:
+                    instance_list_spec[객체 이름] = []
+                    instance_list_spec[객체 이름].append(객체 ID)
 
-            비고: 객체 이름 외에도 "Solid", "Particle" 등의 구별자 사용.
+                비고: 객체 이름 외에도 "Solid", "Particle" 등의 구별자 사용.
 """
-instance_list_spec:dict = {}                         # 객체 종류 별 목록
-instance_draw_list:list = []                         # 개체 그리기 목록
-instance_update:bool = false                         # 개체 갱신 여부
-#event_queue = []                                    # 이벤트 목록
+instance_list_spec: dict = {}  # 객체 종류 별 목록
+instance_draw_list: list = []  # 개체 그리기 목록
+instance_update: bool = false  # 개체 갱신 여부
+sprite_list: dict = {}  # 스프라이트는 이름으로 구분된다.
 
-ID_SOLID:str= "Solid"
-ID_PARTICLE:str = "Particle"
-ID_DOODAD:str = "Doodad"
-ID_DMG_PLAYER:str = "HurtPlayer"
-ID_DMG_ENEMY:str = "HurtEnemy"
+ID_SOLID: str = "Solid"
+ID_PARTICLE: str = "Particle"
+ID_DOODAD: str = "Doodad"
+ID_DMG_PLAYER: str = "HurtPlayer"
+ID_DMG_ENEMY: str = "HurtEnemy"
 instance_list_spec[ID_SOLID] = []
 instance_list_spec[ID_PARTICLE] = []
 instance_list_spec[ID_DOODAD] = []
 instance_list_spec[ID_DMG_PLAYER] = []
 instance_list_spec[ID_DMG_ENEMY] = []
 
+def enter():
+    global hwnd
+    hwnd = open_canvas(screen_width, screen_height, true)
+    SDL_SetWindowTitle(hwnd, ctypes.c_char_p("Vampire Exodus".encode("UTF-8")))
+    SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
+    #SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
+    hide_cursor()
+    hide_lattice()
+
+    # TODO: Definite more objects.
+    # Definitions of Special Objects ( Need a canvas )
+    global bg
+    bg = sprite_load("..\\res\\img\\bg_black.png", "black")
+    temps = sprite_load("..\\res\\img\\theme\\brick_castle.png", "CastleBrick", 4)
+
+    instance_create(oBrick, 0, 100, 100)
+    instance_create(oBrick, 0, 100, 200)
+    instance_create(oBrick, 0, 100, 300)
+    instance_create(oBrick, 0, 200, 100)
+    instance_create(oBrick, 0, 300, 100)
+    instance_create(oBrick, 0, 400, 400)
+    instance_create(Graviton, 0, 100, 400).sprite_index = temps
+
+def exit():
+    close_canvas()
+    pass
+
+def update():
+    if len(instance_list) > 0:
+        for inst in instance_list:
+            if inst.step_enable:
+                inst.event_step()
+    else:
+        raise RuntimeError("No instance")
+    delay(0.01)
+
+def draw():
+    clear_canvas()
+    instance_draw_update()
+    if len(instance_draw_list) > 0:
+        for inst in instance_draw_list:
+            inst.event_draw()
+    else:
+        raise RuntimeError("No instance")
+    update_canvas()
+
+def instance_draw_update():
+    global instance_draw_list, instance_update
+    if instance_update:
+        del instance_draw_list
+        instance_update = false
+        instance_draw_list = []
+        for inst in instance_list:
+            instance_draw_list.append(inst)
+
+def handle_events():
+    event_queue = get_events()
+    for event in event_queue:
+        if (event.type == SDL_QUIT):
+            framework.quit()
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
+            framework.quit()
+
+def pause():
+    pass
+
+def resume():
+    pass
+
+# ==================================================================================================
+#                                    사용자 정의 객체 / 함수
+# ==================================================================================================
+
+# Object : Sprites
+class Sprite(object):
+    number = 0
+
+    def __init__(self, filepath, number):
+        self.__data__ = load_image(filepath)
+
+        # the number of sprite in a image
+        self.number = number
+        # size of each index
+        try:
+            self.width = int(self.__data__.w / number)
+            self.height = int(self.__data__.h)
+
+            tempTy = type(number)
+            if tempTy != int and tempTy != float:
+                raise RuntimeError("스프라이트 불러오기 시 인자가 숫자가 아닙니다.")
+        except ZeroDivisionError:
+            raise RuntimeError("스프라이트의 갯수는 0개가 될 수 없습니다.")
+
+    def draw(self, index, x, y, xscale = float(1), yscale = float(1), rot = float(0.0)):
+        if rot != 0.0: # pico2d does not support scaling + rotating draw.
+            self.__data__.rotate_draw(rot, x, y, int(self.width * xscale),  int(self.height * yscale))
+        else:
+            self.__data__.clip_draw(int(index * self.width), 0, self.width, self.height, x, y, int(self.width * xscale), int(self.height * yscale))
+
 # Object : Gravitons
-class __Graviton(object):
+class Graviton(object):
     name = "None"
     identify = ""
     next = None
 
     # Properties of sprite
-    sprite_index = None
+    sprite_index:Sprite = None
     image_index = float(0)
     image_speed = float(0)
-    visible = true
-    depth = 0
+    visible:bool = true
+    depth:int = 0
 
     # for optimization
-    step_enable = true
+    step_enable:bool = true
 
     x, y = 0, 0
     xVel, yVel = 0, 0
     xFric, yFric = 0.4, 1
     gravity_default = 0.4
-    gravity = 0
-    onAir = false
+    gravity:float = 0
+    onAir:bool = false
 
     def __init__(self, ndepth = int(0), nx = int(0), ny = int(0)):
         self.depth = ndepth
         self.x, self.y = nx, ny
 
-        global instance_list_spec
+        global instance_list, instance_update, instance_list_spec
+        instance_list.append(self)
+        instance_update = true
         if self.identify != "":
             instance_list_spec[self.identify].append(self)
 
@@ -111,10 +218,11 @@ class __Graviton(object):
         self.draw_self()
 
 # Object : Solid Objects
-class __Solid(__Graviton):
+class __Solid(Graviton):
     # reset some inherited variables
     name = "Solid"
     identify = ID_SOLID
+
     step_enable = false
     gravity_default = 0
     xFric, yFric = 0, 0
@@ -122,24 +230,22 @@ class __Solid(__Graviton):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
 
+class oBrick(__Solid):
+    name = "Brick of Mine"
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_index = sprite_get("CastleBrick")
+        self.image_index = irandom_range(0, 3)
+
 # Object : Functions
 def instance_create(Ty, depth = int(0), x = int(0), y = int(0)):
-    global Game, instance_update, instance_last
-
-    temp = Ty.__new__(Ty)
-    temp.depth = depth
-    temp.x = x
-    temp.y = y
-
-    if instance_last != None:
-        instance_last.next = temp
+    temp = Ty(depth, x, y)
+    global instance_last
     instance_last = temp
-    instance_list.append(instance_last)
-    instance_update = true
+    return temp
 
-    return instance_last
-
-def place_free(dx, dy):
+def place_free(dx, dy) -> bool:
     global instance_list_spec
     clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
     length = len(clist)
@@ -149,89 +255,19 @@ def place_free(dx, dy):
             if point_in_rectangle(dx, dy, inst.x - tempspr.width / 2, inst.y - tempspr.height / 2,
                                       inst.x + tempspr.width / 2, inst.y + tempspr.height / 2):
                 return true
+        return false
     else:
         return false
 
-class oBrick(__Solid):
-    name = "Brick of Mine"
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.sprite_index = sprite_get("CastleBrick")
-        self.image_index = irandom_range(0, 3);
+def sprite_load(filepath:str, name = str("default"), number = int(1)) -> Sprite:
+    global sprite_list
+    new = Sprite(filepath, number)
+    sprite_list[name] = new
+    return new
 
-def enter():
-    global hwnd
-    hwnd = open_canvas(screen_width, screen_height, true)
-    SDL_SetWindowTitle(hwnd, ctypes.c_char_p("Vampire Exodus".encode("UTF-8")))
-    SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
+def sprite_get(name:str) -> Sprite:
+    global sprite_list
+    return sprite_list[name]
 
-    # x, y = ctypes.c_int(), ctypes.c_int()
-    # SDL_GetWindowPosition(self.hwnd, ctypes.byref(x), ctypes.byref(y))
-    # x, y = x.value, y.value
-    # vscl = screen_scale * 2
-    # dx, dy = int(x - scr_defw * screen_scale / vscl), int(y - scr_defh * screen_scale / vscl)
-
-    # SDL_SetWindowPosition(self.hwnd, c_int(dx), c_int(dy))
-    # SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
-    hide_cursor()
-    hide_lattice()
-
-    # TODO: Definite more objects.
-    # Definitions of Special Objects ( Need a canvas )
-    sprite_load("..\\res\\img\\theme\\brick_castle.png", "CastleBrick", 4)
-    #sprite_load("..\\res\\img\\theme\\brick_mine_0.png", "MineBrick1")
-    #sprite_load("..\\res\\img\\theme\\brick_mine_1.png", "MineBrick2")
-    #sprite_load("..\\res\\img\\theme\\brick_mine_bot.png", "MineBrickB")
-
-    testo = instance_create(oBrick, 0, 100, 100)
-    instance_create(oBrick, 0, 100, 200)
-    instance_create(oBrick, 0, 100, 300)
-    instance_create(oBrick, 0, 200, 100)
-    instance_create(oBrick, 0, 300, 100)
-    instance_create(oBrick, 0, 400, 400)
-    pass
-
-def exit():
-    close_canvas()
-    pass
-
-def update():
-    if len(instance_list) > 0:
-        for inst in instance_list:
-            if inst.step_enable:
-                inst.event_step()
-    delay(0.01)
-    pass
-
-def draw():
-    clear_canvas()
-    instance_draw_update()
-    for inst in instance_draw_list:
-        if inst.visible:
-            inst.event_draw()
-    update_canvas()
-    pass
-
-def instance_draw_update():
-    global instance_draw_list, instance_update
-    if instance_update:
-        del instance_draw_list
-        instance_update = false
-        instance_draw_list = []
-        for inst in instance_list:
-            instance_draw_list.append(inst)
-
-def handle_events():
-    global event_queue
-    event_queue = get_events()
-    for event in event_queue:
-        if (event.type == SDL_QUIT):
-            framework.quit()
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-            framework.quit()
-
-def pause():
-    pass
-
-def resume():
-    pass
+def draw_sprite(spr:Sprite, index = int(0) or float(0), x = int(0), y = int(0), xscale = float(1), yscale = float(1), rot = float(0.0)) -> None:
+    spr.draw(index, x, y, xscale, yscale, rot)

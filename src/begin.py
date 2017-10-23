@@ -8,14 +8,17 @@ name = "begin_state"
 logo_time = 0
 
 def enter():
-    global image
+    global bg, logo
     open_canvas(screen_width, screen_height, true)
-    image = load_image("..\\res\\img\\kpu_credit.png")
+    hide_cursor()
+    hide_lattice()
+    bg = load_image("..\\res\\img\\bg_black.png")
+    logo = load_image("..\\res\\img\\logo.png")
 
 def exit():
     if logo_time > 10:
-        global image
-        del image
+        global bg, logo
+        del bg, logo
         close_canvas()
 
 def update():
@@ -27,9 +30,10 @@ def update():
     delay(0.01)
 
 def draw():
-    global image
+    global bg, logo
     clear_canvas()
-    image.draw(screen_width / 2, screen_height / 2)
+    bg.draw(screen_width / 2, screen_height / 2)
+    logo.draw(screen_width / 2, screen_height / 2)
     update_canvas()
 
 def handle_events():
