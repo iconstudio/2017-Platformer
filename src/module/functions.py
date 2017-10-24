@@ -7,15 +7,19 @@ import collections
 __all__ = [
     "false", "true", "screen_width", "screen_height", "screen_scale",
     "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle", "irandom", "irandom_range", "distribute",
-    "Camera"
+    "Camera", "path_resource",  "path_image", "path_theme"
 ]
 
 # Global : Constants
 false = False
 true = True
-screen_width:int = 800
-screen_height:int = 450
+screen_width:int = 960
+screen_height:int = 540
 screen_scale:int = 1
+
+path_resource = "..\\res\\"
+path_image = path_resource + "img\\"
+path_theme = path_image + "theme\\"
 
 # Global : Functions
 # arithmetics
