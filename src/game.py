@@ -49,7 +49,7 @@ def enter():
     global hwnd
     hwnd = open_canvas(screen_width, screen_height, true)
     SDL_SetWindowTitle(hwnd, ctypes.c_char_p("Vampire Exodus".encode("UTF-8")))
-    SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
+    #SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
     # SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
     hide_cursor()
     hide_lattice()
@@ -60,34 +60,30 @@ def enter():
     bg = sprite_load(path_image + "bg_black.png", "black")
     sprite_load(
         [path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
-         path_theme + "brick_castle_3.png"], "CastleBrick", 4)
+         path_theme + "brick_castle_3.png"], "CastleBrick")
 
-    for i in range(0, 20, 1):
-        instance_create(oBrick, 40 - i * 20, 800)
-
-        # tempo = instance_create(GObject, 0, 100, 400)
-        # tempo.sprite_index = sprite_get("CastleBrick")
-        # tempo.gravity_default = 0.3
+    instance_create(oBrick, 0, 800, 40)
 
 
 def exit():
     close_canvas()
-    try:
-        while (true):
+    '''
+    while (true):
+        try:
             data_tuple = sprite_list.popitem()
-            if data_tuple.index(0):
-                break
-    except KeyError as e:
-        pass
-
-    pass
+            olddb: Sprite = data_tuple[1]
+            del olddb
+        except KeyError as e:
+            break
+        else:
+            del olddb
+    '''
 
 
 def update():
     if len(instance_list) > 0:
         for inst in instance_list:
-            if inst.step_enable:
-                inst.event_step()
+            inst.event_step()
     else:
         raise RuntimeError("No instance")
     delay(0.01)
@@ -135,6 +131,23 @@ def resume():
 #                                    사용자 정의 객체 / 함수
 # ==================================================================================================
 
+# Object : Terrain Manager
+class TerrainManager:
+    pass
+
+# Object : A Unit of Terrain
+class TerrainAllocator:
+    def __init__(self, nx:int, ny:int, nw:int = screen_width, nh:int = screen_height):
+        self.x = nx
+        self.y = ny
+        self.w = nw
+        self.h = nh
+
+    def create(self):
+        pass
+
+    def 
+
 # Object : Sprites
 class Sprite(object):
     number: int = 0
@@ -175,19 +188,19 @@ class Sprite(object):
         except ZeroDivisionError:
             raise RuntimeError("스프라이트의 갯수는 0개가 될 수 없습니다.")
 
-    def draw(self, index, x, y, xscale=float(1), yscale=float(1), rot=float(0.0)) -> None:
+    def draw(self, index, x, y, xscale=float(1), yscale=float(1), rot=float(0.0), alpha=float(1.0)) -> None:
         if not self.isSummed:
-            if rot != 0.0:  # pico2d does not support scaling + rotating draw.
-                self.__data__.rotate_draw(rot, x, y, int(self.width * xscale), int(self.height * yscale))
-            else:
-                self.__data__.clip_draw(int(index * self.width), 0, self.width, self.height, x, y,
-                                        int(self.width * xscale), int(self.height * yscale))
+            data = self.__data__
         else:
-            if rot != 0.0:  # pico2d does not support scaling + rotating draw.
-                self.__data__[int(index)].rotate_draw(rot, x, y, int(self.width * xscale), int(self.height * yscale))
-            else:
-                self.__data__[int(index)].clip_draw(0, 0, self.width, self.height, x, y, int(self.width * xscale),
-                                                    int(self.height * yscale))
+            data = self.__data__[0]
+        data.opacify(alpha)
+
+        if rot != 0.0:  # pico2d does not support scaling + rotating draw.
+            data.rotate_draw(rot, x, y, int(self.width * xscale), int(self.height * yscale))
+        else:
+            data.clip_draw(0, 0, self.width, self.height, x, y,
+                                        int(self.width * xscale), int(self.height * yscale))
+
 
     def get_handle(self):
         return self.__data__
@@ -219,7 +232,8 @@ class GObject(object):
 
     def __init__(self, ndepth=int(0), nx=int(0), ny=int(0)):
         self.depth = ndepth
-        self.x, self.y = nx, ny
+        self.x = nx
+        self.y = ny
 
         global instance_list, instance_update, instance_list_spec
         instance_list.append(self)
@@ -243,15 +257,12 @@ class GObject(object):
 
     def draw_self(self):  # Simply draws its sprite on its position.
         if (self.sprite_index != None):
-            if self.sprite_index.isSummed:
-                get = self.sprite_index.get_handle()[int(self.image_index)]
-                get.opacify(self.image_alpha)
-            else:
-                get = self.sprite_index.get_handle()
-                get.opacify(self.image_alpha)
-            draw_sprite(self.sprite_index, self.image_index, self.x, self.y)
+            draw_sprite(self.sprite_index, self.image_index, self.x, self.y, 1, 1, 0.0, self.image_alpha)
 
     def event_step(self):  # The basic machanism of objects.
+        if not self.step_enable:
+            return
+
         if self.xVel != 0:
             xc = self.x + self.xVel + sign(self.xVel)
             if place_free(xc, self.y):
@@ -281,16 +292,15 @@ class GObject(object):
 
 # Object : Solid Objects
 class Solid(GObject):
-    # reset some inherited variables
-    name = "Solid"
-    identify = ID_SOLID
-
-    step_enable = false
-    gravity_default = 0
-    xFric, yFric = 0, 0
-
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
+        # reset some inherited variables
+        self.name = "Solid"
+        self.identify = ID_SOLID
+
+        self.step_enable = false
+        self.gravity_default = 0
+        self.xFric, self.yFric = 0, 0
 
 
 class oBrick(Solid):
@@ -299,12 +309,44 @@ class oBrick(Solid):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_index = sprite_get("CastleBrick")
-        self.image_index = self.sprite_index.number #irandom_range(0, 3)
+        self.image_index = irandom_range(0, self.sprite_index.number)
+
+
+# Object : Specials
+# Player
+class Player(GObject):
+    pass
+
+
+# Parent of Enemies
+class EnemyParent(GObject):
+    pass
+
+
+# Damage caused by Player
+class PlayerDamage(GObject):
+    pass
+
+
+# Damage caused by Enemy
+class EnemyDamage(GObject):
+    pass
+
+
+# Parent of Items
+class ItemParent(GObject):
+    pass
+
+
+# Parent of Terrain Doodads
+class DoodadParent(GObject):
+    pass
 
 
 # Object : Functions
 def instance_create(Ty, depth=int(0), x=int(0), y=int(0)) -> object:
     temp = Ty(depth, x, y)
+    temp.x, temp.y = x, y
     global instance_last
     instance_last = temp
     return temp
@@ -338,5 +380,5 @@ def sprite_get(name: str) -> Sprite:
 
 
 def draw_sprite(spr: Sprite, index=int(0) or float(0), x=int(0), y=int(0), xscale=float(1), yscale=float(1),
-                rot=float(0.0)) -> None:
-    spr.draw(index, x, y, xscale, yscale, rot)
+                rot=float(0.0), alpha=float(1.0)) -> None:
+    spr.draw(index, x, y, xscale, yscale, rot, alpha)

@@ -19,7 +19,7 @@ def enter():
     hide_lattice()
     bg = load_image(path_image + "bg_black.png")
     logo = load_image(path_image + "logo.png")
-    hfont = load_font("-윤고딕310", 12)
+    hfont = load_font("Arial", 12)
 
 
 def exit():
@@ -31,10 +31,11 @@ def exit():
 
 def update():
     global logo_time
-    if (logo_time > 1.0):
+    if (logo_time > 180.0):
         logo_time = 0
         framework.push_state(main)
-    logo_time += 0.01
+    logo_time += 1
+
     delay(0.01)
 
 
@@ -43,6 +44,7 @@ def draw():
     clear_canvas()
     bg.draw(screen_width / 2, screen_height / 2)
     logo.draw(screen_width / 2, screen_height / 2)
+    #hfont.draw_unicode(screen_width / 2, screen_height / 2 - 100, "iconstudio", (255, 255, 255))
     update_canvas()
 
 
