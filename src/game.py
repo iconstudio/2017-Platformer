@@ -1,5 +1,6 @@
 from pico2d import *
 from functions import *
+from sprite import *
 
 import framework
 
@@ -25,7 +26,6 @@ instance_list: list = []  # 개체는 순서가 있다.
 instance_list_spec: dict = {}  # 객체 종류 별 목록
 instance_draw_list: list = []  # 개체 그리기 목록
 instance_update: bool = false  # 개체 갱신 여부
-sprite_list: dict = {}  # 스프라이트는 이름으로 구분된다.
 
 ID_SOLID: str = "Solid"
 ID_PARTICLE: str = "Particle"
@@ -46,27 +46,10 @@ name = "game_state"
 
 
 def enter():
-    global hwnd
-    hwnd = open_canvas(screen_width, screen_height, true)
-    SDL_SetWindowTitle(hwnd, ctypes.c_char_p("Vampire Exodus".encode("UTF-8")))
-    #SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
-    # SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
-    hide_cursor()
-    hide_lattice()
-
-    # TODO: Definite more objects.
-    # Definitions of Special Objects ( Need a canvas )
-    global bg
-    bg = sprite_load(path_image + "bg_black.png", "black")
-    sprite_load(
-        [path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
-         path_theme + "brick_castle_3.png"], "CastleBrick")
-
-    instance_create(oBrick, 0, 800, 40)
+    GameExecutor()
 
 
 def exit():
-    close_canvas()
     '''
     while (true):
         try:
@@ -131,79 +114,92 @@ def resume():
 #                                    사용자 정의 객체 / 함수
 # ==================================================================================================
 
+# ==================================================================================================
+#                                               지형
+# ==================================================================================================
+
+# Object : Terrain Container
+class TerrainContainer:
+    mess = []
+
+    def signin(self, types):
+        self.mess.append(types)
+
+
+tcontainer = TerrainContainer()
+
+
 # Object : Terrain Manager
 class TerrainManager:
-    pass
+    fits = []
+    type_theme = 0
 
-# Object : A Unit of Terrain
-class TerrainAllocator:
-    def __init__(self, nx:int, ny:int, nw:int = screen_width, nh:int = screen_height):
-        self.x = nx
-        self.y = ny
-        self.w = nw
-        self.h = nh
+    def __init__(self, theme: int = 0, numberw: int = 1, numberh: int = 1):
+        self.type_theme = theme
+        for i in range(0, numberw, 1):
+            for j in range(0, numberh, 1):
+                newone = TerrainAllocator(self.type_theme, i * screen_width, j * screen_height)
+                self.fits.append(newone)
 
-    def create(self):
-        pass
+    def generate(self):
+        for alloc in self.fits:
+            alloc.generate()
 
-    def 
-
-# Object : Sprites
-class Sprite(object):
-    number: int = 0
-    width, height = 0, 0
-    isSummed: bool = false
-
-    def __init__(self, filepath, number):
-        """
-            이미지 불러오기, 이미지 분할, 리스트화 작업
-            :param filepath: 
-            :param number: 
-        """
-        if type(filepath) == list:
-            self.isSummed = true
-            self.number = len(filepath)
-
-            try:
-                if self.number > 0:
-                    self.__data__ = []
-                    for specpath in filepath:
-                        img = load_image(specpath)
-                        self.__data__.append(img)
-                    self.width = int(self.__data__[0].w)
-                    self.height = int(self.__data__[0].h)
-            except IndexError:
-                raise RuntimeError("스프라이트 목록아 비어있습니다!")
-        else:  # load only an image, so dosent need spliting one image.
-            self.__data__ = load_image(filepath)
-            self.number = number  # the number of sprite in an image
-            # size of each index
-            self.width = int(self.__data__.w / number)
-            self.height = int(self.__data__.h)
-
+    def __del__(self):
         try:
-            tempTy = type(number)
-            if tempTy != int and tempTy != float:
-                raise RuntimeError("스프라이트 불러오기 시 인자가 숫자가 아닙니다.")
-        except ZeroDivisionError:
-            raise RuntimeError("스프라이트의 갯수는 0개가 될 수 없습니다.")
-
-    def draw(self, index, x, y, xscale=float(1), yscale=float(1), rot=float(0.0), alpha=float(1.0)) -> None:
-        if not self.isSummed:
-            data = self.__data__
-        else:
-            data = self.__data__[0]
-        data.opacify(alpha)
-
-        if rot != 0.0:  # pico2d does not support scaling + rotating draw.
-            data.rotate_draw(rot, x, y, int(self.width * xscale), int(self.height * yscale))
-        else:
-            data.clip_draw(0, 0, self.width, self.height, x, y,
-                                        int(self.width * xscale), int(self.height * yscale))
+            for alloc in self.fits:
+                del alloc
+        except IndexError:
+            return
+        except KeyError:
+            return
+            # finally:
+            # del self.fits
 
 
-    def get_handle(self):
-        return self.__data__
+# Object : A Allocating block of Terrain
+class TerrainAllocator:
+    data: str = ""  # Determines what to generate
+    type_theme: int = 0
+    type_path: int = 0  # Determines how to do.
+    tile_w: int = 20
+    tile_h: int = 20
+
+    def __init__(self, nt: int, nx: int, ny: int, nw: int = screen_width, nh: int = screen_height):
+        self.assignment(nt, nx, ny, nw, nh)
+
+    def assignment(self, nt: int, nx: int, ny: int, nw: int = screen_width, nh: int = screen_height):
+        # The position of a map
+        self.x, self.y = nx, ny
+        # The size of a map
+        self.w, self.h = nw, nh
+        # The number of grid
+        self.hsz, self.vsz = int(nw / self.tile_w), int(nh / self.tile_h)
+        self.type_theme = nt
+
+    def generate(self):
+        newx = self.x
+        newy = self.y + self.h - self.tile_h
+        for i in range(0, len(self.data)):
+            current = self.data[i]
+            if current == "0" or current == " " or current == "\n":
+                continue
+            # newx = (i - math.floor(i / self.hsz)) * self.tile_w
+            # newy = math.floor(i / self.hsz) * self.tile_h
+            NEWBLOCK: GObject = tcontainer.mess[int(current) - 1](100, newx, newy)
+            newx += self.tile_w
+            if newx >= self.w:
+                newx = self.x
+                newy += self.tile_h
+
+    def allocate(self, data: str, newtype: int = 0):
+        self.data = data
+        self.type_theme = newtype
+
+
+# ==================================================================================================
+#                                               게임
+# ==================================================================================================
 
 
 # Object : Game Object
@@ -256,7 +252,7 @@ class GObject(object):
         self.onAir = false
 
     def draw_self(self):  # Simply draws its sprite on its position.
-        if (self.sprite_index != None):
+        if self.sprite_index != None:
             draw_sprite(self.sprite_index, self.image_index, self.x, self.y, 1, 1, 0.0, self.image_alpha)
 
     def event_step(self):  # The basic machanism of objects.
@@ -292,15 +288,13 @@ class GObject(object):
 
 # Object : Solid Objects
 class Solid(GObject):
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        # reset some inherited variables
-        self.name = "Solid"
-        self.identify = ID_SOLID
+    # reset some inherited variables
+    name = "Solid"
+    identify = ID_SOLID
 
-        self.step_enable = false
-        self.gravity_default = 0
-        self.xFric, self.yFric = 0, 0
+    step_enable = false
+    gravity_default = 0
+    xFric, yFric = 0, 0
 
 
 class oBrick(Solid):
@@ -367,18 +361,18 @@ def place_free(dx, dy) -> bool:
         return false
 
 
-def sprite_load(filepaths, name=str("default"), number=int(1), xoffset=None, yoffset=None) -> Sprite:
-    global sprite_list
-    new = Sprite(filepaths, number)
-    sprite_list[name] = new
-    return new
+class GameExecutor:
+    def __init__(self):
+        # TODO: Definite more objects.
+        # Definitions of Special Objects ( Need a canvas )
+        global bg
+        bg = sprite_load(path_image + "bg_black.png", "black")
+        sprite_load(
+            [path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
+             path_theme + "brick_castle_3.png"], "CastleBrick", 0, 0)
 
+        tcontainer.signin(oBrick)
 
-def sprite_get(name: str) -> Sprite:
-    global sprite_list
-    return sprite_list[name]
-
-
-def draw_sprite(spr: Sprite, index=int(0) or float(0), x=int(0), y=int(0), xscale=float(1), yscale=float(1),
-                rot=float(0.0), alpha=float(1.0)) -> None:
-    spr.draw(index, x, y, xscale, yscale, rot, alpha)
+        first_scene = TerrainManager(1, 1)
+        first_scene.fits[0].allocate("1111 1111 1111 1111 1111 1111 1111 1111", 0)
+        first_scene.generate()

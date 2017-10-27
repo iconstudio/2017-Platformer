@@ -17,9 +17,6 @@ logo_time = 0
 
 def enter():
     global bg
-    open_canvas(screen_width, screen_height, true)
-    hide_cursor()
-    hide_lattice()
     bg = load_image(path_image + "bg_black.png")
     pass
 
@@ -28,7 +25,6 @@ def exit():
     if logo_time > 10:
         global bg
         del bg
-        close_canvas()
     pass
 
 
@@ -37,7 +33,7 @@ def update():
     if (logo_time > 1.0):
         logo_time = 0
         import game
-        framework.push_state(game)
+        framework.change_state(game)
     logo_time += 0.01
     delay(0.01)
     pass

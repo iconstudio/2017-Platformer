@@ -5,16 +5,16 @@ import ctypes
 import collections
 
 __all__ = [
-    "false", "true", "screen_width", "screen_height", "screen_scale",
+    "false", "true", "screen_width", "screen_height", "screen_scale", "path_resource",  "path_image", "path_theme",
     "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle", "irandom", "irandom_range", "distribute",
-    "Camera", "path_resource",  "path_image", "path_theme"
+    "Camera"
 ]
 
 # Global : Constants
 false = False
 true = True
-screen_width:int = 960
-screen_height:int = 540
+screen_width:int = 640
+screen_height:int = 480
 screen_scale:int = 1
 
 path_resource = "..\\res\\"
