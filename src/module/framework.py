@@ -1,8 +1,10 @@
 from pico2d import *
+import sdl2.keyboard as keyboard
+import sdl2.keycode as keycode
 
 __all__ = [
     "GameState", "change_state", "push_state", "pop_state", "quit", "run"
-]
+] + keyboard.__all__
 
 
 class GameState:

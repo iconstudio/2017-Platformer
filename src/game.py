@@ -96,7 +96,7 @@ def instance_draw_update():
 def handle_events():
     event_queue = get_events()
     for event in event_queue:
-        if (event.type == SDL_QUIT):
+        if event.type == SDL_QUIT:
             framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             framework.quit()
@@ -190,7 +190,7 @@ class TerrainAllocator:
             newx += self.tile_w
             if newx >= self.w:
                 newx = self.x
-                newy += self.tile_h
+                newy -= self.tile_h
 
     def allocate(self, data: str, newtype: int = 0):
         self.data = data
@@ -374,5 +374,10 @@ class GameExecutor:
         tcontainer.signin(oBrick)
 
         first_scene = TerrainManager(1, 1)
-        first_scene.fits[0].allocate("1111 1111 1111 1111 1111 1111 1111 1111", 0)
+        first_scene.fits[0].allocate("1111 1111 1111 1111 1111 1111 1111 1111\
+                                     1111 1111 1111 1111 1111 1111 1111 1111\
+                                     1111 1111 1111 1111 1111 1111 1111 1111\
+                                     1111 1111 1111 1111 1111 1111 1111 1111\
+                                     1111 1111 1111 1111 1111 1111 1111 1111", 0)
+
         first_scene.generate()

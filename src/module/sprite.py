@@ -16,7 +16,7 @@ class Sprite(object):
     width, height = 0, 0
     isSummed: bool = false
 
-    def __init__(self, filepath, number, xoffset=None, yoffset=None):
+    def __init__(self, filepath:list or str, number, xoffset=None, yoffset=None):
         """
             이미지 불러오기, 이미지 분할, 리스트화 작업
             :param filepath:
@@ -52,17 +52,19 @@ class Sprite(object):
         except ZeroDivisionError:
             raise RuntimeError("스프라이트의 갯수는 0개가 될 수 없습니다.")
 
-    def draw(self, index, x, y, xscale=float(1), yscale=float(1), rot=float(0.0), alpha=float(1.0)) -> None:
+    def draw(self, index:int or float, x, y, xscale=float(1), yscale=float(1), rot=float(0.0), alpha=float(1.0)) -> None:
+        dx = 0
         if not self.isSummed:
             data = self.__data__
+            dx = int(self.width * index)
         else:
-            data = self.__data__[0]
+            data = self.__data__[int(index) - 1]
         data.opacify(alpha)
 
-        if rot != 0.0:  # pico2d does not support scaling + rotating draw.
+        if rot != 0.0:  # pico2d does not support clipping + rotating draw.
             data.rotate_draw(rot, x, y, int(self.width * xscale), int(self.height * yscale))
         else:
-            data.clip_draw(0, 0, self.width, self.height, x, y,
+            data.clip_draw(dx, 0, self.width, self.height, x, y,
                            int(self.width * xscale), int(self.height * yscale))
 
     def get_handle(self):
