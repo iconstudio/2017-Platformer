@@ -18,7 +18,7 @@ import game
     "SDLK_0", "SDLK_1", "SDLK_2", "SDLK_3", "SDLK_4", "SDLK_5", "SDLK_6", "SDLK_7", "SDLK_8", "SDLK_9",
     "SDLK_a", "SDLK_a", "SDLK_c", "SDLK_d", "SDLK_e", "SDLK_f"
 
-            5. 
+            5. pico2d.py 에 background_color, draw_color 와 그 set, get 메서드 추가
 ]
 """
 

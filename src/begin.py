@@ -13,16 +13,15 @@ logo_time = 0
 
 
 def enter():
-    global bg, logo, hfont
-    bg = load_image(path_image + "bg_black.png")
+    global logo, hfont
     logo = load_image(path_image + "logo.png")
     hfont = load_font("Arial", 12)
 
 
 def exit():
     if logo_time > 10:
-        global bg, logo, hfont
-        del bg, logo, hfont
+        global logo, hfont
+        del logo, hfont
 
 
 def update():
@@ -36,9 +35,8 @@ def update():
 
 
 def draw():
-    global bg, logo
+    global logo
     clear_canvas()
-    bg.draw(screen_width / 2, screen_height / 2)
     logo.draw(screen_width / 2, screen_height / 2)
     #hfont.draw_unicode(screen_width / 2, screen_height / 2 - 100, "iconstudio", (255, 255, 255))
     update_canvas()

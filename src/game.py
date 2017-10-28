@@ -32,11 +32,13 @@ ID_PARTICLE: str = "Particle"
 ID_DOODAD: str = "Doodad"
 ID_DMG_PLAYER: str = "HurtPlayer"
 ID_DMG_ENEMY: str = "HurtEnemy"
+ID_ITEM: str = "Items"
 instance_list_spec[ID_SOLID] = []
 instance_list_spec[ID_PARTICLE] = []
 instance_list_spec[ID_DOODAD] = []
 instance_list_spec[ID_DMG_PLAYER] = []
 instance_list_spec[ID_DMG_ENEMY] = []
+instance_list_spec[ID_ITEM] = []
 
 # ==================================================================================================
 #                                       프레임워크 함수
@@ -122,8 +124,11 @@ def resume():
 class TerrainContainer:
     mess = []
 
-    def signin(self, types):
-        self.mess.append(types)
+    def signin(self, type_t):
+        self.mess.append(type_t)
+
+    def clear(self):
+        self.mess.clear()
 
 
 tcontainer = TerrainContainer()
@@ -140,6 +145,12 @@ class TerrainManager:
             for j in range(0, numberh, 1):
                 newone = TerrainAllocator(self.type_theme, i * screen_width, j * screen_height)
                 self.fits.append(newone)
+
+    def allocate(self, data: str, position: int = 0):
+        try:
+            self.fits[position].allocate(data, self.type_theme)
+        except IndexError:
+            pass
 
     def generate(self):
         for alloc in self.fits:
@@ -164,6 +175,7 @@ class TerrainAllocator:
     type_path: int = 0  # Determines how to do.
     tile_w: int = 20
     tile_h: int = 20
+    x, y, w, h, hsz, vsz = 0, 0, 0, 0, 0, 0
 
     def __init__(self, nt: int, nx: int, ny: int, nw: int = screen_width, nh: int = screen_height):
         self.assignment(nt, nx, ny, nw, nh)
@@ -183,6 +195,9 @@ class TerrainAllocator:
         for i in range(0, len(self.data)):
             current = self.data[i]
             if current == "0" or current == " " or current == "\n":
+                continue
+            if current == "@":
+                newy -= self.tile_h
                 continue
             # newx = (i - math.floor(i / self.hsz)) * self.tile_w
             # newy = math.floor(i / self.hsz) * self.tile_h
@@ -303,38 +318,46 @@ class oBrick(Solid):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_index = sprite_get("CastleBrick")
-        self.image_index = irandom_range(0, self.sprite_index.number)
+        self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3)
 
 
 # Object : Specials
 # Player
 class Player(GObject):
-    pass
+    name = "Player"
 
 
 # Parent of Enemies
 class EnemyParent(GObject):
-    pass
+    name = "NPC"
 
 
 # Damage caused by Player
 class PlayerDamage(GObject):
-    pass
+    name = "DamageP"
+    identify = ID_DMG_PLAYER
+    gravity_default = 0
 
 
 # Damage caused by Enemy
 class EnemyDamage(GObject):
-    pass
+    name = "DamageE"
+    identify = ID_DMG_ENEMY
+    gravity_default = 0
 
 
 # Parent of Items
 class ItemParent(GObject):
-    pass
+    name = "Item"
+    identify = ID_ITEM
+    gravity_default = 0
 
 
 # Parent of Terrain Doodads
 class DoodadParent(GObject):
-    pass
+    name = "Doodad"
+    identify = ID_DOODAD
+    gravity_default = 0
 
 
 # Object : Functions
@@ -365,8 +388,6 @@ class GameExecutor:
     def __init__(self):
         # TODO: Definite more objects.
         # Definitions of Special Objects ( Need a canvas )
-        global bg
-        bg = sprite_load(path_image + "bg_black.png", "black")
         sprite_load(
             [path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
              path_theme + "brick_castle_3.png"], "CastleBrick", 0, 0)
@@ -374,10 +395,16 @@ class GameExecutor:
         tcontainer.signin(oBrick)
 
         first_scene = TerrainManager(1, 1)
-        first_scene.fits[0].allocate("1111 1111 1111 1111 1111 1111 1111 1111\
+        first_scene.allocate("1111 1111 1111 1111 1111 1111 1111 1111\
                                      1111 1111 1111 1111 1111 1111 1111 1111\
                                      1111 1111 1111 1111 1111 1111 1111 1111\
                                      1111 1111 1111 1111 1111 1111 1111 1111\
-                                     1111 1111 1111 1111 1111 1111 1111 1111", 0)
+                                     1111 1111 1111 1111 1111 1111 1111 1111\
+                                     @ \
+                                     @ \
+                                     @ \
+                                     @ \
+                                     1111 1111 1111 1111 1111 1111 1111 1111\
+                                     ", 0)
 
         first_scene.generate()

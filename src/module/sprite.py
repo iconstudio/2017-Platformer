@@ -58,7 +58,7 @@ class Sprite(object):
             data = self.__data__
             dx = int(self.width * index)
         else:
-            data = self.__data__[int(index) - 1]
+            data = self.__data__[int(index)]
         data.opacify(alpha)
 
         if rot != 0.0:  # pico2d does not support clipping + rotating draw.
