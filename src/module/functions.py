@@ -5,10 +5,11 @@ import ctypes
 import collections
 
 __all__ = [
-    "false", "true", "screen_width", "screen_height", "screen_scale", "path_resource", "path_image", "path_theme", "path_entity",
+    "false", "true", "screen_width", "screen_height", "screen_scale", "path_resource", "path_image", "path_theme",
+    "path_entity",
     "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle",
     "irandom", "irandom_range", "distribute", "choose",
-    "Camera"
+    "Camera", "tcontainer", "oStatusContainer"
 ]
 
 # Global : Constants
@@ -107,3 +108,30 @@ class __Camera:
 
 
 Camera = __Camera()
+
+
+# Object : Terrain Container
+class TerrainContainer:
+    mess = []
+
+    def signin(self, type_t):
+        self.mess.append(type_t)
+
+    def clear(self):
+        self.mess.clear()
+
+
+tcontainer = TerrainContainer()
+
+
+class oStatusContainer:
+    NONE = 0
+    IDLE = 1
+    WALK = 8
+    RUNNING = 10
+    ATTACKING = 40
+    ATTACKING_END = 45
+    CHANNELING = 60
+    STUNNED = 80
+    DEAD = 98
+    DISAPPEAR = 99

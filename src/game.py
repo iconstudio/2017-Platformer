@@ -86,13 +86,14 @@ def draw():
 
 
 def instance_draw_update():
-    global instance_draw_list, instance_update
+    global instance_list, instance_draw_list, instance_update
     if instance_update:
         del instance_draw_list
         instance_update = false
         instance_draw_list = []
-        for inst in instance_list:
-            instance_draw_list.append(inst)
+        instance_draw_list = sorted(instance_list, key=lambda gobject: gobject.depth)
+        #for inst in instance_list:
+        #    instance_draw_list.append(inst)
 
 
 def handle_events():
@@ -119,20 +120,6 @@ def resume():
 # ==================================================================================================
 #                                               지형
 # ==================================================================================================
-
-# Object : Terrain Container
-class TerrainContainer:
-    mess = []
-
-    def signin(self, type_t):
-        self.mess.append(type_t)
-
-    def clear(self):
-        self.mess.clear()
-
-
-tcontainer = TerrainContainer()
-
 
 # Object : Terrain Manager
 class TerrainManager:
@@ -201,7 +188,7 @@ class TerrainAllocator:
                 continue
             # newx = (i - math.floor(i / self.hsz)) * self.tile_w
             # newy = math.floor(i / self.hsz) * self.tile_h
-            NEWBLOCK: GObject = tcontainer.mess[int(current) - 1](100, newx, newy)
+            NEWBLOCK: GObject = instance_create(tcontainer.mess[int(current) - 1], 100, newx, newy)
             newx += self.tile_w
             if newx >= self.w:
                 newx = self.x
@@ -312,6 +299,7 @@ class Solid(GObject):
     xFric, yFric = 0, 0
 
 
+# Definitions of Special Objects
 class oBrick(Solid):
     name = "Brick of Mine"
 
@@ -321,40 +309,41 @@ class oBrick(Solid):
         self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3)
 
 
-# Object : Specials
 # Player
-class Player(GObject):
+class oPlayer(GObject):
     name = "Player"
 
 
 # Parent of Enemies
-class EnemyParent(GObject):
+class oEnemyParent(GObject):
     name = "NPC"
+
+    oStatus = oStatusContainer.IDLE
 
 
 # Damage caused by Player
-class PlayerDamage(GObject):
+class oPlayerDamage(GObject):
     name = "DamageP"
     identify = ID_DMG_PLAYER
     gravity_default = 0
 
 
 # Damage caused by Enemy
-class EnemyDamage(GObject):
+class oEnemyDamage(GObject):
     name = "DamageE"
     identify = ID_DMG_ENEMY
     gravity_default = 0
 
 
 # Parent of Items
-class ItemParent(GObject):
+class oItemParent(GObject):
     name = "Item"
     identify = ID_ITEM
     gravity_default = 0
 
 
 # Parent of Terrain Doodads
-class DoodadParent(GObject):
+class oDoodadParent(GObject):
     name = "Doodad"
     identify = ID_DOODAD
     gravity_default = 0
@@ -363,7 +352,6 @@ class DoodadParent(GObject):
 # Object : Functions
 def instance_create(Ty, depth=int(0), x=int(0), y=int(0)) -> object:
     temp = Ty(depth, x, y)
-    temp.x, temp.y = x, y
     global instance_last
     instance_last = temp
     return temp
@@ -387,13 +375,14 @@ def place_free(dx, dy) -> bool:
 class GameExecutor:
     def __init__(self):
         # TODO: Definite more objects.
-        # Definitions of Special Objects ( Need a canvas )
+        # Declaring of Special Objects ( Need a canvas )
         sprite_load(
             [path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
              path_theme + "brick_castle_3.png"], "CastleBrick", 0, 0)
 
         tcontainer.signin(oBrick)
 
+        Camera.set_pos(0, 0)
         first_scene = TerrainManager(1, 1)
         first_scene.allocate("1111 1111 1111 1111 1111 1111 1111 1111\
                                      1111 1111 1111 1111 1111 1111 1111 1111\

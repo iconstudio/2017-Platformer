@@ -37,7 +37,7 @@ class Sprite(object):
                     self.width = int(self.__data__[0].w)
                     self.height = int(self.__data__[0].h)
             except IndexError:
-                raise RuntimeError("스프라이트 목록아 비어있습니다!")
+                raise RuntimeError("스프라이트 목록이 비어있습니다!")
         else:  # load only an image, so dosent need spliting one image.
             self.__data__ = load_image(filepath)
             self.number = number  # the number of sprite in an image
