@@ -1,4 +1,5 @@
 from pico2d import *
+
 from functions import *
 
 __all__ = [
@@ -16,7 +17,7 @@ class Sprite(object):
     width, height = 0, 0
     isSummed: bool = false
 
-    def __init__(self, filepath:list or str, number, xoffset=None, yoffset=None):
+    def __init__(self, filepath:list or str, number, xoffset=-1, yoffset=-1):
         """
             이미지 불러오기, 이미지 분할, 리스트화 작업
             :param filepath:
@@ -31,7 +32,7 @@ class Sprite(object):
                     self.__data__ = []
                     for specpath in filepath:
                         img = load_image(specpath)
-                        if xoffset != None and yoffset != None:
+                        if xoffset != -1 and yoffset != -1:
                             img.offset(xoffset, yoffset)
                         self.__data__.append(img)
                     self.width = int(self.__data__[0].w)

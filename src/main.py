@@ -1,7 +1,7 @@
 from pico2d import *
-from functions import *
 
 import framework
+from functions import *
 
 __all__ = [
               "Menu", "MenuNode"
@@ -15,22 +15,24 @@ name = "main_state"
 logo_time = 0
 
 
+# noinspection PyGlobalUndefined
 def enter():
-    global bg
-    bg = load_image(path_image + "bg_black.png")
+    #global bg
+    #bg = load_image(path_image + "bg_black.png")
     pass
 
 
 def exit():
     if logo_time > 10:
-        global bg
-        del bg
+        pass
+    #    global bg
+    #    del bg
     pass
 
 
 def update():
     global logo_time
-    if (logo_time > 1.0):
+    if logo_time > 1.0:
         logo_time = 0
         import game
         framework.change_state(game)
@@ -40,16 +42,16 @@ def update():
 
 
 def draw():
-    global bg
+    #global bg
     clear_canvas()
-    bg.draw(screen_width / 2, screen_height / 2)
+    #bg.draw(screen_width / 2, screen_height / 2)
     update_canvas()
     pass
 
 
 def handle_events():
-    events = get_events()
-    for event in events:
+    mevents = get_events()
+    for event in mevents:
         if event.type == SDL_QUIT:
             framework.quit()
         else:

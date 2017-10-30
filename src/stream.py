@@ -1,9 +1,9 @@
 from pico2d import *
-from functions import *
 
 import framework
-#import begin
+# import begin
 import game
+from functions import *
 
 """
         수정 사항:

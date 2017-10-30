@@ -1,8 +1,8 @@
 from pico2d import *
-from functions import *
 
 import framework
 import main
+from functions import *
 
 # ==================================================================================================
 #                                       프레임워크 함수
@@ -12,6 +12,7 @@ name = "begin_state"
 logo_time = 0
 
 
+# noinspection PyGlobalUndefined,PyGlobalUndefined
 def enter():
     global logo, hfont
     logo = load_image(path_image + "logo.png")
@@ -26,7 +27,7 @@ def exit():
 
 def update():
     global logo_time
-    if (logo_time > 180.0):
+    if logo_time > 180.0:
         logo_time = 0
         framework.change_state(main)
     logo_time += 1
@@ -43,8 +44,8 @@ def draw():
 
 
 def handle_events():
-    events = get_events()
-    for event in events:
+    bevents = get_events()
+    for event in bevents:
         if event.type == SDL_QUIT:
             framework.quit()
         else:

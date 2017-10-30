@@ -1,8 +1,8 @@
 from pico2d import *
-from functions import *
-from sprite import *
 
 import framework
+from functions import *
+from sprite import *
 
 __all__ = [
               "name", "hwnd", "instance_last", "instance_list_spec", "instance_draw_list", "instance_update",
@@ -52,7 +52,7 @@ def enter():
 
 
 def exit():
-    '''
+    """
     while (true):
         try:
             data_tuple = sprite_list.popitem()
@@ -62,7 +62,7 @@ def exit():
             break
         else:
             del olddb
-    '''
+    """
 
 
 def update():
@@ -188,6 +188,7 @@ class TerrainAllocator:
                 continue
             # newx = (i - math.floor(i / self.hsz)) * self.tile_w
             # newy = math.floor(i / self.hsz) * self.tile_h
+            # noinspection PyUnusedLocal
             NEWBLOCK: GObject = instance_create(tcontainer.mess[int(current) - 1], 100, newx, newy)
             newx += self.tile_w
             if newx >= self.w:
@@ -254,7 +255,7 @@ class GObject(object):
         self.onAir = false
 
     def draw_self(self):  # Simply draws its sprite on its position.
-        if self.sprite_index != None:
+        if not self.sprite_index.__eq__(None):
             draw_sprite(self.sprite_index, self.image_index, self.x, self.y, 1, 1, 0.0, self.image_alpha)
 
     def event_step(self):  # The basic machanism of objects.

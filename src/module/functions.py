@@ -1,8 +1,6 @@
-from pico2d import *
-from random import *
+
 import math
-import ctypes
-import collections
+from random import *
 
 __all__ = [
     "false", "true", "screen_width", "screen_height", "screen_scale", "path_resource", "path_image", "path_theme",
@@ -95,15 +93,15 @@ class __Camera:
     width, height = screen_width, screen_height
 
     def set_pos(self, x: float = None, y: float = None):
-        if x != None:
+        if not x.__eq__(None):
             self.x = x
-        if y != None:
+        if not y.__eq__(None):
             self.y = y
 
     def add_pos(self, x: float = None, y: float = None):
-        if x != None:
+        if not x.__eq__(None):
             self.x += x
-        if y != None:
+        if not y.__eq__(None):
             self.y += y
 
 
