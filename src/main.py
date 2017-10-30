@@ -75,7 +75,6 @@ class MenuNode:
     captioon:str = "menu"
     nnext = None
 
-    @staticmethod
     def __init__(self, ncaption, node):
         self.captioon = ncaption
         self.nnext = node

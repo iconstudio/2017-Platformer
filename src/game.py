@@ -1,6 +1,7 @@
 from pico2d import *
 
 import framework
+import game_pause
 from functions import *
 from sprite import *
 
@@ -74,14 +75,18 @@ def update():
     delay(0.01)
 
 
-def draw():
-    clear_canvas()
+def draw_clean():
     instance_draw_update()
     if len(instance_draw_list) > 0:
         for inst in instance_draw_list:
             inst.event_draw()
     else:
         raise RuntimeError("No instance")
+
+
+def draw():
+    clear_canvas()
+    draw_clean()
     update_canvas()
 
 
@@ -103,6 +108,8 @@ def handle_events():
             framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             framework.quit()
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
+            framework.push_state(game_pause)
 
 
 def pause():
@@ -142,6 +149,9 @@ class TerrainManager:
     def generate(self):
         for alloc in self.fits:
             alloc.generate()
+        global instance_update
+        instance_update = true
+        instance_draw_update()
 
     def __del__(self):
         try:
@@ -189,7 +199,7 @@ class TerrainAllocator:
             # newx = (i - math.floor(i / self.hsz)) * self.tile_w
             # newy = math.floor(i / self.hsz) * self.tile_h
             # noinspection PyUnusedLocal
-            NEWBLOCK: GObject = instance_create(tcontainer.mess[int(current) - 1], 100, newx, newy)
+            NEWBLOCK: GObject = tcontainer.mess[int(current) - 1](100, newx, newy)
             newx += self.tile_w
             if newx >= self.w:
                 newx = self.x
@@ -255,7 +265,7 @@ class GObject(object):
         self.onAir = false
 
     def draw_self(self):  # Simply draws its sprite on its position.
-        if not self.sprite_index.__eq__(None):
+        if self.sprite_index != None:
             draw_sprite(self.sprite_index, self.image_index, self.x, self.y, 1, 1, 0.0, self.image_alpha)
 
     def event_step(self):  # The basic machanism of objects.

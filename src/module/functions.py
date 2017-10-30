@@ -3,8 +3,8 @@ import math
 from random import *
 
 __all__ = [
-    "false", "true", "screen_width", "screen_height", "screen_scale", "path_resource", "path_image", "path_theme",
-    "path_entity",
+    "false", "true", "screen_width", "screen_height", "screen_scale",
+    "path_resource", "path_image", "path_font", "path_theme", "path_entity",
     "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle",
     "irandom", "irandom_range", "distribute", "choose",
     "Camera", "tcontainer", "oStatusContainer"
@@ -19,8 +19,11 @@ screen_scale: int = 1
 
 path_resource = "..\\res\\"
 path_image = path_resource + "img\\"
+path_font = path_resource + "font\\"
 path_theme = path_image + "theme\\"
 path_entity = path_image + "entity\\"
+
+# Colors
 
 
 # Global : Functions
@@ -122,6 +125,7 @@ class TerrainContainer:
 tcontainer = TerrainContainer()
 
 
+# Object : A container of Status
 class oStatusContainer:
     NONE = 0
     IDLE = 1
