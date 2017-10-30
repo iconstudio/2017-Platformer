@@ -40,7 +40,7 @@ def draw():
     clear_canvas()
     logo.draw(screen_width / 2, screen_height / 2)
     draw_set_color(255, 255, 255)
-    hfont.draw(screen_width / 2, screen_height / 2 - 100, "iconstudio")
+    hfont.draw(screen_width / 2 - 200, screen_height / 2 - 100, "iconstudio")
     update_canvas()
 
 
