@@ -1,7 +1,7 @@
 from pico2d import *
 
 import framework
-from functions import *
+#from functions import *
 
 __all__ = [
               "Menu", "MenuNode"

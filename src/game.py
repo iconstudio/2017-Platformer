@@ -97,7 +97,7 @@ def instance_draw_update():
         instance_update = false
         instance_draw_list = []
         instance_draw_list = sorted(instance_list, key=lambda gobject: gobject.depth)
-        #for inst in instance_list:
+        # for inst in instance_list:
         #    instance_draw_list.append(inst)
 
 
@@ -191,15 +191,20 @@ class TerrainAllocator:
         newy = self.y + self.h - self.tile_h
         for i in range(0, len(self.data)):
             current = self.data[i]
-            if current == "0" or current == " " or current == "\n":
+            if current == '0' or current == ' ' or current == '\n':
                 continue
-            if current == "@":
+            if current == ';':
+                newx = self.x
                 newy -= self.tile_h
                 continue
             # newx = (i - math.floor(i / self.hsz)) * self.tile_w
             # newy = math.floor(i / self.hsz) * self.tile_h
             # noinspection PyUnusedLocal
-            NEWBLOCK: GObject = tcontainer.mess[int(current) - 1](100, newx, newy)
+            if current.isnumeric():
+                tcontainer.mess[int(current) - 1](100, newx, newy)
+            else:
+                if current == '@':
+                    oPlayer(-10, newx + 10, newy + 10)
             newx += self.tile_w
             if newx >= self.w:
                 newx = self.x
@@ -257,6 +262,23 @@ class GObject(object):
         global instance_last, instance_list, instance_list_spec, instance_draw_list, instance_update
 
     # Below methods are common-functions for all object that inherites graviton.
+    # Check the place fits to self
+    def place_free(self, vx, vy) -> bool:
+        global instance_list_spec
+        clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
+        length = len(clist)
+        if length > 0:
+            #print("Checking Place for one")
+            #bbox_left, bbox_right = self.x + self.sprite_index.width - self.sprite_index.xoffset, self.x + self.sprite_index.width + self.sprite_index.xoffset
+            for inst in clist:
+                tempspr: Sprite = inst.sprite_index
+                if point_in_rectangle(self.x + vx, self.y + vy, inst.x - tempspr.width / 2, inst.y - tempspr.height / 2,
+                                      inst.x + tempspr.width / 2, inst.y + tempspr.height / 2):
+                    return false
+            return true
+        else:
+            return true
+
     def collide(self):
         self.xVel = 0
 
@@ -265,7 +287,7 @@ class GObject(object):
         self.onAir = false
 
     def draw_self(self):  # Simply draws its sprite on its position.
-        if self.sprite_index != None:
+        if not self.sprite_index.__eq__(None):
             draw_sprite(self.sprite_index, self.image_index, self.x, self.y, 1, 1, 0.0, self.image_alpha)
 
     def event_step(self):  # The basic machanism of objects.
@@ -273,18 +295,18 @@ class GObject(object):
             return
 
         if self.xVel != 0:
-            xc = self.x + self.xVel + sign(self.xVel)
-            if place_free(xc, self.y):
+            xc = self.xVel + sign(self.xVel)
+            if self.place_free(xc, 0):
                 self.x += self.xVel
             else:
                 self.collide()
 
         if self.yVel > 0:  # Going up higher
-            yc = self.y + self.yVel + 1
+            yc = self.yVel + 1
         else:  # Going down
-            yc = self.y + self.yVel - 1
+            yc = self.yVel - 1
 
-        if place_free(self.x, yc):
+        if self.place_free(0, yc):
             self.y += self.yVel  # let it moves first.
             self.gravity = self.gravity_default
             self.yVel -= self.gravity
@@ -305,6 +327,7 @@ class Solid(GObject):
     name = "Solid"
     identify = ID_SOLID
 
+    image_speed = 0
     step_enable = false
     gravity_default = 0
     xFric, yFric = 0, 0
@@ -316,13 +339,18 @@ class oBrick(Solid):
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
-        self.sprite_index = sprite_get("CastleBrick")
+        self.sprite_index = sprite_get("sCastleBrick")
         self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3)
 
 
 # Player
 class oPlayer(GObject):
     name = "Player"
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_index = sprite_get("Player")
+        self.image_speed = 0
 
 
 # Parent of Enemies
@@ -369,18 +397,20 @@ def instance_create(Ty, depth=int(0), x=int(0), y=int(0)) -> object:
 
 
 def place_free(dx, dy) -> bool:
+    #return true
     global instance_list_spec
     clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
     length = len(clist)
     if length > 0:
+        #print("Checking Place")
         for inst in clist:
             tempspr: Sprite = inst.sprite_index
             if point_in_rectangle(dx, dy, inst.x - tempspr.width / 2, inst.y - tempspr.height / 2,
                                   inst.x + tempspr.width / 2, inst.y + tempspr.height / 2):
-                return true
-        return false
+                return false
+        return true
     else:
-        return false
+        return true
 
 
 class GameExecutor:
@@ -389,7 +419,8 @@ class GameExecutor:
         # Declaring of Special Objects ( Need a canvas )
         sprite_load(
             [path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
-             path_theme + "brick_castle_3.png"], "CastleBrick", 0, 0)
+             path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
+        sprite_load(path_entity + "vampire.png", "Player", 0, 0)
 
         tcontainer.signin(oBrick)
 
@@ -400,10 +431,8 @@ class GameExecutor:
                                      1111 1111 1111 1111 1111 1111 1111 1111\
                                      1111 1111 1111 1111 1111 1111 1111 1111\
                                      1111 1111 1111 1111 1111 1111 1111 1111\
-                                     @ \
-                                     @ \
-                                     @ \
-                                     @ \
+                                     ;;;;@;;; \
+                                     0000 0000 0000 0000 0000 0000 0000 0000\
                                      1111 1111 1111 1111 1111 1111 1111 1111\
                                      ", 0)
 

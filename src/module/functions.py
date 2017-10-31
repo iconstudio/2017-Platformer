@@ -57,6 +57,9 @@ def point_in_rectangle(px, py, x1, y1, x2, y2) -> bool:
     return x1 <= px <= x2 and y1 <= py <= y2
 
 
+def rect_in_rectangle(px1, py1, px2, py2, x1, y1, x2, y2) -> bool:
+    return false
+
 # integer random
 def irandom(n) -> int:
     return randint(0, int(n))
