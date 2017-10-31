@@ -37,7 +37,6 @@ class Sprite(object):
                         self.__data__.append(img)
                     self.width = int(self.__data__[0].w)
                     self.height = int(self.__data__[0].h)
-                    self.xoffset, self.yoffset = self.__data__[0].xoffset, self.__data__[0].yoffset
             except IndexError:
                 raise RuntimeError("스프라이트 목록이 비어있습니다!")
         else:  # 스프라이트가 낱장의 이미지로 구성됨.
@@ -47,8 +46,8 @@ class Sprite(object):
             # size of each index
             self.width = int(self.__data__[0].w / number)
             self.height = int(self.__data__[0].h)
-            self.xoffset, self.yoffset = self.__data__[0].xoffset, self.__data__[0].yoffset
 
+        self.xoffset, self.yoffset = self.__data__[0].xoffset, self.__data__[0].yoffset
         try:
             tempTy = type(number)
             if tempTy != int and tempTy != float:

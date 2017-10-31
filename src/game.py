@@ -268,12 +268,18 @@ class GObject(object):
         clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
         length = len(clist)
         if length > 0:
-            #print("Checking Place for one")
-            #bbox_left, bbox_right = self.x + self.sprite_index.width - self.sprite_index.xoffset, self.x + self.sprite_index.width + self.sprite_index.xoffset
+            # print("Checking Place for one")
+            bbox_left = int(self.x - self.sprite_index.xoffset + vx)
+            bbox_top = int(self.y - self.sprite_index.yoffset + vy)
+            brect = SDL_Rect(bbox_left, bbox_top, self.sprite_index.width, self.sprite_index.height)
+            temprect = SDL_Rect()
+
             for inst in clist:
                 tempspr: Sprite = inst.sprite_index
-                if point_in_rectangle(self.x + vx, self.y + vy, inst.x - tempspr.width / 2, inst.y - tempspr.height / 2,
-                                      inst.x + tempspr.width / 2, inst.y + tempspr.height / 2):
+                otho_left = int(inst.x - tempspr.xoffset)
+                otho_top = int(inst.y - tempspr.yoffset)
+                temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height
+                if rect_in_rectangle_opt(brect, temprect):
                     return false
             return true
         else:
@@ -397,12 +403,12 @@ def instance_create(Ty, depth=int(0), x=int(0), y=int(0)) -> object:
 
 
 def place_free(dx, dy) -> bool:
-    #return true
+    # return true
     global instance_list_spec
     clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
     length = len(clist)
     if length > 0:
-        #print("Checking Place")
+        # print("Checking Place")
         for inst in clist:
             tempspr: Sprite = inst.sprite_index
             if point_in_rectangle(dx, dy, inst.x - tempspr.width / 2, inst.y - tempspr.height / 2,

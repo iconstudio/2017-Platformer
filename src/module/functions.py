@@ -1,12 +1,16 @@
-
+import sdl2.rect as rect
+import sdl2.keycode as keycode
+from sdl2.rect import SDL_Rect
+import sdl2.pixels as px
 import math
 from random import *
 
 __all__ = [
     "false", "true", "screen_width", "screen_height", "screen_scale",
     "path_resource", "path_image", "path_font", "path_theme", "path_entity",
-    "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle",
+    "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle", "rect_in_rectangle", "rect_in_rectangle_opt",
     "irandom", "irandom_range", "distribute", "choose",
+    "c_white",
     "Camera", "tcontainer", "oStatusContainer"
 ]
 
@@ -24,6 +28,7 @@ path_theme = path_image + "theme\\"
 path_entity = path_image + "entity\\"
 
 # Colors
+c_white = px.SDL_Color(255, 255, 255)
 
 
 # Global : Functions
@@ -57,8 +62,19 @@ def point_in_rectangle(px, py, x1, y1, x2, y2) -> bool:
     return x1 <= px <= x2 and y1 <= py <= y2
 
 
-def rect_in_rectangle(px1, py1, px2, py2, x1, y1, x2, y2) -> bool:
-    return false
+def rect_in_rectangle_opt(pstr:SDL_Rect, dstr:SDL_Rect) -> bool:
+    first = pstr
+    second = dstr
+    result = bool(rect.SDL_HasIntersection(first, second))
+    return result
+
+
+def rect_in_rectangle(px1, py1, pw, ph, x1, y1, w, h) -> bool:
+    first = rect.SDL_Rect(px1, py1, pw, ph)
+    second = rect.SDL_Rect(x1, y1, w, h)
+    result = bool(rect.SDL_HasIntersection(first, second))
+    return result
+
 
 # integer random
 def irandom(n) -> int:
@@ -93,7 +109,7 @@ def choose(*args):
 
 
 # Object : View Camera
-class __Camera:
+class oCamera:
     x: float = 0
     y: float = 0
     width, height = screen_width, screen_height
@@ -111,7 +127,7 @@ class __Camera:
             self.y += y
 
 
-Camera = __Camera()
+Camera = oCamera()
 
 
 # Object : Terrain Container
@@ -140,3 +156,15 @@ class oStatusContainer:
     STUNNED = 80
     DEAD = 98
     DISAPPEAR = 99
+
+
+# Object : IO procedure
+class oIOProc:
+    key_list = []
+    key_check = {}
+
+    def key_assign(self, code):
+        self.key_list.append(code)
+
+    def procede(self, keyevent):
+        pass
