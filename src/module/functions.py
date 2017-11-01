@@ -4,15 +4,17 @@ from sdl2.rect import SDL_Rect
 import sdl2.pixels as px
 import math
 from random import *
+import json
 
 __all__ = [
-    "false", "true", "screen_width", "screen_height", "screen_scale",
-    "path_resource", "path_image", "path_font", "path_theme", "path_entity",
-    "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle", "rect_in_rectangle", "rect_in_rectangle_opt",
-    "irandom", "irandom_range", "distribute", "choose",
-    "c_white",
-    "Camera", "tcontainer", "oStatusContainer", "io"
-]
+              "false", "true", "screen_width", "screen_height", "screen_scale",
+              "path_resource", "path_image", "path_font", "path_theme", "path_entity",
+              "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle", "rect_in_rectangle",
+              "rect_in_rectangle_opt",
+              "irandom", "irandom_range", "distribute", "choose",
+              "c_white",
+              "Camera", "tcontainer", "oStatusContainer", "io"
+          ] + json.__all__
 
 # Global : Constants
 false = False
@@ -62,7 +64,7 @@ def point_in_rectangle(px, py, x1, y1, x2, y2) -> bool:
     return x1 <= px <= x2 and y1 <= py <= y2
 
 
-def rect_in_rectangle_opt(pstr:SDL_Rect, dstr:SDL_Rect) -> bool:
+def rect_in_rectangle_opt(pstr: SDL_Rect, dstr: SDL_Rect) -> bool:
     first = pstr
     second = dstr
     result = bool(rect.SDL_HasIntersection(first, second))

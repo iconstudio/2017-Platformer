@@ -27,8 +27,8 @@ from functions import *
 
 hwnd = open_canvas(screen_width, screen_height, true)
 SDL_SetWindowTitle(hwnd, "Vampire Exodus".encode("UTF-8"))
-#icon = load_texture(path_image + "icon.png")
-#SDL_SetWindowIcon(hwnd, icon)
+# icon = load_texture(path_image + "icon.png")
+# SDL_SetWindowIcon(hwnd, icon)
 # SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
 # SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
 hide_cursor()
