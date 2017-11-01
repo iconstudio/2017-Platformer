@@ -19,7 +19,7 @@ from functions import *
 
 lattice_on: bool = True
 audio_on: bool = False
-background_color: SDL_Color = SDL_Color(0, 0, 0)
+background_color: SDL_Color = SDL_Color(210, 210, 210)
 draw_color: SDL_Color = SDL_Color()
 
 __all__ = [
@@ -323,7 +323,7 @@ def load_texture(name):
     return texture
 
 
-def load_image(name, xoff, yoff):
+def load_image(name, xoff=None, yoff=None):
     texture = load_texture(name)
 
     image = Image(texture, xoff, yoff)

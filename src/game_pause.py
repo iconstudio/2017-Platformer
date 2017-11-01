@@ -11,10 +11,10 @@ from functions import *
 name = "pause_state"
 
 
-# noinspection PyGlobalUndefined,PyGlobalUndefined
+# noinspection PyGlobalUndefined
 def enter():
     global logo
-    logo = load_image(path_image + "logo.png")
+    logo = load_image(path_image + "logo.png", 80, 80)
 
 
 def exit():

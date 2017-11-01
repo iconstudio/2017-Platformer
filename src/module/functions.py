@@ -11,7 +11,7 @@ __all__ = [
     "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle", "rect_in_rectangle", "rect_in_rectangle_opt",
     "irandom", "irandom_range", "distribute", "choose",
     "c_white",
-    "Camera", "tcontainer", "oStatusContainer"
+    "Camera", "tcontainer", "oStatusContainer", "io"
 ]
 
 # Global : Constants
@@ -168,3 +168,6 @@ class oIOProc:
 
     def procede(self, keyevent):
         pass
+
+
+io = oIOProc()

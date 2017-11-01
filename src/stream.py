@@ -3,6 +3,7 @@ from pico2d import *
 import framework
 import begin
 import game
+import game_pause
 from functions import *
 
 """
@@ -20,6 +21,7 @@ from functions import *
 
             5. pico2d.py 에 background_color, draw_color 와 그 set, get 메서드 추가
             6. pico2d.py 에 문자 정렬 추가
+            7. rect.py 의 생성자에 int 변환 씌움
 ]
 """
 
@@ -31,5 +33,5 @@ SDL_SetWindowTitle(hwnd, "Vampire Exodus".encode("UTF-8"))
 # SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
 hide_cursor()
 hide_lattice()
-framework.run(game)
+framework.run(game_pause)
 close_canvas()
