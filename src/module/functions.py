@@ -1,36 +1,18 @@
 import sdl2.rect as rect
+import sdl2.pixels as px
 import sdl2.keycode as keycode
 from sdl2.rect import SDL_Rect
-import sdl2.pixels as px
 import math
 from random import *
-import json
+import constants
 
 __all__ = [
-              "false", "true", "screen_width", "screen_height", "screen_scale",
-              "path_resource", "path_image", "path_font", "path_theme", "path_entity",
-              "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle", "rect_in_rectangle",
-              "rect_in_rectangle_opt",
-              "irandom", "irandom_range", "distribute", "choose",
-              "c_white",
-              "Camera", "tcontainer", "oStatusContainer", "io"
-          ] + json.__all__
-
-# Global : Constants
-false = False
-true = True
-screen_width: int = 640
-screen_height: int = 360
-screen_scale: int = 1
-
-path_resource = "..\\res\\"
-path_image = path_resource + "img\\"
-path_font = path_resource + "font\\"
-path_theme = path_image + "theme\\"
-path_entity = path_image + "entity\\"
-
-# Colors
-c_white = px.SDL_Color(255, 255, 255)
+    "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle", "rect_in_rectangle",
+    "rect_in_rectangle_opt",
+    "irandom", "irandom_range", "distribute", "choose",
+    "make_color_rgb",
+    "Camera", "oStatusContainer", "io"
+]
 
 
 # Global : Functions
@@ -56,6 +38,7 @@ def radtodeg(radian: float) -> float:
     return radian * 180 / math.pi
 
 
+# vector
 def point_distance(x1, y1, x2, y2) -> float:
     return math.hypot((x2 - x1), (y2 - y1))
 
@@ -78,6 +61,7 @@ def rect_in_rectangle(px1, py1, pw, ph, x1, y1, w, h) -> bool:
     return result
 
 
+# Randoms
 # integer random
 def irandom(n) -> int:
     return randint(0, int(n))
@@ -96,7 +80,7 @@ def distribute(x1, x2, ratio: float):
         return x2
 
 
-# Choice random
+# choice random
 def choose(*args):
     length = len(args)
     if length <= 0:
@@ -110,11 +94,16 @@ def choose(*args):
     return pick
 
 
+# For Drawing
+def make_color_rgb(r, g, b):
+    return px.SDL_Color(r, g, b)
+
+
 # Object : View Camera
 class oCamera:
     x: float = 0
     y: float = 0
-    width, height = screen_width, screen_height
+    width, height = constants.screen_width, constants.screen_height
 
     def set_pos(self, x: float = None, y: float = None):
         if not x.__eq__(None):
@@ -130,20 +119,6 @@ class oCamera:
 
 
 Camera = oCamera()
-
-
-# Object : Terrain Container
-class TerrainContainer:
-    mess = []
-
-    def signin(self, type_t):
-        self.mess.append(type_t)
-
-    def clear(self):
-        self.mess.clear()
-
-
-tcontainer = TerrainContainer()
 
 
 # Object : A container of Status

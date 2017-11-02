@@ -1,6 +1,5 @@
 from pico2d import *
-
-from functions import *
+from constants import *
 
 __all__ = [
     "Sprite",
@@ -26,7 +25,7 @@ class Sprite(object):
             :param number:
         """
         self.__data__ = []
-        if type(filepath) == list: # 스프라이트가 여러 개의 이미지로 구성됨.
+        if type(filepath) == list:  # 스프라이트가 여러 개의 이미지로 구성됨.
             self.isSeparate = true
             self.number = len(filepath)
 

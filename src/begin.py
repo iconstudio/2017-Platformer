@@ -1,8 +1,8 @@
 from pico2d import *
+from functions import *
 
 import framework
 import main
-from functions import *
 
 # ==================================================================================================
 #                                       프레임워크 함수

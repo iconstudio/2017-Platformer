@@ -1,7 +1,7 @@
 from pico2d import *
+from functions import *
 
 import framework
-#from functions import *
 
 __all__ = [
               "Menu", "MenuNode"
@@ -17,15 +17,15 @@ logo_time = 0
 
 # noinspection PyGlobalUndefined
 def enter():
-    #global bg
-    #bg = load_image(path_image + "bg_black.png")
+    # global bg
+    # bg = load_image(path_image + "bg_black.png")
     pass
 
 
 def exit():
     if logo_time > 10:
         pass
-    #    global bg
+    # global bg
     #    del bg
     pass
 
@@ -42,9 +42,9 @@ def update():
 
 
 def draw():
-    #global bg
+    # global bg
     clear_canvas()
-    #bg.draw(screen_width / 2, screen_height / 2)
+    # bg.draw(screen_width / 2, screen_height / 2)
     update_canvas()
     pass
 
@@ -72,7 +72,7 @@ def resume():
 # ==================================================================================================
 
 class MenuNode:
-    captioon:str = "menu"
+    captioon: str = "menu"
     nnext = None
 
     def __init__(self, ncaption, node):
@@ -81,6 +81,4 @@ class MenuNode:
 
 
 class Menu:
-    root:MenuNode = None
-    
-
+    root: MenuNode = None

@@ -1,10 +1,11 @@
 from pico2d import *
+from functions import *
+from constants import *
 
 import framework
 import begin
 import game
 import game_pause
-from functions import *
 
 """
         수정 사항:
@@ -33,5 +34,6 @@ SDL_SetWindowTitle(hwnd, "Vampire Exodus".encode("UTF-8"))
 # SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
 hide_cursor()
 hide_lattice()
-framework.run(game_pause)
+background_color = make_color_rgb(0, 0, 0)
+framework.run(game)
 close_canvas()

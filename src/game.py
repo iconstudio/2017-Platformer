@@ -1,12 +1,14 @@
 from pico2d import *
+from functions import *
+from constants import *
 
 import framework
 import game_pause
-from functions import *
 from sprite import *
+from terrain import *
 
 __all__ = [
-              "name", "hwnd", "instance_last", "instance_list_spec", "instance_draw_list", "instance_update",
+              "name", "instance_last", "instance_list_spec", "instance_draw_list", "instance_update",
               "sprite_list",
               "Sprite", "GObject", "Solid"
           ] + framework.__all__
@@ -125,96 +127,6 @@ def resume():
 # ==================================================================================================
 #                                    사용자 정의 객체 / 함수
 # ==================================================================================================
-
-# ==================================================================================================
-#                                               지형
-# ==================================================================================================
-
-# Object : Terrain Manager
-class TerrainManager:
-    fits = []
-    type_theme = 0
-
-    def __init__(self, theme: int = 0, numberw: int = 1, numberh: int = 1):
-        self.type_theme = theme
-        for i in range(0, numberw, 1):
-            for j in range(0, numberh, 1):
-                newone = TerrainAllocator(self.type_theme, i * screen_width, j * screen_height)
-                self.fits.append(newone)
-
-    def allocate(self, data: str, position: int = 0):
-        try:
-            self.fits[position].allocate(data, self.type_theme)
-        except IndexError:
-            pass
-
-    def generate(self):
-        for alloc in self.fits:
-            alloc.generate()
-        global instance_update
-        instance_update = true
-        instance_draw_update()
-
-    def __del__(self):
-        try:
-            for alloc in self.fits:
-                del alloc
-        except IndexError:
-            return
-        except KeyError:
-            return
-            # finally:
-            # del self.fits
-
-
-# Object : A Allocating block of Terrain
-class TerrainAllocator:
-    data: str = ""  # Determines what to generate
-    type_theme: int = 0
-    type_path: int = 0  # Determines how to do.
-    tile_w: int = 20
-    tile_h: int = 20
-    x, y, w, h, hsz, vsz = 0, 0, 0, 0, 0, 0
-
-    def __init__(self, nt: int, nx: int, ny: int, nw: int = screen_width, nh: int = screen_height):
-        self.assignment(nt, nx, ny, nw, nh)
-
-    def assignment(self, nt: int, nx: int, ny: int, nw: int = screen_width, nh: int = screen_height):
-        # The position of a map
-        self.x, self.y = nx, ny
-        # The size of a map
-        self.w, self.h = nw, nh
-        # The number of grid
-        self.hsz, self.vsz = int(nw / self.tile_w), int(nh / self.tile_h)
-        self.type_theme = nt
-
-    def generate(self):
-        newx = self.x
-        newy = self.y + self.h - self.tile_h
-        for i in range(0, len(self.data)):
-            current = self.data[i]
-            if current == '0' or current == ' ' or current == '\n':
-                continue
-            if current == ';':
-                newx = self.x
-                newy -= self.tile_h
-                continue
-            # newx = (i - math.floor(i / self.hsz)) * self.tile_w
-            # newy = math.floor(i / self.hsz) * self.tile_h
-            # noinspection PyUnusedLocal
-            if current.isnumeric():
-                tcontainer.mess[int(current) - 1](100, newx, newy)
-            else:
-                if current == '@':
-                    oPlayer(-10, newx + 10, newy + 10)
-            newx += self.tile_w
-            if newx >= self.w:
-                newx = self.x
-                newy -= self.tile_h
-
-    def allocate(self, data: str, newtype: int = 0):
-        self.data = data
-        self.type_theme = newtype
 
 
 # ==================================================================================================
@@ -430,7 +342,8 @@ class GameExecutor:
              path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
         sprite_load(path_entity + "vampire.png", "Player", 0, 0)
 
-        tcontainer.signin(oBrick)
+        tcontainer.signin("1", oBrick)
+        tcontainer.signin("@", oPlayer)
 
         Camera.set_pos(0, 0)
         first_scene = TerrainManager(1, 1)
@@ -445,3 +358,6 @@ class GameExecutor:
                                      ", 0)
 
         first_scene.generate()
+        global instance_update
+        instance_update = true
+        instance_draw_update()
