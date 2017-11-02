@@ -82,8 +82,8 @@ def handle_events():
             framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
             framework.push_state(game_pause)
-        elif event.type in (SDL_KEYDOWN, SDL_KEYUP):
-            io.procede(event)
+        elif event.type == SDL_KEYDOWN or SDL_KEYUP:
+            io.proceed(event)
 
 
 def pause():

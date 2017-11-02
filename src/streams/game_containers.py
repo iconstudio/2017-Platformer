@@ -276,7 +276,7 @@ class oIOProc:
 
     key_list = {}
 
-    def key_add(self, key:SDL_Keycode):
+    def key_add(self, key: SDL_Keycode):
         newnode = self.ionode()
         self.key_list[key] = newnode
         return newnode
@@ -285,22 +285,26 @@ class oIOProc:
         node = self.key_add(key)
         node.code = code
 
-    def procede(self, kevent):
+    def proceed(self, kevent):
+        node = None
         try:
             node = self.key_list[kevent.key]
+
             if kevent.type == SDL_KEYDOWN:
                 node.check = true
                 node.check_pressed = true
                 self.iochecker(node)
+                #print(true)
             elif kevent.type == SDL_KEYUP:
                 node.check = false
                 node.check_pressed = false
-
-            if node.check:
-                runners = node.code
-                runners()
+                #print(false)
         except KeyError:
-            pass
+            return
+
+        if node.check:
+            runners = node.code
+            runners()
 
 
 io = oIOProc()
@@ -310,14 +314,14 @@ io = oIOProc()
 class oPlayer(GObject):
     name = "Player"
 
-    def __cmd__handle_mvl(self,):
-            self.xVel = -3
+    def __cmd__handle_mvl(self):
+        self.xVel = -3
 
     def __cmd__handle_mvr(self):
-            self.xVel = 3
+        self.xVel = 3
 
     def __cmd__handle_jmp(self):
-        if self.yVel == 0 and not self.onAir:
+        if not self.onAir:
             self.yVel = 6
 
     def __init__(self, ndepth, nx, ny):
