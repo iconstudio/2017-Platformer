@@ -11,7 +11,7 @@ __all__ = [
     "rect_in_rectangle_opt",
     "irandom", "irandom_range", "distribute", "choose",
     "make_color_rgb",
-    "Camera", "oStatusContainer", "io"
+    "Camera", "oStatusContainer"
 ]
 
 
@@ -134,17 +134,3 @@ class oStatusContainer:
     DEAD = 98
     DISAPPEAR = 99
 
-
-# Object : IO procedure
-class oIOProc:
-    key_list = []
-    key_check = {}
-
-    def key_assign(self, code):
-        self.key_list.append(code)
-
-    def procede(self, keyevent):
-        pass
-
-
-io = oIOProc()

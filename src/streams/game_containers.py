@@ -2,18 +2,17 @@ from pico2d import *
 from functions import *
 from constants import *
 
-import framework
-import game_pause
 from sprite import *
 from terrain import *
 
 __all__ = [
-              "name", "instance_last", "instance_list_spec", "instance_draw_list", "instance_update",
-              "sprite_list",
-              "Sprite", "GObject", "Solid"
-          ] + framework.__all__
+    "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
+    "container_player", "instance_create", "place_free", "io",
+    "GObject", "Solid", "oBrick", "oPlayer",
+    "ID_SOLID", "ID_DMG_PLAYER", "ID_DMG_ENEMY", "ID_ITEM", "ID_PARTICLE", "ID_DOODAD"
+]
 
-# Global : Variables 2
+# Global : Variables
 instance_last = None  # 마지막 개체
 instance_list: list = []  # 개체는 순서가 있다.
 """
@@ -43,90 +42,7 @@ instance_list_spec[ID_DMG_PLAYER] = []
 instance_list_spec[ID_DMG_ENEMY] = []
 instance_list_spec[ID_ITEM] = []
 
-# ==================================================================================================
-#                                       프레임워크 함수
-# ==================================================================================================
-
-name = "game_state"
-
-
-def enter():
-    GameExecutor()
-
-
-def exit():
-    """
-    while (true):
-        try:
-            data_tuple = sprite_list.popitem()
-            olddb: Sprite = data_tuple[1]
-            del olddb
-        except KeyError as e:
-            break
-        else:
-            del olddb
-    """
-
-
-def update():
-    if len(instance_list) > 0:
-        for inst in instance_list:
-            inst.event_step()
-    else:
-        raise RuntimeError("No instance")
-    delay(0.01)
-
-
-def draw_clean():
-    instance_draw_update()
-    if len(instance_draw_list) > 0:
-        for inst in instance_draw_list:
-            inst.event_draw()
-    else:
-        raise RuntimeError("No instance")
-
-
-def draw():
-    clear_canvas()
-    draw_clean()
-    update_canvas()
-
-
-def instance_draw_update():
-    global instance_list, instance_draw_list, instance_update
-    if instance_update:
-        del instance_draw_list
-        instance_update = false
-        instance_draw_list = []
-        instance_draw_list = sorted(instance_list, key=lambda gobject: gobject.depth)
-        # for inst in instance_list:
-        #    instance_draw_list.append(inst)
-
-
-def handle_events():
-    event_queue = get_events()
-    for event in event_queue:
-        if event.type == SDL_QUIT:
-            framework.quit()
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-            framework.quit()
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
-            framework.push_state(game_pause)
-        elif event.type == SDL_KEYDOWN:
-            io.procede(event)
-
-
-def pause():
-    pass
-
-
-def resume():
-    pass
-
-
-# ==================================================================================================
-#                                    사용자 정의 객체 / 함수
-# ==================================================================================================
+container_player = None
 
 
 # ==================================================================================================
@@ -202,7 +118,49 @@ class GObject(object):
     def collide(self):
         self.xVel = 0
 
+    def move_contact_y(self, dist=1, up: bool = false) -> bool:
+        if dist < 0:
+            dist = 1000000
+
+        global instance_list_spec
+        clist = instance_list_spec["Solid"]
+        length = len(clist)
+        yprog = 0
+        if length > 0:
+            bbox_x = int(self.x - self.sprite_index.xoffset)
+            bbox_y = int(self.y - self.sprite_index.yoffset)
+            if up:
+                bbox_y += 1
+            else:
+                bbox_y -= 1
+            brect = SDL_Rect(bbox_x, bbox_y, self.sprite_index.width, self.sprite_index.height)
+            temprect = SDL_Rect()
+            templist = []
+            for inst in clist:
+                if bool(inst.y + inst.sprite_index.yoffset <= brect.y + brect.h) != up:
+                    templist.append(inst)
+
+            while yprog <= dist:
+                for inst in templist:
+                    tempspr: Sprite = inst.sprite_index
+                    otho_left = int(inst.x - tempspr.xoffset)
+                    otho_top = int(inst.y - tempspr.yoffset)
+                    temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height
+                    if rect_in_rectangle_opt(brect, temprect):
+                        return true
+                if up:
+                    brect.y += 1
+                    yprog += 1
+                else:
+                    brect.y -= 1
+                    yprog += 1
+            return false
+        else:
+            return false
+
     def thud(self):
+        # if self.yVel != 0:
+        self.move_contact_y(abs(self.yVel))
         self.yVel = 0
         self.onAir = false
 
@@ -253,59 +211,10 @@ class Solid(GObject):
     xFric, yFric = 0, 0
 
 
-# Definitions of Special Objects
-class oBrick(Solid):
-    name = "Brick of Mine"
+# ==================================================================================================
+#                                    사용자 정의 객체 / 함수
+# ==================================================================================================
 
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.sprite_index = sprite_get("sCastleBrick")
-        self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3)
-
-
-# Player
-class oPlayer(GObject):
-    name = "Player"
-
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.sprite_index = sprite_get("Player")
-        self.image_speed = 0
-
-
-# Parent of Enemies
-class oEnemyParent(GObject):
-    name = "NPC"
-
-    oStatus = oStatusContainer.IDLE
-
-
-# Damage caused by Player
-class oPlayerDamage(GObject):
-    name = "DamageP"
-    identify = ID_DMG_PLAYER
-    gravity_default = 0
-
-
-# Damage caused by Enemy
-class oEnemyDamage(GObject):
-    name = "DamageE"
-    identify = ID_DMG_ENEMY
-    gravity_default = 0
-
-
-# Parent of Items
-class oItemParent(GObject):
-    name = "Item"
-    identify = ID_ITEM
-    gravity_default = 0
-
-
-# Parent of Terrain Doodads
-class oDoodadParent(GObject):
-    name = "Doodad"
-    identify = ID_DOODAD
-    gravity_default = 0
 
 
 # Object : Functions
@@ -333,31 +242,128 @@ def place_free(dx, dy) -> bool:
         return true
 
 
-class GameExecutor:
-    def __init__(self):
-        # TODO: Definite more objects.
-        # Declaring of Special Objects ( Need a canvas )
-        sprite_load(
-            [path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
-             path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
-        sprite_load(path_entity + "vampire.png", "Player", 0, 0)
+# Definitions of Special Objects
+class oBrick(Solid):
+    name = "Brick of Mine"
 
-        tcontainer.signin("1", oBrick)
-        tcontainer.signin("@", oPlayer)
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_index = sprite_get("sCastleBrick")
+        self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3)
 
-        Camera.set_pos(0, 0)
-        first_scene = TerrainManager(1, 1)
-        first_scene.allocate("1111 1111 1111 1111 1111 1111 1111 1111\
-                                     1111 1111 1111 1111 1111 1111 1111 1111\
-                                     1111 1111 1111 1111 1111 1111 1111 1111\
-                                     1111 1111 1111 1111 1111 1111 1111 1111\
-                                     1111 1111 1111 1111 1111 1111 1111 1111\
-                                     ;;;;@;;; \
-                                     0000 0000 0000 0000 0000 0000 0000 0000\
-                                     1111 1111 1111 1111 1111 1111 1111 1111\
-                                     ", 0)
 
-        first_scene.generate()
-        global instance_update
-        instance_update = true
-        instance_draw_update()
+# Object : IO procedure
+class oIOProc:
+    class iochecker(GObject):
+        gravity = 0
+        life = 2
+        owner = None
+
+        def __init__(self, nowner):
+            super().__init__(0, -10000, -10000)
+            self.owner = nowner
+
+        def event_step(self):
+            self.life -= 1
+            if self.life <= 0:
+                self.owner.check_pressed = false
+                del self
+
+    class ionode:
+        code = None
+        check: bool = false
+        check_pressed: bool = false
+
+    key_list = {}
+
+    def key_add(self, key:SDL_Keycode):
+        newnode = self.ionode()
+        self.key_list[key] = newnode
+        return newnode
+
+    def key_assign(self, key: SDL_Keycode, code):
+        node = self.key_add(key)
+        node.code = code
+
+    def procede(self, kevent):
+        try:
+            node = self.key_list[kevent.key]
+            if kevent.type == SDL_KEYDOWN:
+                node.check = true
+                node.check_pressed = true
+                self.iochecker(node)
+            elif kevent.type == SDL_KEYUP:
+                node.check = false
+                node.check_pressed = false
+
+            if node.check:
+                runners = node.code
+                runners()
+        except KeyError:
+            pass
+
+
+io = oIOProc()
+
+
+# Player
+class oPlayer(GObject):
+    name = "Player"
+
+    def __cmd__handle_mvl(self,):
+            self.xVel = -3
+
+    def __cmd__handle_mvr(self):
+            self.xVel = 3
+
+    def __cmd__handle_jmp(self):
+        if self.yVel == 0 and not self.onAir:
+            self.yVel = 6
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_index = sprite_get("Player")
+        self.image_speed = 0
+
+        global container_player
+        container_player = self
+        io.key_assign(SDLK_LEFT, self.__cmd__handle_mvl)
+        io.key_assign(SDLK_RIGHT, self.__cmd__handle_mvr)
+        io.key_assign(SDLK_UP, self.__cmd__handle_jmp)
+
+
+# Parent of Enemies
+class oEnemyParent(GObject):
+    name = "NPC"
+
+    oStatus = oStatusContainer.IDLE
+
+
+# Damage caused by Player
+class oPlayerDamage(GObject):
+    name = "DamageP"
+    identify = ID_DMG_PLAYER
+    gravity_default = 0
+    life = 60
+
+
+# Damage caused by Enemy
+class oEnemyDamage(GObject):
+    name = "DamageE"
+    identify = ID_DMG_ENEMY
+    gravity_default = 0
+    life = 60
+
+
+# Parent of Items
+class oItemParent(GObject):
+    name = "Item"
+    identify = ID_ITEM
+    gravity_default = 0
+
+
+# Parent of Terrain Doodads
+class oDoodadParent(GObject):
+    name = "Doodad"
+    identify = ID_DOODAD
+    gravity_default = 0

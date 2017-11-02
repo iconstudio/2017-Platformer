@@ -3,9 +3,7 @@ from functions import *
 from constants import *
 
 import framework
-import begin
-import game
-import game_pause
+import streams.game as game
 
 """
         수정 사항:

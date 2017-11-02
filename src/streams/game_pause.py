@@ -2,7 +2,7 @@ from pico2d import *
 from constants import *
 
 import framework
-import game
+import streams.game
 
 # ==================================================================================================
 #                                       프레임워크 함수
@@ -14,7 +14,7 @@ name = "pause_state"
 # noinspection PyGlobalUndefined
 def enter():
     global logo
-    logo = load_image(path_image + "logo.png", 80, 80)
+    logo = load_image(path_image + "kpu_credit.png", 80, 80)
 
 
 def exit():
@@ -29,7 +29,7 @@ def update():
 def draw():
     global logo
     clear_canvas()
-    game.draw_clean()
+    streams.game.draw_clean()
     logo.draw(screen_width / 2, screen_height / 2)
     update_canvas()
 

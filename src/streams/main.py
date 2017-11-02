@@ -1,7 +1,5 @@
-from pico2d import *
-from functions import *
-
 import framework
+from pico2d import *
 
 __all__ = [
               "Menu", "MenuNode"
@@ -34,7 +32,7 @@ def update():
     global logo_time
     if logo_time > 1.0:
         logo_time = 0
-        import game
+        from streams import game
         framework.change_state(game)
     logo_time += 0.01
     delay(0.01)

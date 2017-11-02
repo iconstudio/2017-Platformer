@@ -3,6 +3,7 @@ import types
 import ctypes
 import math
 import json
+import os
 
 from sdl2 import *
 from sdl2.sdlimage import *

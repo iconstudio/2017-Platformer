@@ -1,8 +1,7 @@
 from pico2d import *
-from functions import *
 
 import framework
-import main
+import streams.main as main
 
 # ==================================================================================================
 #                                       프레임워크 함수
