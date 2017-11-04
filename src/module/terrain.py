@@ -1,5 +1,5 @@
-from functions import *
-from constants import *
+from module.functions import *
+from module.constants import *
 
 __all__ = [
     "tcontainer", "TerrainManager", "TerrainAllocator"

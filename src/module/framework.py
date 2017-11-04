@@ -1,5 +1,5 @@
 import sdl2.keyboard as keyboard
-from pico2d import *
+from module.pico2d import *
 
 __all__ = [
     "GameState", "change_state", "push_state", "pop_state", "quit", "run"

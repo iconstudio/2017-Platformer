@@ -16,7 +16,7 @@ import sdl2.keyboard as keyboard
 import sdl2.keycode as keycode
 import sdl2.events as events
 import sdl2.rect as rect
-from constants import *
+from module.constants import *
 
 lattice_on: bool = True
 audio_on: bool = False

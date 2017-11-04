@@ -1,9 +1,9 @@
-from pico2d import *
-from functions import *
-from constants import *
+from module.pico2d import *
+from module.functions import *
+from module.constants import *
 
-from sprite import *
-from terrain import *
+from module.sprite import *
+from module.terrain import *
 
 __all__ = [
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",

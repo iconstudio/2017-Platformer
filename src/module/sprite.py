@@ -1,5 +1,5 @@
-from pico2d import *
-from constants import *
+from module.pico2d import *
+from module.constants import *
 
 __all__ = [
     "Sprite",

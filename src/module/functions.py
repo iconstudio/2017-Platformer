@@ -4,7 +4,7 @@ import sdl2.keycode as keycode
 from sdl2.rect import SDL_Rect
 import math
 from random import *
-import constants
+import module.constants as constants
 
 __all__ = [
     "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle", "rect_in_rectangle",

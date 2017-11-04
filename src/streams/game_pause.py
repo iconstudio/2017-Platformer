@@ -1,8 +1,7 @@
-from pico2d import *
-from constants import *
+from module.pico2d import *
+from module.constants import *
 
-import framework
-import streams.game
+import module.framework as framework
 
 # ==================================================================================================
 #                                       프레임워크 함수

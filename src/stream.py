@@ -1,8 +1,8 @@
-from pico2d import *
-from functions import *
-from constants import *
+from module.pico2d import *
+from module.functions import *
+from module.constants import *
 
-import framework
+import module.framework as framework
 import streams.game as game
 
 """
@@ -24,14 +24,15 @@ import streams.game as game
 ]
 """
 
-hwnd = open_canvas(screen_width, screen_height, true)
-SDL_SetWindowTitle(hwnd, "Vampire Exodus".encode("UTF-8"))
-# icon = load_texture(path_image + "icon.png")
-# SDL_SetWindowIcon(hwnd, icon)
-# SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
-# SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
-hide_cursor()
-hide_lattice()
-background_color = make_color_rgb(0, 0, 0)
-framework.run(game)
-close_canvas()
+if __name__ == "__main__":
+    hwnd = open_canvas(screen_width, screen_height, true)
+    SDL_SetWindowTitle(hwnd, "Vampire Exodus".encode("UTF-8"))
+    # icon = load_texture(path_image + "icon.png")
+    # SDL_SetWindowIcon(hwnd, icon)
+    # SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
+    # SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
+    hide_cursor()
+    hide_lattice()
+    background_color = make_color_rgb(0, 0, 0)
+    framework.run(game)
+    close_canvas()

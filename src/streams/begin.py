@@ -1,6 +1,6 @@
-from pico2d import *
+from module.pico2d import *
 
-import framework
+import module.framework as framework
 import streams.main as main
 
 # ==================================================================================================

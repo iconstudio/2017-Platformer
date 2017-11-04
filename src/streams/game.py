@@ -1,12 +1,12 @@
-from pico2d import *
-from functions import *
-from constants import *
+from module.pico2d import *
+from module.functions import *
+from module.constants import *
 
-import framework
+import module.framework as framework
 import streams.game_pause as game_pause
 
-from sprite import *
-from terrain import *
+from module.sprite import *
+from module.terrain import *
 from streams.game_containers import *
 
 __all__ = [

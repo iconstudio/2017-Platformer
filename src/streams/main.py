@@ -1,5 +1,5 @@
-import framework
-from pico2d import *
+import module.framework as framework
+from module.pico2d import *
 
 __all__ = [
               "Menu", "MenuNode"
