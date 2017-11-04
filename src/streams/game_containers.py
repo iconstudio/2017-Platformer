@@ -52,8 +52,8 @@ container_player = None
 
 # Object : Game Object
 class GObject(object):
-    name = "None"
-    identify = ""
+    name: str = "None"
+    identify: str = ""
     next = None
 
     # Properties of sprite
@@ -70,7 +70,7 @@ class GObject(object):
     x, y = 0, 0
     xVel, yVel = 0, 0
     xFric, yFric = 0.4, 1
-    gravity_default = 0.4
+    gravity_default: float = 0.4
     gravity: float = 0
     onAir: bool = false
 
@@ -89,7 +89,11 @@ class GObject(object):
         return self.name
 
     def __del__(self):
-        global instance_last, instance_list, instance_list_spec, instance_draw_list, instance_update
+        global instance_list, instance_list_spec, instance_draw_list, instance_update
+        instance_update = true
+
+        if self.identify != "":
+            instance_list_spec[self.identify].append(self)
 
     # Below methods are common-functions for all object that inherites graviton.
     # Check the place fits to self
@@ -260,7 +264,7 @@ class oIOProc:
         owner = None
 
         def __init__(self, nowner):
-            super().__init__(0, -10000, -10000)
+            super().__init__(-100000, -10000, -10000)
             self.owner = nowner
 
         def event_step(self):
@@ -281,12 +285,7 @@ class oIOProc:
         self.key_list[key] = newnode
         return newnode
 
-    def key_assign(self, key: SDL_Keycode, code):
-        node = self.key_add(key)
-        node.code = code
-
     def proceed(self, kevent):
-        node = None
         try:
             node = self.key_list[kevent.key]
 
@@ -301,11 +300,6 @@ class oIOProc:
                 #print(false)
         except KeyError:
             return
-
-        if node.check:
-            runners = node.code
-            runners()
-
 
 io = oIOProc()
 
@@ -331,9 +325,6 @@ class oPlayer(GObject):
 
         global container_player
         container_player = self
-        io.key_assign(SDLK_LEFT, self.__cmd__handle_mvl)
-        io.key_assign(SDLK_RIGHT, self.__cmd__handle_mvr)
-        io.key_assign(SDLK_UP, self.__cmd__handle_jmp)
 
 
 # Parent of Enemies

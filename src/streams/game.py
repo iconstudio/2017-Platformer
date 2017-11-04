@@ -103,6 +103,10 @@ class GameExecutor:
              path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
         sprite_load(path_entity + "vampire.png", "Player", 0, 0)
 
+        io.key_add(SDLK_LEFT)
+        io.key_add(SDLK_RIGHT)
+        io.key_add(SDLK_UP)
+        #        Terrains
         tcontainer.signin("1", oBrick)
         tcontainer.signin("@", oPlayer)
 
