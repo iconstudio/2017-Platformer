@@ -54,7 +54,7 @@ container_player = None
 class GObject(object):
     name: str = "None"
     identify: str = ""
-    next = None
+    next: object = None
 
     # Properties of sprite
     sprite_index: Sprite = None
