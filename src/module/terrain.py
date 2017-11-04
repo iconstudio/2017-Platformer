@@ -2,13 +2,24 @@ from module.functions import *
 from module.constants import *
 
 __all__ = [
-    "tcontainer", "TerrainManager", "TerrainAllocator"
+    "tcontainer", "ThemeContainer", "TerrainManager", "TerrainAllocator"
 ]
 
 
 # ==================================================================================================
 #                                               지형
 # ==================================================================================================
+# Object : Terrain Container
+class ThemeContainer:
+    mess = {}
+
+    def signin(self, string: str, ty: type):
+        self.mess[string] = ty
+
+    def clear(self):
+        self.mess.clear()
+
+
 # Object : Terrain Container
 class TerrainContainer:
     mess = {}

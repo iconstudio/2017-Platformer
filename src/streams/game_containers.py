@@ -49,7 +49,7 @@ container_player = None
 #                                               게임
 # ==================================================================================================
 # Object : Game Object
-class GObject(object):
+class GObject(object) :
     name: str = "None"
     identify: str = ""
     next: object = None
@@ -67,12 +67,14 @@ class GObject(object):
 
     x, y = 0, 0
     xVel, yVel = 0, 0
-    xFric, yFric = 0.4, 1
+    xVelMin, xVelMax = -10, 10
+    yVelMin, yVelMax = -8, 16
+    xFric, yFric = 0.6, 0
     gravity_default: float = 0.4
     gravity: float = 0
     onAir: bool = false
 
-    def __init__(self, ndepth=int(0), nx=int(0), ny=int(0)):
+    def __init__(self, ndepth = int(0), nx = int(0), ny = int(0)) :
         self.depth = ndepth
         self.x = nx
         self.y = ny
@@ -80,129 +82,131 @@ class GObject(object):
         global instance_list, instance_update, instance_list_spec
         instance_list.append(self)
         instance_update = true
-        if self.identify != "":
+        if self.identify != "" :
             instance_list_spec[self.identify].append(self)
 
-    def __str__(self):
+    def __str__(self) :
         return self.name
 
-    def __del__(self):
+    def __del__(self) :
         global instance_list, instance_list_spec, instance_draw_list, instance_update
         instance_update = true
 
-        if self.identify != "":
+        if self.identify != "" :
             instance_list_spec[self.identify].append(self)
 
-    # Below methods are common-functions for all object that inherites graviton.
+    # Below methods are common-functions for all object that inherits graviton.
     # Check the place fits to self
-    def place_free(self, vx, vy) -> bool:
+    def place_free(self, vx, vy) -> bool :
         global instance_list_spec
         clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
         length = len(clist)
-        if length > 0:
+        if length > 0 :
             # print("Checking Place for one")
             bbox_left = int(self.x - self.sprite_index.xoffset + vx)
             bbox_top = int(self.y - self.sprite_index.yoffset + vy)
             brect = SDL_Rect(bbox_left, bbox_top, self.sprite_index.width, self.sprite_index.height)
             temprect = SDL_Rect()
 
-            for inst in clist:
+            for inst in clist :
                 tempspr: Sprite = inst.sprite_index
                 otho_left = int(inst.x - tempspr.xoffset)
                 otho_top = int(inst.y - tempspr.yoffset)
                 temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height
-                if rect_in_rectangle_opt(brect, temprect):
+                if rect_in_rectangle_opt(brect, temprect) :
                     return false
             return true
-        else:
+        else :
             return true
 
-    def collide(self):
+    def collide(self) :
         self.xVel = 0
 
-    def move_contact_y(self, dist=1, up: bool = false) -> bool:
-        if dist < 0:
-            dist = 1000000
+    def move_contact_y(self, dist = 1, up: bool = false) -> bool :
+        tdist = dist
+        if dist < 0 :
+            tdist = 1000000
 
         global instance_list_spec
         clist = instance_list_spec["Solid"]
         length = len(clist)
         yprog = 0
-        if length > 0:
+        if length > 0 :
             bbox_x = int(self.x - self.sprite_index.xoffset)
             bbox_y = int(self.y - self.sprite_index.yoffset)
-            if up:
-                bbox_y += 1
-            else:
-                bbox_y -= 1
             brect = SDL_Rect(bbox_x, bbox_y, self.sprite_index.width, self.sprite_index.height)
             temprect = SDL_Rect()
             templist = []
-            for inst in clist:
-                if bool(inst.y + inst.sprite_index.yoffset <= brect.y + brect.h) != up:
+            for inst in clist :
+                if bool(inst.y + inst.sprite_index.yoffset <= brect.y + brect.h) != up :
                     templist.append(inst)
 
-            while yprog <= dist:
-                for inst in templist:
+            while yprog <= tdist :
+                yprog += 1
+                for inst in templist :
                     tempspr: Sprite = inst.sprite_index
                     otho_left = int(inst.x - tempspr.xoffset)
                     otho_top = int(inst.y - tempspr.yoffset)
                     temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height
-                    if rect_in_rectangle_opt(brect, temprect):
+                    if rect_in_rectangle_opt(brect, temprect) :
                         return true
-                if up:
+                if up :
                     brect.y += 1
-                    yprog += 1
-                else:
+                else :
                     brect.y -= 1
-                    yprog += 1
             return false
-        else:
+        else :
             return false
 
-    def thud(self):
+    def thud(self) :
         # if self.yVel != 0:
-        self.move_contact_y(abs(self.yVel))
+        self.move_contact_y(abs(self.yVel), self.yVel > 0)
         self.yVel = 0
         self.onAir = false
 
-    def draw_self(self):  # Simply draws its sprite on its position.
-        if not self.sprite_index.__eq__(None):
+    def draw_self(self) :  # Simply draws its sprite on its position.
+        if not self.sprite_index.__eq__(None) :
             draw_sprite(self.sprite_index, self.image_index, self.x, self.y, 1, 1, 0.0, self.image_alpha)
 
-    def event_step(self):  # The basic machanism of objects.
-        if not self.step_enable:
+    def event_step(self) :  # The basic machanism of objects.
+        if not self.step_enable :
             return
 
-        if self.xVel != 0:
+        if self.xVel != 0 :
             xc = self.xVel + sign(self.xVel)
-            if self.place_free(xc, 0):
+            if self.place_free(xc, 0) :
                 self.x += self.xVel
-            else:
+            else :
                 self.collide()
 
-        if self.yVel > 0:  # Going up higher
+        if self.yVel > 0 :  # Going up higher
             yc = self.yVel + 1
-        else:  # Going down
+        else :  # Going down
             yc = self.yVel - 1
 
-        if self.place_free(0, yc):
+        if self.place_free(0, yc) :
             self.y += self.yVel  # let it moves first.
             self.gravity = self.gravity_default
             self.yVel -= self.gravity
             self.onAir = true
-        else:
+        else :
             self.gravity = 0
-            if self.xVel != 0:  # horizontal friction works only when it is on the ground
-                self.xVel *= self.xFric
+            if self.xVel != 0 :  # horizontal friction works only when it is on the ground
+                if abs(self.xVel) > self.xFric :
+                    self.xVel -= self.xFric * sign(self.xVel)
+                else :
+                    self.xVel = 0
             self.thud()
 
-    def event_draw(self):  # This will be working for drawing.
+        self.xVel = clamp(self.xVelMin, self.xVel, self.xVelMax)
+        self.yVel = clamp(self.yVelMin, self.yVel, self.yVelMax)
+
+    def event_draw(self) :  # This will be working for drawing.
         self.draw_self()
 
 
 # Object : Solid Objects
-class Solid(GObject):
+class Solid(GObject) :
     # reset some inherited variables
     name = "Solid"
     identify = ID_SOLID
@@ -217,58 +221,58 @@ class Solid(GObject):
 #                                    사용자 정의 객체 / 함수
 # ==================================================================================================
 # Object : Functions
-def instance_create(Ty, depth=int(0), x=int(0), y=int(0)) -> object:
+def instance_create(Ty, depth = int(0), x = int(0), y = int(0)) -> object :
     temp = Ty(depth, x, y)
     global instance_last
     instance_last = temp
     return temp
 
 
-def place_free(dx, dy) -> bool:
+def place_free(dx, dy) -> bool :
     # return true
     global instance_list_spec
     clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
     length = len(clist)
-    if length > 0:
+    if length > 0 :
         # print("Checking Place")
-        for inst in clist:
+        for inst in clist :
             tempspr: Sprite = inst.sprite_index
             if point_in_rectangle(dx, dy, inst.x - tempspr.width / 2, inst.y - tempspr.height / 2,
-                                  inst.x + tempspr.width / 2, inst.y + tempspr.height / 2):
+                                  inst.x + tempspr.width / 2, inst.y + tempspr.height / 2) :
                 return false
         return true
-    else:
+    else :
         return true
 
 
 # Definitions of Special Objects
-class oBrick(Solid):
+class oBrick(Solid) :
     name = "Brick of Mine"
 
-    def __init__(self, ndepth, nx, ny):
+    def __init__(self, ndepth, nx, ny) :
         super().__init__(ndepth, nx, ny)
         self.sprite_index = sprite_get("sCastleBrick")
         self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3)
 
 
 # Object : IO procedure
-class oIOProc:
-    class iochecker(GObject):
+class oIOProc :
+    class iochecker(GObject) :
         gravity = 0
         life = 2
         owner = None
 
-        def __init__(self, nowner):
+        def __init__(self, nowner) :
             super().__init__(-100000, -10000, -10000)
             self.owner = nowner
 
-        def event_step(self):
+        def event_step(self) :
             self.life -= 1
-            if self.life <= 0:
+            if self.life <= 0 :
                 self.owner.check_pressed = false
                 del self
 
-    class ionode:
+    class ionode :
         code = None
         check: bool = false
         check_pressed: bool = false
@@ -276,37 +280,37 @@ class oIOProc:
     # This dictionary contains only the Codes of keyboard.
     key_list = {}
 
-    def key_add(self, key: SDL_Keycode):
+    def key_add(self, key: SDL_Keycode) :
         newnode = self.ionode()
         self.key_list[key] = newnode
         return newnode
 
-    def key_check(self, key: SDL_Keycode) -> bool:
-        try:
+    def key_check(self, key: SDL_Keycode) -> bool :
+        try :
             return (self.key_list[key]).check
-        except KeyError:
+        except KeyError :
             return false
 
-    def key_check_pressed(self, key: SDL_Keycode) -> bool:
-        try:
+    def key_check_pressed(self, key: SDL_Keycode) -> bool :
+        try :
             return (self.key_list[key]).check_pressed
-        except KeyError:
+        except KeyError :
             return false
 
-    def proceed(self, kevent):
-        try:
+    def proceed(self, kevent) :
+        try :
             node = self.key_list[kevent.key]
 
-            if kevent.type == SDL_KEYDOWN:
+            if kevent.type == SDL_KEYDOWN :
                 node.check = true
                 node.check_pressed = true
                 self.iochecker(node)
                 # print(true)
-            elif kevent.type == SDL_KEYUP:
+            elif kevent.type == SDL_KEYUP :
                 node.check = false
                 node.check_pressed = false
                 # print(false)
-        except KeyError:
+        except KeyError :
             return
 
 
@@ -314,13 +318,11 @@ io = oIOProc()
 
 
 # Player
-class oPlayer(GObject):
+class oPlayer(GObject) :
     name = "Player"
-    def __cmd__handle_jmp(self):
-        if not self.onAir:
-            self.yVel = 6
+    xVelMin, xVelMax = -2, 2
 
-    def __init__(self, ndepth, nx, ny):
+    def __init__(self, ndepth, nx, ny) :
         super().__init__(ndepth, nx, ny)
         self.sprite_index = sprite_get("Player")
         self.image_speed = 0
@@ -328,24 +330,37 @@ class oPlayer(GObject):
         global container_player
         container_player = self
 
-    def event_step(self):
-        super().event_step()
+    def event_step(self) :
         mx = 0
-        if io.key_check(SDLK_LEFT): mx -= 1
-        if io.key_check(SDLK_RIGHT): mx += 1
-        if io.key_check_pressed(SDLK_UP):
-            self.__cmd__handle_jmp()
+        if io.key_check(SDLK_LEFT) : mx -= 1
+        if io.key_check(SDLK_RIGHT) : mx += 1
+        if not self.onAir :
+            if mx != 0 :
+                self.xVel += mx * 0.6
+            else :
+                self.xFric = 0.5
+        else :
+            if mx != 0 :
+                self.xVel += mx * 0.2
+            else :
+                self.xFric = 0.3
+
+        if io.key_check_pressed(SDLK_UP) :
+            if not self.onAir :
+                self.yVel = 6
+
+        super().event_step()
 
 
 # Parent of Enemies
-class oEnemyParent(GObject):
+class oEnemyParent(GObject) :
     name = "NPC"
 
     oStatus = oStatusContainer.IDLE
 
 
 # Damage caused by Player
-class oPlayerDamage(GObject):
+class oPlayerDamage(GObject) :
     name = "DamageP"
     identify = ID_DMG_PLAYER
     gravity_default = 0
@@ -353,7 +368,7 @@ class oPlayerDamage(GObject):
 
 
 # Damage caused by Enemy
-class oEnemyDamage(GObject):
+class oEnemyDamage(GObject) :
     name = "DamageE"
     identify = ID_DMG_ENEMY
     gravity_default = 0
@@ -361,14 +376,14 @@ class oEnemyDamage(GObject):
 
 
 # Parent of Items
-class oItemParent(GObject):
+class oItemParent(GObject) :
     name = "Item"
     identify = ID_ITEM
     gravity_default = 0
 
 
 # Parent of Terrain Doodads
-class oDoodadParent(GObject):
+class oDoodadParent(GObject) :
     name = "Doodad"
     identify = ID_DOODAD
     gravity_default = 0
