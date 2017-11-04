@@ -116,4 +116,3 @@ class TerrainAllocator:
     def allocate(self, data: str, newtype: int = 0):
         self.data = data
         self.type_theme = newtype
-
