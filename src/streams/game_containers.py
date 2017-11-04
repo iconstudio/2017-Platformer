@@ -48,8 +48,6 @@ container_player = None
 # ==================================================================================================
 #                                               게임
 # ==================================================================================================
-
-
 # Object : Game Object
 class GObject(object):
     name: str = "None"
@@ -218,9 +216,6 @@ class Solid(GObject):
 # ==================================================================================================
 #                                    사용자 정의 객체 / 함수
 # ==================================================================================================
-
-
-
 # Object : Functions
 def instance_create(Ty, depth=int(0), x=int(0), y=int(0)) -> object:
     temp = Ty(depth, x, y)
@@ -278,12 +273,25 @@ class oIOProc:
         check: bool = false
         check_pressed: bool = false
 
+    # This dictionary contains only the Codes of keyboard.
     key_list = {}
 
     def key_add(self, key: SDL_Keycode):
         newnode = self.ionode()
         self.key_list[key] = newnode
         return newnode
+
+    def key_check(self, key: SDL_Keycode) -> bool:
+        try:
+            return (self.key_list[key]).check
+        except KeyError:
+            return false
+
+    def key_check_pressed(self, key: SDL_Keycode) -> bool:
+        try:
+            return (self.key_list[key]).check_pressed
+        except KeyError:
+            return false
 
     def proceed(self, kevent):
         try:
@@ -293,13 +301,14 @@ class oIOProc:
                 node.check = true
                 node.check_pressed = true
                 self.iochecker(node)
-                #print(true)
+                # print(true)
             elif kevent.type == SDL_KEYUP:
                 node.check = false
                 node.check_pressed = false
-                #print(false)
+                # print(false)
         except KeyError:
             return
+
 
 io = oIOProc()
 
@@ -307,13 +316,6 @@ io = oIOProc()
 # Player
 class oPlayer(GObject):
     name = "Player"
-
-    def __cmd__handle_mvl(self):
-        self.xVel = -3
-
-    def __cmd__handle_mvr(self):
-        self.xVel = 3
-
     def __cmd__handle_jmp(self):
         if not self.onAir:
             self.yVel = 6
@@ -325,6 +327,14 @@ class oPlayer(GObject):
 
         global container_player
         container_player = self
+
+    def event_step(self):
+        super().event_step()
+        mx = 0
+        if io.key_check(SDLK_LEFT): mx -= 1
+        if io.key_check(SDLK_RIGHT): mx += 1
+        if io.key_check_pressed(SDLK_UP):
+            self.__cmd__handle_jmp()
 
 
 # Parent of Enemies

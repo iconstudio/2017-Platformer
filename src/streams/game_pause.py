@@ -6,7 +6,6 @@ import module.framework as framework
 # ==================================================================================================
 #                                       프레임워크 함수
 # ==================================================================================================
-
 name = "pause_state"
 
 
@@ -39,7 +38,8 @@ def handle_events():
         if event.type == SDL_QUIT:
             framework.quit()
         else:
-            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_p) or (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
+            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_p) or (event.type, event.key) == (
+            SDL_KEYDOWN, SDLK_ESCAPE):
                 framework.pop_state()
 
 
