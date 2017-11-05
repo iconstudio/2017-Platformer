@@ -104,15 +104,15 @@ class GObject(object):
         if length > 0:
             # print("Checking Place for one")
             bbox_left = int(self.x - self.sprite_index.xoffset + vx)
-            bbox_top = int(self.y - self.sprite_index.yoffset + vy)
-            brect = SDL_Rect(bbox_left, bbox_top, self.sprite_index.width, self.sprite_index.height)
+            bbox_top = int(self.y - self.sprite_index.yoffset + vy) + 1
+            brect = SDL_Rect(bbox_left, bbox_top, self.sprite_index.width, self.sprite_index.height )
             temprect = SDL_Rect()
 
             for inst in clist:
                 tempspr: Sprite = inst.sprite_index
                 otho_left = int(inst.x - tempspr.xoffset)
-                otho_top = int(inst.y - tempspr.yoffset)
-                temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height
+                otho_top = int(inst.y - tempspr.yoffset) + 1
+                temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height - 1
                 if rect_in_rectangle_opt(brect, temprect):
                     return false
             return true
@@ -133,7 +133,7 @@ class GObject(object):
         yprog = 0
         if length > 0:
             bbox_x = int(self.x - self.sprite_index.xoffset)
-            bbox_y = int(self.y - self.sprite_index.yoffset)
+            bbox_y = int(self.y - self.sprite_index.yoffset) + 1
             brect = SDL_Rect(bbox_x, bbox_y, self.sprite_index.width, self.sprite_index.height)
             temprect = SDL_Rect()
             templist = []
@@ -146,8 +146,8 @@ class GObject(object):
                 for inst in templist:
                     tempspr: Sprite = inst.sprite_index
                     otho_left = int(inst.x - tempspr.xoffset)
-                    otho_top = int(inst.y - tempspr.yoffset)
-                    temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height
+                    otho_top = int(inst.y - tempspr.yoffset) + 1
+                    temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height - 1
                     if rect_in_rectangle_opt(brect, temprect):
                         return true
                 if up:
@@ -168,7 +168,7 @@ class GObject(object):
         if not self.sprite_index.__eq__(None):
             draw_sprite(self.sprite_index, self.image_index, self.x, self.y, 1, 1, 0.0, self.image_alpha)
 
-    def event_step(self):  # The basic machanism of objects.
+    def event_step(self):  # The basic mechanisms of objects.
         if not self.step_enable:
             return
 
@@ -338,12 +338,12 @@ class oPlayer(GObject):
             if mx != 0:
                 self.xVel += mx * 0.6
             else:
-                self.xFric = 0.5
+                self.xFric = 0.6
         else:
             if mx != 0:
                 self.xVel += mx * 0.2
             else:
-                self.xFric = 0.3
+                self.xFric = 0.1
 
         if io.key_check_pressed(SDLK_UP):
             if not self.onAir:

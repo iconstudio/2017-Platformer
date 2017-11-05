@@ -33,7 +33,7 @@ __all__ = [
           ] + sdl2.render.__all__ + keyboard.__all__ + events.__all__ + keycode.__all__ + rect.__all__
 
 
-def draw_set_color(newa: SDL_Color or int, newb=None, newc=None):
+def draw_set_color(newa: SDL_Color or int, newb = None, newc = None):
     global draw_color
     if type(newa) == SDL_Color:
         draw_color = newa
@@ -48,27 +48,7 @@ def draw_get_color():
     return draw_color
 
 
-def clamp(minimum, x, maximum):
-    return max(minimum, min(x, maximum))
-
-
-def delay(sec):
-    SDL_Delay(int(sec * 1000))
-
-
-def get_time():
-    return SDL_GetTicks() / 1000.0
-
-
-def get_canvas_width():
-    return canvas_width
-
-
-def get_canvas_height():
-    return canvas_height
-
-
-def open_canvas(w=int(800), h=int(600), sync=False):
+def open_canvas(w = int(800), h = int(600), sync = False):
     global window, renderer
     global canvas_width, canvas_height
     global debug_font
@@ -111,6 +91,22 @@ def open_canvas(w=int(800), h=int(600), sync=False):
     return window
 
 
+def get_canvas_width():
+    return canvas_width
+
+
+def get_canvas_height():
+    return canvas_height
+
+
+def show_cursor():
+    SDL_ShowCursor(SDL_ENABLE)
+
+
+def hide_cursor():
+    SDL_ShowCursor(SDL_DISABLE)
+
+
 def show_lattice():
     global lattice_on
     lattice_on = True
@@ -125,17 +121,8 @@ def hide_lattice():
     update_canvas()
 
 
-def close_canvas():
-    if audio_on:
-        Mix_HaltMusic()
-        Mix_HaltChannel(-1)
-        Mix_CloseAudio()
-        Mix_Quit()
-    TTF_Quit()
-    IMG_Quit()
-    SDL_DestroyRenderer(renderer)
-    SDL_DestroyWindow(window)
-    SDL_Quit()
+def update_canvas():
+    SDL_RenderPresent(renderer)
 
 
 def clear_canvas():
@@ -163,16 +150,29 @@ def clear_canvas_now():
     update_canvas()
 
 
-def update_canvas():
-    SDL_RenderPresent(renderer)
+def close_canvas():
+    if audio_on:
+        Mix_HaltMusic()
+        Mix_HaltChannel(-1)
+        Mix_CloseAudio()
+        Mix_Quit()
+    TTF_Quit()
+    IMG_Quit()
+    SDL_DestroyRenderer(renderer)
+    SDL_DestroyWindow(window)
+    SDL_Quit()
 
 
-def show_cursor():
-    SDL_ShowCursor(SDL_ENABLE)
+def clamp(minimum, x, maximum):
+    return max(minimum, min(x, maximum))
 
 
-def hide_cursor():
-    SDL_ShowCursor(SDL_DISABLE)
+def delay(sec):
+    SDL_Delay(int(sec * 1000))
+
+
+def get_time():
+    return SDL_GetTicks() / 1000.0
 
 
 cur_time = 0.0
@@ -195,6 +195,16 @@ def debug_print(str):
     global canvas_height
     global debug_font
     debug_font.draw(0, canvas_height - 10, str)
+
+
+def to_sdl_rect(x, y, w, h):
+    return SDL_Rect(int(x), int(-y + canvas_height - h), int(w), int(h))
+
+
+def draw_rectangle(x1, y1, x2, y2):
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255)
+    rect = SDL_Rect(int(x1), int(-y2 + canvas_height - 1), int(x2 - x1 + 1), int(y2 - y1 + 1))
+    SDL_RenderDrawRect(renderer, rect)
 
 
 class Event:
@@ -228,16 +238,6 @@ def get_events():
     return events
 
 
-def to_sdl_rect(x, y, w, h):
-    return SDL_Rect(int(x), int(-y + canvas_height - h), int(w), int(h))
-
-
-def draw_rectangle(x1, y1, x2, y2):
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255)
-    rect = SDL_Rect(int(x1), int(-y2 + canvas_height - 1), int(x2 - x1 + 1), int(y2 - y1 + 1))
-    SDL_RenderDrawRect(renderer, rect)
-
-
 class Image:
     """Pico2D Image Class"""
     xoffset: float = 0
@@ -260,28 +260,28 @@ class Image:
         else:
             self.xoffset, self.yoffset = self.w / 2, self.h / 2
 
-    def rotate_draw(self, rad, x, y, w=None, h=None):
+    def rotate_draw(self, rad, x, y, w = None, h = None):
         """Rotate(in radian unit) and draw image to back buffer"""
         if w == None and h == None:
             w, h = self.w, self.h
         rect = to_sdl_rect(x - self.xoffset, y - self.yoffset, w, h)
         SDL_RenderCopyEx(renderer, self.texture, None, rect, math.degrees(-rad), None, SDL_FLIP_NONE);
 
-    def draw(self, x, y, w=None, h=None):
+    def draw(self, x, y, w = None, h = None):
         """Draw image to back buffer"""
         if w == None and h == None:
             w, h = self.w, self.h
         rect = to_sdl_rect(x - self.xoffset, y - self.yoffset, w, h)
         SDL_RenderCopy(renderer, self.texture, None, rect)
 
-    def draw_to_origin(self, x, y, w=None, h=None):
+    def draw_to_origin(self, x, y, w = None, h = None):
         """Draw image to back buffer"""
         if w == None and h == None:
             w, h = self.w, self.h
         rect = to_sdl_rect(x, y, w, h)
         SDL_RenderCopy(renderer, self.texture, None, rect)
 
-    def clip_draw(self, left, bottom, width, height, x, y, w=None, h=None):
+    def clip_draw(self, left, bottom, width, height, x, y, w = None, h = None):
         """Clip a rectangle from image and draw"""
         if w == None and h == None:
             w, h = width, height
@@ -289,7 +289,7 @@ class Image:
         dest_rect = to_sdl_rect(x - int(self.xoffset), y - int(self.yoffset), w, h)
         SDL_RenderCopy(renderer, self.texture, src_rect, dest_rect)
 
-    def clip_draw_to_origin(self, left, bottom, width, height, x, y, w=None, h=None):
+    def clip_draw_to_origin(self, left, bottom, width, height, x, y, w = None, h = None):
         """Clip a rectangle from image and draw"""
         if w == None and h == None:
             w, h = width, height
@@ -297,7 +297,7 @@ class Image:
         dest_rect = to_sdl_rect(x, y, w, h)
         SDL_RenderCopy(renderer, self.texture, src_rect, dest_rect)
 
-    def draw_now(self, x, y, w=None, h=None):
+    def draw_now(self, x, y, w = None, h = None):
         """Draw image to canvas immediately"""
         self.draw(x, y, w, h)
         update_canvas()
@@ -324,7 +324,7 @@ def load_texture(name):
     return texture
 
 
-def load_image(name, xoff=None, yoff=None):
+def load_image(name, xoff = None, yoff = None):
     texture = load_texture(name)
 
     image = Image(texture, xoff, yoff)
@@ -332,7 +332,7 @@ def load_image(name, xoff=None, yoff=None):
 
 
 class Font:
-    def __init__(self, name, size=20):
+    def __init__(self, name, size = 20):
         # print('font' + name + 'loaded')
         self.font = TTF_OpenFont(name.encode('utf-8'), size)
 
@@ -357,7 +357,7 @@ class Font:
         image.draw(x + image.w / 2, y)
 
 
-def load_font(name, size=20):
+def load_font(name, size = 20):
     font = Font(name, size)
     return font
 
@@ -370,7 +370,7 @@ class Music:
     def repeat_play(self):
         Mix_PlayMusic(self.music, -1)
 
-    def play(self, n=1):
+    def play(self, n = 1):
         Mix_PlayMusic(self.music, n)
 
     def set_volume(self, v):
@@ -399,7 +399,7 @@ class Wav:
     def repeat_play(self):
         Mix_PlayChannel(-1, self.wav, -1)
 
-    def play(self, n=1):
+    def play(self, n = 1):
         Mix_PlayChannel(-1, self.wav, n - 1)
 
     def set_volume(self, v):
