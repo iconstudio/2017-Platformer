@@ -3,6 +3,7 @@ from module.functions import *
 from module.constants import *
 
 import module.framework as framework
+from module.framework import io
 import streams.game_pause as game_pause
 
 from module.sprite import *

@@ -11,7 +11,6 @@ from sdl2.sdlttf import *
 from sdl2.sdlmixer import *
 import sdl2.render
 
-import encodings
 import sdl2.keyboard as keyboard
 import module.keycode as keycode
 import sdl2.events as events
@@ -29,7 +28,7 @@ __all__ = [
               "draw_set_color", "draw_get_color", "draw_background_color_set",
               "get_events", "load_texture", "load_image", "load_font", "load_music", "load_wav",
               "Event", "Image", "Font",
-              "SDL_SetWindowTitle", "SDL_SetWindowIcon", "SDL_Color"
+              "SDL_SetWindowTitle", "SDL_SetWindowIcon", "SDL_Color",
           ] + sdl2.render.__all__ + keyboard.__all__ + events.__all__ + keycode.__all__ + rect.__all__
 
 

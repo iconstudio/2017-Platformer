@@ -43,5 +43,5 @@ if __name__ == "__main__":
 		 path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
 	sprite_load(path_entity + "vampire.png", "Player", 0, 0)
 
-	framework.run(begin)
+	framework.run(game)
 	close_canvas()

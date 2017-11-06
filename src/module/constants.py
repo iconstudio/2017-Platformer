@@ -2,8 +2,8 @@ import sdl2.pixels as px
 
 __all__ = [
     "false", "true", "screen_width", "screen_height", "screen_scale",
-    "path_resource", "path_image", "path_font", "path_theme", "path_entity", "path_background"
-    "c_white"
+    "path_resource", "path_image", "path_font", "path_theme", "path_entity", "path_background",
+    "c_white",
 ]
 
 # Global : Constants

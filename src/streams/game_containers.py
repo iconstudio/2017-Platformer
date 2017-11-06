@@ -2,12 +2,14 @@ from module.pico2d import *
 from module.functions import *
 from module.constants import *
 
+from module.framework import io
+
 from module.sprite import *
 from module.terrain import *
 
 __all__ = [
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
-    "container_player", "instance_create", "place_free", "io",
+    "container_player", "instance_create", "place_free",
     "GObject", "Solid", "oBrick", "oPlayer",
     "ID_SOLID", "ID_DMG_PLAYER", "ID_DMG_ENEMY", "ID_ITEM", "ID_PARTICLE", "ID_DOODAD"
 ]
