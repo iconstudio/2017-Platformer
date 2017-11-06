@@ -3,6 +3,8 @@ from module.pico2d import *
 import module.framework as framework
 import streams.main as main
 
+from module.sprite import *
+
 # ==================================================================================================
 #                                       프레임워크 함수
 # ==================================================================================================

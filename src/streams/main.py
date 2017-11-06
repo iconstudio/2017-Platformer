@@ -1,5 +1,8 @@
-import module.framework as framework
 from module.pico2d import *
+
+import module.framework as framework
+
+from module.sprite import *
 
 __all__ = [
               "Menu", "MenuNode"

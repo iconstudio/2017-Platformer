@@ -97,10 +97,6 @@ class GameExecutor:
     def __init__(self):
         # TODO: Definite more objects.
         # Declaring of Special Objects ( Need a canvas )
-        sprite_load(
-            [path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
-             path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
-        sprite_load(path_entity + "vampire.png", "Player", 0, 0)
 
         io.key_add(SDLK_LEFT)
         io.key_add(SDLK_RIGHT)

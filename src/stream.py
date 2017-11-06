@@ -3,7 +3,10 @@ from module.functions import *
 from module.constants import *
 
 import module.framework as framework
+import streams.main as begin
 import streams.game as game
+
+from module.sprite import *
 
 """
         수정 사항:
@@ -24,7 +27,7 @@ import streams.game as game
 ]
 """
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
 	hwnd = open_canvas(screen_width, screen_height, true)
 	SDL_SetWindowTitle(hwnd, "Vampire Exodus".encode("UTF-8"))
 	# icon = load_texture(path_image + "icon.png")
@@ -34,5 +37,11 @@ if __name__ == "__main__" :
 	hide_cursor()
 	hide_lattice()
 	draw_background_color_set(0, 0, 0)
-	framework.run(game)
+
+	sprite_load(
+		[path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
+		 path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
+	sprite_load(path_entity + "vampire.png", "Player", 0, 0)
+
+	framework.run(begin)
 	close_canvas()
