@@ -33,6 +33,6 @@ if __name__ == "__main__" :
 	# SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
 	hide_cursor()
 	hide_lattice()
-	background_color = make_color_rgb(0, 0, 0)
+	draw_background_color_set(0, 0, 0)
 	framework.run(game)
 	close_canvas()

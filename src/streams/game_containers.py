@@ -108,14 +108,14 @@ class GObject(object):
             # print("Checking Place for one")
             bbox_left = int(self.x - self.sprite_index.xoffset + vx)
             bbox_top = int(self.y - self.sprite_index.yoffset + vy)
-            brect = SDL_Rect(bbox_left, bbox_top, self.sprite_index.width, self.sprite_index.height + 1)
+            brect = SDL_Rect(bbox_left, bbox_top, self.sprite_index.width, self.sprite_index.height - 1)
             temprect = SDL_Rect()
 
             for inst in clist:
                 tempspr: Sprite = inst.sprite_index
                 otho_left = int(inst.x - tempspr.xoffset)
                 otho_top = int(inst.y - tempspr.yoffset)
-                temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height + 1
+                temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height
                 if rect_in_rectangle_opt(brect, temprect):
                     return false
             return true
@@ -138,11 +138,12 @@ class GObject(object):
         if length > 0:
             templist = []
             for inst in clist:
-                if bool(inst.y + inst.sprite_index.yoffset <= int(self.y - self.sprite_index.yoffset) + self.sprite_index.height + 1) != up:
+                if bool(inst.y + inst.sprite_index.yoffset <= int(self.y - self.sprite_index.yoffset) + self.sprite_index.height - 1) != up:
                     templist.append(inst)
 
             while yprog <= tdist:
-                
+                if not self.place_free(self.x, self.y + cy):
+                    return true
 
                 yprog += 1
                 if up:
@@ -252,9 +253,10 @@ class oBrick(Solid):
 
 # Object : IO procedure
 class oIOProc:
+    checking = None
     class iochecker(GObject):
         gravity = 0
-        life = 2
+        life = 3
         owner = None
 
         def __init__(self, nowner):
@@ -262,10 +264,13 @@ class oIOProc:
             self.owner = nowner
 
         def event_step(self):
-            self.life -= 1
             if self.life <= 0:
+                global io
+                io.checking = None
                 self.owner.check_pressed = false
                 del self
+            else:
+                self.life -= 1
 
     class ionode:
         code = None
@@ -299,7 +304,8 @@ class oIOProc:
             if kevent.type == SDL_KEYDOWN:
                 node.check = true
                 node.check_pressed = true
-                self.iochecker(node)
+                if self.checking == None:
+                    self.checking = self.iochecker(node)
                 # print(true)
             elif kevent.type == SDL_KEYUP:
                 node.check = false

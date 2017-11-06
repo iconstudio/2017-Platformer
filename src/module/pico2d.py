@@ -26,7 +26,7 @@ draw_color: SDL_Color = SDL_Color()
 __all__ = [
               "clamp", "get_time", "open_canvas", "close_canvas", "update_canvas", "clear_canvas", "clear_canvas_now",
               "show_lattice", "hide_lattice", "hide_cursor", "delay", "background_color", "draw_color", "audio_on",
-              "draw_set_color", "draw_get_color",
+              "draw_set_color", "draw_get_color", "draw_background_color_set",
               "get_events", "load_texture", "load_image", "load_font", "load_music", "load_wav",
               "Event", "Image", "Font",
               "SDL_SetWindowTitle", "SDL_SetWindowIcon", "SDL_Color"
@@ -46,6 +46,14 @@ def draw_set_color(newa: SDL_Color or int, newb = None, newc = None):
 def draw_get_color():
     global draw_color
     return draw_color
+
+
+def draw_background_color_set(r: int, g: int, b: int, a: int = 255):
+    global background_color
+    background_color.r = r
+    background_color.g = g
+    background_color.b = b
+    background_color.a = a
 
 
 def open_canvas(w = int(800), h = int(600), sync = False):
