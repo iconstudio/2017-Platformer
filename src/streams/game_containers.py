@@ -111,7 +111,7 @@ class GObject(object):
             # print("Checking Place for one")
             bbox_left = int(self.x - self.sprite_index.xoffset + vx)
             bbox_top = int(self.y - self.sprite_index.yoffset + vy)
-            brect = SDL_Rect(bbox_left, bbox_top, self.sprite_index.width, self.sprite_index.height + 1)
+            brect = SDL_Rect(bbox_left, bbox_top, self.sprite_index.width, self.sprite_index.height)
             temprect = SDL_Rect()
 
             for inst in clist:
@@ -142,11 +142,11 @@ class GObject(object):
             templist = []
             for inst in clist:
                 if bool(inst.y + inst.sprite_index.yoffset <= int(
-                                self.y - self.sprite_index.yoffset) + self.sprite_index.height) != up:
+                                        self.y - self.sprite_index.yoffset + self.sprite_index.height)) != up:
                     templist.append(inst)
 
             while yprog <= tdist:
-                if not self.place_free(self.x, self.y + cy - 1):
+                if not self.place_free(0, cy, templist):
                     self.y += cy
                     return true
 
@@ -258,6 +258,7 @@ class oPlayer(GObject):
         container_player = self
 
     def event_step(self):
+        super().event_step()
         if self.oStatus < oStatusContainer.CHANNELING:  # Player can control its character.
             mx = 0
             if io.key_check(SDLK_LEFT): mx -= 1
@@ -266,12 +267,12 @@ class oPlayer(GObject):
                 if mx != 0:
                     self.xVel += mx * 0.6
                 else:
-                    self.xFric = 0.6
+                    self.xFric = 0.4
             else:
                 if mx != 0:
                     self.xVel += mx * 0.2
                 else:
-                    self.xFric = 0.1
+                    self.xFric = 0.2
 
             if io.key_check_pressed(SDLK_UP):
                 if not self.onAir:
@@ -294,8 +295,6 @@ class oPlayer(GObject):
             self.image_index = 0
             if self.oStatus == oStatusContainer.DEAD:
                 self.sprite_index = sprite_get("PlayerDead")
-
-        super().event_step()
 
 
 # Parent of Enemies

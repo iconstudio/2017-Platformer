@@ -53,8 +53,9 @@ if __name__ == "__main__":
     sprite_load(path_entity + "VampireJump_0.png", "PlayerJump", 8, 8)
     sprite_load([path_entity + "VampireRun_0.png", path_entity + "VampireRun_1.png",
                  path_entity + "VampireRun_2.png", path_entity + "VampireRun_3.png",
-                 path_entity + "VampireRun_4.png", path_entity + "VampireRun_5.png"], "PlayerRun", 8, 8)
+                 path_entity + "VampireRun_4.png", path_entity + "VampireRun_5.png",
+                 path_entity + "VampireRun_2.png", path_entity + "VampireRun_1.png"], "PlayerRun", 8, 8)
     sprite_load(path_entity + "VampireDead_0.png", "PlayerDead", 8, 8)
 
-    framework.run(begin)
+    framework.run(game)
     close_canvas()
