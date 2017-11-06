@@ -8,28 +8,35 @@ __all__ = [
 	          "io",
           ] + keyboard.__all__
 
+keylogger_list = []
+
 
 # Object : IO procedure
 class oIOProc:
-	checking = {}
-	keyboard_list = []
-
 	# This dictionary contains only the Node of keyboard.
 	key_list = {}
+	# list of checking obj.
+	checker_list = {}
 
 	class iochecker:
 		code = None
-		life = 3
+		life = 2
 		owner = None
 
 		def __init__(self, nowner, key: SDL_Keycode):
 			self.owner = nowner
 			self.code = key
 
+		def __del__(self):
+			self.owner.timer = None
+			try:
+				global keylogger_list
+				keylogger_list.remove(self)
+			except ValueError:
+				pass
+
 		def event_step(self):
-			if self.life <= 0:
-				global io
-				io.checking[self.code] = None
+			if self.life == 0:
 				self.owner.check_pressed = false
 				del self
 			else:
@@ -37,11 +44,26 @@ class oIOProc:
 
 	class ionode:
 		code = None
+		timer = None
 		check: bool = false
 		check_pressed: bool = false
 
 		def __init__(self, key: SDL_Keycode):
 			self.code = key
+
+		def enter(self):
+			if self.timer == None:
+				global io
+				self.timer = io.iochecker(self, self.code)
+				io.checker_list[self.code] = self.timer
+
+				global keylogger_list
+				keylogger_list.append(self.timer)
+
+		def close(self):
+			if self.timer != None:
+				del self.timer
+				self.timer = None
 
 	def key_add(self, key: SDL_Keycode):
 		newnode = self.ionode(key)
@@ -67,30 +89,21 @@ class oIOProc:
 			if kevent.type == SDL_KEYDOWN:
 				node.check = true
 				node.check_pressed = true
-				if self.checking[node.code] == None:
-					self.checking[node.code] = self.iochecker(node, node.code)
-					self.keyboard_list.append(self.checking[node.code])
+				node.enter()
 			elif kevent.type == SDL_KEYUP:
 				node.check = false
 				node.check_pressed = false
-				if self.checking[node.code] != None:
-					del self.checking[node.code]
-					self.checking[node.code] = None
-					try:
-						self.keyboard_list.remove(self.checking[node.code])
-					except ValueError:
-						pass
+				node.close()
 		except KeyError:
 			return
 
-	def keyboard_update(self):
-		klen = len(self.keyboard_list)
-		if klen > 0:
-			i = 0
-			while i < klen:
-				what = self.keyboard_list[i]
-				what.event_step()
-				i += 1
+
+def keyboard_update():
+	global keylogger_list
+	klen = len(keylogger_list)
+	if klen > 0:
+		for checker in keylogger_list:
+			checker.event_step()
 
 
 io = oIOProc()
@@ -153,7 +166,7 @@ def run(start_state):
 	stack = [start_state]
 	start_state.enter()
 	while running:
-		io.keyboard_update()
+		keyboard_update()
 		stack[-1].handle_events()
 		stack[-1].update()
 		stack[-1].draw()

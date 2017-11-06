@@ -349,7 +349,7 @@ class Font:
         surface = TTF_RenderText_Blended(self.font, str.encode('utf-8'), draw_color)
         texture = SDL_CreateTextureFromSurface(renderer, surface)
         SDL_FreeSurface(surface)
-        image = Image(texture)
+        image = Image(texture, None, None)
         image.draw(x + image.w / 2, y)
 
     # unicode rendering not working well at the moment, needs to modify

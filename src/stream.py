@@ -2,9 +2,9 @@ from module.pico2d import *
 from module.functions import *
 from module.constants import *
 
-import module.framework as framework
-import streams.main as begin
-import streams.game as game
+from module import framework
+from streams import begin
+from streams import game
 
 from module.sprite import *
 
@@ -38,10 +38,20 @@ if __name__ == "__main__":
 	hide_lattice()
 	draw_background_color_set(0, 0, 0)
 
+	# Background
+	sprite_load(path_background + "bgCastle.png", "bgCastle", 0, 0)
+	sprite_load(path_background + "bgCave.png", "bgCave", 0, 0)
+	sprite_load(path_background + "bgTemple.png", "bgTemple", 0, 0)
+
+	# Theme
 	sprite_load(
 		[path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
 		 path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
+
+	# Entity
 	sprite_load(path_entity + "vampire.png", "Player", 0, 0)
 
-	framework.run(game)
+
+
+	framework.run(begin)
 	close_canvas()

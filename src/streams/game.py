@@ -2,9 +2,9 @@ from module.pico2d import *
 from module.functions import *
 from module.constants import *
 
-import module.framework as framework
+from module import framework
 from module.framework import io
-import streams.game_pause as game_pause
+from streams import game_pause
 
 from module.sprite import *
 from module.terrain import *
@@ -48,6 +48,9 @@ def update():
 
 
 def draw_clean():
+    for x in range(0, screen_width, 32):
+        pass
+    
     instance_draw_update()
     if len(instance_draw_list) > 0:
         for inst in instance_draw_list:
@@ -98,14 +101,14 @@ class GameExecutor:
     def __init__(self):
         # TODO: Definite more objects.
         # Declaring of Special Objects ( Need a canvas )
-
+        
         io.key_add(SDLK_LEFT)
         io.key_add(SDLK_RIGHT)
         io.key_add(SDLK_UP)
         #        Terrains
         tcontainer.signin("1", oBrick)
         tcontainer.signin("@", oPlayer)
-
+        
         Camera.set_pos(0, 0)
         first_scene = TerrainManager(1, 1)
         first_scene.allocate("1111 1111 1111 1111 1111 1111 1111 1111\
@@ -117,7 +120,7 @@ class GameExecutor:
                                      0000 0000 0000 0000 0000 0000 0000 0000\
                                      1111 1111 1111 1111 1111 1111 1111 1111\
                                      ", 0)
-
+        
         first_scene.generate()
         global instance_update
         instance_update = true

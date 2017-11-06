@@ -1,7 +1,8 @@
 from module.pico2d import *
+from module.constants import *
 
-import module.framework as framework
-import streams.main as main
+from module import framework
+from streams import main
 
 from module.sprite import *
 
@@ -15,7 +16,7 @@ logo_time = 0
 # noinspection PyGlobalUndefined,PyGlobalUndefined
 def enter():
     global logo, hfont
-    logo = load_image(path_image + "logo.png")
+    logo = load_image(path_image + "logo.png", 80, 80)
     hfont = load_font(path_font + "윤고딕_310.ttf", 32)
 
 
@@ -40,7 +41,7 @@ def draw():
     clear_canvas()
     logo.draw(screen_width / 2, screen_height / 2)
     draw_set_color(255, 255, 255)
-    hfont.draw(screen_width / 2 - 200, screen_height / 2 - 100, "iconstudio")
+    hfont.draw(screen_width / 2 + 200, screen_height / 2 - 100, "iconstudio")
     update_canvas()
 
 

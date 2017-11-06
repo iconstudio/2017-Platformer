@@ -1,6 +1,6 @@
 from module.pico2d import *
 
-import module.framework as framework
+from module import framework
 
 from module.sprite import *
 
