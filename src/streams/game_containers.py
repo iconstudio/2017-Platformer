@@ -97,22 +97,25 @@ class GObject(object):
 
     # Below methods are common-functions for all object that inherits graviton.
     # Check the place fits to self
-    def place_free(self, vx, vy) -> bool:
-        global instance_list_spec
-        clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
+    def place_free(self, vx, vy, list = None) -> bool:
+        if list == None:
+            global instance_list_spec
+            clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
+        else:
+            clist = list
         length = len(clist)
         if length > 0:
             # print("Checking Place for one")
             bbox_left = int(self.x - self.sprite_index.xoffset + vx)
-            bbox_top = int(self.y - self.sprite_index.yoffset + vy) + 1
-            brect = SDL_Rect(bbox_left, bbox_top, self.sprite_index.width, self.sprite_index.height )
+            bbox_top = int(self.y - self.sprite_index.yoffset + vy)
+            brect = SDL_Rect(bbox_left, bbox_top, self.sprite_index.width, self.sprite_index.height + 1)
             temprect = SDL_Rect()
 
             for inst in clist:
                 tempspr: Sprite = inst.sprite_index
                 otho_left = int(inst.x - tempspr.xoffset)
-                otho_top = int(inst.y - tempspr.yoffset) + 1
-                temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height - 1
+                otho_top = int(inst.y - tempspr.yoffset)
+                temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height + 1
                 if rect_in_rectangle_opt(brect, temprect):
                     return false
             return true
@@ -131,29 +134,21 @@ class GObject(object):
         clist = instance_list_spec["Solid"]
         length = len(clist)
         yprog = 0
+        cy = 0
         if length > 0:
-            bbox_x = int(self.x - self.sprite_index.xoffset)
-            bbox_y = int(self.y - self.sprite_index.yoffset) + 1
-            brect = SDL_Rect(bbox_x, bbox_y, self.sprite_index.width, self.sprite_index.height)
-            temprect = SDL_Rect()
             templist = []
             for inst in clist:
-                if bool(inst.y + inst.sprite_index.yoffset <= brect.y + brect.h) != up:
+                if bool(inst.y + inst.sprite_index.yoffset <= int(self.y - self.sprite_index.yoffset) + self.sprite_index.height + 1) != up:
                     templist.append(inst)
 
             while yprog <= tdist:
+                
+
                 yprog += 1
-                for inst in templist:
-                    tempspr: Sprite = inst.sprite_index
-                    otho_left = int(inst.x - tempspr.xoffset)
-                    otho_top = int(inst.y - tempspr.yoffset) + 1
-                    temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height - 1
-                    if rect_in_rectangle_opt(brect, temprect):
-                        return true
                 if up:
-                    brect.y += 1
+                    cy += 1
                 else:
-                    brect.y -= 1
+                    cy -= 1
             return false
         else:
             return false
