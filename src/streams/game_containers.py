@@ -146,7 +146,7 @@ class GObject(object):
                     templist.append(inst)
 
             while yprog <= tdist:
-                if not self.place_free(0, cy, templist):
+                if not self.place_free(0, cy + 1, templist):
                     self.y += cy
                     return true
 
