@@ -49,24 +49,14 @@ def point_in_rectangle(px, py, x1, y1, x2, y2) -> bool:
 
 def rect_in_rectangle_opt(pstr: SDL_Rect, dstr: SDL_Rect) -> bool:
     first = pstr
-    #first.x -= 1; first.y -= 1; first.w += 1; first.h += 1
-<<<<<<< HEAD
-=======
-    first.x -= 1; first.y -= 1
->>>>>>> 2dc08d42739a6b251e47d492a91c51c9eae845d4
     second = dstr
     result = bool(rect.SDL_HasIntersection(first, second))
     return result
 
 
 def rect_in_rectangle(px1, py1, pw, ph, x1, y1, w, h) -> bool:
-<<<<<<< HEAD
-    first = rect.SDL_Rect(px1, py1 , pw, ph)
-    second = rect.SDL_Rect(x1, y1, w, h)
-=======
     first = rect.SDL_Rect(px1 - 1, py1 - 1, pw + 1, ph + 1)
     second = rect.SDL_Rect(x1 - 1, y1 - 1, w + 1, h + 1)
->>>>>>> 2dc08d42739a6b251e47d492a91c51c9eae845d4
     result = bool(rect.SDL_HasIntersection(first, second))
     return result
 
