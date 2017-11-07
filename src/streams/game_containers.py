@@ -133,13 +133,14 @@ class GObject(object):
         tdist = dist
         if dist < 0:
             tdist = 1000000
+        if dist == 0:
+            return false
 
         global instance_list_spec
         clist = instance_list_spec["Solid"]
         length = len(clist)
         yprog = 0
         cy = 0
-        self.y = math.floor(self.y)
         if length > 0:
             templist = []
             for inst in clist:
@@ -162,9 +163,10 @@ class GObject(object):
             return false
 
     def thud(self):
-        # if self.yVel != 0:
-        self.move_contact_y(abs(self.yVel), self.yVel > 0)
-        self.yVel = 0
+        if self.yVel != 0:
+            self.move_contact_y(abs(self.yVel), self.yVel > 0)
+            self.yVel = 0
+            self.y = math.floor(self.y)
         self.onAir = false
 
     def draw_self(self):  # Simply draws its sprite on its position.
@@ -292,7 +294,7 @@ class oPlayer(GObject):
                 self.image_speed = 0
                 self.image_index = 0
                 self.sprite_index = sprite_get("PlayerJump")
-        else:  # It would be evaluated, and uncontrollable
+        else:  # It would be eventually, and uncontrollable
             self.image_speed = 0
             self.image_index = 0
             if self.oStatus == oStatusContainer.DEAD:
@@ -303,7 +305,16 @@ class oPlayer(GObject):
 class oEnemyParent(GObject):
     name = "NPC"
 
+    hp, maxhp = 1, 1
+    mp, maxmp = 0, 0
     oStatus = oStatusContainer.IDLE
+
+
+class oEnemySoldier(oEnemyParent):
+    hp, maxhp = 4, 4
+
+
+
 
 
 # Damage caused by Player
