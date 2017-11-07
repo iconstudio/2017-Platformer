@@ -6,6 +6,7 @@ from module.framework import io
 
 from module.sprite import *
 from module.terrain import *
+import math
 
 __all__ = [
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
@@ -118,7 +119,7 @@ class GObject(object):
                 tempspr: Sprite = inst.sprite_index
                 otho_left = int(inst.x - tempspr.xoffset)
                 otho_top = int(inst.y - tempspr.yoffset) + 2
-                temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height
+                temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height + 1
                 if rect_in_rectangle_opt(brect, temprect):
                     return false
             return true
@@ -138,6 +139,7 @@ class GObject(object):
         length = len(clist)
         yprog = 0
         cy = 0
+        self.y = math.floor(self.y)
         if length > 0:
             templist = []
             for inst in clist:
