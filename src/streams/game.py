@@ -107,10 +107,10 @@ class GameExecutor:
         io.key_add(SDLK_LEFT)
         io.key_add(SDLK_RIGHT)
         io.key_add(SDLK_UP)
-        #        Terrains
+        # Terrains
         tcontainer.signin("1", oBrick)
         tcontainer.signin("@", oPlayer)
-        
+
         Camera.set_pos(0, 0)
         first_scene = TerrainManager(1, 1)
         first_scene.allocate("1111 1111 1111 1111 1111 1111 1111 1111\
@@ -121,7 +121,7 @@ class GameExecutor:
                               ;;;; \
                               0000 0000 1111 0000 0000 0000 0000 0000  \
                               1111 1111 1111 @ \
-                              ;;;  \
+                              ;;  \
                               0000 0000 0000 0000 0000 0000 0000 0000\
                               1111 1111 1111 1111 1111 1111 1111 1111\
                               ", 0)

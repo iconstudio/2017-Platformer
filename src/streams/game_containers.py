@@ -53,10 +53,14 @@ container_player = None
 # ==================================================================================================
 # Object : Game Object
 class GObject(object):
+    # Basis properties of object
     name: str = "None"
     identify: str = ""
     next: object = None
+
+    #Advanced properties of object
     oStatus = oStatusContainer.IDLE
+    stunned: int = 0
 
     # Properties of sprite
     sprite_index: Sprite = None
@@ -69,6 +73,7 @@ class GObject(object):
     # for optimization
     step_enable: bool = true
 
+    # Physics
     x, y = 0, 0
     xVel, yVel = 0, 0
     xVelMin, xVelMax = -10, 10
@@ -139,14 +144,8 @@ class GObject(object):
         xprog = 0
         cx = 0
         if length > 0:
-            templist = []
-            for inst in clist:
-                if bool(inst.x + inst.sprite_index.xoffset <= int(
-                                        self.x - self.sprite_index.xoffset + self.sprite_index.width)) != right:
-                    templist.append(inst)
-        
             while xprog <= tdist:
-                if not self.place_free(cx + sign(cx), 0, templist):
+                if not self.place_free(cx + sign(cx) * 2, 0):
                     self.x += cx
                     return true
 
