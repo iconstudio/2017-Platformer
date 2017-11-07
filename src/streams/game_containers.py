@@ -97,7 +97,7 @@ class GObject(object):
         instance_update = true
 
         if self.identify != "":
-            instance_list_spec[self.identify].append(self)
+            instance_list_spec[self.identify].remove(self)
 
     # Below methods are common-functions for all object that inherits graviton.
     # Check the place fits to self
@@ -126,8 +126,47 @@ class GObject(object):
         else:
             return true
 
+    def move_contact_x(self, dist=1, right: bool = false) -> bool:
+        tdist = dist
+        if dist < 0:
+            tdist = 1000000
+        if dist == 0:
+            return false
+    
+        global instance_list_spec
+        clist = instance_list_spec["Solid"]
+        length = len(clist)
+        xprog = 0
+        cx = 0
+        if length > 0:
+            templist = []
+            for inst in clist:
+                if bool(inst.x + inst.sprite_index.xoffset <= int(
+                                        self.x - self.sprite_index.xoffset + self.sprite_index.width)) != right:
+                    templist.append(inst)
+        
+            while xprog <= tdist:
+                if not self.place_free(cx + sign(cx), 0, templist):
+                    self.x += cx
+                    return true
+
+                xprog += 1
+                if right:
+                    cx += 1
+                else:
+                    cx -= 1
+            return false
+        else:
+            return false
+
     def collide(self):
-        self.xVel = 0
+        if self.xVel != 0:
+            self.move_contact_x(abs(self.xVel), self.xVel > 0)
+            if self.oStatus >= oStatusContainer.STUNNED:
+                self.xVel *= -0.4
+            else:
+                self.xVel = 0
+            self.x = math.floor(self.x)
 
     def move_contact_y(self, dist = 1, up: bool = false) -> bool:
         tdist = dist
@@ -165,7 +204,12 @@ class GObject(object):
     def thud(self):
         if self.yVel != 0:
             self.move_contact_y(abs(self.yVel), self.yVel > 0)
-            self.yVel = 0
+            if self.oStatus >= oStatusContainer.STUNNED:
+                self.yVel *= -0.4
+            elif self.yVel > 0:
+                self.yVel *= -0.2
+            else:
+                self.yVel = 0
             self.y = math.floor(self.y)
         self.onAir = false
 
@@ -239,6 +283,7 @@ def instance_create(Ty, depth = int(0), x = int(0), y = int(0)) -> object:
 
 
 # Definitions of Special Objects
+# Brick
 class oBrick(Solid):
     name = "Brick of Mine"
 
@@ -303,6 +348,9 @@ class oPlayer(GObject):
 
 # Parent of Enemies
 class oEnemyParent(GObject):
+    """
+            모든 적 객체의 부모 객체
+    """
     name = "NPC"
 
     hp, maxhp = 1, 1
@@ -312,9 +360,14 @@ class oEnemyParent(GObject):
 
 class oEnemySoldier(oEnemyParent):
     hp, maxhp = 4, 4
+    name = "Soldier"
+    xVelMin, xVelMax = -2, 2
 
-
-
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_index = sprite_get("SoldierIdle")
+        self.runspr = sprite_get("SoldierRun")
+        self.image_speed = 0
 
 
 # Damage caused by Player
