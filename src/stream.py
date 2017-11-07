@@ -28,30 +28,34 @@ from module.sprite import *
 """
 
 if __name__ == "__main__":
-	hwnd = open_canvas(screen_width, screen_height, true)
-	SDL_SetWindowTitle(hwnd, "Vampire Exodus".encode("UTF-8"))
-	# icon = load_texture(path_image + "icon.png")
-	# SDL_SetWindowIcon(hwnd, icon)
-	# SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
-	# SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
-	hide_cursor()
-	hide_lattice()
-	draw_background_color_set(0, 0, 0)
+    hwnd = open_canvas(screen_width, screen_height, true)
+    SDL_SetWindowTitle(hwnd, "Vampire Exodus".encode("UTF-8"))
+    # icon = load_texture(path_image + "icon.png")
+    # SDL_SetWindowIcon(hwnd, icon)
+    # SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
+    # SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
+    hide_cursor()
+    hide_lattice()
+    draw_background_color_set(0, 0, 0)
 
-	# Background
-	sprite_load(path_background + "bgCastle.png", "bgCastle", 0, 0)
-	sprite_load(path_background + "bgCave.png", "bgCave", 0, 0)
-	sprite_load(path_background + "bgTemple.png", "bgTemple", 0, 0)
+    # Background
+    sprite_load(path_background + "bgCastle.png", "bgCastle", 0, 0)
+    sprite_load(path_background + "bgCave.png", "bgCave", 0, 0)
+    sprite_load(path_background + "bgTemple.png", "bgTemple", 0, 0)
 
-	# Theme
-	sprite_load(
-		[path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
-		 path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
+    # Theme
+    sprite_load(
+        [path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
+         path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
 
-	# Entity
-	sprite_load(path_entity + "vampire.png", "Player", 0, 0)
+    # Entity
+    sprite_load(path_entity + "vampire.png", "Player", 8, 8)
+    sprite_load(path_entity + "VampireJump_0.png", "PlayerJump", 8, 8)
+    sprite_load([path_entity + "VampireRun_0.png", path_entity + "VampireRun_1.png",
+                 path_entity + "VampireRun_2.png", path_entity + "VampireRun_3.png",
+                 path_entity + "VampireRun_4.png", path_entity + "VampireRun_5.png",
+                 path_entity + "VampireRun_2.png", path_entity + "VampireRun_1.png"], "PlayerRun", 8, 8)
+    sprite_load(path_entity + "VampireDead_0.png", "PlayerDead", 8, 8)
 
-
-
-	framework.run(begin)
-	close_canvas()
+    framework.run(game)
+    close_canvas()

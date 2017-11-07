@@ -48,8 +48,10 @@ def update():
 
 
 def draw_clean():
+    back = sprite_get("bgCave")
     for x in range(0, screen_width, 32):
-        pass
+        for y in range(0, screen_height, 32):
+            draw_sprite(back, 0, x, y)
     
     instance_draw_update()
     if len(instance_draw_list) > 0:

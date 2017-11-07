@@ -105,7 +105,15 @@ class TerrainAllocator:
             # noinspection PyUnusedLocal
             try:
                 whattocreate = tcontainer.mess[current]
-                whattocreate(100, newx, newy)
+                obj = whattocreate(100, newx, newy)
+
+                try:
+                    tempspr = obj.sprite_index
+                    obj.x += tempspr.xoffset
+                    obj.y += tempspr.yoffset
+                except AttributeError:
+                    pass
+
             except KeyError:
                 pass
             newx += self.tile_w

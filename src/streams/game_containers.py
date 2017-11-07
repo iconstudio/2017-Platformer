@@ -9,7 +9,7 @@ from module.terrain import *
 
 __all__ = [
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
-    "container_player", "instance_create", "place_free",
+    "container_player", "instance_create",
     "GObject", "Solid", "oBrick", "oPlayer",
     "ID_SOLID", "ID_DMG_PLAYER", "ID_DMG_ENEMY", "ID_ITEM", "ID_PARTICLE", "ID_DOODAD"
 ]
@@ -55,6 +55,7 @@ class GObject(object):
     name: str = "None"
     identify: str = ""
     next: object = None
+    oStatus = oStatusContainer.IDLE
 
     # Properties of sprite
     sprite_index: Sprite = None
@@ -110,7 +111,7 @@ class GObject(object):
             # print("Checking Place for one")
             bbox_left = int(self.x - self.sprite_index.xoffset + vx)
             bbox_top = int(self.y - self.sprite_index.yoffset + vy)
-            brect = SDL_Rect(bbox_left, bbox_top, self.sprite_index.width, self.sprite_index.height - 1)
+            brect = SDL_Rect(bbox_left, bbox_top, self.sprite_index.width, self.sprite_index.height)
             temprect = SDL_Rect()
 
             for inst in clist:
@@ -140,11 +141,13 @@ class GObject(object):
         if length > 0:
             templist = []
             for inst in clist:
-                if bool(inst.y + inst.sprite_index.yoffset <= int(self.y - self.sprite_index.yoffset) + self.sprite_index.height - 1) != up:
+                if bool(inst.y + inst.sprite_index.yoffset <= int(
+                                        self.y - self.sprite_index.yoffset + self.sprite_index.height)) != up:
                     templist.append(inst)
 
             while yprog <= tdist:
-                if not self.place_free(self.x, self.y + cy):
+                if not self.place_free(0, cy, templist):
+                    self.y += cy
                     return true
 
                 yprog += 1
@@ -169,6 +172,11 @@ class GObject(object):
     def event_step(self):  # The basic mechanisms of objects.
         if not self.step_enable:
             return
+
+        if self.image_speed > 0:
+            self.image_index += self.image_speed
+            if self.image_index >= self.sprite_index.number:
+                self.image_index -= self.sprite_index.number
 
         if self.xVel != 0:
             xc = self.xVel + sign(self.xVel)
@@ -226,23 +234,6 @@ def instance_create(Ty, depth = int(0), x = int(0), y = int(0)) -> object:
     return temp
 
 
-def place_free(dx, dy) -> bool:
-    # return true
-    global instance_list_spec
-    clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
-    length = len(clist)
-    if length > 0:
-        # print("Checking Place")
-        for inst in clist:
-            tempspr: Sprite = inst.sprite_index
-            if point_in_rectangle(dx, dy, inst.x - tempspr.width / 2, inst.y - tempspr.height / 2,
-                                  inst.x + tempspr.width / 2, inst.y + tempspr.height / 2):
-                return false
-        return true
-    else:
-        return true
-
-
 # Definitions of Special Objects
 class oBrick(Solid):
     name = "Brick of Mine"
@@ -267,25 +258,43 @@ class oPlayer(GObject):
         container_player = self
 
     def event_step(self):
-        mx = 0
-        if io.key_check(SDLK_LEFT): mx -= 1
-        if io.key_check(SDLK_RIGHT): mx += 1
-        if not self.onAir:
-            if mx != 0:
-                self.xVel += mx * 0.6
-            else:
-                self.xFric = 0.6
-        else:
-            if mx != 0:
-                self.xVel += mx * 0.2
-            else:
-                self.xFric = 0.1
-
-        if io.key_check_pressed(SDLK_UP):
-            if not self.onAir:
-                self.yVel = 6
-
         super().event_step()
+        if self.oStatus < oStatusContainer.CHANNELING:  # Player can control its character.
+            mx = 0
+            if io.key_check(SDLK_LEFT): mx -= 1
+            if io.key_check(SDLK_RIGHT): mx += 1
+            if not self.onAir:
+                if mx != 0:
+                    self.xVel += mx * 0.6
+                else:
+                    self.xFric = 0.4
+            else:
+                if mx != 0:
+                    self.xVel += mx * 0.2
+                else:
+                    self.xFric = 0.2
+
+            if io.key_check_pressed(SDLK_UP):
+                if not self.onAir:
+                    self.yVel = 6
+
+            if not self.onAir:
+                if self.xVel != 0:
+                    self.image_speed = 0.3
+                    self.sprite_index = sprite_get("PlayerRun")
+                else:
+                    self.image_speed = 0
+                    self.image_index = 0
+                    self.sprite_index = sprite_get("Player")
+            else:
+                self.image_speed = 0
+                self.image_index = 0
+                self.sprite_index = sprite_get("PlayerJump")
+        else:  # It would be evaluated, and uncontrollable
+            self.image_speed = 0
+            self.image_index = 0
+            if self.oStatus == oStatusContainer.DEAD:
+                self.sprite_index = sprite_get("PlayerDead")
 
 
 # Parent of Enemies
