@@ -117,7 +117,7 @@ class GObject(object):
             for inst in clist:
                 tempspr: Sprite = inst.sprite_index
                 otho_left = int(inst.x - tempspr.xoffset)
-                otho_top = int(inst.y - tempspr.yoffset)
+                otho_top = int(inst.y - tempspr.yoffset) + 2
                 temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height
                 if rect_in_rectangle_opt(brect, temprect):
                     return false
@@ -146,7 +146,7 @@ class GObject(object):
                     templist.append(inst)
 
             while yprog <= tdist:
-                if not self.place_free(0, cy + 1, templist):
+                if not self.place_free(0, cy + sign(cy), templist):
                     self.y += cy
                     return true
 

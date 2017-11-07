@@ -43,8 +43,8 @@ def point_distance(x1, y1, x2, y2) -> float:
     return math.hypot((x2 - x1), (y2 - y1))
 
 
-def point_in_rectangle(px, py, x1, y1, x2, y2) -> bool:
-    return x1 <= px <= x2 and y1 <= py <= y2
+def point_in_rectangle(px1, py1, x1, y1, x2, y2) -> bool:
+    return x1 <= px1 <= x2 and y1 <= py1 <= y2
 
 
 def rect_in_rectangle_opt(pstr: SDL_Rect, dstr: SDL_Rect) -> bool:
@@ -55,8 +55,8 @@ def rect_in_rectangle_opt(pstr: SDL_Rect, dstr: SDL_Rect) -> bool:
 
 
 def rect_in_rectangle(px1, py1, pw, ph, x1, y1, w, h) -> bool:
-    first = rect.SDL_Rect(px1 - 1, py1 - 1, pw + 1, ph + 1)
-    second = rect.SDL_Rect(x1 - 1, y1 - 1, w + 1, h + 1)
+    first = rect.SDL_Rect(px1 - 1, py1 - 1, pw + 2, ph + 2)
+    second = rect.SDL_Rect(x1 - 1, y1 - 1, w + 2, h + 2)
     result = bool(rect.SDL_HasIntersection(first, second))
     return result
 
