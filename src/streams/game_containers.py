@@ -3,6 +3,7 @@ from module.functions import *
 from module.constants import *
 
 from module.framework import io
+from module.framework import Camera
 
 from module.sprite import *
 from module.terrain import *
@@ -48,20 +49,37 @@ instance_list_spec[ID_ITEM] = []
 container_player = None
 
 
+# TODO: Definite more objects.
+# Declaring of Special Objects ( Need a canvas )
+
 # ==================================================================================================
 #                                               게임
 # ==================================================================================================
+# Object : A container of Status
+class oStatusContainer:
+    NONE = 0
+    IDLE = 1
+    WALK = 8
+    RUNNING = 10
+    ATTACKING = 40
+    ATTACKING_END = 45
+    CHANNELING = 60
+    STUNNED = 80
+    DEAD = 98
+    DISAPPEAR = 99
+
+
 # Object : Game Object
 class GObject(object):
     # Basis properties of object
     name: str = "None"
     identify: str = ""
     next: object = None
-
-    #Advanced properties of object
+    
+    # Advanced properties of object
     oStatus = oStatusContainer.IDLE
     stunned: int = 0
-
+    
     # Properties of sprite
     sprite_index: Sprite = None
     image_alpha: float = 1.0
@@ -69,10 +87,10 @@ class GObject(object):
     image_speed = float(0)
     visible: bool = true
     depth: int = 0
-
+    
     # for optimization
     step_enable: bool = true
-
+    
     # Physics
     x, y = 0, 0
     xVel, yVel = 0, 0
@@ -82,31 +100,31 @@ class GObject(object):
     gravity_default: float = 0.4
     gravity: float = 0
     onAir: bool = false
-
-    def __init__(self, ndepth = int(0), nx = int(0), ny = int(0)):
+    
+    def __init__(self, ndepth=int(0), nx=int(0), ny=int(0)):
         self.depth = ndepth
         self.x = nx
         self.y = ny
-
+        
         global instance_list, instance_update, instance_list_spec
         instance_list.append(self)
         instance_update = true
         if self.identify != "":
             instance_list_spec[self.identify].append(self)
-
+    
     def __str__(self):
         return self.name
-
+    
     def __del__(self):
         global instance_list, instance_list_spec, instance_draw_list, instance_update
         instance_update = true
-
+        
         if self.identify != "":
             instance_list_spec[self.identify].remove(self)
-
+    
     # Below methods are common-functions for all object that inherits graviton.
     # Check the place fits to self
-    def place_free(self, vx, vy, list = None) -> bool:
+    def place_free(self, vx, vy, list=None) -> bool:
         if list == None:
             global instance_list_spec
             clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
@@ -119,7 +137,7 @@ class GObject(object):
             bbox_top = int(self.y - self.sprite_index.yoffset + vy)
             brect = SDL_Rect(bbox_left, bbox_top, self.sprite_index.width, self.sprite_index.height)
             temprect = SDL_Rect()
-
+            
             for inst in clist:
                 tempspr: Sprite = inst.sprite_index
                 otho_left = int(inst.x - tempspr.xoffset)
@@ -130,14 +148,14 @@ class GObject(object):
             return true
         else:
             return true
-
+    
     def move_contact_x(self, dist=1, right: bool = false) -> bool:
         tdist = dist
         if dist < 0:
             tdist = 1000000
         if dist == 0:
             return false
-    
+        
         global instance_list_spec
         clist = instance_list_spec["Solid"]
         length = len(clist)
@@ -148,7 +166,7 @@ class GObject(object):
                 if not self.place_free(cx + sign(cx) * 2, 0):
                     self.x += cx
                     return true
-
+                
                 xprog += 1
                 if right:
                     cx += 1
@@ -157,7 +175,7 @@ class GObject(object):
             return false
         else:
             return false
-
+    
     def collide(self):
         if self.xVel != 0:
             self.move_contact_x(abs(self.xVel), self.xVel > 0)
@@ -166,14 +184,14 @@ class GObject(object):
             else:
                 self.xVel = 0
             self.x = math.floor(self.x)
-
-    def move_contact_y(self, dist = 1, up: bool = false) -> bool:
+    
+    def move_contact_y(self, dist=1, up: bool = false) -> bool:
         tdist = dist
         if dist < 0:
             tdist = 1000000
         if dist == 0:
             return false
-
+        
         global instance_list_spec
         clist = instance_list_spec["Solid"]
         length = len(clist)
@@ -185,12 +203,12 @@ class GObject(object):
                 if bool(inst.y + inst.sprite_index.yoffset <= int(
                                         self.y - self.sprite_index.yoffset + self.sprite_index.height)) != up:
                     templist.append(inst)
-
+            
             while yprog <= tdist:
                 if not self.place_free(0, cy + sign(cy), templist):
                     self.y += cy
                     return true
-
+                
                 yprog += 1
                 if up:
                     cy += 1
@@ -199,7 +217,7 @@ class GObject(object):
             return false
         else:
             return false
-
+    
     def thud(self):
         if self.yVel != 0:
             self.move_contact_y(abs(self.yVel), self.yVel > 0)
@@ -211,32 +229,34 @@ class GObject(object):
                 self.yVel = 0
             self.y = math.floor(self.y)
         self.onAir = false
-
+    
     def draw_self(self):  # Simply draws its sprite on its position.
         if not self.sprite_index.__eq__(None):
             draw_sprite(self.sprite_index, self.image_index, self.x, self.y, 1, 1, 0.0, self.image_alpha)
-
+    
     def event_step(self):  # The basic mechanisms of objects.
         if not self.step_enable:
             return
-
-        if self.image_speed > 0:
-            self.image_index += self.image_speed
-            if self.image_index >= self.sprite_index.number:
-                self.image_index -= self.sprite_index.number
-
+        
+        count = self.sprite_index.number
+        if count > 1:
+            if self.image_speed > 0:
+                self.image_index += self.image_speed
+                if self.image_index >= count:
+                    self.image_index -= count
+        
         if self.xVel != 0:
             xc = self.xVel + sign(self.xVel)
             if self.place_free(xc, 0):
                 self.x += self.xVel
             else:
                 self.collide()
-
+        
         if self.yVel > 0:  # Going up higher
             yc = self.yVel + 1
         else:  # Going down
             yc = self.yVel - 1
-
+        
         if self.place_free(0, yc):
             self.y += self.yVel  # let it moves first.
             self.gravity = self.gravity_default
@@ -250,10 +270,10 @@ class GObject(object):
                 else:
                     self.xVel = 0
             self.thud()
-
+        
         self.xVel = clamp(self.xVelMin, self.xVel, self.xVelMax)
         self.yVel = clamp(self.yVelMin, self.yVel, self.yVelMax)
-
+    
     def event_draw(self):  # This will be working for drawing.
         self.draw_self()
 
@@ -274,7 +294,7 @@ class Solid(GObject):
 #                                    사용자 정의 객체 / 함수
 # ==================================================================================================
 # Object : Functions
-def instance_create(Ty, depth = int(0), x = int(0), y = int(0)) -> object:
+def instance_create(Ty, depth=int(0), x=int(0), y=int(0)) -> object:
     temp = Ty(depth, x, y)
     global instance_last
     instance_last = temp
@@ -285,7 +305,7 @@ def instance_create(Ty, depth = int(0), x = int(0), y = int(0)) -> object:
 # Brick
 class oBrick(Solid):
     name = "Brick of Mine"
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_index = sprite_get("sCastleBrick")
@@ -301,7 +321,7 @@ class oPlayer(GObject):
         super().__init__(ndepth, nx, ny)
         self.sprite_index = sprite_get("Player")
         self.image_speed = 0
-
+        
         global container_player
         container_player = self
 
@@ -321,11 +341,11 @@ class oPlayer(GObject):
                     self.xVel += mx * 0.2
                 else:
                     self.xFric = 0.2
-
+            
             if io.key_check_pressed(SDLK_UP):
                 if not self.onAir:
                     self.yVel = 6
-
+            
             if not self.onAir:
                 if self.xVel != 0:
                     self.image_speed = 0.3
@@ -338,7 +358,7 @@ class oPlayer(GObject):
                 self.image_speed = 0
                 self.image_index = 0
                 self.sprite_index = sprite_get("PlayerJump")
-        else:  # It would be eventually, and uncontrollable
+        else:  # It would be eventual, and uncontrollable
             self.image_speed = 0
             self.image_index = 0
             if self.oStatus == oStatusContainer.DEAD:
@@ -351,7 +371,7 @@ class oEnemyParent(GObject):
             모든 적 객체의 부모 객체
     """
     name = "NPC"
-
+    
     hp, maxhp = 1, 1
     mp, maxmp = 0, 0
     oStatus = oStatusContainer.IDLE
@@ -361,7 +381,7 @@ class oEnemySoldier(oEnemyParent):
     hp, maxhp = 4, 4
     name = "Soldier"
     xVelMin, xVelMax = -2, 2
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_index = sprite_get("SoldierIdle")

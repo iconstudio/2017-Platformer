@@ -5,7 +5,7 @@ import sdl2.keyboard as keyboard
 
 __all__ = [
               "GameState", "change_state", "push_state", "pop_state", "quit", "run",
-              "io",
+              "io", "Camera",
           ] + keyboard.__all__
 
 keylogger_list = []
@@ -17,16 +17,16 @@ class oIOProc:
     key_list = {}
     # list of checking obj.
     checker_list = {}
-
+    
     class iochecker:
         code = None
         life = 2
         owner = None
-
+        
         def __init__(self, nowner, key: SDL_Keycode):
             self.owner = nowner
             self.code = key
-
+        
         def __del__(self):
             self.owner.timer = None
             try:
@@ -36,58 +36,58 @@ class oIOProc:
                 pass
             except AttributeError:
                 pass
-
+        
         def event_step(self):
             if self.life == 0:
                 self.owner.check_pressed = false
                 del self
             else:
                 self.life -= 1
-
+    
     class ionode:
         code = None
         timer = None
         check: bool = false
         check_pressed: bool = false
-
+        
         def __init__(self, key: SDL_Keycode):
             self.code = key
-
+        
         def enter(self):
             if self.timer == None:
                 global io
                 self.timer = io.iochecker(self, self.code)
                 io.checker_list[self.code] = self.timer
-
+                
                 global keylogger_list
                 keylogger_list.append(self.timer)
-
+        
         def close(self):
             if self.timer != None:
                 del self.timer
                 self.timer = None
-
+    
     def key_add(self, key: SDL_Keycode):
         newnode = self.ionode(key)
         self.key_list[key] = newnode
         return newnode
-
+    
     def key_check(self, key: SDL_Keycode) -> bool:
         try:
             return (self.key_list[key]).check
         except KeyError:
             return false
-
+    
     def key_check_pressed(self, key: SDL_Keycode) -> bool:
         try:
             return (self.key_list[key]).check_pressed
         except KeyError:
             return false
-
+    
     def proceed(self, kevent):
         try:
             node = self.key_list[kevent.key]
-
+            
             if kevent.type == SDL_KEYDOWN:
                 node.check = true
                 node.check_pressed = true
@@ -98,6 +98,9 @@ class oIOProc:
                 node.close()
         except KeyError:
             return
+ 
+    def clear(self):
+        pass
 
 
 def keyboard_update():
@@ -109,6 +112,28 @@ def keyboard_update():
 
 
 io = oIOProc()
+
+
+# Object : View Camera
+class oCamera:
+    x: float = 0
+    y: float = 0
+    width, height = screen_width, screen_height
+    
+    def set_pos(self, x: float = None, y: float = None):
+        if not x.__eq__(None):
+            self.x = x
+        if not y.__eq__(None):
+            self.y = y
+    
+    def add_pos(self, x: float = None, y: float = None):
+        if not x.__eq__(None):
+            self.x += x
+        if not y.__eq__(None):
+            self.y += y
+
+
+Camera = oCamera()
 
 
 class GameState:
@@ -134,8 +159,8 @@ def change_state(state):
 
 
 def push_state(state):
-    close_canvas()
-
+    #close_canvas()
+    
     global stack
     if len(stack) > 0:
         stack[-1].pause()
@@ -151,7 +176,7 @@ def pop_state():
         stack[-1].exit()
         # remove the current state
         stack.pop()
-
+    
     # execute resume function of the previous state
     if len(stack) > 0:
         stack[-1].resume()

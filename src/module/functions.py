@@ -10,8 +10,7 @@ __all__ = [
     "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle", "rect_in_rectangle",
     "rect_in_rectangle_opt",
     "irandom", "irandom_range", "distribute", "choose",
-    "make_color_rgb",
-    "Camera", "oStatusContainer"
+    "make_color_rgb"
 ]
 
 
@@ -85,7 +84,7 @@ def choose(*args):
     length = len(args)
     if length <= 0:
         raise RuntimeError("choose 함수에 값이 제대로 전달되지 않았습니다!" + __name__)
-
+    
     pick = None
     try:
         pick = args[irandom(length - 1)]
@@ -97,40 +96,3 @@ def choose(*args):
 # For Drawing
 def make_color_rgb(r, g, b):
     return px.SDL_Color(r, g, b)
-
-
-# Object : View Camera
-class oCamera:
-    x: float = 0
-    y: float = 0
-    width, height = constants.screen_width, constants.screen_height
-
-    def set_pos(self, x: float = None, y: float = None):
-        if not x.__eq__(None):
-            self.x = x
-        if not y.__eq__(None):
-            self.y = y
-
-    def add_pos(self, x: float = None, y: float = None):
-        if not x.__eq__(None):
-            self.x += x
-        if not y.__eq__(None):
-            self.y += y
-
-
-Camera = oCamera()
-
-
-# Object : A container of Status
-class oStatusContainer:
-    NONE = 0
-    IDLE = 1
-    WALK = 8
-    RUNNING = 10
-    ATTACKING = 40
-    ATTACKING_END = 45
-    CHANNELING = 60
-    STUNNED = 80
-    DEAD = 98
-    DISAPPEAR = 99
-

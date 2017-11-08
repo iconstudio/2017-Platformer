@@ -4,6 +4,7 @@ from module.constants import *
 
 from module import framework
 from module.framework import io
+from module.framework import Camera
 from streams import game_pause
 
 from module.sprite import *
@@ -11,7 +12,7 @@ from module.terrain import *
 from streams.game_containers import *
 
 __all__ = [
-    "name", "GameExecutor"
+    "name", "GameExecutor", "draw_clean", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
 ]
 
 # ==================================================================================================
@@ -101,9 +102,6 @@ def resume():
 
 class GameExecutor:
     def __init__(self):
-        # TODO: Definite more objects.
-        # Declaring of Special Objects ( Need a canvas )
-        
         io.key_add(SDLK_LEFT)
         io.key_add(SDLK_RIGHT)
         io.key_add(SDLK_UP)

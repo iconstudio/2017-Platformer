@@ -3,10 +3,9 @@ from module.pico2d import *
 from module import framework
 
 from module.sprite import *
-
 __all__ = [
-              "Menu", "MenuNode"
-          ] + framework.__all__
+    "name", "Menu", "MenuNode", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
+]
 
 # ==================================================================================================
 #                                       프레임워크 함수
