@@ -196,7 +196,7 @@ def get_time():
     return SDL_GetTicks() / 1000.0
 
 
-def to_sdl_rect(x, y, w, h):
+def make_sdlrect(x, y, w, h):
     return SDL_Rect(int(x), int(-y + canvas_height - h), int(w), int(h))
 
 
@@ -260,7 +260,7 @@ class Image:
             self.xoffset, self.yoffset = self.w / 2, self.h / 2
     
     def make_draw_region(self, dx, dy, dw, dh):
-        return to_sdl_rect(dx - self.xoffset, dy - self.yoffset, dw, dh)
+        return make_sdlrect(dx - self.xoffset, dy - self.yoffset, dw, dh)
     
     def rotate_draw(self, rad, x, y, w=None, h=None):
         """Rotate(in radian unit) and draw image to back buffer, center of rotation is the image center"""
@@ -269,7 +269,7 @@ class Image:
         rect = self.make_draw_region(x, y, w, h)
         SDL_RenderCopyEx(renderer, self.texture, None, rect, math.degrees(-rad), None, SDL_FLIP_NONE)
     
-    def composite_draw(self, rad, flip, x, y, w=None, h=None):
+    def composite_draw(self, rad, flip: str, x, y, w=None, h=None):
         if w is None and h is None:
             w, h = self.w, self.h
         rect = self.make_draw_region(x, y, w, h)
@@ -291,7 +291,7 @@ class Image:
         """Draw image to back buffer"""
         if w == None and h == None:
             w, h = self.w, self.h
-        rect = to_sdl_rect(x, y, w, h)
+        rect = make_sdlrect(x, y, w, h)
         SDL_RenderCopy(renderer, self.texture, None, rect)
     
     def clip_draw(self, left, bottom, width, height, x, y, w=None, h=None):
@@ -302,7 +302,7 @@ class Image:
         dest_rect = self.make_draw_region(x, y, w, h)
         SDL_RenderCopy(renderer, self.texture, src_rect, dest_rect)
     
-    def clip_composite_draw(self, left, bottom, width, height, rad, flip, x, y, w=None, h=None):
+    def clip_composite_draw(self, left, bottom, width, height, rad, flip: str, x, y, w=None, h=None):
         if w is None and h is None:
             w, h = self.w, self.h
         src_rect = SDL_Rect(left, self.h - bottom - height, width, height)
@@ -313,13 +313,25 @@ class Image:
         if 'v' in flip:
             flip_flag |= SDL_FLIP_VERTICAL
         SDL_RenderCopyEx(renderer, self.texture, src_rect, dst_rect, math.degrees(-rad), None, flip_flag)
-    
+
+    def clip_composite_draw_angle(self, left, bottom, width, height, deg, flip: str, x, y, w=None, h=None):
+        if w is None and h is None:
+            w, h = self.w, self.h
+        src_rect = SDL_Rect(left, self.h - bottom - height, width, height)
+        dst_rect = self.make_draw_region(x, y, w, h)
+        flip_flag = SDL_FLIP_NONE
+        if 'h' in flip:
+            flip_flag |= SDL_FLIP_HORIZONTAL
+        if 'v' in flip:
+            flip_flag |= SDL_FLIP_VERTICAL
+        SDL_RenderCopyEx(renderer, self.texture, src_rect, dst_rect, deg, None, flip_flag)
+
     def clip_draw_to_origin(self, left, bottom, width, height, x, y, w=None, h=None):
         """Clip a rectangle from image and draw"""
         if w == None and h == None:
             w, h = width, height
         src_rect = SDL_Rect(left, self.h - bottom - height, width, height)
-        dest_rect = to_sdl_rect(x, y, w, h)
+        dest_rect = make_sdlrect(x, y, w, h)
         SDL_RenderCopy(renderer, self.texture, src_rect, dest_rect)
     
     def draw_now(self, x, y, w=None, h=None):
@@ -331,13 +343,12 @@ class Image:
         '''
         if w == None and h == None:
             w,h = self.w, self.h
-        rect = to_sdl_rect(x-w/2, y-h/2, w, h)
+        rect = make_sdlrect(x-w/2, y-h/2, w, h)
         SDL_RenderCopy(renderer, self.texture, None, rect);
         SDL_RenderPresent(renderer)
         '''
     
     def opacify(self, o):
-        SDL_SetTextureAlphaMod(self.texture, int(o * 255.0))
         SDL_SetTextureAlphaMod(self.texture, int(o * 255.0))
 
 
@@ -365,9 +376,8 @@ class Font:
             print('cannot load %s' % name)
             raise IOError
     
-    def draw(self, x, y, str, color=(0, 0, 0)):
-        sdl_color = SDL_Color(color[0], color[1], color[2])
-        # print(str)
+    def draw(self, x, y, str):
+        sdl_color = draw_get_color()
         surface = TTF_RenderUTF8_Blended(self.font, str.encode('utf-8'), sdl_color)
         texture = SDL_CreateTextureFromSurface(renderer, surface)
         SDL_FreeSurface(surface)

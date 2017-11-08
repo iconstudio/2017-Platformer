@@ -25,14 +25,14 @@ def enter():
 
 
 def exit():
-    if logo_time > 180:
+    if logo_time > fps_target * 3:
         global logo, hfont
         del logo, hfont
 
 
-def update():
+def update(game_frame):
     global logo_time
-    if logo_time > 180.0:
+    if logo_time > fps_target * 3:
         logo_time = 0
         framework.change_state(main)
     logo_time += 1
@@ -49,7 +49,7 @@ def draw():
     update_canvas()
 
 
-def handle_events():
+def handle_events(frame_time):
     bevents = get_events()
     for event in bevents:
         if event.type == SDL_QUIT:

@@ -29,7 +29,7 @@ def exit():
     pass
 
 
-def update():
+def update(game_frame):
     global logo_time
     if logo_time > 1.0:
         logo_time = 0
@@ -48,7 +48,7 @@ def draw():
     pass
 
 
-def handle_events():
+def handle_events(game_frame):
     mevents = get_events()
     for event in mevents:
         if event.type == SDL_QUIT:

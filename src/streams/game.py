@@ -39,10 +39,10 @@ def exit():
     """
 
 
-def update():
+def update(frame_time):
     if len(instance_list) > 0:
         for inst in instance_list:
-            inst.event_step()
+            inst.event_step(frame_time)
     else:
         raise RuntimeError("No instance")
     delay(0.01)
@@ -79,7 +79,7 @@ def instance_draw_update():
         #    instance_draw_list.append(inst)
 
 
-def handle_events():
+def handle_events(frame_time):
     event_queue = get_events()
     for event in event_queue:
         if event.type == SDL_QUIT:

@@ -98,7 +98,7 @@ class oIOProc:
                 node.close()
         except KeyError:
             return
- 
+    
     def clear(self):
         pass
 
@@ -149,6 +149,15 @@ class GameState:
 
 running = None
 stack = None
+current_time = 0.0
+
+
+def get_frame_time():
+    global current_time
+    
+    frame_time = get_time() - current_time
+    current_time += frame_time
+    return frame_time
 
 
 def change_state(state):
@@ -159,7 +168,7 @@ def change_state(state):
 
 
 def push_state(state):
-    #close_canvas()
+    # close_canvas()
     
     global stack
     if len(stack) > 0:
@@ -188,14 +197,17 @@ def quit():
 
 
 def run(start_state):
-    global running, stack, io
+    global running, stack, io, current_time
     running = True
+
     stack = [start_state]
     start_state.enter()
+    current_time = get_time()
     while running:
+        ftime = get_frame_time()
         keyboard_update()
-        stack[-1].handle_events()
-        stack[-1].update()
+        stack[-1].handle_events(ftime)
+        stack[-1].update(ftime)
         stack[-1].draw()
     # repeatedly delete the top of the stack
     while len(stack) > 0:

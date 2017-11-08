@@ -234,7 +234,7 @@ class GObject(object):
         if not self.sprite_index.__eq__(None):
             draw_sprite(self.sprite_index, self.image_index, self.x, self.y, 1, 1, 0.0, self.image_alpha)
     
-    def event_step(self):  # The basic mechanisms of objects.
+    def event_step(self, frame_time):  # The basic mechanisms of objects.
         if not self.step_enable:
             return
         
@@ -325,8 +325,8 @@ class oPlayer(GObject):
         global container_player
         container_player = self
 
-    def event_step(self):
-        super().event_step()
+    def event_step(self, frame_time):
+        super().event_step(frame_time)
         if self.oStatus < oStatusContainer.CHANNELING:  # Player can control its character.
             mx = 0
             if io.key_check(SDLK_LEFT): mx -= 1
@@ -394,7 +394,7 @@ class oPlayerDamage(GObject):
     name = "DamageP"
     identify = ID_DMG_PLAYER
     gravity_default = 0
-    life = 60
+    life = fps_target
 
 
 # Damage caused by Enemy
@@ -402,7 +402,7 @@ class oEnemyDamage(GObject):
     name = "DamageE"
     identify = ID_DMG_ENEMY
     gravity_default = 0
-    life = 60
+    life = fps_target
 
 
 # Parent of Items

@@ -23,7 +23,7 @@ def exit():
     global logo
     del logo
 
-def update():
+def update(frame_time):
     delay(0.01)
 
 
@@ -35,7 +35,7 @@ def draw():
     update_canvas()
 
 
-def handle_events():
+def handle_events(frame_time):
     bevents = get_events()
     for event in bevents:
         if event.type == SDL_QUIT:

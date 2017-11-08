@@ -60,6 +60,11 @@ def rect_in_rectangle(px1, py1, pw, ph, x1, y1, w, h) -> bool:
     return result
 
 
+# physics
+def delta_velocity(spd = 1):
+    return constants.phy_velocity * spd
+
+
 # Randoms
 # integer random
 def irandom(n) -> int:
