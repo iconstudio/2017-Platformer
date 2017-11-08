@@ -114,6 +114,7 @@ def open_canvas(w=int(800), h=int(600), sync=False, full=False):
     
     debug_font_path = path_font + '윤고딕_310.ttf'
     debug_font = load_font(debug_font_path, 16)
+    return window
 
 
 def get_canvas_width():

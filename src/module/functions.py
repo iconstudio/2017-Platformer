@@ -8,7 +8,7 @@ import module.constants as constants
 
 __all__ = [
     "sqr", "sign", "degtorad", "radtodeg", "point_distance", "point_in_rectangle", "rect_in_rectangle",
-    "rect_in_rectangle_opt",
+    "rect_in_rectangle_opt", "delta_velocity",
     "irandom", "irandom_range", "distribute", "choose",
     "make_color_rgb"
 ]

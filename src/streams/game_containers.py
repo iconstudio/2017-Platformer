@@ -2,6 +2,7 @@ from module.pico2d import *
 from module.functions import *
 from module.constants import *
 
+import math
 from module.framework import io
 from module.framework import Camera
 
@@ -149,7 +150,7 @@ class GObject(object):
         else:
             return true
     
-    def move_contact_x(self, dist=1, right: bool = false) -> bool:
+    def move_contact_x(self, dist: float or int = 1, right: bool = false) -> bool:
         tdist = dist
         if dist < 0:
             tdist = 1000000
@@ -176,16 +177,16 @@ class GObject(object):
         else:
             return false
     
-    def collide(self):
-        if self.xVel != 0:
-            self.move_contact_x(abs(self.xVel), self.xVel > 0)
+    def collide(self, how: float or int):
+        if self.xVel is not 0:
+            self.move_contact_x(abs(math.floor(how)), how > 0)
             if self.oStatus >= oStatusContainer.STUNNED:
                 self.xVel *= -0.4
             else:
                 self.xVel = 0
             self.x = math.floor(self.x)
     
-    def move_contact_y(self, dist=1, up: bool = false) -> bool:
+    def move_contact_y(self, dist: float or int = 1, up: bool = false) -> bool:
         tdist = dist
         if dist < 0:
             tdist = 1000000
@@ -218,9 +219,9 @@ class GObject(object):
         else:
             return false
     
-    def thud(self):
+    def thud(self, how: float or int):
         if self.yVel != 0:
-            self.move_contact_y(abs(self.yVel), self.yVel > 0)
+            self.move_contact_y(abs(math.ceil(how)), how > 0)
             if self.oStatus >= oStatusContainer.STUNNED:
                 self.yVel *= -0.4
             elif self.yVel > 0:
@@ -241,24 +242,26 @@ class GObject(object):
         count = self.sprite_index.number
         if count > 1:
             if self.image_speed > 0:
-                self.image_index += self.image_speed
+                self.image_index += count / self.image_speed * frame_time / 2
                 if self.image_index >= count:
                     self.image_index -= count
         
         if self.xVel != 0:
-            xc = self.xVel + sign(self.xVel)
+            xdist = delta_velocity(self.xVel * 10) * frame_time
+            xc = xdist + sign(xdist)
             if self.place_free(xc, 0):
-                self.x += self.xVel
+                self.x += xdist
             else:
-                self.collide()
+                self.collide(xdist)
         
-        if self.yVel > 0:  # Going up higher
-            yc = self.yVel + 1
+        ydist = delta_velocity(self.yVel * 10) * frame_time
+        if ydist > 0:  # Going up higher
+            yc = ydist + 1
         else:  # Going down
-            yc = self.yVel - 1
+            yc = ydist - 1
         
         if self.place_free(0, yc):
-            self.y += self.yVel  # let it moves first.
+            self.y += ydist  # let it moves first.
             self.gravity = self.gravity_default
             self.yVel -= self.gravity
             self.onAir = true
@@ -269,7 +272,7 @@ class GObject(object):
                     self.xVel -= self.xFric * sign(self.xVel)
                 else:
                     self.xVel = 0
-            self.thud()
+            self.thud(ydist)
         
         self.xVel = clamp(self.xVelMin, self.xVel, self.xVelMax)
         self.yVel = clamp(self.yVelMin, self.yVel, self.yVelMax)
@@ -283,7 +286,7 @@ class Solid(GObject):
     # reset some inherited variables
     name = "Solid"
     identify = ID_SOLID
-
+    
     image_speed = 0
     step_enable = false
     gravity_default = 0
@@ -316,7 +319,7 @@ class oBrick(Solid):
 class oPlayer(GObject):
     name = "Player"
     xVelMin, xVelMax = -2, 2
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_index = sprite_get("Player")
@@ -324,7 +327,7 @@ class oPlayer(GObject):
         
         global container_player
         container_player = self
-
+    
     def event_step(self, frame_time):
         super().event_step(frame_time)
         if self.oStatus < oStatusContainer.CHANNELING:  # Player can control its character.
