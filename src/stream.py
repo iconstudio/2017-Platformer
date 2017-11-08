@@ -28,7 +28,7 @@ from module.sprite import *
 """
 
 if __name__ == "__main__":
-    hwnd = open_canvas(screen_width, screen_height, true)
+    hwnd = open_canvas(screen_width, screen_height, sync=true)
     SDL_SetWindowTitle(hwnd, "Vampire Exodus".encode("UTF-8"))
     # icon = load_texture(path_image + "icon.png")
     # SDL_SetWindowIcon(hwnd, icon)
