@@ -54,7 +54,7 @@ class oIOProc:
             self.code = key
         
         def enter(self):
-            if self.timer == None:
+            if self.timer is None:
                 global io
                 self.timer = io.iochecker(self, self.code)
                 io.checker_list[self.code] = self.timer
@@ -63,7 +63,7 @@ class oIOProc:
                 keylogger_list.append(self.timer)
         
         def close(self):
-            if self.timer != None:
+            if self.timer is not None:
                 del self.timer
                 self.timer = None
     

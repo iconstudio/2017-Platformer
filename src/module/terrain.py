@@ -1,4 +1,3 @@
-from module.functions import *
 from module.constants import *
 
 __all__ = [

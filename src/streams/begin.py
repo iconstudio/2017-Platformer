@@ -30,7 +30,7 @@ def exit():
         del logo, hfont
 
 
-def update(game_frame):
+def update(frame_time):
     global logo_time
     if logo_time > fps_target * 3:
         logo_time = 0

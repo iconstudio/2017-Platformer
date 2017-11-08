@@ -68,6 +68,7 @@ def draw():
     update_canvas()
 
 
+# noinspection PyGlobalUndefined
 def instance_draw_update():
     global instance_list, instance_draw_list, instance_update
     if instance_update:

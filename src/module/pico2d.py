@@ -22,6 +22,8 @@ except ImportError:
 import module.keycode as keycode
 from module.constants import *
 
+window, renderer, debug_font = None, None, None
+canvas_width, canvas_height = 0, 0
 lattice_on: bool = True
 audio_on: bool = False
 background_color: SDL_Color = SDL_Color(210, 210, 210)
@@ -46,7 +48,7 @@ def draw_set_color(newa: SDL_Color or int, newb=None, newc=None):
     if type(newa) == SDL_Color:
         draw_color = newa
     else:
-        if newb != None and newc != None:
+        if newb is not None and newc is not None:
             del draw_color
             draw_color = SDL_Color(newa, newb, newc)
 
@@ -255,7 +257,7 @@ class Image:
         SDL_DestroyTexture(self.texture)
     
     def offset(self, xoff: float, yoff: float):
-        if xoff != None and yoff != None:
+        if xoff is not None and yoff is not None:
             self.xoffset, self.yoffset = xoff, yoff
         else:
             self.xoffset, self.yoffset = self.w / 2, self.h / 2
@@ -265,7 +267,7 @@ class Image:
     
     def rotate_draw(self, rad, x, y, w=None, h=None):
         """Rotate(in radian unit) and draw image to back buffer, center of rotation is the image center"""
-        if w == None and h == None:
+        if w is None and h is None:
             w, h = self.w, self.h
         rect = self.make_draw_region(x, y, w, h)
         SDL_RenderCopyEx(renderer, self.texture, None, rect, math.degrees(-rad), None, SDL_FLIP_NONE)
@@ -283,21 +285,21 @@ class Image:
     
     def draw(self, x, y, w=None, h=None):
         """Draw image to back buffer"""
-        if w == None and h == None:
+        if w is None and h is None:
             w, h = self.w, self.h
         rect = self.make_draw_region(x, y, w, h)
         SDL_RenderCopy(renderer, self.texture, None, rect)
     
     def draw_to_origin(self, x, y, w=None, h=None):
         """Draw image to back buffer"""
-        if w == None and h == None:
+        if w is None and h is None:
             w, h = self.w, self.h
         rect = make_sdlrect(x, y, w, h)
         SDL_RenderCopy(renderer, self.texture, None, rect)
     
     def clip_draw(self, left, bottom, width, height, x, y, w=None, h=None):
         """Clip a rectangle from image and draw"""
-        if w == None and h == None:
+        if w is None and h is None:
             w, h = width, height
         src_rect = SDL_Rect(left, self.h - bottom - height, width, height)
         dest_rect = self.make_draw_region(x, y, w, h)
@@ -329,7 +331,7 @@ class Image:
 
     def clip_draw_to_origin(self, left, bottom, width, height, x, y, w=None, h=None):
         """Clip a rectangle from image and draw"""
-        if w == None and h == None:
+        if w is None and h is None:
             w, h = width, height
         src_rect = SDL_Rect(left, self.h - bottom - height, width, height)
         dest_rect = make_sdlrect(x, y, w, h)
@@ -356,7 +358,7 @@ class Image:
 def load_texture(name):
     global renderer
     texture = IMG_LoadTexture(renderer, name.encode('UTF-8'))
-    if (not texture):
+    if not texture:
         print('cannot load %s' % name)
         raise IOError
     return texture
@@ -373,13 +375,13 @@ class Font:
     def __init__(self, name, size=20):
         # print('font' + name + 'loaded')
         self.font = TTF_OpenFont(name.encode('utf-8'), size)
-        if (not self.font):
+        if not self.font:
             print('cannot load %s' % name)
             raise IOError
     
-    def draw(self, x, y, str):
+    def draw(self, x, y, caption: str):
         sdl_color = draw_get_color()
-        surface = TTF_RenderUTF8_Blended(self.font, str.encode('utf-8'), sdl_color)
+        surface = TTF_RenderUTF8_Blended(self.font, caption.encode('utf-8'), sdl_color)
         texture = SDL_CreateTextureFromSurface(renderer, surface)
         SDL_FreeSurface(surface)
         image = Image(texture, None, None)
@@ -407,10 +409,10 @@ def print_fps():
     SDL_SetWindowTitle(window, caption)
 
 
-def debug_print(str):
+def debug_print(caption):
     global canvas_height
     global debug_font
-    debug_font.draw(0, canvas_height - 10, str, (0, 255, 0))
+    debug_font.draw(0, canvas_height - 10, caption, (0, 255, 0))
 
 
 # only one music can exist at one time
@@ -424,19 +426,24 @@ class Music:
     def play(self, n=1):
         Mix_PlayMusic(self.music, n)
     
-    def set_volume(self, v):
+    @staticmethod
+    def set_volume(v):
         Mix_VolumeMusic(v)
     
-    def get_volume(self):
+    @staticmethod
+    def get_volume():
         return Mix_VolumeMusic(-1)
     
-    def stop(self):
+    @staticmethod
+    def stop():
         Mix_HaltMusic()
     
-    def pause(self):
+    @staticmethod
+    def pause():
         Mix_PauseMusic()
     
-    def resume(self):
+    @staticmethod
+    def resume():
         Mix_ResumeMusic()
     
     def __del__(self):
@@ -466,7 +473,7 @@ class Wav:
 def load_music(name):
     if audio_on:
         data = Mix_LoadMUS(name.encode('UTF-8'))
-        if (not data):
+        if not data:
             print('cannot load %s' % name)
             raise IOError
         
@@ -479,7 +486,7 @@ def load_music(name):
 def load_wav(name):
     if audio_on:
         data = Mix_LoadWAV(name.encode('UTF-8'))
-        if (not data):
+        if not data:
             print('cannot load %s' % name)
             raise IOError
         
@@ -524,7 +531,8 @@ def pico2d_image_loader(filename, colorkey, **kwargs):
 
 
 def load_tilemap(filename):
-    return pytmx.TiledMap(filename, image_loader=pico2d_image_loader)
+    #return pytmx.TiledMap(filename, image_loader=pico2d_image_loader)
+    pass
 
 
 def test_pico2d():

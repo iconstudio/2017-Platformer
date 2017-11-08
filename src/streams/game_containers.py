@@ -88,6 +88,7 @@ class GObject(object):
     image_speed = float(0)
     visible: bool = true
     depth: int = 0
+    image_xscale: float = 1
     
     # for optimization
     step_enable: bool = true
@@ -125,12 +126,12 @@ class GObject(object):
     
     # Below methods are common-functions for all object that inherits graviton.
     # Check the place fits to self
-    def place_free(self, vx, vy, list=None) -> bool:
-        if list == None:
+    def place_free(self, vx, vy, olist=None) -> bool:
+        if olist is None:
             global instance_list_spec
             clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
         else:
-            clist = list
+            clist = olist
         length = len(clist)
         if length > 0:
             # print("Checking Place for one")
@@ -179,7 +180,7 @@ class GObject(object):
     
     def collide(self, how: float or int):
         if self.xVel is not 0:
-            self.move_contact_x(abs(math.floor(how)), how > 0)
+            self.move_contact_x(abs(how), how > 0)
             if self.oStatus >= oStatusContainer.STUNNED:
                 self.xVel *= -0.4
             else:
@@ -221,7 +222,7 @@ class GObject(object):
     
     def thud(self, how: float or int):
         if self.yVel != 0:
-            self.move_contact_y(abs(math.ceil(how)), how > 0)
+            self.move_contact_y(abs(math.ceil(how)) + 1, how > 0)
             if self.oStatus >= oStatusContainer.STUNNED:
                 self.yVel *= -0.4
             elif self.yVel > 0:
@@ -233,7 +234,7 @@ class GObject(object):
     
     def draw_self(self):  # Simply draws its sprite on its position.
         if not self.sprite_index.__eq__(None):
-            draw_sprite(self.sprite_index, self.image_index, self.x, self.y, 1, 1, 0.0, self.image_alpha)
+            draw_sprite(self.sprite_index, self.image_index, self.x, self.y, self.image_xscale, 1, 0.0, self.image_alpha)
     
     def event_step(self, frame_time):  # The basic mechanisms of objects.
         if not self.step_enable:
@@ -259,8 +260,12 @@ class GObject(object):
             yc = ydist + 1
         else:  # Going down
             yc = ydist - 1
-        
-        if self.place_free(0, yc):
+        if abs(ydist) > 20:
+            self.gravity = self.gravity_default
+            self.yVel -= self.gravity * 10 * frame_time
+            ydist -=  self.gravity * 10 * frame_time
+            self.move_contact_y(abs(math.ceil(ydist)) + 1, ydist > 0)
+        elif self.place_free(0, yc):
             self.y += ydist  # let it moves first.
             self.gravity = self.gravity_default
             self.yVel -= self.gravity
@@ -344,26 +349,25 @@ class oPlayer(GObject):
                     self.xVel += mx * 0.2
                 else:
                     self.xFric = 0.2
+            if mx != 0:
+                self.image_xscale = mx
             
             if io.key_check_pressed(SDLK_UP):
                 if not self.onAir:
-                    self.yVel = 6
+                    self.yVel = 8.5
             
             if not self.onAir:
                 if self.xVel != 0:
                     self.image_speed = 0.3
                     self.sprite_index = sprite_get("PlayerRun")
                 else:
-                    self.image_speed = 0
-                    self.image_index = 0
+                    self.image_speed, self.image_index = 0, 0
                     self.sprite_index = sprite_get("Player")
             else:
-                self.image_speed = 0
-                self.image_index = 0
+                self.image_speed, self.image_index = 0, 0
                 self.sprite_index = sprite_get("PlayerJump")
         else:  # It would be eventual, and uncontrollable
-            self.image_speed = 0
-            self.image_index = 0
+            self.image_speed, self.image_index = 0, 0
             if self.oStatus == oStatusContainer.DEAD:
                 self.sprite_index = sprite_get("PlayerDead")
 
@@ -378,6 +382,7 @@ class oEnemyParent(GObject):
     hp, maxhp = 1, 1
     mp, maxmp = 0, 0
     oStatus = oStatusContainer.IDLE
+    image_speed = 0
 
 
 class oEnemySoldier(oEnemyParent):
