@@ -75,7 +75,7 @@ def instance_draw_update():
         del instance_draw_list
         instance_update = false
         instance_draw_list = []
-        instance_draw_list = sorted(instance_list, key=lambda gobject: gobject.depth)
+        instance_draw_list = sorted(instance_list, key=lambda gobject: -gobject.depth)
         # for inst in instance_list:
         #    instance_draw_list.append(inst)
 
@@ -109,6 +109,7 @@ class GameExecutor:
         # Terrains
         tcontainer.signin("1", oBrick)
         tcontainer.signin("@", oPlayer)
+        tcontainer.signin("s", oSoldier)
 
         Camera.set_pos(0, 0)
         first_scene = TerrainManager(1, 1)
@@ -119,7 +120,7 @@ class GameExecutor:
                               1111 1111 1111 1111 1111 1111 1111 1111\
                               ;;;; \
                               0000 0000 1111 0000 0000 0000 0000 0000  \
-                              1111 1111 1111 @ \
+                              1111 1111 1111 @000 00ss 0001 0s11 1111 \
                               ;;  \
                               0000 0000 0000 0000 0000 0000 0000 0000\
                               1111 1111 1111 1111 1111 1111 1111 1111\

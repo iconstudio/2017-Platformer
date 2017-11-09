@@ -8,12 +8,14 @@ from module.framework import Camera
 
 from module.sprite import *
 from module.terrain import *
+
 import math
+import sys
 
 __all__ = [
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
     "container_player", "instance_create",
-    "GObject", "Solid", "oBrick", "oPlayer",
+    "GObject", "Solid", "oBrick", "oPlayer", "oSoldier",
     "ID_SOLID", "ID_DMG_PLAYER", "ID_DMG_ENEMY", "ID_ITEM", "ID_PARTICLE", "ID_DOODAD"
 ]
 
@@ -39,12 +41,14 @@ ID_PARTICLE: str = "Particle"
 ID_DOODAD: str = "Doodad"
 ID_DMG_PLAYER: str = "HurtPlayer"
 ID_DMG_ENEMY: str = "HurtEnemy"
+ID_ENEMY: str = "Enemy"
 ID_ITEM: str = "Items"
 instance_list_spec[ID_SOLID] = []
 instance_list_spec[ID_PARTICLE] = []
 instance_list_spec[ID_DOODAD] = []
 instance_list_spec[ID_DMG_PLAYER] = []
 instance_list_spec[ID_DMG_ENEMY] = []
+instance_list_spec[ID_ENEMY] = []
 instance_list_spec[ID_ITEM] = []
 
 container_player = None
@@ -104,7 +108,8 @@ class GObject(object):
     onAir: bool = false
     
     def __init__(self, ndepth=int(0), nx=int(0), ny=int(0)):
-        self.depth = ndepth
+        if ndepth is not None:
+            self.depth = ndepth
         self.x = nx
         self.y = ny
         
@@ -233,8 +238,11 @@ class GObject(object):
         self.onAir = false
     
     def draw_self(self):  # Simply draws its sprite on its position.
-        if not self.sprite_index.__eq__(None):
-            draw_sprite(self.sprite_index, self.image_index, self.x, self.y, self.image_xscale, 1, 0.0, self.image_alpha)
+        data = self.sprite_index
+        if not data.__eq__(None):
+            if Camera.x <= self.x - data.xoffset and Camera.y <= self.y - data.yoffset:
+                draw_sprite(self.sprite_index, self.image_index, self.x, self.y, self.image_xscale, 1, 0.0,
+                        self.image_alpha)
     
     def event_step(self, frame_time):  # The basic mechanisms of objects.
         if not self.step_enable:
@@ -260,12 +268,7 @@ class GObject(object):
             yc = ydist + 1
         else:  # Going down
             yc = ydist - 1
-        if abs(ydist) > 20:
-            self.gravity = self.gravity_default
-            self.yVel -= self.gravity * 10 * frame_time
-            ydist -=  self.gravity * 10 * frame_time
-            self.move_contact_y(abs(math.ceil(ydist)) + 1, ydist > 0)
-        elif self.place_free(0, yc):
+        if self.place_free(0, yc):
             self.y += ydist  # let it moves first.
             self.gravity = self.gravity_default
             self.yVel -= self.gravity
@@ -293,6 +296,7 @@ class Solid(GObject):
     identify = ID_SOLID
     
     image_speed = 0
+    depth = 1000
     step_enable = false
     gravity_default = 0
     xFric, yFric = 0, 0
@@ -309,6 +313,25 @@ def instance_create(Ty, depth=int(0), x=int(0), y=int(0)) -> object:
     return temp
 
 
+def instance_place(Ty, fx, fy) -> object:
+    try:
+        ibj = Ty.identify
+    except AttributeError:
+        print("Cannot find variable 'identify' in %s" % (str(Ty)))
+        sys.exit(-1)
+
+    global instance_list_spec
+    clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
+    length = len(clist)
+    if length > 0:
+        temprect = SDL_Rect()
+    
+    for inst in clist:
+        pass
+
+    return Ty()
+
+
 # Definitions of Special Objects
 # Brick
 class oBrick(Solid):
@@ -323,7 +346,8 @@ class oBrick(Solid):
 # Player
 class oPlayer(GObject):
     name = "Player"
-    xVelMin, xVelMax = -2, 2
+    depth = 0
+    xVelMin, xVelMax = -3, 3
     
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -378,6 +402,8 @@ class oEnemyParent(GObject):
             모든 적 객체의 부모 객체
     """
     name = "NPC"
+    identify = ID_ENEMY
+    depth = 100
     
     hp, maxhp = 1, 1
     mp, maxmp = 0, 0
@@ -385,7 +411,7 @@ class oEnemyParent(GObject):
     image_speed = 0
 
 
-class oEnemySoldier(oEnemyParent):
+class oSoldier(oEnemyParent):
     hp, maxhp = 4, 4
     name = "Soldier"
     xVelMin, xVelMax = -2, 2

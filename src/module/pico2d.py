@@ -205,8 +205,8 @@ def make_sdlrect(x, y, w, h):
 
 def draw_rectangle(x1, y1, x2, y2):
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255)
-    rect = SDL_Rect(int(x1), int(-y2 + canvas_height - 1), int(x2 - x1 + 1), int(y2 - y1 + 1))
-    SDL_RenderDrawRect(renderer, rect)
+    drect = SDL_Rect(int(x1), int(-y2 + canvas_height - 1), int(x2 - x1 + 1), int(y2 - y1 + 1))
+    SDL_RenderDrawRect(renderer, drect)
 
 
 class Event:
@@ -224,11 +224,11 @@ def get_events():
     # print_fps()
     SDL_Delay(1)
     sdl_event = SDL_Event()
-    events = []
+    events_return = []
     while SDL_PollEvent(ctypes.byref(sdl_event)):
         event = Event(sdl_event.type)
         if event.type in (SDL_QUIT, SDL_KEYDOWN, SDL_KEYUP, SDL_MOUSEMOTION, SDL_MOUSEBUTTONDOWN, SDL_MOUSEBUTTONUP):
-            events.append(event)
+            events_return.append(event)
             if event.type == SDL_KEYDOWN or event.type == SDL_KEYUP:
                 if not sdl_event.key.repeat:
                     event.key = sdl_event.key.keysym.sym
@@ -237,7 +237,7 @@ def get_events():
             elif event.type == SDL_MOUSEBUTTONDOWN or event.type == SDL_MOUSEBUTTONUP:
                 event.button, event.x, event.y = sdl_event.button.button, sdl_event.button.x, sdl_event.button.y
     
-    return events
+    return events_return
 
 
 class Image:
@@ -265,37 +265,40 @@ class Image:
     def make_draw_region(self, dx, dy, dw, dh):
         return make_sdlrect(dx - self.xoffset, dy - self.yoffset, dw, dh)
     
+    def make_draw_region_origin(self, dx, dy, dw, dh):
+        return make_sdlrect(dx, dy, dw, dh)
+    
     def rotate_draw(self, rad, x, y, w=None, h=None):
         """Rotate(in radian unit) and draw image to back buffer, center of rotation is the image center"""
         if w is None and h is None:
             w, h = self.w, self.h
-        rect = self.make_draw_region(x, y, w, h)
-        SDL_RenderCopyEx(renderer, self.texture, None, rect, math.degrees(-rad), None, SDL_FLIP_NONE)
+        drect = self.make_draw_region(x, y, w, h)
+        SDL_RenderCopyEx(renderer, self.texture, None, drect, math.degrees(-rad), None, SDL_FLIP_NONE)
     
     def composite_draw(self, rad, flip: str, x, y, w=None, h=None):
         if w is None and h is None:
             w, h = self.w, self.h
-        rect = self.make_draw_region(x, y, w, h)
+        drect = self.make_draw_region(x, y, w, h)
         flip_flag = SDL_FLIP_NONE
         if 'h' in flip:
             flip_flag |= SDL_FLIP_HORIZONTAL
         if 'v' in flip:
             flip_flag |= SDL_FLIP_VERTICAL
-        SDL_RenderCopyEx(renderer, self.texture, None, rect, math.degrees(-rad), None, flip_flag)
+        SDL_RenderCopyEx(renderer, self.texture, None, drect, math.degrees(-rad), None, flip_flag)
     
     def draw(self, x, y, w=None, h=None):
         """Draw image to back buffer"""
         if w is None and h is None:
             w, h = self.w, self.h
-        rect = self.make_draw_region(x, y, w, h)
-        SDL_RenderCopy(renderer, self.texture, None, rect)
+        drect = self.make_draw_region(x, y, w, h)
+        SDL_RenderCopy(renderer, self.texture, None, drect)
     
     def draw_to_origin(self, x, y, w=None, h=None):
         """Draw image to back buffer"""
         if w is None and h is None:
             w, h = self.w, self.h
-        rect = make_sdlrect(x, y, w, h)
-        SDL_RenderCopy(renderer, self.texture, None, rect)
+        drect = self.make_draw_region_origin(x, y, w, h)
+        SDL_RenderCopy(renderer, self.texture, None, drect)
     
     def clip_draw(self, left, bottom, width, height, x, y, w=None, h=None):
         """Clip a rectangle from image and draw"""
@@ -316,7 +319,7 @@ class Image:
         if 'v' in flip:
             flip_flag |= SDL_FLIP_VERTICAL
         SDL_RenderCopyEx(renderer, self.texture, src_rect, dst_rect, math.degrees(-rad), None, flip_flag)
-
+    
     def clip_composite_draw_angle(self, left, bottom, width, height, deg, flip: str, x, y, w=None, h=None):
         if w is None and h is None:
             w, h = self.w, self.h
@@ -328,13 +331,13 @@ class Image:
         if 'v' in flip:
             flip_flag |= SDL_FLIP_VERTICAL
         SDL_RenderCopyEx(renderer, self.texture, src_rect, dst_rect, deg, None, flip_flag)
-
+    
     def clip_draw_to_origin(self, left, bottom, width, height, x, y, w=None, h=None):
         """Clip a rectangle from image and draw"""
         if w is None and h is None:
             w, h = width, height
         src_rect = SDL_Rect(left, self.h - bottom - height, width, height)
-        dest_rect = make_sdlrect(x, y, w, h)
+        dest_rect = self.make_draw_region_origin(x, y, w, h)
         SDL_RenderCopy(renderer, self.texture, src_rect, dest_rect)
     
     def draw_now(self, x, y, w=None, h=None):
@@ -381,9 +384,9 @@ class Font:
     
     def draw(self, x, y, caption: str):
         sdl_color = draw_get_color()
-        surface = TTF_RenderUTF8_Blended(self.font, caption.encode('utf-8'), sdl_color)
-        texture = SDL_CreateTextureFromSurface(renderer, surface)
-        SDL_FreeSurface(surface)
+        fsurface = TTF_RenderUTF8_Blended(self.font, caption.encode('utf-8'), sdl_color)
+        texture = SDL_CreateTextureFromSurface(renderer, fsurface)
+        SDL_FreeSurface(fsurface)
         image = Image(texture, None, None)
         image.draw(x + image.w / 2, y)
 
@@ -503,8 +506,8 @@ from functools import partial
 # import pytmx
 
 def pico2d_image_loader(filename, colorkey, **kwargs):
-    def extract_image(rect=None, flags=None):
-        if rect:
+    def extract_image(crect=None, flags=None):
+        if crect:
             try:
                 flip = ''
                 if flags.flipped_horizontally:
@@ -514,7 +517,7 @@ def pico2d_image_loader(filename, colorkey, **kwargs):
                 if flags.flipped_diagonally:
                     flip = 'hv'
                 
-                return image, rect, flip
+                return image, crect, flip
             
             except ValueError:
                 print('Tile bounds outside bounds of tileset image')
@@ -531,7 +534,7 @@ def pico2d_image_loader(filename, colorkey, **kwargs):
 
 
 def load_tilemap(filename):
-    #return pytmx.TiledMap(filename, image_loader=pico2d_image_loader)
+    # return pytmx.TiledMap(filename, image_loader=pico2d_image_loader)
     pass
 
 

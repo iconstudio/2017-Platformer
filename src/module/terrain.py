@@ -104,7 +104,7 @@ class TerrainAllocator:
             # noinspection PyUnusedLocal
             try:
                 whattocreate = tcontainer.mess[current]
-                obj = whattocreate(100, newx, newy)
+                obj = whattocreate(None, newx, newy)
 
                 try:
                     tempspr = obj.sprite_index
