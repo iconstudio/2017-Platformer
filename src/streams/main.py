@@ -36,7 +36,6 @@ def update(frame_time):
         from streams import game
         framework.change_state(game)
     logo_time += 0.01
-    delay(0.01)
     pass
 
 

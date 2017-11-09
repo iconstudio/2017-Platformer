@@ -45,7 +45,6 @@ def update(frame_time):
             inst.event_step(frame_time)
     else:
         raise RuntimeError("No instance")
-    delay(0.01)
 
 
 def draw_clean():
