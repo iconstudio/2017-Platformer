@@ -159,7 +159,9 @@ class GObject(object):
                 otho_top = int(inst.y - tempspr.yoffset)
                 temprect.x, temprect.y, temprect.w, temprect.h = otho_left, otho_top, tempspr.width, tempspr.height
                 if rect_in_rectangle_opt(brect, temprect):
+                    del temprect
                     return false
+            del temprect
             return true
         else:
             return true
@@ -326,23 +328,29 @@ def instance_create(Ty, depth = int(0), x = int(0), y = int(0)) -> object:
     return temp
 
 
-def instance_place(Ty, fx, fy) -> object or list:
+def instance_place(Ty, fx, fy) -> (list, int):
     try:
         ibj = Ty.identify
     except AttributeError:
         print("Cannot find variable 'identify' in %s" % (str(Ty)))
         sys.exit(-1)
 
-    global instance_list_spec
-    clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
+    __returns = []
+    global instance_list, instance_list_spec
+    if ibj == "":
+        clist = instance_list
+    else:
+        clist = instance_list_spec[ibj]
     length = len(clist)
     if length > 0:
-        temprect = SDL_Rect()
+        for inst in clist:
+            tempspr: Sprite = inst.sprite_index
+            otho_left = int(inst.x - tempspr.xoffset)
+            otho_top = int(inst.y - tempspr.yoffset)
+            if point_in_rectangle(fx, fy, otho_left, otho_top, otho_left + tempspr.width, otho_top + tempspr.height):
+                __returns.append(inst)
 
-    for inst in clist:
-        pass
-
-    return Ty()
+    return __returns, len(__returns)
 
 
 # Definitions of Special Objects
