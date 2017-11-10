@@ -37,8 +37,6 @@ def update(frame_time):
         framework.change_state(main)
     logo_time += 1
 
-    delay(0.01)
-
 
 def draw():
     global logo

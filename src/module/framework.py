@@ -5,16 +5,35 @@ import sdl2.keyboard as keyboard
 
 __all__ = [
               "GameState", "change_state", "push_state", "pop_state", "quit", "run",
-              "io", "Camera",
+              "io", "Camera", "game_begin", "game_end", "HWND",
           ] + keyboard.__all__
 
+HWND = None
 keylogger_list = []
+
+
+def game_begin():
+    global HWND
+    HWND = open_canvas(screen_width, screen_height, sync=true, full=false)
+    SDL_SetWindowTitle(HWND, "Vampire Exodus".encode("UTF-8"))
+    # icon = load_texture(path_image + "icon.png")
+    # SDL_SetWindowIcon(hwnd, icon)
+    # SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
+    # SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
+    hide_cursor()
+    hide_lattice()
+    draw_background_color_set(0, 0, 0)
+
+
+def game_end():
+    close_canvas()
 
 
 # Object : IO procedure
 class oIOProc:
+    key_list = []
     # This dictionary contains only the Node of keyboard.
-    key_list = {}
+    key_map = {}
     # list of checking obj.
     checker_list = {}
     
@@ -54,6 +73,9 @@ class oIOProc:
             self.code = key
         
         def enter(self):
+            self.check = true
+            self.check_pressed = true
+            
             if self.timer is None:
                 global io
                 self.timer = io.iochecker(self, self.code)
@@ -63,44 +85,47 @@ class oIOProc:
                 keylogger_list.append(self.timer)
         
         def close(self):
+            self.check = false
+            self.check_pressed = false
+            
             if self.timer is not None:
                 del self.timer
                 self.timer = None
     
     def key_add(self, key: SDL_Keycode):
         newnode = self.ionode(key)
-        self.key_list[key] = newnode
+        self.key_map[key] = newnode
+        self.key_list.append(key)
         return newnode
     
     def key_check(self, key: SDL_Keycode) -> bool:
         try:
-            return (self.key_list[key]).check
+            return (self.key_map[key]).check
         except KeyError:
             return false
     
     def key_check_pressed(self, key: SDL_Keycode) -> bool:
         try:
-            return (self.key_list[key]).check_pressed
+            return (self.key_map[key]).check_pressed
         except KeyError:
             return false
     
     def proceed(self, kevent):
         try:
-            node = self.key_list[kevent.key]
+            node = self.key_map[kevent.key]
             
             if kevent.type == SDL_KEYDOWN:
-                node.check = true
-                node.check_pressed = true
                 node.enter()
             elif kevent.type == SDL_KEYUP:
-                node.check = false
-                node.check_pressed = false
                 node.close()
         except KeyError:
             return
     
     def clear(self):
-        pass
+        if len(self.key_list) > 0:
+            for keycode in self.key_list:
+                node = self.key_map[keycode]
+                node.close()
 
 
 def keyboard_update():
@@ -199,7 +224,7 @@ def quit():
 def run(start_state):
     global running, stack, io, current_time
     running = True
-
+    
     stack = [start_state]
     start_state.enter()
     current_time = get_time()

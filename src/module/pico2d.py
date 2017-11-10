@@ -12,6 +12,7 @@ try:
     from sdl2.sdlmixer import *
     import sdl2.render
     
+    import sdl2.video as video
     import sdl2.keyboard as keyboard
     import sdl2.events as events
     import sdl2.rect as rect
@@ -36,7 +37,7 @@ __all__ = [
               "get_events", "load_texture", "load_image", "load_font", "load_music", "load_wav",
               "Event", "Image", "Font",
               "SDL_SetWindowTitle", "SDL_SetWindowIcon", "SDL_Color", "lattice_on", "audio_on"
-          ] + sdl2.render.__all__ + keyboard.__all__ + events.__all__ + keycode.__all__ + rect.__all__
+          ] + sdl2.render.__all__ + keyboard.__all__ + events.__all__ + keycode.__all__ + rect.__all__ + video.__all__
 
 
 def clamp(minimum, x, maximum):
@@ -211,31 +212,35 @@ def draw_rectangle(x1, y1, x2, y2):
 
 class Event:
     """Pico2D Event Class"""
+    key = None
+    button = None
+    x, y = None, None
+    event = None
     
-    def __init__(self, evt_type):
+    def __init__(self, evt_type, evt_subevent = None):
         self.type = evt_type
-        self.key = None
-        self.button = None
-        self.x = None
-        self.y = None
+        self.event = evt_subevent
 
 
 def get_events():
     # print_fps()
     SDL_Delay(1)
-    sdl_event = SDL_Event()
+    inner_event = SDL_Event()
     events_return = []
-    while SDL_PollEvent(ctypes.byref(sdl_event)):
-        event = Event(sdl_event.type)
-        if event.type in (SDL_QUIT, SDL_KEYDOWN, SDL_KEYUP, SDL_MOUSEMOTION, SDL_MOUSEBUTTONDOWN, SDL_MOUSEBUTTONUP):
-            events_return.append(event)
-            if event.type == SDL_KEYDOWN or event.type == SDL_KEYUP:
-                if not sdl_event.key.repeat:
-                    event.key = sdl_event.key.keysym.sym
-            elif event.type == SDL_MOUSEMOTION:
-                event.x, event.y = sdl_event.motion.x, sdl_event.motion.y
-            elif event.type == SDL_MOUSEBUTTONDOWN or event.type == SDL_MOUSEBUTTONUP:
-                event.button, event.x, event.y = sdl_event.button.button, sdl_event.button.x, sdl_event.button.y
+    while SDL_PollEvent(ctypes.byref(inner_event)):
+        curr_event = Event(inner_event.type)
+        if curr_event.type in (SDL_WINDOWEVENT, ):
+            curr_event.event = inner_event.window.event
+            events_return.append(curr_event)
+        if curr_event.type in (SDL_QUIT, SDL_KEYDOWN, SDL_KEYUP, SDL_MOUSEMOTION, SDL_MOUSEBUTTONDOWN, SDL_MOUSEBUTTONUP):
+            events_return.append(curr_event)
+            if curr_event.type == SDL_KEYDOWN or curr_event.type == SDL_KEYUP:
+                if not inner_event.key.repeat:
+                    curr_event.key = inner_event.key.keysym.sym
+            elif curr_event.type == SDL_MOUSEMOTION:
+                curr_event.x, curr_event.y = inner_event.motion.x, inner_event.motion.y
+            elif curr_event.type == SDL_MOUSEBUTTONDOWN or curr_event.type == SDL_MOUSEBUTTONUP:
+                curr_event.button, curr_event.x, curr_event.y = inner_event.button.button, inner_event.button.x, inner_event.button.y
     
     return events_return
 

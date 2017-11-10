@@ -21,15 +21,7 @@ from module.sprite import *
 """
 
 if __name__ == "__main__":
-    hwnd = open_canvas(screen_width, screen_height, sync=true, full=false)
-    SDL_SetWindowTitle(hwnd, "Vampire Exodus".encode("UTF-8"))
-    # icon = load_texture(path_image + "icon.png")
-    # SDL_SetWindowIcon(hwnd, icon)
-    # SDL_SetWindowSize(hwnd, screen_width * screen_scale, screen_height * screen_scale)
-    # SDL_SetWindowFullscreen(self.hwnd, ctypes.c_uint32(1))
-    hide_cursor()
-    hide_lattice()
-    draw_background_color_set(0, 0, 0)
+    framework.game_begin()
 
     # Background
     sprite_load(path_background + "bgCastle.png", "bgCastle", 0, 0)
@@ -56,4 +48,4 @@ if __name__ == "__main__":
                  path_entity + "SolidierWalk_2.png", path_entity + "SolidierWalk_1.png"], "SoldierRun", 8, 8)
 
     framework.run(game)
-    close_canvas()
+    framework.game_end()

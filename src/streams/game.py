@@ -45,7 +45,6 @@ def update(frame_time):
             inst.event_step(frame_time)
     else:
         raise RuntimeError("No instance")
-    delay(0.01)
 
 
 def draw_clean():
@@ -83,11 +82,14 @@ def instance_draw_update():
 def handle_events(frame_time):
     event_queue = get_events()
     for event in event_queue:
-        if event.type == SDL_QUIT:
+        if event.event == SDL_WINDOWEVENT_FOCUS_LOST:
+            io.clear()
+        elif event.type == SDL_QUIT:
             framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
+            io.clear()
             framework.push_state(game_pause)
         elif event.type == SDL_KEYDOWN or SDL_KEYUP:
             io.proceed(event)

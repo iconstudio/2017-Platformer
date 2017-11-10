@@ -104,3 +104,6 @@ ENV/
 
 /slides/~$2017_2DGP_1차발표.pptx
 /slides/~$Cosmos_20171105.pptx
+.idea
+/key_private.ppk
+/key_public.putty

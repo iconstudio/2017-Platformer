@@ -20,7 +20,7 @@ screen_scale: int = 1
 # Physics Ratio
 # 10 픽셀 == 1 미터
 phy_mess = 10.0 / 1
-phy_velocity = 1000.0 / (fps_target * fps_target) * phy_mess
+phy_velocity = 1000.0 / (fps_target * fps_target) * phy_mess * 10
 
 path_resource = "..\\res\\"
 path_image = path_resource + "img\\"

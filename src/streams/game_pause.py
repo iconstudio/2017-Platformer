@@ -24,7 +24,7 @@ def exit():
     del logo
 
 def update(frame_time):
-    delay(0.01)
+    pass
 
 
 def draw():
