@@ -8,7 +8,7 @@ import module.constants as constants
 
 __all__ = [
     "sqr", "sign", "degtorad", "radtodeg", "direction", "point_distance", "oParser",
-    "point_in_rectangle", "rect_in_rectangle", "rect_in_rectangle_opt", "delta_velocity",
+    "point_in_rectangle", "rect_in_rectangle", "rect_in_rectangle_opt", "delta_velocity", "delta_gravity",
     "irandom", "irandom_range", "distribute", "choose",
     "make_color_rgb"
 ]
@@ -44,25 +44,25 @@ class oParser:
     value: float = 0.0
     value_min: float = 0.0
     value_max: float = 1.0
-    
+
     def limitation(self):
         if self.value < self.value_min:
             self.value = self.value_min
         while self.value >= self.value_max:
             self.value -= self.value_max
-    
-    def __init__(self, nvalue=0.0):
+
+    def __init__(self, nvalue = 0.0):
         self.value = nvalue
-    
+
     def __abs__(self) -> float:
         return abs(self.value)
-    
+
     def __eq__(self, other) -> bool:
         try:
             return bool(self.value == other.value)
         except AttributeError:
             return constants.false
-    
+
     def __gt__(self, values) -> bool:
         if type(values) is int or float:
             self.value += values
@@ -73,7 +73,7 @@ class oParser:
                 return bool(self.value > values.value)
             except AttributeError:
                 return constants.false
-    
+
     def __lt__(self, values) -> bool:
         if type(values) is int or float:
             self.value += values
@@ -84,7 +84,7 @@ class oParser:
                 return bool(self.value < values.value)
             except AttributeError:
                 return constants.false
-    
+
     def __add__(self, values) -> object:
         if type(values) is int or float:
             self.value += values
@@ -97,10 +97,10 @@ class oParser:
                 pass
         self.limitation()
         return self
-    
+
     def __sub__(self, values) -> object:
         return self.__add__(-values)
-    
+
     def __mul__(self, values) -> object:
         if type(values) is int or float:
             self.value *= values
@@ -113,10 +113,10 @@ class oParser:
                 pass
         self.limitation()
         return self
-    
+
     def __neg__(self) -> float:
         return -self.value
-    
+
     __radd__ = __add__
     __rsub__ = __sub__
     __rmul__ = __mul__
@@ -150,8 +150,12 @@ def rect_in_rectangle(px1, py1, pw, ph, x1, y1, w, h) -> bool:
 
 
 # physics
-def delta_velocity(spd=1):
+def delta_velocity(spd = 1):
     return constants.phy_velocity * spd
+
+
+def delta_gravity():
+    return constants.phy_gravity
 
 
 # Randoms
@@ -178,7 +182,7 @@ def choose(*args):
     length = len(args)
     if length <= 0:
         raise RuntimeError("choose 함수에 값이 제대로 전달되지 않았습니다!" + __name__)
-    
+
     pick = None
     try:
         pick = args[irandom(length - 1)]

@@ -99,13 +99,13 @@ class GObject(object):
     # for optimization
     step_enable: bool = true
 
-    # Physics
+    # Physics (real-scale: Km per hours)
     x, y = 0, 0
     xVel, yVel = 0, 0
-    xVelMin, xVelMax = -10, 10
-    yVelMin, yVelMax = -8, 16
+    xVelMin, xVelMax = -45, 45
+    yVelMin, yVelMax = -80, 100
     xFric, yFric = 0.6, 0
-    gravity_default: float = 0.4
+    gravity_default: float = delta_gravity()
     gravity: float = 0
     onAir: bool = false
 
@@ -278,7 +278,7 @@ class GObject(object):
             else:
                 self.collide(xdist)
 
-        ydist = self.yVel  # delta_velocity(self.yVel * 10) * frame_time
+        ydist = delta_velocity(self.yVel) * frame_time
         if ydist > 0:  # Going up higher
             yc = ydist + 1
         else:  # Going down
@@ -286,13 +286,13 @@ class GObject(object):
         if self.place_free(0, yc):
             self.y += ydist  # let it moves first.
             self.gravity = self.gravity_default
-            self.yVel -= self.gravity
+            self.yVel -= self.gravity * frame_time
             self.onAir = true
         else:
             self.gravity = 0
             if self.xVel != 0:  # horizontal friction works only when it is on the ground
                 if abs(self.xVel) > self.xFric:
-                    self.xVel -= self.xFric * sign(self.xVel)
+                    self.xVel -= self.xFric * self.xVel
                 else:
                     self.xVel = 0
             self.thud(ydist)
@@ -370,7 +370,8 @@ class oPlayer(GObject):
     depth = 0
     image_speed = 0
 
-    xVelMin, xVelMax = -3, 3
+    # real-scale: 54 km per hour
+    xVelMin, xVelMax = -54, 54
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -390,36 +391,34 @@ class oPlayer(GObject):
                 for enemy in whothere:
                     if enemy.oStatus < oStatusContainer.STUNNED:
                         if enemy.name in ("Soldier", ):
-                            if self.yVel < -3:
-                                self.yVel *= -0.4
+                            if self.yVel < -4:
+                                self.yVel *= -0.6
                             else:
-                                self.yVel = 2
+                                self.yVel = 3
                             enemy.hp -= 1
                             if enemy.hp <= 0:
                                 enemy.oStatus = oStatusContainer.DEAD
                             else:
                                 enemy.oStatus = oStatusContainer.STUNNED
-                                enemy.stunned = fps_target * 4
+                                enemy.stunned = fps_target * 5
 
             mx = 0
             if io.key_check(SDLK_LEFT): mx -= 1
             if io.key_check(SDLK_RIGHT): mx += 1
-            if not self.onAir:
-                if mx != 0:
-                    self.xVel += mx * 0.6
-                else:
-                    self.xFric = 0.4
-            else:
-                if mx != 0:
-                    self.xVel += mx * 0.2
-                else:
-                    self.xFric = 0.2
+
             if mx != 0:
+                self.xFric = 0
+                if not self.onAir:
+                    self.xVel += mx * 5
+                else:
+                    self.xVel += mx * 2
                 self.image_xscale = mx
+            else:
+                self.xFric = 0.6
 
             if io.key_check_pressed(SDLK_UP):
                 if not self.onAir:
-                    self.yVel = 6
+                    self.yVel = 90
 
             if not self.onAir:
                 if self.xVel != 0:

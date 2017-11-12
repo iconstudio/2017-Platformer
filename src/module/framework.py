@@ -14,7 +14,7 @@ keylogger_list = []
 
 def game_begin():
     global HWND
-    HWND = open_canvas(screen_width, screen_height, sync=true, full=false)
+    HWND = open_canvas(screen_width, screen_height)
     SDL_SetWindowTitle(HWND, "Vampire Exodus".encode("UTF-8"))
     # icon = load_texture(path_image + "icon.png")
     # SDL_SetWindowIcon(hwnd, icon)
