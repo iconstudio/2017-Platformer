@@ -455,31 +455,34 @@ class oEnemyParent(GObject):
     image_speed = 0
     collide_with_player: bool = false
 
-    def handle_idle(self):
+    def handle_idle(self, *args):
         pass
 
-    def handle_walk(self):
+    def handle_walk(self, *args):
         pass
 
-    def handle_stunned(self, frame_time):
+    def handle_dead(self, *args):
+        self.sprite_set("SoldierDead")
+
+    def handle_stunned(self, *args):
         if self.stunned <= 0:
             if self.hp > 0:
                 self.oStatus = oStatusContainer.IDLE
             else:
                 self.oStatus = oStatusContainer.DEAD
-        self.stunned -= delta_velocity() * frame_time
+        self.stunned -= delta_velocity() * args[1]
 
     def event_step(self, frame_time):
         super().event_step(frame_time)
 
-        if self.oStatus == oStatusContainer.IDLE:
-            self.handle_idle()
-        elif self.oStatus == oStatusContainer.WALK:
-            self.handle_walk()
-        elif self.oStatus >= oStatusContainer.STUNNED:
-            if self.oStatus == oStatusContainer.STUNNED:
-                self.handle_stunned(frame_time)
+        table = {
+            oStatusContainer.IDLE: self.handle_idle(),
+            oStatusContainer.WALK: self.handle_walk(),
+            oStatusContainer.STUNNED: self.handle_stunned(args=(frame_time, )),
+            oStatusContainer.DEAD: self.handle_dead()
+        }
 
+        table[self.oStatus](self, frame_time)
 
 class oSoldier(oEnemyParent):
     hp, maxhp = 4, 4

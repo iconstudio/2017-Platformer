@@ -41,11 +41,12 @@ if __name__ == "__main__":
                  path_entity + "VampireRun_4.png", path_entity + "VampireRun_5.png",
                  path_entity + "VampireRun_2.png", path_entity + "VampireRun_1.png"], "PlayerRun", 8, 8)
     sprite_load(path_entity + "VampireDead_0.png", "PlayerDead", 8, 8)
-    sprite_load(path_entity + "SolidierWalk_2.png", "SoldierIdle", 8, 8)
+    sprite_load(path_entity + "Soldier.png", "SoldierIdle", 8, 8)
     sprite_load([path_entity + "SolidierWalk_0.png", path_entity + "SolidierWalk_1.png",
                  path_entity + "SolidierWalk_2.png", path_entity + "SolidierWalk_3.png",
                  path_entity + "SolidierWalk_4.png", path_entity + "SolidierWalk_5.png",
                  path_entity + "SolidierWalk_2.png", path_entity + "SolidierWalk_1.png"], "SoldierRun", 8, 8)
+    sprite_load(path_entity + "SoldierDead.png", "SoldierDead", 8, 8)
 
     framework.run(game)
     framework.game_end()
