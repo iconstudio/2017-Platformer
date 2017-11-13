@@ -9,7 +9,7 @@ import module.constants as constants
 __all__ = [
     "sqr", "sign", "degtorad", "radtodeg", "direction", "point_distance", "oParser",
     "point_in_rectangle", "rect_in_rectangle", "rect_in_rectangle_opt", "delta_velocity", "delta_gravity",
-    "irandom", "irandom_range", "distribute", "choose",
+    "irandom", "irandom_range", "distribute", "choose", "list_seek",
     "make_color_rgb"
 ]
 
@@ -143,8 +143,12 @@ def rect_in_rectangle_opt(pstr: SDL_Rect, dstr: SDL_Rect) -> bool:
 
 
 def rect_in_rectangle(px1, py1, pw, ph, x1, y1, w, h) -> bool:
-    first = rect.SDL_Rect(px1 - 1, py1 - 1, pw + 2, ph + 2)
-    second = rect.SDL_Rect(x1 - 1, y1 - 1, w + 2, h + 2)
+    
+    if px1 > x1 + w: return False
+    if ra < lb: return False
+    if ta < bb: return False
+    if ba > tb: return False
+
     result = bool(rect.SDL_HasIntersection(first, second))
     return result
 
@@ -189,6 +193,16 @@ def choose(*args):
     except ValueError:
         pass
     return pick
+
+
+def list_seek(alist: list, value) -> int:
+    index = 0
+    lengths = len(alist)
+    for i in range(lengths):
+        if alist[i] == value:
+            index = i
+            break
+    return index
 
 
 # For Drawing

@@ -44,40 +44,28 @@ def update(frame_time):
     if len(instance_list) > 0:
         for inst in instance_list:
             inst.event_step(frame_time)
-    else:
-        raise RuntimeError("No instance")
 
 
 def draw_clean():
+    dx = Camera.x / 10 - 32
+    dy = -Camera.y / 10 - 32
     back = sprite_get("bgCave")
-    for x in range(0, screen_width, 32):
-        for y in range(0, screen_height, 32):
-            draw_sprite(back, 0, x, y)
+    for x in range(0, screen_width + 32, 32):
+        for y in range(0, screen_height + 32, 32):
+            draw_sprite(back, 0, (dx + x) % screen_width, (dy + y) % screen_height)
     
     instance_draw_update()
     if len(instance_draw_list) > 0:
         for inst in instance_draw_list:
             inst.event_draw()
     else:
-        raise RuntimeError("No instance")
+        raise RuntimeError("개체가 존재하지 않습니다!")
 
 
 def draw():
     clear_canvas()
     draw_clean()
     update_canvas()
-
-
-# noinspection PyGlobalUndefined
-def instance_draw_update():
-    global instance_list, instance_draw_list, instance_update
-    if instance_update:
-        del instance_draw_list
-        instance_update = false
-        instance_draw_list = []
-        instance_draw_list = sorted(instance_list, key=lambda gobject: -gobject.depth)
-        # for inst in instance_list:
-        #    instance_draw_list.append(inst)
 
 
 def handle_events(frame_time):
@@ -115,7 +103,7 @@ class GameExecutor:
         tcontainer.signin("s", oSoldier)
         tcontainer.signin("S", oSnake)
         tcontainer.signin("C", oCobra)
-
+        
         Camera.set_pos(0, 0)
         first_scene = TerrainManager(1, 1)
         first_scene.allocate("1111 1111 1111 1111 1111 1111 1111 1111\

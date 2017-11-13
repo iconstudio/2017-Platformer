@@ -14,7 +14,7 @@ import sys
 
 __all__ = [
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
-    "container_player", "instance_create",
+    "container_player", "instance_create", "instance_draw_update",
     "GObject", "Solid", "oBrick", "oPlayer", "oSoldier", "oSnake", "oCobra",
     "ID_SOLID", "ID_DMG_PLAYER", "ID_DMG_ENEMY", "ID_ITEM", "ID_PARTICLE", "ID_DOODAD"
 ]
@@ -56,6 +56,18 @@ instance_list_spec[ID_ENEMY] = []
 instance_list_spec[ID_ITEM] = []
 
 container_player = None
+
+
+def instance_draw_update():
+    global instance_list, instance_draw_list, instance_update
+    if instance_update:
+        del instance_draw_list
+        instance_update = false
+        instance_draw_list = []
+        for inst in instance_list:
+            instance_draw_list.append(inst)
+        #instance_draw_list = sorted(instance_list)
+        #instance_draw_list = sorted(instance_list, key=lambda gobject: -gobject.depth)
 
 
 # TODO: Definite more objects.
@@ -125,13 +137,18 @@ class GObject(object):
     def __str__(self):
         return self.name
     
-    def __del__(self):
-        self.step_enable = false
-        global instance_list, instance_list_spec, instance_draw_list, instance_update
-        instance_update = true
-        
-        # if self.identify != "":
-        #    instance_list_spec[self.identify].remove(self)
+    def __gt__(self, other) -> bool:
+        return self.depth > other.depth
+    
+    def __lt__(self, other) -> bool:
+        return self.depth < other.depth
+
+    def __ge__(self, other) -> bool:
+        return self.depth >= other.depth
+
+    def __le__(self, other) -> bool:
+        return self.depth <= other.depth
+   
     
     def sprite_set(self, spr: Sprite or str):
         if type(spr) == str:
@@ -140,7 +157,21 @@ class GObject(object):
             self.sprite_index = spr
         self.image_index = 0
     
+    def destroy(self):
+        self.step_enable = false
+        global instance_list, instance_list_spec, instance_update, instance_draw_list
+        instance_update = true
+        
+        del instance_list[list_seek(instance_list, self)]
+        del instance_list_spec[self.identify][list_seek(instance_list_spec[self.identify], self)]
+        del instance_draw_list[list_seek(instance_draw_list, self)]
+        del (self)
+    
     # Below methods are common-functions for all object that inherits graviton.
+    def get_bbox(self):
+        data = self.sprite_index
+        return self.x - data.xoffset, self.y - data.yoffset, self.x - data.xoffset + data.width, self.y - data.yoffset + data.height
+    
     # Check the place fits to self
     def place_free(self, vx, vy, olist=None) -> bool:
         clist = olist
@@ -258,22 +289,23 @@ class GObject(object):
     def draw_self(self):  # Simply draws its sprite on its position.
         data = self.sprite_index
         if not data.__eq__(None):
-            if Camera.x <= self.x - data.xoffset and 0 <= self.x + data.width and Camera.y <= self.y - data.yoffset and 0 <= self.y + data.height:
-                draw_sprite(self.sprite_index, self.image_index, self.x - Camera.x, self.y - Camera.y, self.image_xscale, 1, 0.0,
+            dx, dy = self.x - data.xoffset, self.y - data.yoffset
+            if dx <= Camera.x + Camera.width and Camera.x <= dx + data.width and Camera.y <= dy + data.height and dy <= Camera.y + Camera.height:
+                draw_sprite(self.sprite_index, self.image_index, self.x - Camera.x, self.y - Camera.y,
+                            self.image_xscale, 1, 0.0,
                             self.image_alpha)
     
     def event_step(self, frame_time):  # The basic mechanisms of objects.
         if not self.step_enable:
             return
         
-        count = 0
         try:
             count = self.sprite_index.number
         except AttributeError:
-            raise RuntimeError(self.name + " has no sprite!")
+            raise RuntimeError(self.name + " 는 스프라이트를 갖고있지 않습니다!")
         if count > 1:
             if self.image_speed > 0:
-                self.image_index += count / self.image_speed * frame_time / 2
+                self.image_index += self.image_speed * count * frame_time * 2.5
                 if self.image_index >= count:
                     self.image_index -= count
         
@@ -431,7 +463,7 @@ class oPlayer(GObject):
             
             if not self.onAir:
                 if self.xVel != 0:
-                    self.image_speed = 0.3
+                    self.image_speed = 0.8
                     self.sprite_index = sprite_get("PlayerRun")
                 else:
                     self.sprite_set("Player")
@@ -548,6 +580,7 @@ class oSoldier(oEnemyParent):
 class oSnake(oEnemyParent):
     hp, maxhp = 1, 1
     name = "Snake"
+    count = 0
     
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -560,13 +593,43 @@ class oSnake(oEnemyParent):
     
     def handle_be_walk(self, *args):
         self.sprite_index = self.runspr
-        self.image_speed = 0.5
+        self.image_speed = 0.65
+    
+    def handle_idle(self, *args):
+        self.count += delta_velocity()
+        if self.count >= delta_velocity(irandom_range(8, 12)) and irandom(99) == 0:
+            self.status_change(oStatusContainer.WALK)
+            self.count = 0
     
     def handle_walk(self, *args):
-        pass
+        checkl, checkr = self.place_free(-10, -10), self.place_free(10, -10)
+        if checkl and checkr:
+            self.status_change(oStatusContainer.WALK)
+            return
+        
+        distance = delta_velocity(15) * args[0]
+        self.count += delta_velocity()
+        if self.image_xscale == 1:
+            if self.place_free(distance + 10, 0) and not self.place_free(distance + 10, -10):
+                self.xVel = 15
+            else:
+                self.image_xscale = -1
+                self.xVel = -15
+        else:
+            if self.place_free(distance - 10, 0) and not self.place_free(distance - 10, -10):
+                self.xVel = -15
+            else:
+                self.image_xscale = 1
+                self.xVel = 15
+        
+        if self.count >= delta_velocity(20):
+            if irandom(99) == 0:
+                self.xVel = 0
+                self.status_change(oStatusContainer.IDLE)
+                self.count = 0
     
-    def handle_be_dead(self, *args):
-        del self
+    def handle_dead(self, *args):
+        self.destroy()
 
 
 class oCobra(oSnake):
