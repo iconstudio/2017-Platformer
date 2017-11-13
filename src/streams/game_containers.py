@@ -559,7 +559,7 @@ class Snake(oEnemyParent):
         self.image_speed = 0.5
 
     def handle_walk(self, *args):
-        if 
+        pass
     
     def handle_dead(self, *args):
         del self
