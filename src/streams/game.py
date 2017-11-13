@@ -41,6 +41,7 @@ def exit():
 
 
 def update(frame_time):
+    instance_draw_update()
     if len(instance_list) > 0:
         for inst in instance_list:
             inst.event_step(frame_time)
@@ -50,11 +51,11 @@ def draw_clean():
     dx = Camera.x / 10 - 32
     dy = -Camera.y / 10 - 32
     back = sprite_get("bgCave")
-    for x in range(0, screen_width + 32, 32):
-        for y in range(0, screen_height + 32, 32):
+    for x in range(0, screen_width + 65, 32):
+        for y in range(0, screen_height + 65, 32):
             draw_sprite(back, 0, (dx + x) % screen_width, (dy + y) % screen_height)
-    
-    instance_draw_update()
+
+    global instance_draw_list
     if len(instance_draw_list) > 0:
         for inst in instance_draw_list:
             inst.event_draw()
@@ -120,6 +121,4 @@ class GameExecutor:
                               ", 0)
         
         first_scene.generate()
-        global instance_update
-        instance_update = true
         instance_draw_update()
