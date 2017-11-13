@@ -143,6 +143,7 @@ io = oIOProc()
 class oCamera:
     x: float = 0
     y: float = 0
+    lock: bool = false
     width, height = screen_width, screen_height
     
     def set_pos(self, x: float = None, y: float = None):

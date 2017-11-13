@@ -15,7 +15,7 @@ import sys
 __all__ = [
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
     "container_player", "instance_create",
-    "GObject", "Solid", "oBrick", "oPlayer", "oSoldier",
+    "GObject", "Solid", "oBrick", "oPlayer", "oSoldier", "oSnake", "oCobra",
     "ID_SOLID", "ID_DMG_PLAYER", "ID_DMG_ENEMY", "ID_ITEM", "ID_PARTICLE", "ID_DOODAD"
 ]
 
@@ -38,6 +38,7 @@ instance_update: bool = false  # 개체 갱신 여부
 
 player_lives = 3
 
+ID_OTHERS: str = "Objects"
 ID_SOLID: str = "Solid"
 ID_PARTICLE: str = "Particle"
 ID_DOODAD: str = "Doodad"
@@ -80,7 +81,7 @@ class oStatusContainer:
 class GObject(object):
     # Basis properties of object
     name: str = "None"
-    identify: str = ""
+    identify: str = ID_OTHERS
     next: object = None
     
     # Advanced properties of object
@@ -124,11 +125,12 @@ class GObject(object):
         return self.name
     
     def __del__(self):
+        self.step_enable = false
         global instance_list, instance_list_spec, instance_draw_list, instance_update
         instance_update = true
         
-        if self.identify != "":
-            instance_list_spec[self.identify].remove(self)
+        #if self.identify != "":
+        #    instance_list_spec[self.identify].remove(self)
     
     def sprite_set(self, spr: Sprite or str):
         if type(spr) == str:
@@ -236,11 +238,11 @@ class GObject(object):
     def thud(self, how: float or int):
         if self.yVel != 0:
             if self.yVel > 0:
-                self.move_contact_y(abs(self.yVel) + 1, true)
+                self.move_contact_y(abs(how) + 1, true)
             elif self.yVel < 0:
-                self.move_contact_y(abs(self.yVel) + 1)
+                self.move_contact_y(abs(how) + 1)
             if self.oStatus >= oStatusContainer.STUNNED:
-                if abs(self.yVel) <= 1:
+                if abs(self.yVel) <= 3:
                     self.onAir = false
                     self.yVel = 0
                 else:
@@ -255,15 +257,19 @@ class GObject(object):
     def draw_self(self):  # Simply draws its sprite on its position.
         data = self.sprite_index
         if not data.__eq__(None):
-            if Camera.x <= self.x - data.xoffset and Camera.y <= self.y - data.yoffset:
+            if Camera.x <= self.x - data.xoffset and 0 <= self.x + data.width and Camera.y <= self.y - data.yoffset and 0 <= self.y + data.height:
                 draw_sprite(self.sprite_index, self.image_index, self.x, self.y, self.image_xscale, 1, 0.0,
-                            self.image_alpha)
+                            self.image_alpha / 2)
     
     def event_step(self, frame_time):  # The basic mechanisms of objects.
         if not self.step_enable:
             return
         
-        count = self.sprite_index.number
+        count = 0
+        try:
+            count = self.sprite_index.number
+        except AttributeError:
+            raise RuntimeError(self.name + " has no sprite!")
         if count > 1:
             if self.image_speed > 0:
                 self.image_index += count / self.image_speed * frame_time / 2
@@ -377,11 +383,11 @@ class oPlayer(GObject):
     
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
-        self.sprite_set("Player")
+        self.sprite_index = sprite_get("Player")
         
         global container_player
         container_player = self
-        self.hfont = load_font(path_font + "윤고딕_310.ttf", 32)
+        self.hfont = load_font(path_font + "윤고딕_310.ttf", 20)
     
     def event_step(self, frame_time):
         super().event_step(frame_time)
@@ -392,11 +398,11 @@ class oPlayer(GObject):
             if howmany > 0 and self.yVel < 0 and self.onAir:
                 for enemy in whothere:
                     if enemy.oStatus < oStatusContainer.STUNNED:
-                        if enemy.name in ("Soldier",):
-                            if self.yVel < -4:
+                        if enemy.name not in ("ManEater", "Lavaman",):
+                            if self.yVel < -20:
                                 self.yVel *= -0.6
                             else:
-                                self.yVel = 3
+                                self.yVel = 30
                             enemy.hp -= 1
                             if enemy.hp <= 0:
                                 enemy.status_change(oStatusContainer.DEAD)
@@ -427,15 +433,12 @@ class oPlayer(GObject):
                     self.image_speed = 0.3
                     self.sprite_index = sprite_get("PlayerRun")
                 else:
-                    self.image_speed, self.image_index = 0, 0
-                    self.sprite_index = sprite_get("Player")
+                    self.sprite_set("Player")
             else:
-                self.image_speed, self.image_index = 0, 0
-                self.sprite_index = sprite_get("PlayerJump")
+                self.sprite_set("PlayerJump")
         else:  # It would be eventual, and uncontrollable
-            self.image_speed, self.image_index = 0, 0
             if self.oStatus == oStatusContainer.DEAD:
-                self.sprite_index = sprite_get("PlayerDead")
+                self.sprite_set("PlayerDead")
     
     def event_draw(self):
         super().event_draw()
@@ -449,6 +452,7 @@ class oEnemyParent(GObject):
     """
     name = "NPC"
     identify = ID_ENEMY
+    #sprite_index = sprite_get("Snake")
     depth = 100
     
     hp, maxhp = 1, 1
@@ -540,9 +544,32 @@ class oSoldier(oEnemyParent):
         super().handle_stunned(frame_time)
 
 
-class Snake(oEnemyParent):
+class oSnake(oEnemyParent):
     hp, maxhp = 1, 1
     name = "Snake"
+    
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("SnakeIdle")
+        self.runspr = sprite_get("SnakeRun")
+        self.image_speed = 0
+    
+    def handle_be_idle(self):
+        self.sprite_set("SnakeIdle")
+    
+    def handle_be_walk(self, *args):
+        self.sprite_index = self.runspr
+        self.image_speed = 0.5
+    
+    def handle_walk(self, *args):
+        pass
+    
+    def handle_be_dead(self, *args):
+        del self
+
+
+class oCobra(oSnake):
+    name = "Cobra"
     
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -552,18 +579,6 @@ class Snake(oEnemyParent):
     
     def handle_be_idle(self):
         self.sprite_set("CobraIdle")
-        self.image_speed = 0.2
-
-    def handle_be_walk(self, *args):
-        self.sprite_index = self.runspr
-        self.image_speed = 0.5
-
-    def handle_walk(self, *args):
-        pass
-    
-    def handle_dead(self, *args):
-        del self
-    
 
 
 # Damage caused by Player

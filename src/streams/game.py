@@ -23,6 +23,7 @@ name = "game_state"
 
 def enter():
     GameExecutor()
+    delay(1)
 
 
 def exit():
@@ -112,6 +113,8 @@ class GameExecutor:
         tcontainer.signin("1", oBrick)
         tcontainer.signin("@", oPlayer)
         tcontainer.signin("s", oSoldier)
+        tcontainer.signin("S", oSnake)
+        tcontainer.signin("C", oCobra)
 
         Camera.set_pos(0, 0)
         first_scene = TerrainManager(1, 1)
@@ -121,8 +124,8 @@ class GameExecutor:
                               1111 1111 1111 1111 1111 1111 1111 1111\
                               1111 1111 1111 1111 1111 1111 1111 1111\
                               ;;;; \
-                              0000 0000 1111 0000 0000 0000 0000 0000  \
-                              1111 1111 1111 @000 00ss 0001 0s11 1111 \
+                              00C0 00S0 1111 0000 0000 0000 0000 0000  \
+                              1111 1111 1111 @000 00ss 0001 0s11 1C11 \
                               ;;  \
                               0000 0000 0000 0000 0000 0000 0000 0000\
                               1111 1111 1111 1111 1111 1111 1111 1111\
