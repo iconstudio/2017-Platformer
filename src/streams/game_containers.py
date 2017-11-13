@@ -46,6 +46,7 @@ ID_DMG_PLAYER: str = "HurtPlayer"
 ID_DMG_ENEMY: str = "HurtEnemy"
 ID_ENEMY: str = "Enemy"
 ID_ITEM: str = "Items"
+instance_list_spec[ID_OTHERS] = []
 instance_list_spec[ID_SOLID] = []
 instance_list_spec[ID_PARTICLE] = []
 instance_list_spec[ID_DOODAD] = []
@@ -129,7 +130,7 @@ class GObject(object):
         global instance_list, instance_list_spec, instance_draw_list, instance_update
         instance_update = true
         
-        #if self.identify != "":
+        # if self.identify != "":
         #    instance_list_spec[self.identify].remove(self)
     
     def sprite_set(self, spr: Sprite or str):
@@ -258,8 +259,8 @@ class GObject(object):
         data = self.sprite_index
         if not data.__eq__(None):
             if Camera.x <= self.x - data.xoffset and 0 <= self.x + data.width and Camera.y <= self.y - data.yoffset and 0 <= self.y + data.height:
-                draw_sprite(self.sprite_index, self.image_index, self.x, self.y, self.image_xscale, 1, 0.0,
-                            self.image_alpha / 2)
+                draw_sprite(self.sprite_index, self.image_index, self.x - Camera.x, self.y - Camera.y, self.image_xscale, 1, 0.0,
+                            self.image_alpha)
     
     def event_step(self, frame_time):  # The basic mechanisms of objects.
         if not self.step_enable:
@@ -392,7 +393,7 @@ class oPlayer(GObject):
     def event_step(self, frame_time):
         super().event_step(frame_time)
         if self.oStatus < oStatusContainer.CHANNELING:  # Player can control its character.
-            
+            Camera.x, Camera.y = self.x - Camera.width / 2, self.y - Camera.height / 2
             # Stomp enemies under the character
             whothere, howmany = instance_place(oEnemyParent, self.x, self.y - 9)
             if howmany > 0 and self.yVel < 0 and self.onAir:
@@ -442,7 +443,7 @@ class oPlayer(GObject):
     
     def event_draw(self):
         super().event_draw()
-        self.hfont.draw(self.x - 40, self.y + 50, 'Time: %1.0f' % get_time())
+        self.hfont.draw(self.x - 40 - Camera.x, self.y + 50 - Camera.y, 'Time: %1.0f' % get_time())
 
 
 # Parent of Enemies
@@ -452,7 +453,7 @@ class oEnemyParent(GObject):
     """
     name = "NPC"
     identify = ID_ENEMY
-    #sprite_index = sprite_get("Snake")
+    # sprite_index = sprite_get("Snake")
     depth = 100
     
     hp, maxhp = 1, 1
