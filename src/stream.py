@@ -22,17 +22,17 @@ from module.sprite import *
 
 if __name__ == "__main__":
     framework.game_begin()
-
+    
     # Background
     sprite_load(path_background + "bgCastle.png", "bgCastle", 0, 0)
     sprite_load(path_background + "bgCave.png", "bgCave", 0, 0)
     sprite_load(path_background + "bgTemple.png", "bgTemple", 0, 0)
-
+    
     # Theme
     sprite_load(
         [path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
          path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
-
+    
     # Entity
     sprite_load(path_entity + "vampire.png", "Player", 8, 8)
     sprite_load(path_entity + "VampireJump_0.png", "PlayerJump", 8, 8)
@@ -47,6 +47,10 @@ if __name__ == "__main__":
                  path_entity + "SolidierWalk_4.png", path_entity + "SolidierWalk_5.png",
                  path_entity + "SolidierWalk_2.png", path_entity + "SolidierWalk_1.png"], "SoldierRun", 8, 8)
     sprite_load(path_entity + "SoldierDead.png", "SoldierDead", 8, 8)
-
+    sprite_load(path_entity + "Cobra_0.png", "CobraIdle", 8, 8)
+    sprite_load([path_entity + "CobraWalk_0.png", path_entity + "CobraWalk_1.png",
+                 path_entity + "CobraWalk_2.png", path_entity + "CobraWalk_3.png",
+                 path_entity + "CobraWalk_4.png", path_entity + "CobraWalk_5.png"], "CobraRun", 8, 8)
+    
     framework.run(game)
     framework.game_end()

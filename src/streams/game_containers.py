@@ -456,28 +456,32 @@ class oEnemyParent(GObject):
     oStatus = oStatusContainer.IDLE
     image_speed = 0
     collide_with_player: bool = false
-
+    attack_delay = 0
+    
     def handle_none(self, *args):
         pass
-
+    
     def handle_be_idle(self, *args):
         pass
-
+    
+    def handle_be_walk(self, *args):
+        pass
+    
     def handle_be_stunned(self, *args):
         pass
-
+    
     def handle_be_dead(self, *args):
         pass
-
+    
     def handle_idle(self, *args):
         pass
-
+    
     def handle_walk(self, *args):
         pass
-
+    
     def handle_dead(self, *args):
         pass
-
+    
     def handle_stunned(self, frame_time):
         if self.stunned <= 0:
             if self.hp > 0:
@@ -485,21 +489,21 @@ class oEnemyParent(GObject):
             else:
                 self.status_change(oStatusContainer.DEAD)
         self.stunned -= delta_velocity() * frame_time
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.table = {
             oStatusContainer.IDLE: (self.handle_idle, self.handle_be_idle),
-            oStatusContainer.WALK: (self.handle_walk, self.handle_none),
+            oStatusContainer.WALK: (self.handle_walk, self.handle_be_walk),
             oStatusContainer.STUNNED: (self.handle_stunned, self.handle_be_stunned),
             oStatusContainer.DEAD: (self.handle_dead, self.handle_be_dead)
         }
-
+    
     def status_change(self, what):
         if self.oStatus != what:
             (self.table[what])[1]()
         self.oStatus = what
-
+    
     def event_step(self, frame_time):
         super().event_step(frame_time)
         
@@ -509,7 +513,7 @@ class oEnemyParent(GObject):
 class oSoldier(oEnemyParent):
     hp, maxhp = 4, 4
     name = "Soldier"
-    xVelMin, xVelMax = -2, 2
+    xVelMin, xVelMax = -45, 45
     
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -534,6 +538,32 @@ class oSoldier(oEnemyParent):
     
     def handle_stunned(self, frame_time):
         super().handle_stunned(frame_time)
+
+
+class Snake(oEnemyParent):
+    hp, maxhp = 1, 1
+    name = "Snake"
+    
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("CobraIdle")
+        self.runspr = sprite_get("CobraRun")
+        self.image_speed = 0
+    
+    def handle_be_idle(self):
+        self.sprite_set("CobraIdle")
+        self.image_speed = 0.2
+
+    def handle_be_walk(self, *args):
+        self.sprite_index = self.runspr
+        self.image_speed = 0.5
+
+    def handle_walk(self, *args):
+        if 
+    
+    def handle_dead(self, *args):
+        del self
+    
 
 
 # Damage caused by Player
