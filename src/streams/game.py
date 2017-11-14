@@ -48,12 +48,19 @@ def update(frame_time):
 
 
 def draw_clean():
-    dx = Camera.x / 10 - 32
-    dy = -Camera.y / 10 - 32
+    dx = -32
     back = sprite_get("bgCave")
-    for x in range(0, screen_width + 65, 32):
-        for y in range(0, screen_height + 65, 32):
-            draw_sprite(back, 0, (dx + x) % screen_width, (dy + y) % screen_height)
+    for x in range(22):
+        dy = -32
+        for y in range(13):
+            draw_sprite(back, 0, dx, dy)
+            dy += 32
+        dx += 32
+        if dx > screen_width:
+            dx -= screen_width
+        elif dx < 0:
+            dx += screen_width
+
 
     global instance_draw_list
     if len(instance_draw_list) > 0:
@@ -107,17 +114,17 @@ class GameExecutor:
         
         Camera.set_pos(0, 0)
         first_scene = TerrainManager(1, 1)
-        first_scene.allocate("1111 1111 1111 1111 1111 1111 1111 1111\
-                              1111 1111 1111 1111 1111 1111 1111 1111\
-                              1111 1111 1111 1111 1111 1111 1111 1111\
-                              1111 1111 1111 1111 1111 1111 1111 1111\
-                              1111 1111 1111 1111 1111 1111 1111 1111\
+        first_scene.allocate("1111 1111 1111 1111 1111 1111 1111 1111  \
+                              1111 1111 1111 1111 1111 1111 1111 1111  \
+                              1111 1111 1111 1111 1111 1111 1111 1111  \
+                              1111 1111 1111 1111 1111 1111 1111 1111  \
+                              1111 1111 1111 1111 1111 1111 1111 1111  \
                               ;;;; \
                               00C0 00S0 1111 0000 0000 0000 0000 0000  \
-                              1111 1111 1111 @000 00ss 0001 0s11 1C11 \
+                              1111 1111 1111 @000 00ss 0001 0s11 1C11  \
                               ;;  \
-                              0000 0000 0000 0000 0000 0000 0000 0000\
-                              1111 1111 1111 1111 1111 1111 1111 1111\
+                              0000 0000 0000 0000 0000 0000 0000 0000  \
+                              1111 1111 1111 1111 1111 1111 1111 1111  \
                               ", 0)
         
         first_scene.generate()
