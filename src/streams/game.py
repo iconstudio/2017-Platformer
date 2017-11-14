@@ -41,7 +41,6 @@ def exit():
 
 
 def update(frame_time):
-    instance_draw_update()
     if len(instance_list) > 0:
         for inst in instance_list:
             inst.event_step(frame_time)
@@ -61,7 +60,7 @@ def draw_clean():
         elif dx < 0:
             dx += screen_width
 
-
+    instance_draw_update()
     global instance_draw_list
     if len(instance_draw_list) > 0:
         for inst in instance_draw_list:

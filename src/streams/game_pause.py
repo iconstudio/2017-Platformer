@@ -16,7 +16,7 @@ name = "pause_state"
 # noinspection PyGlobalUndefined
 def enter():
     global logo
-    logo = load_image(path_image + "logo.png", 80, 80)
+    logo = load_image(path_ui + "paused.png")
 
 
 def exit():
@@ -31,7 +31,7 @@ def draw():
     global logo
     clear_canvas()
     game.draw_clean()
-    logo.draw(screen_width / 2, screen_height / 2)
+    logo.draw(screen_width / 2, 80)
     update_canvas()
 
 

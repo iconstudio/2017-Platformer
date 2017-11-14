@@ -46,6 +46,7 @@ ID_DMG_PLAYER: str = "HurtPlayer"
 ID_DMG_ENEMY: str = "HurtEnemy"
 ID_ENEMY: str = "Enemy"
 ID_ITEM: str = "Items"
+ID_EFFECT: str = "Effect"
 instance_list_spec[ID_OTHERS] = []
 instance_list_spec[ID_SOLID] = []
 instance_list_spec[ID_PARTICLE] = []
@@ -54,6 +55,7 @@ instance_list_spec[ID_DMG_PLAYER] = []
 instance_list_spec[ID_DMG_ENEMY] = []
 instance_list_spec[ID_ENEMY] = []
 instance_list_spec[ID_ITEM] = []
+instance_list_spec[ID_EFFECT] = []
 
 container_player = None
 
@@ -61,9 +63,10 @@ container_player = None
 def instance_draw_update():
     global instance_list, instance_draw_list, instance_update
     if instance_update or len(instance_draw_list) <= 0:
-        del instance_draw_list
+        print("instance drawing list would be updated")
+        #del instance_draw_list
         instance_update = false
-        instance_draw_list = sorted(instance_list, key=lambda gobject: -gobject.depth)
+        #instance_draw_list = sorted(instance_list, key=lambda gobject: -gobject.depth)
 
 
 # TODO: Definite more objects.
@@ -133,7 +136,12 @@ class GObject(object):
     
     def __str__(self):
         return self.name
-    
+
+    def __del__(self):
+        if self.step_enable:
+            self.step_enable = false
+            self.destroy()
+
     def sprite_set(self, spr: Sprite or str):
         if type(spr) == str:
             self.sprite_index = sprite_get(spr)
@@ -144,14 +152,13 @@ class GObject(object):
     def destroy(self):
         self.step_enable = false
         global instance_list, instance_list_spec, instance_update, instance_draw_list
-        #instance_update = true
+        instance_update = true
         
-        del instance_list[list_seek(instance_list, self)]
-        del instance_list_spec[self.identify][list_seek(instance_list_spec[self.identify], self)]
-        del instance_draw_list[list_seek(instance_draw_list, self)]
+        instance_list.remove(self)
+        (instance_list_spec[self.identify]).remove(self)
+        instance_draw_list.remove(self)
         del self
-        instance_draw_update()
-    
+
     # Below methods are common-functions for all object that inherits graviton.
     def instance_collide(self, b):
         sx, sy, sw, sh = self.get_bbox()
@@ -668,3 +675,18 @@ class oDoodadParent(GObject):
     name = "Doodad"
     identify = ID_DOODAD
     gravity_default = 0
+
+
+# Parent of Effect
+class oEffectParent(GObject):
+    name = "Fx Effect"
+    identify = ID_EFFECT
+    image_speed = 0.5
+
+
+class oBlood(oEffectParent):
+    name = "Blood"
+
+    def event_step(self, frame_time):
+        super().event_step(frame_time)
+        

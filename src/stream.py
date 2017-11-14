@@ -32,7 +32,10 @@ if __name__ == "__main__":
     sprite_load(
         [path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png", path_theme + "brick_castle_2.png",
          path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
+
+    # Doodads
     
+
     # Entity
     sprite_load(path_entity + "vampire.png", "Player", 8, 8)
     sprite_load(path_entity + "VampireJump_0.png", "PlayerJump", 8, 8)
@@ -46,6 +49,12 @@ if __name__ == "__main__":
                  path_entity + "SolidierWalk_2.png", path_entity + "SolidierWalk_3.png",
                  path_entity + "SolidierWalk_4.png", path_entity + "SolidierWalk_5.png",
                  path_entity + "SolidierWalk_2.png", path_entity + "SolidierWalk_1.png"], "SoldierRun", 8, 8)
+    sprite_load(path_entity + "ManBeard_0.png", "ManBeardIdle", 8, 8)
+    sprite_load([path_entity + "ManBeardWalk_0.png", path_entity + "ManBeardWalk_1.png",
+                 path_entity + "ManBeardWalk_2.png", path_entity + "ManBeardWalk_3.png",
+                 path_entity + "ManBeardWalk_4.png", path_entity + "ManBeardWalk_5.png",
+                 path_entity + "ManBeardWalk_2.png", path_entity + "ManBeardWalk_1.png"], "ManBeardRun", 8, 8)
+    
     sprite_load(path_entity + "SoldierDead.png", "SoldierDead", 8, 8)
     sprite_load(path_entity + "Snake_0.png", "SnakeIdle", 8, 8)
     sprite_load([path_entity + "SnakeWalk_0.png", path_entity + "SnakeWalk_1.png",
@@ -56,5 +65,15 @@ if __name__ == "__main__":
                  path_entity + "CobraWalk_2.png", path_entity + "CobraWalk_3.png",
                  path_entity + "CobraWalk_4.png", path_entity + "CobraWalk_5.png"], "CobraRun", 8, 8)
     
+    # Effect
+    sprite_load([path_entity + "Blood_0.png", path_entity + "Blood_1.png",
+                 path_entity + "Blood_2.png", path_entity + "Blood_2.png"], "Bloods", 4, 4)
+
+    sprite_load([path_entity + "BloodTrail_0.png", path_entity + "BloodTrail_1.png",
+                 path_entity + "BloodTrail_2.png", path_entity + "BloodTrail_3.png",
+                 path_entity + "BloodTrail_4.png", path_entity + "BloodTrail_5.png",
+                 path_entity + "BloodTrail_6.png"], "BloodTrails", 4, 4)
+
+
     framework.run(game)
     framework.game_end()
