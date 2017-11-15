@@ -10,6 +10,7 @@ from streams import game_pause
 from module.sprite import *
 from module.terrain import *
 from streams.game_containers import *
+from module.gobject_header import *
 
 __all__ = [
     "name", "GameExecutor", "draw_clean", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
@@ -104,13 +105,14 @@ class GameExecutor:
         io.key_add(SDLK_LEFT)
         io.key_add(SDLK_RIGHT)
         io.key_add(SDLK_UP)
+
         # Terrains
         tcontainer.signin("1", oBrick)
         tcontainer.signin("@", oPlayer)
         tcontainer.signin("s", oSoldier)
         tcontainer.signin("S", oSnake)
         tcontainer.signin("C", oCobra)
-        
+
         Camera.set_pos(0, 0)
         first_scene = TerrainManager(1, 1)
         first_scene.allocate("1111 1111 1111 1111 1111 1111 1111 1111  \
@@ -125,6 +127,6 @@ class GameExecutor:
                               0000 0000 0000 0000 0000 0000 0000 0000  \
                               1111 1111 1111 1111 1111 1111 1111 1111  \
                               ", 0)
-        
+
         first_scene.generate()
         instance_draw_update()

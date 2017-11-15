@@ -22,7 +22,10 @@ from module.sprite import *
 
 if __name__ == "__main__":
     framework.game_begin()
-    
+
+    # UI
+    sprite_load(path_ui + "heart.png", "sHeart", 0, 0)
+
     # Background
     sprite_load(path_background + "bgCastle.png", "bgCastle", 0, 0)
     sprite_load(path_background + "bgCave.png", "bgCave", 0, 0)

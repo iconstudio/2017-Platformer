@@ -143,14 +143,12 @@ def rect_in_rectangle_opt(pstr: SDL_Rect, dstr: SDL_Rect) -> bool:
 
 
 def rect_in_rectangle(px1, py1, pw, ph, x1, y1, w, h) -> bool:
-    
     if px1 > x1 + w: return False
-    if ra < lb: return False
-    if ta < bb: return False
-    if ba > tb: return False
+    if px1 + pw < x1: return False
+    if py1 + ph < x1: return False
+    if py1 > y1 + h: return False
 
-    result = bool(rect.SDL_HasIntersection(first, second))
-    return result
+    return True
 
 
 # physics

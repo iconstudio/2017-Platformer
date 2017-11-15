@@ -1,4 +1,5 @@
 from module.pico2d import *
+from module.functions import *
 from module.constants import *
 
 from module import framework
@@ -15,6 +16,7 @@ __all__ = [
 # ==================================================================================================
 name = "begin_state"
 logo_time = 0
+targ_time = delta_velocity(4)
 
 
 # noinspection PyGlobalUndefined,PyGlobalUndefined
@@ -25,17 +27,16 @@ def enter():
 
 
 def exit():
-    if logo_time > fps_target * 3:
-        global logo, hfont
-        del logo, hfont
+    global logo, hfont
+    del logo, hfont
 
 
 def update(frame_time):
-    global logo_time
-    if logo_time > fps_target * 3:
+    global logo_time, targ_time
+    if logo_time <= 0:
         logo_time = 0
         framework.change_state(main)
-    logo_time += 1
+    logo_time -= delta_velocity() * frame_time
 
 
 def draw():
