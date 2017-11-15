@@ -6,10 +6,10 @@ from module import framework
 from module.framework import io
 from module.framework import Camera
 from streams import game_pause
+from streams.game_containers import *
 
 from module.sprite import *
 from module.terrain import *
-from streams.game_containers import *
 from module.gobject_header import *
 
 __all__ = [
@@ -28,17 +28,7 @@ def enter():
 
 
 def exit():
-    """
-    while (true):
-        try:
-            data_tuple = sprite_list.popitem()
-            olddb: Sprite = data_tuple[1]
-            del olddb
-        except KeyError as e:
-            break
-        else:
-            del olddb
-    """
+    pass
 
 
 def update(frame_time):
@@ -87,8 +77,9 @@ def handle_events(frame_time):
             framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
             io.clear()
+            framework.pause()
             framework.push_state(game_pause)
-        elif event.type == SDL_KEYDOWN or SDL_KEYUP:
+        else:
             io.proceed(event)
 
 

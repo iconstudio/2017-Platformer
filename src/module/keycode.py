@@ -2,17 +2,18 @@ from sdl2.stdinc import Sint32
 from sdl2.scancode import *
 
 __all__ = [
-	"SDL_Keycode", "SDLK_RETURN", "SDLK_ESCAPE", "SDLK_BACKSPACE", "SDLK_TAB", "SDLK_SPACE", "SDLK_EXCLAIM",
-	"SDLK_QUOTEDBL",
-	"SDLK_UP", "SDLK_LEFT", "SDLK_DOWN", "SDLK_RIGHT", "SDLK_LCTRL", "SDLK_LSHIFT", "SDLK_RCTRL", "SDLK_F1", "SDLK_F2",
-	"SDLK_F3", "SDLK_F4", "SDLK_F5",
-	"SDLK_0", "SDLK_1", "SDLK_2", "SDLK_3", "SDLK_4", "SDLK_5", "SDLK_6", "SDLK_7", "SDLK_8", "SDLK_9",
-	"SDLK_a", "SDLK_a", "SDLK_c", "SDLK_d", "SDLK_e", "SDLK_f", "SDLK_g", "SDLK_h", "SDLK_i", "SDLK_p"
+    "SDL_Keycode", "SDLK_RETURN", "SDLK_ESCAPE", "SDLK_BACKSPACE", "SDLK_TAB", "SDLK_SPACE", "SDLK_EXCLAIM",
+    "SDLK_QUOTEDBL",
+    "SDLK_UP", "SDLK_LEFT", "SDLK_DOWN", "SDLK_RIGHT", "SDLK_LCTRL", "SDLK_LSHIFT", "SDLK_RCTRL", "SDLK_F1", "SDLK_F2",
+    "SDLK_F3", "SDLK_F4", "SDLK_F5",
+    "SDLK_0", "SDLK_1", "SDLK_2", "SDLK_3", "SDLK_4", "SDLK_5", "SDLK_6", "SDLK_7", "SDLK_8", "SDLK_9",
+    "SDLK_a", "SDLK_a", "SDLK_c", "SDLK_d", "SDLK_e", "SDLK_f", "SDLK_g", "SDLK_h", "SDLK_i", "SDLK_p",
+    "SDLK_t", "SDLK_u", "SDLK_v", "SDLK_w", "SDLK_y", "SDLK_x", "SDLK_z"
 ]
 
 SDL_Keycode = Sint32
 SDLK_SCANCODE_MASK = 1 << 30
-SDL_SCANCODE_TO_KEYCODE = lambda x : (x | SDLK_SCANCODE_MASK)
+SDL_SCANCODE_TO_KEYCODE = lambda x: (x | SDLK_SCANCODE_MASK)
 
 SDL_Keymod = c_int
 

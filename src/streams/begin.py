@@ -15,8 +15,8 @@ __all__ = [
 #                                       프레임워크 함수
 # ==================================================================================================
 name = "begin_state"
-logo_time = 0
 targ_time = delta_velocity(4)
+logo_time = targ_time
 
 
 # noinspection PyGlobalUndefined,PyGlobalUndefined
@@ -44,7 +44,7 @@ def draw():
     clear_canvas()
     logo.draw(screen_width / 2, screen_height / 2)
     draw_set_color(255, 255, 255)
-    hfont.draw(screen_width / 2 - 60, screen_height / 2 - 100, "iconstudio")
+    hfont.draw(screen_width / 2, screen_height / 2 - 100, "iconstudio")
     update_canvas()
 
 

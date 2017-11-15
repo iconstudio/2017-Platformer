@@ -400,7 +400,7 @@ class Font:
         texture = SDL_CreateTextureFromSurface(renderer, fsurface)
         SDL_FreeSurface(fsurface)
         image = Image(texture, None, None)
-        image.draw(x + image.w / 2, y)
+        image.draw(x, y)
 
 
 def load_font(name, size = 20):

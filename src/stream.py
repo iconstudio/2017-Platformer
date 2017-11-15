@@ -4,6 +4,7 @@ from module.constants import *
 
 from module import framework
 from streams import begin
+from streams import main
 from streams import game
 
 from module.sprite import *
@@ -78,5 +79,5 @@ if __name__ == "__main__":
                  path_entity + "BloodTrail_6.png"], "BloodTrails", 4, 4)
 
 
-    framework.run(game)
+    framework.run(main)
     framework.game_end()

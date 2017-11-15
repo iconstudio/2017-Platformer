@@ -22,6 +22,7 @@ def enter():
 def exit():
     global logo
     del logo
+    framework.unpause()
 
 def update(frame_time):
     pass
@@ -31,7 +32,7 @@ def draw():
     global logo
     clear_canvas()
     game.draw_clean()
-    logo.draw(screen_width / 2, 80)
+    logo.draw(screen_width / 2, 40)
     update_canvas()
 
 
