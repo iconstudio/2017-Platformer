@@ -18,7 +18,7 @@ def instance_draw_update():
         print("instance drawing list would be updated")
         # del instance_draw_list
         instance_update = false
-        # instance_draw_list = sorted(instance_list, key=lambda gobject: -gobject.depth)
+        instance_draw_list = sorted(instance_list, key=lambda gobject: -gobject.depth)
 
 
 # ==================================================================================================
@@ -27,14 +27,15 @@ def instance_draw_update():
 
 
 # Declaring of Special Objects ( Need a canvas )
+player_lives = 3
 
 
 # ==================================================================================================
 #                                    사용자 정의 객체 / 함수
 # ==================================================================================================
 # Object : Functions
-def instance_create(Ty, depth = int(0), x = int(0), y = int(0)) -> object:
-    temp = Ty(depth, x, y)
+def instance_create(Ty, ndepth = int(0), nx = int(0), ny = int(0)) -> object:
+    temp = Ty(ndepth, nx, ny)
     global instance_last
     instance_last = temp
     return temp
@@ -89,7 +90,7 @@ class oPlayer(GObject):
     xVelMin, xVelMax = -54, 54
 
     def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny + 80)
+        super().__init__(ndepth, nx, ny)
         self.sprite_index = sprite_get("Player")
 
         global container_player
@@ -99,7 +100,7 @@ class oPlayer(GObject):
     def event_step(self, frame_time):
         super().event_step(frame_time)
         if self.oStatus < oStatusContainer.CHANNELING:  # Player can control its character.
-            Camera.x, Camera.y = self.x - Camera.width / 2, self.y - Camera.height / 2
+            Camera.set_pos(self.x - Camera.width / 2, self.y - Camera.height / 2)
             # Stomp enemies under the character
             whothere, howmany = instance_place(oEnemyParent, self.x, self.y - 9)
             if howmany > 0 > self.yVel and self.onAir:

@@ -31,8 +31,6 @@ instance_list_spec: dict = {}  # 객체 종류 별 목록
 instance_draw_list: list = []  # 개체 그리기 목록
 instance_update: bool = true  # 개체 갱신 여부
 
-player_lives = 3
-
 ID_OTHERS: str = "Objects"
 ID_SOLID: str = "Solid"
 ID_PARTICLE: str = "Particle"

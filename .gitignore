@@ -107,3 +107,4 @@ ENV/
 .idea
 /key_private.ppk
 /key_public.putty
+/.tgitconfig

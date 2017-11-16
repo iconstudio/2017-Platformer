@@ -145,15 +145,15 @@ class oCamera:
     width, height = screen_width, screen_height
 
     def set_pos(self, x: float = None, y: float = None):
-        if not x.__eq__(None):
+        if x is not None:
             self.x = x
-        if not y.__eq__(None):
+        if y is not None:
             self.y = y
 
     def add_pos(self, x: float = None, y: float = None):
-        if not x.__eq__(None):
+        if x is not None:
             self.x += x
-        if not y.__eq__(None):
+        if y is not None:
             self.y += y
 
 
