@@ -77,5 +77,5 @@ if __name__ == "__main__":
                  path_entity + "BloodTrail_6.png"], "BloodTrails", 4, 4)
 
 
-    framework.run(begin)
+    framework.run(game)
     framework.game_end()

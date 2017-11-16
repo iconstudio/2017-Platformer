@@ -71,7 +71,7 @@ class MainMenu:
                 dscl = 1 - menum.menuscl[j] / 5
                 dhfont = hfontlrg
                 draw_set_color(32, 32, 32)
-                draw_rectangle(0, ddy - 20, screen_width, ddy + 20)
+                draw_rectangle(0, ddy - 25, screen_width, ddy + 15)
             elif j == menum.menuold:
                 dscl = 1.2 - menum.menuscl[j] / 5
             else:
@@ -142,31 +142,9 @@ def update(frame_time):
 
 def draw(frame_time):
     clear_canvas()
-    
     global mainmenu
     mainmenu.draw(frame_time)
-    """
-    global hfont, hfontlrg, menu_begin, menusy
-    ddx = screen_width / 2 + 90
-    curr = menu_begin
-    ddy = menusy - mpush
-    while curr != None:
-        if menusel == curr:
-            break
-        ddy += 50
-        curr = next(curr)
-    
-    curr = menu_begin
-    while curr != None:
-        if menusel == curr:
-            hfontlrg.draw(ddx, ddy, curr.caption)
-        else:
-            hfont.draw(ddx, ddy, curr.caption)
-        ddy -= 50 - curr.rpush
-        curr = next(curr)
-    """
     update_canvas()
-    pass
 
 
 def handle_events(frame_time):

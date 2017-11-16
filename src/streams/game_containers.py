@@ -102,7 +102,7 @@ class oPlayer(GObject):
             Camera.x, Camera.y = self.x - Camera.width / 2, self.y - Camera.height / 2
             # Stomp enemies under the character
             whothere, howmany = instance_place(oEnemyParent, self.x, self.y - 9)
-            if howmany > 0 and self.yVel < 0 and self.onAir:
+            if howmany > 0 > self.yVel and self.onAir:
                 for enemy in whothere:
                     if enemy.oStatus < oStatusContainer.STUNNED:
                         if enemy.name not in ("ManEater", "Lavaman",):
