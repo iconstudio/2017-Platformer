@@ -1,9 +1,10 @@
-import sdl2.rect as rect
-import sdl2.pixels as px
-import sdl2.keycode as keycode
-from sdl2.rect import SDL_Rect
 import math
 from random import *
+
+import sdl2.pixels as px
+import sdl2.rect as rect
+from sdl2.rect import SDL_Rect
+
 import module.constants as constants
 
 __all__ = [

@@ -1,12 +1,10 @@
 from module.pico2d import *
 from module.constants import *
 
-import sdl2.keyboard as keyboard
-
 __all__ = [
               "GameState", "change_state", "push_state", "pop_state", "quit", "run",
               "io", "Camera", "game_begin", "game_end", "HWND", "current_time", "game_realtime",
-          ] + keyboard.__all__
+          ]
 
 HWND = None
 keylogger_list = []
@@ -123,8 +121,8 @@ class oIOProc:
 
     def clear(self):
         if len(self.key_list) > 0:
-            for keycode in self.key_list:
-                node = self.key_map[keycode]
+            for codes in self.key_list:
+                node = self.key_map[codes]
                 node.close()
 
 
@@ -248,7 +246,7 @@ def run(start_state):
         keyboard_update()
         stack[-1].handle_events(ftime)
         stack[-1].update(ftime)
-        stack[-1].draw()
+        stack[-1].draw(ftime)
     # repeatedly delete the top of the stack
     while len(stack) > 0:
         stack[-1].exit()

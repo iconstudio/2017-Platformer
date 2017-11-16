@@ -16,139 +16,69 @@ __all__ = [
 #                                       프레임워크 함수
 # ==================================================================================================
 name = "main_state"
-menusel = None
-menudic = {}
 
 menusy = screen_height - 180
-mpush = 0
 
 
-class MenuNode:
-    captioon: str = "submenu"
-    nnext = None
-
-    def __init__(self, ncaption):
-        self.captioon = ncaption
-
-    def set_next(self, node):
-        self.nnext = node
-
-    def __next__(self):
-        return self.nnext
-
-
-class Menu:
-    caption: str = "menu"
-    menu_last = None
-    nnext = None
-    nbefore = None
-    rpush = 0
-
-    subsel = None
-    sub_opened: bool = false
-    submenu_last: MenuNode = None
-    subroot: MenuNode = None
-
-    def __init__(self, ncaption):
-        self.caption = ncaption
-
-    def add(self, ncaption):
-        newnode = MenuNode(ncaption)
-        if self.subroot == None:
-            self.subroot = newnode
-        if self.submenu_last != None:
-            self.submenu_last.set_next(self)
-        return newnode
-
-    def __next__(self):
-        return self.nnext
-
-
-def menu_create(ncaption) -> Menu:
-    newone = Menu(ncaption)
-    if Menu.menu_last != None:
-        Menu.menu_last.nnext = newone
-        newone.nbefore = Menu.menu_last
-
-    Menu.menu_last = newone
-    menudic[ncaption] = newone
-    return newone
-
-
-menu_begin: Menu = None
+class MenuEnumerator:
+    menunod = []  # A List of menu nodes
+    menucnt = 0  # The number of menu nodes
+    menusel = 0  # Current selection (index)
+    menuold = 0  # Previous selection (index)
+    menuscl = []  # A inverted scale of a currently selected menu node (Not acquire to all nodes in an index)
+    menupos = 0  # The initiative y position of a menu node
 
 
 class MainMenu:
-    maxdepth = 0
     menu_hsize = 50
-    menucnt = []  # The number of menu nodes
-    menusel = []  # Current selection
-    menuold = []  # Previous selection
-    menuscl = []
-    menupos = []  # The initiative y position of a menu node
-
-    def menu_clear(self, index: int, default_selected: int = 9):
-        if (index > self.maxdepth):
-            self.maxdepth = index
-        self.menucnt[index] = 0
-        self.menusel[index] = default_selected
-        self.menuold[index] = default_selected
-        self.menuscl[index] = 0
-        self.menupos[index] = self.menu_hsize * default_selected
-
+    depthlist = []
+    currdepth = 0
+    
+    def menu_init(self, default_selected: int = 0):
+        newone = MenuEnumerator()
+        self.depthlist.append(newone)
+        newone.menusel = default_selected
+        newone.menuold = default_selected
+        newone.menupos = self.menu_hsize * default_selected
+    
+    def menu_add(self, caption: str):
+        menum = self.depthlist[self.currdepth]
+        menum.menunod.append(caption)
+        menum.menuscl.append(0)
+        menum.menucnt += 1
+        return menum.menucnt - 1
+    
     def update(self, frame_time):
-        for i in range(self.maxdepth):
-            self.menupos[i] += (-self.menu_hsize * self.menusel[i] - self.menupos[i]) / 5 * (
-                frame_time * delta_velocity(10))
-            self.menuscl[i] -= self.menuscl[i] / 5 * (frame_time * delta_velocity(10))
-
+        menum = self.depthlist[self.currdepth]
+        vel = frame_time * delta_velocity(10)
+        for i in range(menum.menucnt):
+            menum.menupos += (self.menu_hsize * menum.menusel - menum.menupos) / 5 * vel
+            if menum.menusel == i:
+                if menum.menuscl[i] != 0:
+                    menum.menuscl[i] -= menum.menuscl[i] / 5 * vel
+            elif menum.menuscl[i] != 1:
+                menum.menuscl[i] += (1 - menum.menuscl[i]) / 5 * vel
+    
     def draw(self, frame_time):
-        """
-
-for (j = 0; j <= maxdepth; j += 1) {
- dy = menupos[j] - 10;
- dalpha = 1 - abs(menurot / 90 - j);
- for (i = 0; i < menucnt[j]; i += 1) {
-  if (i = menusel[j])
-   draw_set_alpha(aalpha);
-  else
-   draw_set_alpha(dalpha * aalpha);
-  if (i = menusel[j])
-   dscl = 4 - menuscl[j] * 2;
-  else if (i = menuold[j])
-   dscl = 2 + menuscl[j] * 2;
-  else
-   dscl = 2;
-  draw_set_color(make_color_hsv(0, 0, 255 * menucol[j, i]));
-  sw = menu_text(8 + rpush[2], dy, menucap[j, i], dscl / 6, menurot - j * 90);
-  ldy = dy;
-  dy += 5 * dscl + 1.5;
-  if (menuinf[j, i] != "") {
-   if (i = menusel[j]) {
-    draw_set_alpha(aalpha * infoscl[j]);
-    menu_text(8 + rpush[2], dy - 0.875 * infoscl[j], "- " + menuinf[j, i], infoscl[j] * 1.75 / 6, menurot - j * 90);
-    dy += 10.5 * infoscl[j] + 1;
-   } else if (i = menuold[j]) {
-    draw_set_alpha(aalpha * infosco[j]);
-    menu_text(8 + rpush[2], dy - 0.875 * infosco[j], "- " + menuinf[j, i], infosco[j] * 1.75 / 6, menurot - j * 90);
-    dy += 10.5 * infosco[j] + 1.5;
-   }
-  }
-  if (menuvar[j, i] != "0") {
-   draw_set_alpha(dalpha * aalpha);
-   draw_set_color(make_color_hsv(0, 0, 176 * menucol[j, i]));;
-   d3d_transform_set_rotation_y(90);
-   d3d_transform_add_translation(-sw, 0, -sw);
-   d3d_transform_add_rotation_y(menurot - j * 90);
-   d3d_transform_add_translation(sw, 0, sw);
-   draw_text_transformed(8 + (string_width(menucap[j, i]) + 3) * dscl / 6 + rpush[2], ldy, string(variable_global_get(menuvar[j, i])), dscl / 6, dscl / 6, 0);
-   d3d_transform_set_identity();
-   draw_set_color(make_color_hsv(0, 0, 255 * menucol[j, i]));
-  }
- }
-}
-        """
-        pass
+        menum = self.depthlist[self.currdepth]
+        ddx = screen_width / 2 + 160
+        ddy = menusy + menum.menupos + 10
+        
+        global hfont, hfontlrg
+        for j in range(menum.menucnt):
+            dhfont = hfont
+            if j == menum.menusel:
+                dscl = 1 - menum.menuscl[j] / 5
+                dhfont = hfontlrg
+                draw_set_color(32, 32, 32)
+                draw_rectangle(0, ddy - 20, screen_width, ddy + 20)
+            elif j == menum.menuold:
+                dscl = 1.2 - menum.menuscl[j] / 5
+            else:
+                dscl = 1
+            draw_set_color(255, 255, 255)
+            dhfont.draw(ddx, ddy, menum.menunod[j], dscl)
+            ddy -= self.menu_hsize * dscl
 
 
 # noinspection PyGlobalUndefined
@@ -156,75 +86,67 @@ def enter():
     io.key_add(SDLK_UP)
     io.key_add(SDLK_LEFT)
     io.key_add(SDLK_DOWN)
-    io.key_add(SDLK_x)
-    io.key_add(SDLK_z)
+    io.key_add(ord('z'))
+    io.key_add(ord('x'))
     io.key_add(SDLK_RETURN)
+    
+    global hfontsml, hfont, hfontlrg
+    hfontsml = load_font(path_font + "Contl___.ttf", 36)
+    hfont = load_font(path_font + "Contl___.ttf", 40)  # "윤고딕_310.ttf"
+    hfontlrg = load_font(path_font + "Contl___.ttf", 44)
 
-    global hfont, hfontlrg
-    hfont = load_font(path_font + "윤고딕_310.ttf", 40)
-    hfontlrg = load_font(path_font + "윤고딕_320.ttf", 40)
-
-    global menusel, menu_begin, menu_opt, menu_credit, menu_exit
-    cm = menusel = menu_begin = menu_create("Start Game")
-    cm.subsel = cm.add("Stage 1")
-    cm.add("Stage 2")
-    cm.add("Stage 3")
-    menu_opt = menu_create("Option")
-    menu_credit = menu_create("Credit")
-    cm = menu_exit = menu_create("Exit Game")
-    cm.add("Yes")
-    cm.subsel = cm.add("No")
-    # cm.nnext = menu_begin
+    draw_set_alpha(1)
+    global mainmenu, mn_begin, mn_opt, mn_credit, mn_end
+    mainmenu = MainMenu()
+    mainmenu.menu_init(0)
+    mn_begin = mainmenu.menu_add("begin game")
+    mn_opt = mainmenu.menu_add("option")
+    mn_credit = mainmenu.menu_add("credit")
+    mn_end = mainmenu.menu_add("end game")
 
 
 def exit():
-    global hfont, hfontlrg
-    del hfont, hfontlrg
+    global hfontsml, hfont, hfontlrg
+    del hfontsml, hfont, hfontlrg
 
 
 def update(frame_time):
-    global mpush
-    if mpush != 0:
-        mpush -= mpush / 4 * (frame_time * delta_velocity(10))
-
-    global menusel, menu_begin, menu_opt, menu_credit, menu_exit
-    if io.key_check_pressed(SDLK_z):
-        if menusel == menu_begin:
-            menusel.sub_opened = false
-    elif io.key_check_pressed(SDLK_RETURN) or io.key_check_pressed(SDLK_x):
+    global mainmenu
+    mainmenu.update(frame_time)
+    menum = mainmenu.depthlist[mainmenu.currdepth]
+    
+    if io.key_check_pressed(ord('z')):
         io.clear()
-        if menusel == menu_begin:
-            if not menusel.sub_opened:
-                menusel.sub_opened = true
-            else:
-                framework.change_state(game)
-        elif menusel == menu_opt:
+    elif io.key_check_pressed(SDLK_RETURN) or io.key_check_pressed(ord('x')):
+        io.clear()
+        
+        if mn_begin == menum.menusel:
+            framework.change_state(game)
+        elif mn_opt == menum.menusel:
             pass
-        elif menusel == menu_credit:
+        elif mn_credit == menum.menusel:
             pass
-        elif menusel == menu_exit:
+        elif mn_end == menum.menusel:
             framework.quit()
     elif io.key_check_pressed(SDLK_UP):
-        if not menusel.sub_opened:
-            menusel = menusel.nbefore
-            if menusel == None:
-                menusel = Menu.menu_last
-                mpush = 200
-            else:
-                mpush = -50
+        if menum.menusel <= 0:
+            menum.menusel = menum.menucnt - 1
+        else:
+            menum.menusel -= 1
     elif io.key_check_pressed(SDLK_DOWN):
-        if not menusel.sub_opened:
-            menusel = next(menusel)
-            if menusel == None:
-                menusel = menu_begin
-                mpush = -200
-            else:
-                mpush = 50
+        if menum.menusel >= menum.menucnt - 1:
+            menum.menusel = 0
+        else:
+            menum.menusel += 1
 
 
-def draw():
-    global hfont, hfontlrg, menu_begin, menusy
+def draw(frame_time):
     clear_canvas()
+    
+    global mainmenu
+    mainmenu.draw(frame_time)
+    """
+    global hfont, hfontlrg, menu_begin, menusy
     ddx = screen_width / 2 + 90
     curr = menu_begin
     ddy = menusy - mpush
@@ -233,7 +155,7 @@ def draw():
             break
         ddy += 50
         curr = next(curr)
-
+    
     curr = menu_begin
     while curr != None:
         if menusel == curr:
@@ -242,6 +164,7 @@ def draw():
             hfont.draw(ddx, ddy, curr.caption)
         ddy -= 50 - curr.rpush
         curr = next(curr)
+    """
     update_canvas()
     pass
 

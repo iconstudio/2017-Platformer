@@ -1,13 +1,9 @@
-from module.pico2d import *
-from module.functions import *
-from module.constants import *
-
 from module import framework
-from streams import begin
+from module.constants import *
+from module.sprite import *
 from streams import main
 from streams import game
-
-from module.sprite import *
+from streams import begin
 
 """
         수정 사항:
@@ -25,7 +21,9 @@ if __name__ == "__main__":
     framework.game_begin()
 
     # UI
-    sprite_load(path_ui + "heart.png", "sHeart", 0, 0)
+    sprite_load(path_image + "logo.png", "sLogo", None, None)
+    sprite_load(path_ui + "loading.png", "sLoading", None, None)
+    sprite_load(path_ui + "heart.png", "sHeart", 16, 16)
 
     # Background
     sprite_load(path_background + "bgCastle.png", "bgCastle", 0, 0)
@@ -79,5 +77,5 @@ if __name__ == "__main__":
                  path_entity + "BloodTrail_6.png"], "BloodTrails", 4, 4)
 
 
-    framework.run(main)
+    framework.run(begin)
     framework.game_end()

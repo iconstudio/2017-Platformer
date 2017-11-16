@@ -1,16 +1,13 @@
-from module.pico2d import *
-from module.functions import *
-from module.constants import *
-
 from module import framework
-from module.framework import io
+from module.constants import *
 from module.framework import Camera
-from streams import game_pause
-from streams.game_containers import *
-
+from module.framework import io
+from module.gobject_header import *
+from module.pico2d import *
 from module.sprite import *
 from module.terrain import *
-from module.gobject_header import *
+from streams import game_pause
+from streams.game_containers import *
 
 __all__ = [
     "name", "GameExecutor", "draw_clean", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
@@ -60,7 +57,7 @@ def draw_clean():
         raise RuntimeError("개체가 존재하지 않습니다!")
 
 
-def draw():
+def draw(frame_time):
     clear_canvas()
     draw_clean()
     update_canvas()

@@ -28,7 +28,7 @@ def update(frame_time):
     pass
 
 
-def draw():
+def draw(frame_time):
     global logo
     clear_canvas()
     game.draw_clean()

@@ -262,8 +262,11 @@ class GObject(object):
                 else:
                     self.yVel *= -0.4
             else:
-                self.onAir = false
-                self.yVel = 0
+                if self.yVel <= 0:
+                    self.onAir = false
+                    self.yVel = 0
+                else:
+                    self.yVel *= -0.6
         else:
             self.onAir = false
         self.y = math.ceil(self.y)

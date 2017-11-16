@@ -1,13 +1,10 @@
-from module.pico2d import *
-from module.functions import *
 from module.constants import *
-
-from module.framework import game_realtime
-from module.framework import io
 from module.framework import Camera
-
-from module.sprite import *
+from module.framework import io
+from module.functions import *
 from module.gobject_header import *
+from module.pico2d import *
+from module.sprite import *
 
 __all__ = [
     "instance_create", "instance_draw_update",

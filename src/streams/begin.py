@@ -1,8 +1,7 @@
-from module.pico2d import *
-from module.functions import *
-from module.constants import *
-
 from module import framework
+from module.constants import *
+from module.functions import *
+from module.pico2d import *
 from streams import main
 
 from module.sprite import *
@@ -15,35 +14,42 @@ __all__ = [
 #                                       프레임워크 함수
 # ==================================================================================================
 name = "begin_state"
-targ_time = delta_velocity(4)
+targ_time = delta_velocity(3)
 logo_time = targ_time
-
+alpha_max = delta_velocity(2)
+alpha = alpha_max
 
 # noinspection PyGlobalUndefined,PyGlobalUndefined
 def enter():
     global logo, hfont
-    logo = load_image(path_image + "logo.png", 80, 80)
+    logo = sprite_get("sLogo")
     hfont = load_font(path_font + "윤고딕_310.ttf", 32)
 
 
 def exit():
-    global logo, hfont
-    del logo, hfont
+    global hfont
+    del hfont
 
 
 def update(frame_time):
-    global logo_time, targ_time
+    global logo_time, targ_time, alpha_max, alpha
     if logo_time <= 0:
         logo_time = 0
+        alpha -= delta_velocity() * frame_time
+    else:
+        logo_time -= delta_velocity() * frame_time
+    if alpha <= -alpha_max:
         framework.change_state(main)
-    logo_time -= delta_velocity() * frame_time
 
 
-def draw():
-    global logo
+def draw(frame_time):
+    global hfont, alpha_max, alpha
     clear_canvas()
-    logo.draw(screen_width / 2, screen_height / 2)
+    
+    valuea = float(max(0, alpha) / alpha_max)
+    draw_sprite(logo, 0, screen_width / 2, screen_height / 2, 1, 1, 0, valuea)
     draw_set_color(255, 255, 255)
+    draw_set_alpha(valuea)
     hfont.draw(screen_width / 2, screen_height / 2 - 100, "iconstudio")
     update_canvas()
 
