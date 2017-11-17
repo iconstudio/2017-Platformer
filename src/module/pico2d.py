@@ -515,7 +515,7 @@ def load_wav(name):
 # for pytmx
 
 
-# import pytmx
+import pytmx
 
 def pico2d_image_loader(filename, colorkey, **kwargs):
     def extract_image(crect = None, flags = None):
@@ -546,7 +546,7 @@ def pico2d_image_loader(filename, colorkey, **kwargs):
 
 
 def load_tilemap(filename):
-    # return pytmx.TiledMap(filename, image_loader=pico2d_image_loader)
+    return pytmx.TiledMap(filename, image_loader=pico2d_image_loader)
     pass
 
 

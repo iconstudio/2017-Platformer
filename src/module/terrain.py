@@ -1,4 +1,5 @@
 from module.constants import *
+import pytmx
 
 __all__ = [
     "tcontainer", "ThemeContainer", "TerrainManager", "TerrainAllocator"
