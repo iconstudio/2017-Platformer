@@ -105,6 +105,8 @@ class TerrainAllocator:
         newx = self.x
         newy = self.y + self.h - self.tile_h
         currln: str = ""
+        currlist: list = []
+        prevlist: list = []
         j: int = 0
 
         for i in range(0, len(self.data)):
@@ -120,9 +122,9 @@ class TerrainAllocator:
                     obj = whattocreate(None, newx, newy)
 
                     val, length = self.hsz, len(currln)
-                    if length > val:
-                        if currln[length - val] == current:
-                            obj.tile_up = true
+                    if length < val or (length >= val and currln[length - val] == current):
+                        obj.tile_up = true
+                    currlist.append(obj) # save objects in current line
 
                     try:
                         tempspr = obj.sprite_index
@@ -130,22 +132,39 @@ class TerrainAllocator:
                         obj.y += tempspr.yoffset
                     except AttributeError:
                         pass
-
                 except KeyError:
                     pass
             else:
+                # Skip this line
                 if current == ';':
                     newx = self.x
                     newy -= self.tile_h
                     continue
 
-            # Parsing
             currln += current
             newx += self.tile_w
+            # Wrap
             if newx >= self.w:
                 newx = self.x
                 newy -= self.tile_h
+                # Parsing
+                # """   * previous line     <- X [preprevlist.?]
+                # """   * current line      <- prevlist (but refered when parsing 'next' line)
+                # """   * next line         <- currlist
+                val, length = self.hsz, len(currlist)
+                if len(prevlist) > 0 and length > 0:
+                    i = 0
+                    for inst in range(length):
+                        try:
+                            if prevlist[i].name is currlist[i].name:
+                                prevlist[i].tile_down = true
+                        except IndexError:
+                            break
+                        i += 1
 
+                del prevlist
+                prevlist = currlist.copy() # push current line back to previous line
+                currlist.clear() # make new list
 
 
     def allocate(self, data: str, newtype: int = 0):
