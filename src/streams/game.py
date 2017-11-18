@@ -95,7 +95,8 @@ class GameExecutor:
         io.key_add(SDLK_UP)
 
         # Terrains
-        tcontainer.signin("1", oBrick)
+        tcontainer.signin("1", oBrickCastle)
+        tcontainer.signin("2", oLush)
         tcontainer.signin("@", oPlayer)
         tcontainer.signin("s", oSoldier)
         tcontainer.signin("S", oSnake)
@@ -103,18 +104,11 @@ class GameExecutor:
 
         Camera.set_pos(0, 0)
         first_scene = TerrainManager(1, 1)
-        first_scene.allocate("1111 1111 1111 1111 1111 1111 1111 1111  \
-                              1111 1111 1111 1111 1111 1111 1111 1111  \
-                              1111 1111 1111 1111 1111 1111 1111 1111  \
-                              1111 1111 1111 1111 1111 1111 1111 1111  \
-                              1111 1111 1111 1111 1111 1111 1111 1111  \
-                              ;;;; \
-                              00C0 00S0 1111 0000 0000 0000 0000 0000  \
-                              1111 1111 1111 @000 00ss 0001 0s11 1C11  \
-                              ;;  \
-                              0000 0000 0000 0000 0000 0000 0000 0000  \
-                              1111 1111 1111 1111 1111 1111 1111 1111  \
-                              ", 0)
+        first_scene.allocate(";;;;;;;;;;;; \
+                            0000 0000 0000 00@0 0000 0000 0000 0000  \
+                            2222 2222 2222 2222 2222 2222 2222 2222  \
+                            2222 2222 2222 2222 2222 2222 2222 2222  \
+                            2222 2222 2222 2222 2222 2222 2222 2222", 0)
 
         first_scene.generate()
         instance_draw_update()

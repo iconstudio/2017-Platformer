@@ -94,7 +94,13 @@ class TerrainAllocator:
         newy = self.y + self.h - self.tile_h
         for i in range(0, len(self.data)):
             current = self.data[i]
-            if current == '0' or current == ' ' or current == '\n':
+            if current == '0':
+                newx += self.tile_w
+                if newx >= self.w:
+                    newx = self.x
+                    newy -= self.tile_h
+                continue
+            if current == ' ' or current == '\n':
                 continue
             if current == ';':
                 newx = self.x

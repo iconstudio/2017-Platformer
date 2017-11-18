@@ -2,12 +2,15 @@ from module.pico2d import *
 from module.constants import *
 
 __all__ = [
-              "GameState", "change_state", "push_state", "pop_state", "quit", "run",
-              "io", "Camera", "game_begin", "game_end", "HWND", "current_time", "game_realtime",
-          ]
+    "GameState", "change_state", "push_state", "pop_state", "quit", "run",
+    "io", "Camera", "game_begin", "game_end", "HWND", "current_time", "game_realtime",
+    "scene_width", "scene_height", "game_set_size"
+]
 
 HWND = None
 keylogger_list = []
+scene_width = screen_width
+scene_height = screen_height
 
 
 def game_begin():
@@ -25,6 +28,12 @@ def game_begin():
 
 def game_end():
     close_canvas()
+
+
+def game_set_size(w, h):
+    global scene_width, scene_height
+    scene_width = w
+    scene_height = h
 
 
 # Object : IO procedure
@@ -144,6 +153,11 @@ class oCamera:
     lock: bool = false
     width, height = screen_width, screen_height
 
+    def limit(self):
+        global screen_width, screen_height, scene_width, scene_height
+        self.x = clamp(0, self.x, scene_width - screen_width)
+        self.y = clamp(0, self.y, scene_height - screen_height)
+
     def set_pos(self, x: float = None, y: float = None):
         if x is not None:
             self.x = x
@@ -193,6 +207,7 @@ def change_state(state):
     pop_state()
     stack.append(state)
     state.enter()
+    io.clear()
 
 
 def push_state(state):
@@ -204,6 +219,7 @@ def push_state(state):
     stack.append(state)
     print(": " + state.name + " begins")
     state.enter()
+    io.clear()
 
 
 def pop_state():
@@ -217,6 +233,7 @@ def pop_state():
     # execute resume function of the previous state
     if len(stack) > 0:
         stack[-1].resume()
+    io.clear()
 
 
 def quit():

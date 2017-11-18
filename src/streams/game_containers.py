@@ -8,7 +8,8 @@ from module.sprite import *
 
 __all__ = [
     "instance_create", "instance_draw_update",
-    "oBrick", "oPlayer", "oSoldier", "oSnake", "oCobra",
+    "oBrickCastle", "oLush", "oBrickDirt",
+    "oPlayer", "oSoldier", "oSnake", "oCobra",
 ]
 
 
@@ -67,14 +68,33 @@ def instance_place(Ty, fx, fy) -> (list, int):
 
 
 # Definitions of Special Objects
-# Brick
-class oBrick(Solid):
+
+# Castle Brick
+class oBrickCastle(Solid):
     name = "Brick of Mine"
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sCastleBrick")
         self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3)
+
+# Lush
+class oLush(Solid):
+    name = "Brick of Forest"
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sLush")
+        self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 1, 1)
+
+# Dirt Brick
+class oBrickDirt(Solid):
+    name = "Brick of Mine"
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sDirt")
+        self.image_index = choose(0, 0, 0, 0, 0, 0, 1, 1)
 
 
 # Player
