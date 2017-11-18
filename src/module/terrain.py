@@ -1,6 +1,7 @@
+from module.constants import *
+
 from module import framework
 
-from module.constants import *
 from module.gobject_header import *
 import pytmx
 
@@ -124,7 +125,7 @@ class TerrainAllocator:
                     val, length = self.hsz, len(currln)
                     if length < val or (length >= val and currln[length - val] == current):
                         obj.tile_up = true
-                    currlist.append(obj) # save objects in current line
+                    currlist.append(obj)  # save objects in current line
 
                     try:
                         tempspr = obj.sprite_index
@@ -163,9 +164,8 @@ class TerrainAllocator:
                         i += 1
 
                 del prevlist
-                prevlist = currlist.copy() # push current line back to previous line
-                currlist.clear() # make new list
-
+                prevlist = currlist.copy()  # push current line back to previous line
+                currlist.clear()  # make new list
 
     def allocate(self, data: str, newtype: int = 0):
         self.data = data

@@ -1,13 +1,15 @@
-from module import framework
+from module.pico2d import *
 from module.constants import *
+
+from module import framework
 from module.framework import Camera
 from module.framework import io
-from module.gobject_header import *
-from module.pico2d import *
-from module.sprite import *
-from module.terrain import *
 from streams import game_pause
 from streams.game_containers import *
+from module.gobject_header import *
+
+from module.sprite import *
+from module.terrain import *
 
 __all__ = [
     "name", "GameExecutor", "draw_clean", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
@@ -20,8 +22,8 @@ name = "game_state"
 
 
 def enter():
-    GameExecutor()
-    delay(1)
+    StageIntro()
+    delay(0.5)
 
 
 def exit():
@@ -89,7 +91,21 @@ def resume():
 
 
 class GameExecutor:
+    def update_begin(self):
+        instance_draw_update()
+        global instance_list, instance_draw_list
+        instance_draw_list = sorted(instance_list, key = lambda gobject: -gobject.depth)
+
+    def tassign_more(self):
+        tcontainer.signin("s", oSoldier)
+        tcontainer.signin("S", oSnake)
+        tcontainer.signin("C", oCobra)
+
+
+class StageIntro(GameExecutor):
     def __init__(self):
+        framework.scene_set_size(screen_width * 3)
+        Camera.set_pos(0, 0)
         io.key_add(SDLK_LEFT)
         io.key_add(SDLK_RIGHT)
         io.key_add(SDLK_UP)
@@ -98,17 +114,14 @@ class GameExecutor:
         tcontainer.signin("1", oBrickCastle)
         tcontainer.signin("2", oLush)
         tcontainer.signin("@", oPlayer)
-        tcontainer.signin("s", oSoldier)
-        tcontainer.signin("S", oSnake)
-        tcontainer.signin("C", oCobra)
 
-        Camera.set_pos(0, 0)
         first_scene = TerrainManager(1, 1)
         first_scene.allocate(";;;;;;;;;;;;; \
                             0000 0000 0000 00@0 0000 0000 0000 0000  \
-                            2222 2222 2122 2212 1112 2222 2222 2222  \
+                            1112 2222 2122 2212 1112 2222 2212 2222  \
                             2122 2212 2222 2222 2222 2122 2222 2222  \
-                            2222 2211 2212 2222 2222 2222 2222 2222", 0)
+                            2222 1211 2212 2222 2222 2222 2222 2211  \
+                            2222 2222 2222 2222 2222 2222 2222 2222", 0)
 
         first_scene.generate()
-        instance_draw_update()
+        self.update_begin()

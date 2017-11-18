@@ -1,9 +1,11 @@
+from module.pico2d import *
+from module.functions import *
 from module.constants import *
+
 from module.framework import Camera
 from module.framework import io
-from module.functions import *
+
 from module.gobject_header import *
-from module.pico2d import *
 from module.sprite import *
 
 __all__ = [
@@ -19,7 +21,7 @@ def instance_draw_update():
         print("instance drawing list would be updated")
         # del instance_draw_list
         instance_update = false
-        instance_draw_list = sorted(instance_list, key=lambda gobject: -gobject.depth)
+        instance_draw_list = sorted(instance_list, key = lambda gobject: -gobject.depth)
 
 
 # ==================================================================================================
@@ -35,7 +37,7 @@ player_lives = 3
 #                                    사용자 정의 객체 / 함수
 # ==================================================================================================
 # Object : Functions
-def instance_create(Ty, ndepth = int(0), nx = int(0), ny = int(0)) -> object:
+def instance_create(Ty, ndepth = 0, nx = int(0), ny = int(0)) -> object:
     temp = Ty(ndepth, nx, ny)
     global instance_last
     instance_last = temp
@@ -78,6 +80,7 @@ class oBrickCastle(Solid):
         self.sprite_set("sCastleBrick")
         self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3)
 
+
 # Lush
 class oLush(Solid):
     name = "Brick of Forest"
@@ -91,12 +94,14 @@ class oLush(Solid):
         if not self.tile_up or not self.tile_down:
             self.sprite_set("sLushDirectional")
             if self.tile_up and not self.tile_down:
-               self.image_index = 0
+                self.image_index = 0
             elif self.tile_down:
                 self.image_index = 1
             else:
-              self.image_index = 2
-
+                self.image_index = 2
+        if not self.tile_up:
+            newdeco = instance_create(oLushDecoration, None, self.x + 4, self.y + 20)
+            newdeco.parent = self
 
 
 # Dirt Brick
@@ -139,10 +144,10 @@ class oPlayer(GObject):
                 for enemy in whothere:
                     if enemy.oStatus < oStatusContainer.STUNNED:
                         if enemy.name not in ("ManEater", "Lavaman",):
-                            if self.yVel < -20:
+                            if self.yVel < -50:
                                 self.yVel *= -0.6
                             else:
-                                self.yVel = 30
+                                self.yVel = 60
                             enemy.hp -= 1
                             if enemy.hp <= 0:
                                 enemy.status_change(oStatusContainer.DEAD)
@@ -182,7 +187,7 @@ class oPlayer(GObject):
 
     def event_draw(self):
         super().event_draw()
-        self.hfont.draw(Camera.x + 200, Camera.y + screen_height - 50, 'Time: %1.0f' % get_time())
+        self.hfont.draw(200, screen_height - 50, 'Time: %1.0f' % get_time())
 
 
 # Parent of Enemies
@@ -193,7 +198,7 @@ class oEnemyParent(GObject):
     name = "NPC"
     identify = ID_ENEMY
     # sprite_index = sprite_get("Snake")
-    depth = 100
+    depth = 500
 
     hp, maxhp = 1, 1
     mp, maxmp = 0, 0
@@ -321,7 +326,7 @@ class oSoldier(oEnemyParent):
             return
 
         distance = delta_velocity(10) * args[0]
-        #self.count += delta_velocity() * args[0]
+        # self.count += delta_velocity() * args[0]
         if self.image_xscale == 1:
             if self.place_free(distance + 10, 0) and not self.place_free(distance + 10, -10):
                 self.xVel = 10
@@ -414,45 +419,20 @@ class oCobra(oSnake):
         self.sprite_set("CobraIdle")
 
 
-# Damage caused by Player
-class oPlayerDamage(GObject):
-    name = "DamageP"
-    identify = ID_DMG_PLAYER
-    gravity_default = 0
-    life = fps_target
+# A Decorator of Lush
+class oLushDecoration(oDoodadParent):
+    name = "Lush Decoration"
 
-
-# Damage caused by Enemy
-class oEnemyDamage(GObject):
-    name = "DamageE"
-    identify = ID_DMG_ENEMY
-    gravity_default = 0
-    life = fps_target
-
-
-# Parent of Items
-class oItemParent(GObject):
-    name = "Item"
-    identify = ID_ITEM
-    gravity_default = 0
-
-
-# Parent of Terrain Doodads
-class oDoodadParent(GObject):
-    name = "Doodad"
-    identify = ID_DOODAD
-    gravity_default = 0
-
-
-# Parent of Effect
-class oEffectParent(GObject):
-    name = "Fx Effect"
-    identify = ID_EFFECT
-    image_speed = 0.5
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sLushDoodad")
+        self.image_speed = 0
+        self.image_index = choose(0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2)
 
 
 class oBlood(oEffectParent):
     name = "Blood"
+    depth = 700
 
     def event_step(self, frame_time):
         super().event_step(frame_time)

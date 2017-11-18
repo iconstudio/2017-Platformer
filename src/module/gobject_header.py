@@ -10,7 +10,8 @@ from module.sprite import *
 __all__ = [
     "oStatusContainer",
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
-    "container_player", "GObject", "Solid",
+    "container_player", "GObject", "Solid", "oPlayerDamage", "oEnemyDamage", "oItemParent", "oDoodadParent",
+    "oEffectParent",
     "ID_OTHERS", "ID_SOLID", "ID_DMG_PLAYER", "ID_DMG_ENEMY", "ID_ENEMY", "ID_ITEM", "ID_PARTICLE", "ID_DOODAD",
     "ID_EFFECT"
 ]
@@ -334,7 +335,7 @@ class Solid(GObject):
     identify = ID_SOLID
 
     image_speed = 0
-    depth = 1000
+    depth = 10000
     step_enable = false
     gravity_default = 0
     xFric, yFric = 0, 0
@@ -344,3 +345,45 @@ class Solid(GObject):
 
     def tile_correction(self):
         pass
+
+
+# Damage caused by Player
+class oPlayerDamage(GObject):
+    name = "DamageP"
+    identify = ID_DMG_PLAYER
+    gravity_default = 0
+    life = fps_target
+
+
+# Damage caused by Enemy
+class oEnemyDamage(GObject):
+    name = "DamageE"
+    identify = ID_DMG_ENEMY
+    gravity_default = 0
+    life = fps_target
+
+
+# Parent of Items
+class oItemParent(GObject):
+    name = "Item"
+    identify = ID_ITEM
+    gravity_default = 0
+    depth = 400
+
+
+# Parent of Terrain Doodads
+class oDoodadParent(GObject):
+    name = "Doodad"
+    parent: Solid = None
+    identify = ID_DOODAD
+    gravity_default = 0
+    step_enable = false
+    depth = -100
+
+
+# Parent of Effect
+class oEffectParent(GObject):
+    name = "Fx Effect"
+    identify = ID_EFFECT
+    image_speed = 0.5
+    depth = -400

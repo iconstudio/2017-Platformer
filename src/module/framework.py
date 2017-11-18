@@ -4,7 +4,7 @@ from module.constants import *
 __all__ = [
     "GameState", "change_state", "push_state", "pop_state", "quit", "run",
     "io", "Camera", "game_begin", "game_end", "HWND", "current_time", "game_realtime",
-    "scene_width", "scene_height", "game_set_size"
+    "scene_width", "scene_height", "scene_set_size"
 ]
 
 HWND = None
@@ -30,7 +30,7 @@ def game_end():
     close_canvas()
 
 
-def game_set_size(w, h):
+def scene_set_size(w = scene_width, h = scene_height):
     global scene_width, scene_height
     scene_width = w
     scene_height = h

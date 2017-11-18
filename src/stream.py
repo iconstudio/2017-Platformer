@@ -48,7 +48,8 @@ if __name__ == "__main__":
                  path_theme + "brick_mine_updown_0.png"], "sDirtBrickDirectional", 0, 0)
 
     # Doodads
-
+    sprite_load([path_theme + "lush_top_0.png", path_theme + "lush_top_1.png", path_theme + "lush_top_2.png"],
+                "sLushDoodad", 0, 0)
 
     # Entity
     sprite_load(path_entity + "vampire.png", "Player", 8, 8)

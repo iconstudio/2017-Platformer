@@ -1,7 +1,8 @@
-from module import framework
-from module.constants import *
-from module.functions import *
 from module.pico2d import *
+from module.functions import *
+from module.constants import *
+
+from module import framework
 from streams import main
 
 from module.sprite import *
