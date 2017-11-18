@@ -104,48 +104,49 @@ class TerrainAllocator:
     def generate(self):
         newx = self.x
         newy = self.y + self.h - self.tile_h
-        prevln: str = "0000 0000 0000 0000 0000 0000 0000 0000"
         currln: str = ""
+        j: int = 0
+
         for i in range(0, len(self.data)):
             current = self.data[i]
 
-            # Parsing
-            prevln = currln
-            currln = ""
-            currln.join(current)
-
-            if current == '0':
-                newx += self.tile_w
-                if newx >= self.w:
-                    newx = self.x
-                    newy -= self.tile_h
-                continue
+            # ignore blanks
             if current == ' ' or current == '\n':
                 continue
-            if current == ';':
-                newx = self.x
-                newy -= self.tile_h
-                continue
-            # newx = (i - math.floor(i / self.hsz)) * self.tile_w
-            # newy = math.floor(i / self.hsz) * self.tile_h
-            # noinspection PyUnusedLocal
-            try:
-                whattocreate = tcontainer.mess[current]
-                obj = whattocreate(None, newx, newy)
 
+            if current is not ';' and current is not '0':
                 try:
-                    tempspr = obj.sprite_index
-                    obj.x += tempspr.xoffset
-                    obj.y += tempspr.yoffset
-                except AttributeError:
-                    pass
+                    whattocreate = tcontainer.mess[current]
+                    obj = whattocreate(None, newx, newy)
 
-            except KeyError:
-                pass
+                    val, length = self.hsz, len(currln)
+                    if length > val:
+                        if currln[length - val] == current:
+                            obj.tile_up = true
+
+                    try:
+                        tempspr = obj.sprite_index
+                        obj.x += tempspr.xoffset
+                        obj.y += tempspr.yoffset
+                    except AttributeError:
+                        pass
+
+                except KeyError:
+                    pass
+            else:
+                if current == ';':
+                    newx = self.x
+                    newy -= self.tile_h
+                    continue
+
+            # Parsing
+            currln += current
             newx += self.tile_w
             if newx >= self.w:
                 newx = self.x
                 newy -= self.tile_h
+
+
 
     def allocate(self, data: str, newtype: int = 0):
         self.data = data
