@@ -104,7 +104,7 @@ class GameExecutor:
 
         Camera.set_pos(0, 0)
         first_scene = TerrainManager(1, 1)
-        first_scene.allocate(";;;;;;;;;;;; \
+        first_scene.allocate(";;;;;;;;;;;;; \
                             0000 0000 0000 00@0 0000 0000 0000 0000  \
                             2222 2222 2222 2222 2222 2222 2222 2222  \
                             2222 2222 2222 2222 2222 2222 2222 2222  \

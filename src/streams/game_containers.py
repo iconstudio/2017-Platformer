@@ -87,6 +87,18 @@ class oLush(Solid):
         self.sprite_set("sLush")
         self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 1, 1)
 
+    def tile_correction(self):
+        if not self.tile_up or not self.tile_down:
+            self.sprite_set("sLushDirectional")
+            if self.tile_up and not self.tile_down:
+               self.image_index = 0
+            elif self.tile_down:
+                self.image_index = 1
+            else:
+              self.image_index = 2
+
+
+
 # Dirt Brick
 class oBrickDirt(Solid):
     name = "Brick of Mine"
@@ -170,7 +182,7 @@ class oPlayer(GObject):
 
     def event_draw(self):
         super().event_draw()
-        self.hfont.draw(self.x - 40 - Camera.x, self.y + 50 - Camera.y, 'Time: %1.0f' % get_time())
+        self.hfont.draw(Camera.x + 200, Camera.y + screen_height - 50, 'Time: %1.0f' % get_time())
 
 
 # Parent of Enemies

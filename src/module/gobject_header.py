@@ -339,5 +339,8 @@ class Solid(GObject):
     gravity_default = 0
     xFric, yFric = 0, 0
 
-    def tile_correction(self, up, down):
+    tile_up: bool = false
+    tile_down: bool = false
+
+    def tile_correction(self):
         pass

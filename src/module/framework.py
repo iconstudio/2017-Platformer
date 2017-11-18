@@ -156,19 +156,21 @@ class oCamera:
     def limit(self):
         global screen_width, screen_height, scene_width, scene_height
         self.x = clamp(0, self.x, scene_width - screen_width)
-        self.y = clamp(0, self.y, scene_height - screen_height)
+        self.y = clamp(20, self.y, scene_height - screen_height)
 
     def set_pos(self, x: float = None, y: float = None):
         if x is not None:
             self.x = x
         if y is not None:
             self.y = y
+        self.limit()
 
     def add_pos(self, x: float = None, y: float = None):
         if x is not None:
             self.x += x
         if y is not None:
             self.y += y
+        self.limit()
 
 
 Camera = oCamera()

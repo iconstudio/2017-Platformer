@@ -1,4 +1,7 @@
+from module import framework
+
 from module.constants import *
+from module.gobject_header import *
 import pytmx
 
 __all__ = [
@@ -56,6 +59,15 @@ class TerrainManager:
         for alloc in self.fits:
             alloc.generate()
 
+        global instance_list_spec
+        clist = instance_list_spec["Solid"]
+        for inst in clist:
+            if inst.y >= framework.scene_height - 20:
+                inst.tile_up = true
+            if inst.y <= 20:
+                inst.tile_down = true
+            inst.tile_correction()
+
     def __del__(self):
         try:
             for alloc in self.fits:
@@ -92,8 +104,16 @@ class TerrainAllocator:
     def generate(self):
         newx = self.x
         newy = self.y + self.h - self.tile_h
+        prevln: str = "0000 0000 0000 0000 0000 0000 0000 0000"
+        currln: str = ""
         for i in range(0, len(self.data)):
             current = self.data[i]
+
+            # Parsing
+            prevln = currln
+            currln = ""
+            currln.join(current)
+
             if current == '0':
                 newx += self.tile_w
                 if newx >= self.w:
