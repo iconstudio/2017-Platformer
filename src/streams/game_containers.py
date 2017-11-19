@@ -100,7 +100,7 @@ class oLush(Solid):
             else:
                 self.image_index = 2
         if not self.tile_up:
-            newdeco = instance_create(oLushDecoration, None, self.x + 4, self.y + 20)
+            newdeco = instance_create(oLushDecoration, None, self.x + 2, self.y + 20)
             newdeco.parent = self
 
 
