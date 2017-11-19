@@ -430,6 +430,18 @@ class oLushDecoration(oDoodadParent):
         self.image_index = choose(0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2)
 
 
+# A tile of mil at intro
+class oMillHousechip(oDoodadParent):
+    name = "Lush Decoration"
+    depth = 900
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sLushDoodad")
+        self.image_speed = 0
+        self.image_index = choose(0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2)
+
+
 class oBlood(oEffectParent):
     name = "Blood"
     depth = 700
