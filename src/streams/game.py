@@ -114,14 +114,41 @@ class StageIntro(GameExecutor):
         tcontainer.signin("1", oBrickCastle)
         tcontainer.signin("2", oLush)
         tcontainer.signin("@", oPlayer)
+        tcontainer.signin("w", oMillHousechip)
+        tcontainer.signin("l", oMillHousechipL)
+        tcontainer.signin("r", oMillHousechipR)
+        tcontainer.signin("m", oMillHousechipM)
+        tcontainer.signin("S", oMillHousestone)
+        tcontainer.signin("e", oSoldier)
+        tcontainer.signin("C", oCobra)
 
-        first_scene = TerrainManager(1, 1)
-        first_scene.allocate(";;;;;;;;;;;;; \
-                            0000 0000 0000 00@0 0000 0000 0000 0000  \
+        first_scene = TerrainManager(0)
+        first_scene.allocate(";;;;;;;; \
+                            0000 0000 0000 00mm mmmm mm00 0000 0000  \
+                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
+                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
+                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
+                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
+                            00@0 0000 0000 lwSS SSSS SSwr 0000 0000  \
                             1112 2222 2122 2212 1112 2222 2212 2222  \
                             2122 2212 2222 2222 2222 2122 2222 2222  \
                             2222 1211 2212 2222 2222 2222 2222 2211  \
                             0000 2022 0020 0000 0000 0000 0000 0022", 0)
 
+        scene2 = TerrainManager(0)
+        scene2.allocate(";;;;;;;; \
+                            0000 0000 0000 00mm mmmm mm00 0000 0000  \
+                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
+                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
+                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
+                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
+                            00@0 0000 0000 lwSS SSSS SSwr 0000 0000  \
+                            1112 2222 2122 2212 1112 2222 2212 2222  \
+                            2122 2212 2222 2222 2222 2122 2222 2222  \
+                            2222 1211 2212 2222 2222 2222 2222 2211  \
+                            0000 2022 0020 0000 0000 0000 0000 0022", 0, screen_width)
+
+
         first_scene.generate()
+        scene2.generate()
         self.update_begin()

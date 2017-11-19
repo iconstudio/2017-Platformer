@@ -380,6 +380,9 @@ class oDoodadParent(GObject):
     step_enable = false
     depth = -100
 
+    def tile_correction(self):
+        pass
+
 
 # Parent of Effect
 class oEffectParent(GObject):

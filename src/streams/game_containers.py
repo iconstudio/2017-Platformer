@@ -10,7 +10,9 @@ from module.sprite import *
 
 __all__ = [
     "instance_create", "instance_draw_update",
-    "oBrickCastle", "oLush", "oBrickDirt",
+    "oBrickCastle", "oLush", "oBrickDirt", "oStonewall",
+    "oLushDecoration", "oMillHousechip", "oMillHousestone", "oMillHousechipL", "oMillHousechipR",
+    "oMillHousechipM",
     "oPlayer", "oSoldier", "oSnake", "oCobra",
 ]
 
@@ -37,7 +39,7 @@ player_lives = 3
 #                                    사용자 정의 객체 / 함수
 # ==================================================================================================
 # Object : Functions
-def instance_create(Ty, ndepth = 0, nx = int(0), ny = int(0)) -> object:
+def instance_create(Ty, ndepth = 0 or None, nx = int(0), ny = int(0)) -> object:
     temp = Ty(ndepth, nx, ny)
     global instance_last
     instance_last = temp
@@ -112,6 +114,16 @@ class oBrickDirt(Solid):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sDirt")
         self.image_index = choose(0, 0, 0, 0, 0, 0, 1, 1)
+
+
+# Stone Wall
+class oStonewall(Solid):
+    name = "Brick of Stone"
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sStonewall")
+        self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 0, 1, 2)
 
 
 # Player
@@ -432,14 +444,45 @@ class oLushDecoration(oDoodadParent):
 
 # A tile of mil at intro
 class oMillHousechip(oDoodadParent):
-    name = "Lush Decoration"
+    name = "Wood"
     depth = 900
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
-        self.sprite_set("sLushDoodad")
+        self.sprite_set("sWood")
         self.image_speed = 0
-        self.image_index = choose(0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2)
+
+
+# A tile of mil at intro
+class oMillHousestone(oDoodadParent):
+    name = "Stone"
+    depth = 900
+    image_index = 0
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sStonewall")
+
+
+# A tile of mil at intro
+class oMillHousechipL(oMillHousechip):
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.image_index = 1
+
+
+# A tile of mil at intro
+class oMillHousechipR(oMillHousechip):
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.image_index = 2
+
+
+# A tile of mil at intro
+class oMillHousechipM(oMillHousechip):
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.image_index = 3
 
 
 class oBlood(oEffectParent):

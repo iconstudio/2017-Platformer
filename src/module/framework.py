@@ -163,7 +163,7 @@ class oCamera:
             self.x = x
         if y is not None:
             self.y = y
-        self.limit()
+        #self.limit()
 
     def add_pos(self, x: float = None, y: float = None):
         if x is not None:

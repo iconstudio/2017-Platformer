@@ -40,28 +40,37 @@ tcontainer = TerrainContainer()
 
 # Object : Terrain Manager
 class TerrainManager:
-    fits = []
-    type_theme = 0
 
     def __init__(self, theme: int = 0, numberw: int = 1, numberh: int = 1):
+        self.fits = []
         self.type_theme = theme
-        for i in range(0, numberw, 1):
-            for j in range(0, numberh, 1):
+        ax = 0
+        for j in range(numberh):
+            for i in range(numberw):
                 newone = TerrainAllocator(self.type_theme, i * screen_width, j * screen_height)
                 self.fits.append(newone)
+                ax += screen_width
+            ax = 0
 
-    def allocate(self, data: str, position: int = 0):
+    def allocate(self, data: str, position: int = 0, nx = None, ny = None):
         try:
-            self.fits[position].allocate(data, self.type_theme)
+            print("Allocating a chunk: %d" % position)
+            obja = self.fits[position]
+            obja.allocate(data, self.type_theme)
+            if nx is not None:
+                obja.x = nx
+            if ny is not None:
+                obja.y = ny
+
         except IndexError:
-            pass
+            print("Cannot add new chunk!")
 
     def generate(self):
         for alloc in self.fits:
             alloc.generate()
 
         global instance_list_spec
-        clist = instance_list_spec["Solid"]
+        clist = instance_list_spec[ID_SOLID] + instance_list_spec[ID_DOODAD]
         for inst in clist:
             if inst.y >= framework.scene_height - 20:
                 inst.tile_up = true
@@ -103,14 +112,14 @@ class TerrainAllocator:
         self.type_theme = nt
 
     def generate(self):
+        print("Generating a chunk.")
         newx = self.x
         newy = self.y + self.h - self.tile_h
-        currln: str = ""
+        currln = ""
         currlist: list = []
         prevlist: list = []
-        j: int = 0
 
-        for i in range(0, len(self.data)):
+        for i in range(len(self.data)):
             current = self.data[i]
 
             # ignore blanks
@@ -123,7 +132,7 @@ class TerrainAllocator:
                     obj = whattocreate(None, newx, newy)
 
                     val, length = self.hsz, len(currln)
-                    if length < val or (length >= val and currln[length - val] == current):
+                    if i < val or (length >= val and currln[length - val] == current):
                         obj.tile_up = true
                     currlist.append(obj)  # save objects in current line
 
@@ -154,14 +163,14 @@ class TerrainAllocator:
                 # """   * next line         <- currlist
                 val, length = self.hsz, len(currlist)
                 if len(prevlist) > 0 and length > 0:
-                    i = 0
+                    k = 0
                     for inst in range(length):
                         try:
-                            if prevlist[i].name is currlist[i].name:
-                                prevlist[i].tile_down = true
+                            if prevlist[k].name is currlist[k].name:
+                                prevlist[k].tile_down = true
                         except IndexError:
                             break
-                        i += 1
+                        k += 1
 
                 del prevlist
                 prevlist = currlist.copy()  # push current line back to previous line

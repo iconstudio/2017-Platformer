@@ -38,6 +38,10 @@ if __name__ == "__main__":
     sprite_load(path_background + "bgTemple.png", "bgTemple", 0, 0)
 
     # Theme
+    sprite_load([path_theme + "wood_0.png", path_theme + "wood_1.png", path_theme + "wood_2.png",
+                 path_theme + "wood_3.png"], "sWood", 0, 0)
+    sprite_load([path_theme + "stonewall_0.png", path_theme + "stonewall_1.png", path_theme + "stonewall_2.png"],
+                "sStonewall", 0, 0)
     sprite_load([path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png",
                  path_theme + "brick_castle_2.png", path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
     sprite_load([path_theme + "lush_0.png", path_theme + "lush_1.png"], "sLush", 0, 0)
