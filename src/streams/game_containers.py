@@ -275,12 +275,6 @@ class oEnemyParent(GObject):
         
         (self.table[self.oStatus])[0](frame_time)
 
-    def event_draw(self):
-        super().event_draw()
-        if self.oStatus >= oStatusContainer.STUNNED:
-            dat = sprite_get("Stun")
-            draw_sprite(dat, self.image_index, self.x, self.y, self.image_xscale)
-
 
 class oSoldier(oEnemyParent):
     hp, maxhp = 4, 4
@@ -309,7 +303,7 @@ class oSoldier(oEnemyParent):
         self.image_speed = 0.7
     
     def handle_be_stunned(self):
-        self.sprite_set("SoldierDead")
+        self.sprite_set("SoldierStunned")
     
     def handle_be_dead(self):
         self.sprite_set("SoldierDead")

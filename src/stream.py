@@ -72,13 +72,19 @@ if __name__ == "__main__":
                  path_entity + "SolidierWalk_2.png", path_entity + "SolidierWalk_3.png",
                  path_entity + "SolidierWalk_4.png", path_entity + "SolidierWalk_5.png",
                  path_entity + "SolidierWalk_2.png", path_entity + "SolidierWalk_1.png"], "SoldierRun", 8, 8)
+
+    sprite_load([path_entity + "SoldierStunned_0.png", path_entity + "SoldierStunned_1.png",
+                 path_entity + "SoldierStunned_2.png", path_entity + "SoldierStunned_3.png",
+                 path_entity + "SoldierStunned_4.png"], "SoldierStunned", 8, 8)
+    sprite_load(path_entity + "SoldierDead.png", "SoldierDead", 8, 8)
+    
+    
     sprite_load(path_entity + "ManBeard_0.png", "ManBeardIdle", 8, 8)
     sprite_load([path_entity + "ManBeardWalk_0.png", path_entity + "ManBeardWalk_1.png",
                  path_entity + "ManBeardWalk_2.png", path_entity + "ManBeardWalk_3.png",
                  path_entity + "ManBeardWalk_4.png", path_entity + "ManBeardWalk_5.png",
                  path_entity + "ManBeardWalk_2.png", path_entity + "ManBeardWalk_1.png"], "ManBeardRun", 8, 8)
-    
-    sprite_load(path_entity + "SoldierDead.png", "SoldierDead", 8, 8)
+
     sprite_load(path_entity + "Snake_0.png", "SnakeIdle", 8, 8)
     sprite_load([path_entity + "SnakeWalk_0.png", path_entity + "SnakeWalk_1.png",
                  path_entity + "SnakeWalk_2.png", path_entity + "SnakeWalk_3.png",
