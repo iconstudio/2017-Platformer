@@ -15,7 +15,7 @@ scene_height = screen_height
 
 def game_begin():
     global HWND
-    HWND = open_canvas(screen_width, screen_height)
+    HWND = open_canvas(screen_width, screen_height, full = true)
     SDL_SetWindowTitle(HWND, "Vampire Exodus".encode("UTF-8"))
     # icon = load_texture(path_image + "icon.png")
     # SDL_SetWindowIcon(hwnd, icon)
@@ -156,7 +156,7 @@ class oCamera:
     def limit(self):
         global screen_width, screen_height, scene_width, scene_height
         self.x = clamp(0, self.x, scene_width - screen_width)
-        self.y = clamp(20, self.y, scene_height - screen_height)
+        self.y = clamp(40, self.y, scene_height - screen_height)
     
     def set_pos(self, x: float = None, y: float = None):
         if x is not None:
