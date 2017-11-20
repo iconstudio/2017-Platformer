@@ -49,7 +49,7 @@ def draw_clean():
             dx -= screen_width
         elif dx < 0:
             dx += screen_width
-
+    
     instance_draw_update()
     global instance_draw_list
     if len(instance_draw_list) > 0:
@@ -95,7 +95,7 @@ class GameExecutor:
         instance_draw_update()
         global instance_list, instance_draw_list
         instance_draw_list = sorted(instance_list, key = lambda gobject: -gobject.depth)
-
+    
     def tassign_more(self):
         tcontainer.signin("s", oSoldier)
         tcontainer.signin("S", oSnake)
@@ -109,7 +109,7 @@ class StageIntro(GameExecutor):
         io.key_add(SDLK_LEFT)
         io.key_add(SDLK_RIGHT)
         io.key_add(SDLK_UP)
-
+        
         # Terrains
         tcontainer.signin("1", oBrickCastle)
         tcontainer.signin("2", oLush)
@@ -121,34 +121,19 @@ class StageIntro(GameExecutor):
         tcontainer.signin("S", oMillHousestone)
         tcontainer.signin("e", oSoldier)
         tcontainer.signin("C", oCobra)
-
+        
         first_scene = TerrainManager(0)
-        first_scene.allocate(";;;;;;;; \
-                            0000 0000 0000 00mm mmmm mm00 0000 0000  \
-                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
-                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
-                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
-                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
-                            00@0 0000 0000 lwSS SSSS SSwr 0000 0000  \
-                            1112 2222 2122 2212 1112 2222 2212 2222  \
-                            2122 2212 2222 2222 2222 2122 2222 2222  \
-                            2222 1211 2212 2222 2222 2222 2222 2211  \
-                            0000 2022 0020 0000 0000 0000 0000 0022", 0)
-
-        scene2 = TerrainManager(0)
-        scene2.allocate(";;;;;;;; \
-                            0000 0000 0000 00mm mmmm mm00 0000 0000  \
-                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
-                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
-                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
-                            0000 0000 0000 lwSS SSSS SSwr 0000 0000  \
-                            00@0 0000 0000 lwSS SSSS SSwr 0000 0000  \
-                            1112 2222 2122 2212 1112 2222 2212 2222  \
-                            2122 2212 2222 2222 2222 2122 2222 2222  \
-                            2222 1211 2212 2222 2222 2222 2222 2211  \
-                            0000 2022 0020 0000 0000 0000 0000 0022", 0, screen_width)
-
-
+        first_scene.allocate(";;;;;;;;"
+                             "0000 0000 00mm mmmm mm00 0000 0000 0000 0000 0000 00000 0000 0000 0000\n"
+                             "0000 0000 lwSS SSSS SSwr 0000 0000\n"
+                             "0000 0000 lwSS SSSS SSwr 0000 0000\n"
+                             "0000 0000 lwSS SSSS SSwr 0000 0000\n"
+                             "0000 0000 lwSS SSSS SSwr 0000 0000\n"
+                             "00@0 0000 lwSS SSSS SSwr 0000 0000 0000 0000 0000 0000 0000 0000 0000\n"
+                             "1112 2222 2122 2212 1112 2222 2212 2222 2222 2222 2222 2222 2222 2222 2222\n"
+                             "2122 2212 2222 2222 2222 2122 2222 2222\n"
+                             "2222 1211 2212 2222 2222 2222 2222 2211\n"
+                             "0000 2022 0020 0000 0000 0000 0000 0022")
+        
         first_scene.generate()
-        scene2.generate()
         self.update_begin()

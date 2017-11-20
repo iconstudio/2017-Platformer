@@ -30,7 +30,7 @@ def game_end():
     close_canvas()
 
 
-def scene_set_size(w = scene_width, h = scene_height):
+def scene_set_size(w=scene_width, h=scene_height):
     global scene_width, scene_height
     scene_width = w
     scene_height = h
@@ -43,16 +43,16 @@ class oIOProc:
     key_map = {}
     # list of checking obj.
     checker_list = {}
-
+    
     class iochecker:
         code = None
         life = 2
         owner = None
-
+        
         def __init__(self, nowner, key: SDL_Keycode):
             self.owner = nowner
             self.code = key
-
+        
         def __del__(self):
             self.owner.timer = None
             try:
@@ -62,72 +62,72 @@ class oIOProc:
                 pass
             except AttributeError:
                 pass
-
+        
         def event_step(self):
             if self.life == 0:
                 self.owner.check_pressed = false
                 del self
             else:
                 self.life -= 1
-
+    
     class ionode:
         code = None
         timer = None
         check: bool = false
         check_pressed: bool = false
-
+        
         def __init__(self, key: SDL_Keycode):
             self.code = key
-
+        
         def enter(self):
             self.check = true
             self.check_pressed = true
-
+            
             if self.timer is None:
                 global io
                 self.timer = io.iochecker(self, self.code)
                 io.checker_list[self.code] = self.timer
-
+                
                 global keylogger_list
                 keylogger_list.append(self.timer)
-
+        
         def close(self):
             self.check = false
             self.check_pressed = false
-
+            
             if self.timer is not None:
                 del self.timer
                 self.timer = None
-
+    
     def key_add(self, key: SDL_Keycode):
         newnode = self.ionode(key)
         self.key_map[key] = newnode
         self.key_list.append(key)
         return newnode
-
+    
     def key_check(self, key: SDL_Keycode) -> bool:
         try:
             return (self.key_map[key]).check
         except KeyError:
             return false
-
+    
     def key_check_pressed(self, key: SDL_Keycode) -> bool:
         try:
             return (self.key_map[key]).check_pressed
         except KeyError:
             return false
-
+    
     def proceed(self, kevent):
         try:
             node = self.key_map[kevent.key]
-
+            
             if kevent.type == SDL_KEYDOWN:
                 node.enter()
             elif kevent.type == SDL_KEYUP:
                 node.close()
         except KeyError:
             return
-
+    
     def clear(self):
         if len(self.key_list) > 0:
             for codes in self.key_list:
@@ -152,19 +152,19 @@ class oCamera:
     y: float = 0
     lock: bool = false
     width, height = screen_width, screen_height
-
+    
     def limit(self):
         global screen_width, screen_height, scene_width, scene_height
         self.x = clamp(0, self.x, scene_width - screen_width)
         self.y = clamp(20, self.y, scene_height - screen_height)
-
+    
     def set_pos(self, x: float = None, y: float = None):
         if x is not None:
             self.x = x
         if y is not None:
             self.y = y
-        #self.limit()
-
+        self.limit()
+    
     def add_pos(self, x: float = None, y: float = None):
         if x is not None:
             self.x += x
@@ -196,7 +196,7 @@ paused = false
 
 def get_frame_time():
     global current_time, game_realtime, paused
-
+    
     frame_time = get_time() - current_time
     current_time += frame_time
     if not paused:
@@ -214,7 +214,7 @@ def change_state(state):
 
 def push_state(state):
     # close_canvas()
-
+    
     global stack
     if len(stack) > 0:
         stack[-1].pause()
@@ -231,7 +231,7 @@ def pop_state():
         stack[-1].exit()
         # remove the current state
         stack.pop()
-
+    
     # execute resume function of the previous state
     if len(stack) > 0:
         stack[-1].resume()
@@ -256,7 +256,7 @@ def unpause():
 def run(start_state):
     global running, stack, io, current_time
     running = True
-
+    
     stack = [start_state]
     start_state.enter()
     current_time = get_time()
