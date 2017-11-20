@@ -87,16 +87,18 @@ class TerrainAllocator:
         # The size of a map
         self.w, self.h = nw, nh
         # The number of grid
-        self.hsz, self.vsz = 9999, int(nh / self.tile_h)
+        self.hsz, self.vsz = int(nw / self.tile_w), int(nh / self.tile_h)
         self.type_theme = nt
     
     def generate(self):
         print("Generating a chunk.")
         newx = self.x
         newy = self.y + self.h - self.tile_h
+        neww = self.hsz
         currln = ""
         currlist: list = []
         prevlist: list = []
+        j = 0
         
         for i in range(len(self.data)):
             current = self.data[i]
@@ -105,7 +107,7 @@ class TerrainAllocator:
             if current == ' ':
                 continue
             
-            if current is not ';' and current is not '0':
+            if current is not ';' and current is not '0' and current is not '\n':
                 try:
                     whattocreate = tcontainer.mess[current]
                     obj = whattocreate(None, newx, newy)
@@ -113,10 +115,14 @@ class TerrainAllocator:
                         obj.tile_up = true
                     if newy <= 20:
                         obj.tile_down = true
-                    
-                    #val, length = self.hsz, len(currln)
-                    #if length >= val <= 0: and currln[length - val] == current:
-                    #    obj.tile_up = true
+
+                    length = len(currln)
+                    if length > 0:
+                        try:
+                            if currln[length - neww] == current:
+                                obj.tile_up = true
+                        except IndexError:
+                            pass
                     currlist.append(obj)  # save objects in current line
                     
                     try:
@@ -131,15 +137,18 @@ class TerrainAllocator:
                 # Skip this line
                 if current == ';':
                     currlist.clear()
+                    j = 0
                     newx = self.x
                     newy -= self.tile_h
                     continue
             
+            j += 1
             currln += current
             newx += self.tile_w
             # Wrap
             if current == '\n':
-                self.hsz = len(currlist)
+                neww = j
+                j = 0
                 newx = self.x
                 newy -= self.tile_h
                 # Parsing
