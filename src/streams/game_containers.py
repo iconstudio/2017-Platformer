@@ -9,22 +9,12 @@ from module.gobject_header import *
 from module.sprite import *
 
 __all__ = [
-    "instance_create", "instance_draw_update",
+    "instance_create", "player_lives",
     "oBrickCastle", "oLush", "oBrickDirt", "oStonewall",
     "oLushDecoration", "oMillHousechip", "oMillHousestone", "oMillHousechipL", "oMillHousechipR",
-    "oMillHousechipM",
+    "oMillHousechipM", "oTorch",
     "oPlayer", "oSoldier", "oSnake", "oCobra",
 ]
-
-
-def instance_draw_update():
-    global instance_list, instance_draw_list, instance_update
-    if instance_update or len(instance_draw_list) <= 0:
-        print("instance drawing list would be updated")
-        # del instance_draw_list
-        instance_update = false
-        instance_draw_list = sorted(instance_list, key = lambda gobject: -gobject.depth)
-
 
 # ==================================================================================================
 #                                               게임
@@ -52,7 +42,7 @@ def instance_place(Ty, fx, fy) -> (list, int):
     except AttributeError:
         print("Cannot find variable 'identify' in %s" % (str(Ty)))
         sys.exit(-1)
-
+    
     __returns = []
     global instance_list, instance_list_spec
     if ibj == "":
@@ -67,7 +57,7 @@ def instance_place(Ty, fx, fy) -> (list, int):
             otho_top = int(inst.y - tempspr.yoffset)
             if point_in_rectangle(fx, fy, otho_left, otho_top, otho_left + tempspr.width, otho_top + tempspr.height):
                 __returns.append(inst)
-
+    
     return __returns, len(__returns)
 
 
@@ -76,7 +66,7 @@ def instance_place(Ty, fx, fy) -> (list, int):
 # Castle Brick
 class oBrickCastle(Solid):
     name = "Brick of Mine"
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sCastleBrick")
@@ -86,12 +76,12 @@ class oBrickCastle(Solid):
 # Lush
 class oLush(Solid):
     name = "Brick of Forest"
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sLush")
         self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 1, 1)
-
+    
     def tile_correction(self):
         if not self.tile_up or not self.tile_down:
             self.sprite_set("sLushDirectional")
@@ -109,7 +99,7 @@ class oLush(Solid):
 # Dirt Brick
 class oBrickDirt(Solid):
     name = "Brick of Mine"
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sDirt")
@@ -119,7 +109,7 @@ class oBrickDirt(Solid):
 # Stone Wall
 class oStonewall(Solid):
     name = "Brick of Stone"
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sStonewall")
@@ -134,18 +124,18 @@ class oPlayer(GObject):
     # anitem what to hold on
     held: object = None
     invincible: int = 0
-
+    
     # real-scale: 54 km per hour
     xVelMin, xVelMax = -54, 54
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_index = sprite_get("Player")
-
+        
         global container_player
         container_player = self
         self.hfont = load_font(path_font + "윤고딕_310.ttf", 20)
-
+    
     def event_step(self, frame_time):
         super().event_step(frame_time)
         if self.oStatus < oStatusContainer.CHANNELING:  # Player can control its character.
@@ -166,11 +156,11 @@ class oPlayer(GObject):
                             else:
                                 enemy.status_change(oStatusContainer.STUNNED)
                                 enemy.stunned = delta_velocity(5)
-
+            
             mx = 0
             if io.key_check(SDLK_LEFT): mx -= 1
             if io.key_check(SDLK_RIGHT): mx += 1
-
+            
             if mx != 0:
                 self.xFric = 0
                 if not self.onAir:
@@ -180,11 +170,11 @@ class oPlayer(GObject):
                 self.image_xscale = mx
             else:
                 self.xFric = 0.6
-
+            
             if io.key_check_pressed(SDLK_UP):
                 if not self.onAir:
                     self.yVel = 90
-
+            
             if not self.onAir:
                 if self.xVel != 0:
                     self.image_speed = 0.8
@@ -196,7 +186,7 @@ class oPlayer(GObject):
         else:  # It would be eventual, and uncontrollable
             if self.oStatus == oStatusContainer.DEAD:
                 self.sprite_set("PlayerDead")
-
+    
     def event_draw(self):
         super().event_draw()
         self.hfont.draw(200, screen_height - 50, 'Time: %1.0f' % get_time())
@@ -211,50 +201,50 @@ class oEnemyParent(GObject):
     identify = ID_ENEMY
     # sprite_index = sprite_get("Snake")
     depth = 500
-
+    
     hp, maxhp = 1, 1
     mp, maxmp = 0, 0
     oStatus = oStatusContainer.IDLE
     image_speed = 0
     collide_with_player: bool = false
     attack_delay = 0
-
+    
     def handle_none(self, *args):
         pass
-
+    
     def handle_be_idle(self, *args):
         pass
-
+    
     def handle_be_patrol(self, *args):
         pass
-
+    
     def handle_be_walk(self, *args):
         pass
-
+    
     def handle_be_track(self, *args):
         pass
-
+    
     def handle_be_stunned(self, *args):
         pass
-
+    
     def handle_be_dead(self, *args):
         pass
-
+    
     def handle_idle(self, *args):
         pass
-
+    
     def handle_patrol(self, *args):
         pass
-
+    
     def handle_walk(self, *args):
         pass
-
+    
     def handle_track(self, *args):
         pass
-
+    
     def handle_dead(self, *args):
         pass
-
+    
     def handle_stunned(self, frame_time):
         if self.stunned <= 0:
             if self.hp > 0:
@@ -263,7 +253,7 @@ class oEnemyParent(GObject):
                 self.status_change(oStatusContainer.DEAD)
         if not self.onAir:
             self.stunned -= delta_velocity() * frame_time
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.table = {
@@ -274,16 +264,22 @@ class oEnemyParent(GObject):
             oStatusContainer.STUNNED: (self.handle_stunned, self.handle_be_stunned),
             oStatusContainer.DEAD: (self.handle_dead, self.handle_be_dead)
         }
-
+    
     def status_change(self, what):
         if self.oStatus != what:
             (self.table[what])[1]()
         self.oStatus = what
-
+    
     def event_step(self, frame_time):
         super().event_step(frame_time)
-
+        
         (self.table[self.oStatus])[0](frame_time)
+
+    def event_draw(self):
+        super().event_draw()
+        if self.oStatus >= oStatusContainer.STUNNED:
+            dat = sprite_get("Stun")
+            draw_sprite(dat, self.image_index, self.x, self.y, self.image_xscale)
 
 
 class oSoldier(oEnemyParent):
@@ -291,33 +287,33 @@ class oSoldier(oEnemyParent):
     name = "Soldier"
     xVelMin, xVelMax = -45, 45
     count = 0
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("SoldierIdle")
         self.runspr = sprite_get("SoldierRun")
         self.image_speed = 0
         self.image_xscale = choose(-1, 1)
-
+    
     def phy_collide(self, how: float or int):
         super().phy_collide(how)
         if self.oStatus < oStatusContainer.STUNNED and abs(how) > 1:
             self.xVel *= -1
             self.image_xscale *= -1
-
+    
     def handle_be_idle(self):
         self.sprite_set("SoldierIdle")
-
+    
     def handle_be_walk(self, *args):
         self.sprite_index = self.runspr
         self.image_speed = 0.7
-
+    
     def handle_be_stunned(self):
         self.sprite_set("SoldierDead")
-
+    
     def handle_be_dead(self):
         self.sprite_set("SoldierDead")
-
+    
     def handle_idle(self, *args):
         """
             This method does not mean literally stopping when idle.
@@ -329,14 +325,14 @@ class oSoldier(oEnemyParent):
             self.count = 0
             if irandom(4) == 0:
                 self.image_xscale *= -1
-
+    
     # moves slowly
     def handle_walk(self, *args):
         checkl, checkr = self.place_free(-10, -10), self.place_free(10, -10)
         if checkl and checkr:
             self.status_change(oStatusContainer.IDLE)
             return
-
+        
         distance = delta_velocity(10) * args[0]
         # self.count += delta_velocity() * args[0]
         if self.image_xscale == 1:
@@ -351,14 +347,14 @@ class oSoldier(oEnemyParent):
             else:
                 self.image_xscale = 1
                 self.xVel = 10
-
+        
         if irandom(99) == 0:
             self.xVel = 0
             self.status_change(oStatusContainer.IDLE)
-
+    
     def handle_dead(self, *args):
         pass
-
+    
     def handle_stunned(self, frame_time):
         super().handle_stunned(frame_time)
 
@@ -367,32 +363,32 @@ class oSnake(oEnemyParent):
     hp, maxhp = 1, 1
     name = "Snake"
     count = 0
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("SnakeIdle")
         self.runspr = sprite_get("SnakeRun")
         self.image_speed = 0
-
+    
     def handle_be_idle(self):
         self.sprite_set("SnakeIdle")
-
+    
     def handle_be_walk(self, *args):
         self.sprite_index = self.runspr
         self.image_speed = 0.65
-
+    
     def handle_idle(self, *args):
         self.count += delta_velocity()
         if self.count >= delta_velocity(irandom_range(8, 12)) and irandom(99) == 0:
             self.status_change(oStatusContainer.WALK)
             self.count = 0
-
+    
     def handle_walk(self, *args):
         checkl, checkr = self.place_free(-10, -10), self.place_free(10, -10)
         if checkl and checkr:
             self.status_change(oStatusContainer.IDLE)
             return
-
+        
         distance = delta_velocity(15) * args[0]
         self.count += delta_velocity() * args[0]
         if self.image_xscale == 1:
@@ -407,26 +403,26 @@ class oSnake(oEnemyParent):
             else:
                 self.image_xscale = 1
                 self.xVel = 15
-
+        
         if self.count >= delta_velocity(20):
             if irandom(99) == 0:
                 self.xVel = 0
                 self.status_change(oStatusContainer.IDLE)
                 self.count = 0
-
-    def handle_dead(self, *args):
+    
+    def handle_be_dead(self, *args):
         self.destroy()
 
 
 class oCobra(oSnake):
     name = "Cobra"
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("CobraIdle")
         self.runspr = sprite_get("CobraRun")
         self.image_speed = 0
-
+    
     def handle_be_idle(self):
         self.sprite_set("CobraIdle")
 
@@ -434,7 +430,7 @@ class oCobra(oSnake):
 # A Decorator of Lush
 class oLushDecoration(oDoodadParent):
     name = "Lush Decoration"
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sLushDoodad")
@@ -442,11 +438,22 @@ class oLushDecoration(oDoodadParent):
         self.image_index = choose(0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2)
 
 
+# Tiki Torch
+class oTorch(oDoodadParent):
+    name = "Torch"
+    image_speed = 0.6
+    step_enable = true
+    
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sTorch")
+
+
 # A tile of mil at intro
 class oMillHousechip(oDoodadParent):
     name = "Wood"
     depth = 900
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sWood")
@@ -458,7 +465,7 @@ class oMillHousestone(oDoodadParent):
     name = "Stone"
     depth = 900
     image_index = 0
-
+    
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sStonewall")
@@ -488,6 +495,6 @@ class oMillHousechipM(oMillHousechip):
 class oBlood(oEffectParent):
     name = "Blood"
     depth = 700
-
+    
     def event_step(self, frame_time):
         super().event_step(frame_time)

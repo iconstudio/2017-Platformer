@@ -119,10 +119,10 @@ class GObject(object):
         return self.name
     
     def __del__(self):
-        if self.step_enable:
-            self.step_enable = false
-            self.destroy()
-    
+        
+        #self.destroy()
+        pass
+
     def sprite_set(self, spr: Sprite or str):
         if type(spr) == str:
             self.sprite_index = sprite_get(spr)
@@ -134,7 +134,8 @@ class GObject(object):
         self.step_enable = false
         global instance_list, instance_list_spec, instance_update, instance_draw_list
         instance_update = true
-        
+
+        self.visible = false
         instance_list.remove(self)
         (instance_list_spec[self.identify]).remove(self)
         instance_draw_list.remove(self)
@@ -280,9 +281,6 @@ class GObject(object):
                             self.image_alpha)
     
     def event_step(self, frame_time):  # The basic mechanisms of objects.
-        if not self.step_enable:
-            return
-        
         try:
             count = self.sprite_index.number
         except AttributeError:
@@ -292,6 +290,9 @@ class GObject(object):
                 self.image_index += self.image_speed * count * frame_time * 2.5
                 if self.image_index >= count:
                     self.image_index -= count
+        
+        if not self.step_enable:
+            return
         
         if self.xVel != 0:
             xdist = delta_velocity(self.xVel) * frame_time

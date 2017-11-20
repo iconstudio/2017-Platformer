@@ -22,8 +22,6 @@ class Sprite(object):
     def __init__(self, filepath: list or str, number, xoffset, yoffset):
         """
             이미지 불러오기, 이미지 분할, 리스트화 작업
-            :param filepath:
-            :param number:
         """
         self.__data__ = []
         if type(filepath) == list:  # 스프라이트가 여러 개의 이미지로 구성됨.
@@ -72,7 +70,8 @@ class Sprite(object):
             data = self.__data__[0]
             dx = int(self.width * index)
         else:
-            data = self.__data__[int(index)]
+            data = self.__data__[int(index % self.number)]
+            
         data.opacify(alpha)
         flipmod: str = ""
         if xscale < 0:

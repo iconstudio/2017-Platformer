@@ -19,7 +19,7 @@ __all__ = [
 #                                       프레임워크 함수
 # ==================================================================================================
 name = "game_state"
-
+background_sprite = "bgNight"
 
 def enter():
     StageIntro()
@@ -37,26 +37,36 @@ def update(frame_time):
 
 
 def draw_clean():
-    dx = -32
-    back = sprite_get("bgCave")
-    for x in range(22):
-        dy = -32
-        for y in range(13):
-            draw_sprite(back, 0, dx, dy)
-            dy += 32
-        dx += 32
-        if dx > screen_width:
-            dx -= screen_width
-        elif dx < 0:
-            dx += screen_width
+    back = sprite_get(background_sprite)
+    if background_sprite in ("bgCave", ):
+        dx = -32
+        for x in range(22):
+            dy = -32
+            for y in range(13):
+                draw_sprite(back, 0, dx, dy)
+                dy += 32
+            dx += 32
+            if dx > screen_width:
+                dx -= screen_width
+            elif dx < 0:
+                dx += screen_width
+    elif background_sprite in ("bgNight",):
+        draw_sprite(back, 0, 0, 0)
     
-    instance_draw_update()
     global instance_draw_list
     if len(instance_draw_list) > 0:
         for inst in instance_draw_list:
-            inst.event_draw()
+            if inst.visible:
+                inst.event_draw()
     else:
         raise RuntimeError("개체가 존재하지 않습니다!")
+
+    global player_lives
+    heart = sprite_get("sHeart")
+    dx, dy = screen_width - 56, screen_height - 48
+    for i in range(player_lives):
+        draw_sprite(heart, 0, dx, dy)
+        dx -= 40
 
 
 def draw(frame_time):
@@ -92,16 +102,9 @@ def resume():
 
 class GameExecutor:
     def update_begin(self):
-        instance_draw_update()
         global instance_list, instance_draw_list
         instance_draw_list = sorted(instance_list, key = lambda gobject: -gobject.depth)
     
-    def tassign_more(self):
-        tcontainer.signin("s", oSoldier)
-        tcontainer.signin("S", oSnake)
-        tcontainer.signin("C", oCobra)
-
-
 class StageIntro(GameExecutor):
     def __init__(self):
         framework.scene_set_size(screen_width * 3)
@@ -121,19 +124,22 @@ class StageIntro(GameExecutor):
         tcontainer.signin("S", oMillHousestone)
         tcontainer.signin("e", oSoldier)
         tcontainer.signin("C", oCobra)
+        tcontainer.signin("z", oSnake)
+        tcontainer.signin("T", oTorch)
+        
         
         first_scene = TerrainManager(0)
         first_scene.allocate(";;;;;;;;"
-                             "0000 0000 00mm mmmm mm00 0000 0000 0000 0000 0000 00000 0000 0000 0000\n"
+                             "0000 0000 00mm mmmm mm00 0000 0000 0000 0000 0000 00000 0000 0000 0000 0000\n"
                              "0000 0000 lwSS SSSS SSwr 0000 0000\n"
-                             "0000 0000 lwSS SSSS SSwr 0000 0000\n"
-                             "0000 0000 lwSS SSSS SSwr 0000 0000\n"
-                             "0000 0000 lwSS SSSS SSwr 0000 0000\n"
-                             "00@0 0000 lwSS SSSS SSwr 0000 0000 0000 0000 0000 0000 0000 0000 0000\n"
-                             "1112 2222 2122 2212 1112 2222 2212 2222 2222 2222 2222 2222 2222 2222 2222\n"
-                             "2122 2212 2222 2222 2222 2122 2222 2222\n"
-                             "2222 1211 2212 2222 2222 2222 2222 2211\n"
-                             "0000 2022 0020 0000 0000 0000 0000 0022")
+                             "0100 0000 lwSS SSSS SSwr 0000 0000\n"
+                             "1100 0000 lwSS SSSS SSwr 0000 0000\n"
+                             "1100 0000 lwSS SSSS SSwr 0000 0000\n"
+                             "1100 0T00 lwSS S@SS SSwr 0000 0000 0000 0T0e 0T00 0000 0000 0000 0ee0 0000 000C 0000 0000 00z0 0e0z 0000 00C0 0zz0 0000\n"
+                             "1112 2222 2122 2212 1112 2222 2212 2222 2212 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222\n"
+                             "2122 2212 2222 2222 2222 2122 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222\n"
+                             "2222 1211 2212 2222 2222 2222 2222 2211 2222 2211 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222\n"
+                             "0000 2022 0020 0000 0000 0000 0000 0022 0000 0022")
         
         first_scene.generate()
         self.update_begin()
