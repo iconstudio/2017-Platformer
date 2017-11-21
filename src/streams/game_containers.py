@@ -141,13 +141,13 @@ class oPlayer(GObject):
         player_lives -= how
         if player_lives <= 0:
             self.oStatus = oStatusContainer.DEAD
+            self.xVel = 0
         else:
             self.invincible = delta_velocity(3)
-
-        io.clear()
-        self.xVel = -dir * 20
-        self.yVel += 5
-        self.controllable = delta_velocity(0.5)
+            io.clear()
+            self.xVel = -dir * 20
+            self.yVel += 5
+            self.controllable = delta_velocity(0.5)
     
     def event_step(self, frame_time):
         super().event_step(frame_time)
@@ -158,13 +158,20 @@ class oPlayer(GObject):
             self.image_alpha = 1
         if self.controllable > 0:
             self.controllable -= delta_velocity(frame_time)
-            
-            #elist, ecount = instance_place(oEnemyParent, self.x, self.y)
-            #dlist, dcount = instance_place(oEnemyDamage, self.x, self.y)
-            #tlist, tcount = elist + dlist, ecount + dcount
-            #if tcount > 0:
-            #    for inst in elist:
-            #        pass
+        
+        elist, ecount = instance_place(oEnemyParent, self.x, self.y)
+        dlist, dcount = instance_place(oEnemyDamage, self.x, self.y)
+        tlist, tcount = elist + dlist, ecount + dcount
+        if tcount > 0:
+            for enemy in tlist:
+                if not enemy.collide_with_player and enemy.oStatus < oStatusContainer.STUNNED:
+                    enemy.collide_with_player = true
+                    if enemy.name in (
+                            "ManEater", "Lavaman",):  # Cannot ignore getting damages from these kind of enemies.
+                        self.get_dmg(1, enemy.image_xscale)
+                    elif self.invincible <= 0 and self.y <= enemy.y:
+                        self.get_dmg(1, enemy.image_xscale)
+                    enemy.collide_with_player = true
         
         if self.oStatus < oStatusContainer.CHANNELING:  # Player can control its character.
             Camera.set_pos(self.x - Camera.width / 2, self.y - Camera.height / 2)
@@ -172,7 +179,6 @@ class oPlayer(GObject):
             whothere, howmany = instance_place(oEnemyParent, self.x, self.y - 9)
             if howmany > 0 > self.yVel and self.onAir:
                 for enemy in whothere:
-                    enemy.collide_with_player = false
                     if enemy.oStatus < oStatusContainer.STUNNED:
                         if enemy.name not in ("ManEater", "Lavaman",):  # Cannot stomping these kind of enemies.
                             if self.yVel < -50:
@@ -181,6 +187,7 @@ class oPlayer(GObject):
                                 self.yVel = 60
                             enemy.hp -= 1
                             enemy.yVel = 30
+                            enemy.collide_with_player = false
                             if enemy.hp <= 0:
                                 enemy.status_change(oStatusContainer.DEAD)
                             else:
@@ -194,7 +201,7 @@ class oPlayer(GObject):
                     enemy.collide_with_player = false
                     if enemy.oStatus < oStatusContainer.STUNNED:
                         if enemy.name in (
-                        "ManEater", "Lavaman",):  # Cannot ignore getting damages from these kind of enemies.
+                                "ManEater", "Lavaman",):  # Cannot ignore getting damages from these kind of enemies.
                             self.get_dmg(1, enemy.image_xscale)
                         elif self.invincible <= 0:
                             self.get_dmg(1, enemy.image_xscale)
@@ -204,7 +211,7 @@ class oPlayer(GObject):
             if self.controllable <= 0:
                 if io.key_check(SDLK_LEFT): mx -= 1
                 if io.key_check(SDLK_RIGHT): mx += 1
-            
+                
                 if mx != 0:
                     self.xFric = 0
                     if not self.onAir:
@@ -214,7 +221,7 @@ class oPlayer(GObject):
                     self.image_xscale = mx
                 else:
                     self.xFric = 0.6
-            
+                
                 if io.key_check_pressed(SDLK_UP):
                     if not self.onAir:
                         self.yVel = 90
