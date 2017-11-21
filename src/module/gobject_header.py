@@ -256,7 +256,7 @@ class GObject(object):
             elif self.yVel < 0:
                 self.move_contact_y(abs(how) + 1)
             if self.oStatus >= oStatusContainer.STUNNED:
-                if abs(self.yVel) <= 3:
+                if abs(how) <= 3:
                     self.onAir = false
                     self.yVel = 0
                 else:

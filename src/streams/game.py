@@ -22,12 +22,15 @@ name = "game_state"
 background_sprite = "bgNight"
 
 def enter():
+    global hfont
+    hfont = load_font(path_font + "윤고딕_310.ttf", 20)
     StageIntro()
     delay(0.5)
 
 
 def exit():
-    pass
+    global hfont
+    del hfont
 
 
 def update(frame_time):
@@ -67,6 +70,8 @@ def draw_clean():
     for i in range(player_lives):
         draw_sprite(heart, 0, dx, dy)
         dx -= 40
+
+    hfont.draw(200, screen_height - 50, 'Time: %1.0f' % get_time())
 
 
 def draw(frame_time):

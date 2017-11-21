@@ -123,7 +123,8 @@ class oPlayer(GObject):
     image_speed = 0
     # anitem what to hold on
     held: object = None
-    invincible: int = 0
+    invincible: float = 0
+    controllable: float = 0
     
     # real-scale: 54 km per hour
     xVelMin, xVelMax = -54, 54
@@ -134,46 +135,89 @@ class oPlayer(GObject):
         
         global container_player
         container_player = self
-        self.hfont = load_font(path_font + "윤고딕_310.ttf", 20)
+    
+    def get_dmg(self, how: int = 1, dir = 1):
+        global player_lives
+        player_lives -= how
+        if player_lives <= 0:
+            self.oStatus = oStatusContainer.DEAD
+        else:
+            self.invincible = delta_velocity(3)
+
+        io.clear()
+        self.xVel = -dir * 20
+        self.yVel += 5
+        self.controllable = delta_velocity(0.5)
     
     def event_step(self, frame_time):
         super().event_step(frame_time)
+        if self.invincible > 0:
+            self.invincible -= delta_velocity(frame_time)
+            self.image_alpha = 0.5
+        else:
+            self.image_alpha = 1
+        if self.controllable > 0:
+            self.controllable -= delta_velocity(frame_time)
+            
+            #elist, ecount = instance_place(oEnemyParent, self.x, self.y)
+            #dlist, dcount = instance_place(oEnemyDamage, self.x, self.y)
+            #tlist, tcount = elist + dlist, ecount + dcount
+            #if tcount > 0:
+            #    for inst in elist:
+            #        pass
+        
         if self.oStatus < oStatusContainer.CHANNELING:  # Player can control its character.
             Camera.set_pos(self.x - Camera.width / 2, self.y - Camera.height / 2)
             # Stomp enemies under the character
             whothere, howmany = instance_place(oEnemyParent, self.x, self.y - 9)
             if howmany > 0 > self.yVel and self.onAir:
                 for enemy in whothere:
+                    enemy.collide_with_player = false
                     if enemy.oStatus < oStatusContainer.STUNNED:
-                        if enemy.name not in ("ManEater", "Lavaman",):
+                        if enemy.name not in ("ManEater", "Lavaman",):  # Cannot stomping these kind of enemies.
                             if self.yVel < -50:
                                 self.yVel *= -0.6
                             else:
                                 self.yVel = 60
                             enemy.hp -= 1
+                            enemy.yVel = 30
                             if enemy.hp <= 0:
                                 enemy.status_change(oStatusContainer.DEAD)
                             else:
                                 enemy.status_change(oStatusContainer.STUNNED)
                                 enemy.stunned = delta_velocity(5)
+                        else:
+                            enemy.collide_with_player = true
+                            self.get_dmg(1, enemy.image_xscale)
+            elif howmany > 0:  # Cannot Stomp but collide with enemy
+                for enemy in whothere:
+                    enemy.collide_with_player = false
+                    if enemy.oStatus < oStatusContainer.STUNNED:
+                        if enemy.name in (
+                        "ManEater", "Lavaman",):  # Cannot ignore getting damages from these kind of enemies.
+                            self.get_dmg(1, enemy.image_xscale)
+                        elif self.invincible <= 0:
+                            self.get_dmg(1, enemy.image_xscale)
+                        enemy.collide_with_player = true
             
             mx = 0
-            if io.key_check(SDLK_LEFT): mx -= 1
-            if io.key_check(SDLK_RIGHT): mx += 1
+            if self.controllable <= 0:
+                if io.key_check(SDLK_LEFT): mx -= 1
+                if io.key_check(SDLK_RIGHT): mx += 1
             
-            if mx != 0:
-                self.xFric = 0
-                if not self.onAir:
-                    self.xVel += mx * 5
+                if mx != 0:
+                    self.xFric = 0
+                    if not self.onAir:
+                        self.xVel += mx * 5
+                    else:
+                        self.xVel += mx * 2
+                    self.image_xscale = mx
                 else:
-                    self.xVel += mx * 2
-                self.image_xscale = mx
-            else:
-                self.xFric = 0.6
+                    self.xFric = 0.6
             
-            if io.key_check_pressed(SDLK_UP):
-                if not self.onAir:
-                    self.yVel = 90
+                if io.key_check_pressed(SDLK_UP):
+                    if not self.onAir:
+                        self.yVel = 90
             
             if not self.onAir:
                 if self.xVel != 0:
@@ -184,12 +228,10 @@ class oPlayer(GObject):
             else:
                 self.sprite_set("PlayerJump")
         else:  # It would be eventual, and uncontrollable
+            self.image_alpha = 1
+            
             if self.oStatus == oStatusContainer.DEAD:
                 self.sprite_set("PlayerDead")
-    
-    def event_draw(self):
-        super().event_draw()
-        self.hfont.draw(200, screen_height - 50, 'Time: %1.0f' % get_time())
 
 
 # Parent of Enemies
@@ -252,7 +294,7 @@ class oEnemyParent(GObject):
             else:
                 self.status_change(oStatusContainer.DEAD)
         if not self.onAir:
-            self.stunned -= delta_velocity() * frame_time
+            self.stunned -= delta_velocity(frame_time)
     
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
