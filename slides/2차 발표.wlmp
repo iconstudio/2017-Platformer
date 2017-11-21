@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project name="2차 발표" themeId="0" version="65540" templateID="SimpleProjectTemplate">
   <MediaItems>
-    <MediaItem id="18" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\녹음 (14).m4a" arWidth="0" arHeight="0" duration="7.2959791000000003" songTitle="녹음 (14)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
     <MediaItem id="1" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\first.png" arWidth="1280" arHeight="1024" duration="0" songTitle="" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="2" />
     <MediaItem id="19" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\last.png" arWidth="1280" arHeight="1024" duration="0" songTitle="" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="2" />
     <MediaItem id="2" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\second.png" arWidth="1280" arHeight="1024" duration="0" songTitle="" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="2" />
-    <MediaItem id="3" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\third.png" arWidth="1280" arHeight="1024" duration="0" songTitle="" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="2" />
+    <MediaItem id="3" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\third.png" arWidth="96" arHeight="77" duration="0" songTitle="" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="2" />
     <MediaItem id="20" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\녹음 (58).m4a" arWidth="0" arHeight="0" duration="5.2266458" songTitle="녹음 (58)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
     <MediaItem id="4" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\fourth.png" arWidth="1280" arHeight="1024" duration="0" songTitle="" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="2" />
-    <MediaItem id="21" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\녹음 (11).m4a" arWidth="0" arHeight="0" duration="9.8346458000000005" songTitle="녹음 (11)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
     <MediaItem id="22" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\녹음 (19).m4a" arWidth="0" arHeight="0" duration="2.5173125000000001" songTitle="녹음 (19)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
     <MediaItem id="5" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\fifth.png" arWidth="1280" arHeight="1024" duration="0" songTitle="" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="2" />
     <MediaItem id="23" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\녹음 (15).m4a" arWidth="0" arHeight="0" duration="2.4106458000000002" songTitle="녹음 (15)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
+    <MediaItem id="6" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\주차4.m4a" arWidth="0" arHeight="0" duration="9.2799791000000003" songTitle="녹음 (70)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
+    <MediaItem id="7" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\소개.m4a" arWidth="0" arHeight="0" duration="6.9333125000000004" songTitle="녹음 (70)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
     <MediaItem id="24" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\녹음 (42).m4a" arWidth="0" arHeight="0" duration="6.5706458000000003" songTitle="녹음 (42)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
+    <MediaItem id="8" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\주차5.m4a" arWidth="0" arHeight="0" duration="6.4853125" songTitle="녹음 (93)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
     <MediaItem id="25" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\녹음 (47).m4a" arWidth="0" arHeight="0" duration="5.3333124999999999" songTitle="녹음 (47)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
+    <MediaItem id="9" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\게임 안내 1.m4a" arWidth="0" arHeight="0" duration="3.8826458000000001" songTitle="녹음 (94)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
     <MediaItem id="26" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\녹음 (59).m4a" arWidth="0" arHeight="0" duration="4.5013125" songTitle="녹음 (59)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
+    <MediaItem id="10" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\기절.m4a" arWidth="0" arHeight="0" duration="3.6053125000000001" songTitle="녹음 (14)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
     <MediaItem id="27" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\테마.m4a" arWidth="0" arHeight="0" duration="3.8399790999999999" songTitle="녹음 (11)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
+    <MediaItem id="11" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\무적시간.m4a" arWidth="0" arHeight="0" duration="5.5253125000000001" songTitle="녹음 (17)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
     <MediaItem id="28" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\ai.m4a" arWidth="0" arHeight="0" duration="4.5226458000000003" songTitle="녹음 (19)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
+    <MediaItem id="12" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\하트버그.m4a" arWidth="0" arHeight="0" duration="4.1599791000000002" songTitle="녹음 (22)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
+    <MediaItem id="29" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\현황.m4a" arWidth="0" arHeight="0" duration="2.1759791000000002" songTitle="녹음 (30)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
+    <MediaItem id="30" filePath="E:\사용자 문서\Project\Platformer_2017_10\slides\res\주차123.m4a" arWidth="0" arHeight="0" duration="11.0506458" songTitle="녹음 (10)" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="3" />
+    <MediaItem id="32" filePath="E:\yoyof\Videos\Base Profile\Base Profile 2017.11.21 - 20.24.54.08.mp4" arWidth="640" arHeight="480" duration="29.692" songTitle="" songArtist="" songAlbum="" songCopyrightUrl="" songArtistUrl="" songAudioFileUrl="" stabilizationMode="0" mediaItemType="1" />
   </MediaItems>
   <Extents>
-    <AudioClip extentID="56" gapBefore="0.31258336666666509" mediaItemID="22" inTime="0" outTime="0" speed="1">
+    <AudioClip extentID="34" gapBefore="5.0946875000000063" mediaItemID="11" inTime="0" outTime="5.4000000000000057" speed="1">
       <Effects />
       <Transitions />
       <BoundProperties>
@@ -27,6 +35,38 @@
         <BoundPropertyFloat Name="Volume" Value="1" />
       </BoundProperties>
     </AudioClip>
+    <AudioClip extentID="68" gapBefore="0.038729200000005903" mediaItemID="22" inTime="0.52447916666666572" outTime="2.38229166666666" speed="1">
+      <Effects />
+      <Transitions />
+      <BoundProperties>
+        <BoundPropertyBool Name="Mute" Value="false" />
+        <BoundPropertyFloat Name="Volume" Value="1" />
+      </BoundProperties>
+    </AudioClip>
+    <AudioClip extentID="35" gapBefore="-0.033333333333331439" mediaItemID="12" inTime="0.26666666666666572" outTime="4.1599791000000002" speed="1">
+      <Effects />
+      <Transitions />
+      <BoundProperties>
+        <BoundPropertyBool Name="Mute" Value="false" />
+        <BoundPropertyFloat Name="Volume" Value="1" />
+      </BoundProperties>
+    </AudioClip>
+    <ImageClip extentID="69" gapBefore="0" mediaItemID="19" duration="1.8999999999999999">
+      <Effects />
+      <Transitions />
+      <BoundProperties>
+        <BoundPropertyInt Name="rotateStepNinety" Value="0" />
+      </BoundProperties>
+    </ImageClip>
+    <VideoClip extentID="71" gapBefore="0" mediaItemID="32" inTime="0" outTime="0" speed="1" stabilizationMode="0">
+      <Effects />
+      <Transitions />
+      <BoundProperties>
+        <BoundPropertyBool Name="Mute" Value="false" />
+        <BoundPropertyInt Name="rotateStepNinety" Value="0" />
+        <BoundPropertyFloat Name="Volume" Value="0" />
+      </BoundProperties>
+    </VideoClip>
     <ImageClip extentID="5" gapBefore="0" mediaItemID="1" duration="5">
       <Effects />
       <Transitions />
@@ -34,7 +74,7 @@
         <BoundPropertyInt Name="rotateStepNinety" Value="0" />
       </BoundProperties>
     </ImageClip>
-    <AudioClip extentID="57" gapBefore="20.193395866666659" mediaItemID="23" inTime="0.47999999999999998" outTime="2.4106458000000002" speed="1">
+    <AudioClip extentID="23" gapBefore="0.017062533333334073" mediaItemID="25" inTime="0.39000000000000001" outTime="5.3333124999999999" speed="1">
       <Effects />
       <Transitions />
       <BoundProperties>
@@ -42,7 +82,7 @@
         <BoundPropertyFloat Name="Volume" Value="1" />
       </BoundProperties>
     </AudioClip>
-    <AudioClip extentID="58" gapBefore="0.027166699999998656" mediaItemID="25" inTime="0.39000000000000001" outTime="5.3333124999999999" speed="1">
+    <AudioClip extentID="57" gapBefore="0.62187500000000284" mediaItemID="23" inTime="0.47999999999999998" outTime="2.4106458000000002" speed="1">
       <Effects />
       <Transitions />
       <BoundProperties>
@@ -50,7 +90,14 @@
         <BoundPropertyFloat Name="Volume" Value="1" />
       </BoundProperties>
     </AudioClip>
-    <AudioClip extentID="59" gapBefore="0.20772916666666674" mediaItemID="26" inTime="0.47999999999999998" outTime="4.5013125" speed="1">
+    <ImageClip extentID="6" gapBefore="0" mediaItemID="4" duration="28">
+      <Effects />
+      <Transitions />
+      <BoundProperties>
+        <BoundPropertyInt Name="rotateStepNinety" Value="0" />
+      </BoundProperties>
+    </ImageClip>
+    <AudioClip extentID="24" gapBefore="-0.11887496666667374" mediaItemID="6" inTime="0.54000000000000004" outTime="9.1799999999999997" speed="1">
       <Effects />
       <Transitions />
       <BoundProperties>
@@ -58,7 +105,7 @@
         <BoundPropertyFloat Name="Volume" Value="1" />
       </BoundProperties>
     </AudioClip>
-    <AudioClip extentID="60" gapBefore="0.16733333333333178" mediaItemID="27" inTime="0.71999999999999997" outTime="3.8399790999999999" speed="1">
+    <AudioClip extentID="7" gapBefore="-0.053312466666666225" mediaItemID="7" inTime="0" outTime="0" speed="1">
       <Effects />
       <Transitions />
       <BoundProperties>
@@ -66,15 +113,15 @@
         <BoundPropertyFloat Name="Volume" Value="1" />
       </BoundProperties>
     </AudioClip>
-    <AudioClip extentID="9" gapBefore="-0.053312466666666225" mediaItemID="18" inTime="0" outTime="0" speed="1">
+    <AudioClip extentID="25" gapBefore="-0.0023750000000006821" mediaItemID="26" inTime="0.47999999999999998" outTime="4.5013125" speed="1">
       <Effects />
       <Transitions />
       <BoundProperties>
         <BoundPropertyBool Name="Mute" Value="false" />
-        <BoundPropertyFloat Name="Volume" Value="1" />
+        <BoundPropertyFloat Name="Volume" Value="0.37647062540054321" />
       </BoundProperties>
     </AudioClip>
-    <AudioClip extentID="61" gapBefore="0.058562566666669369" mediaItemID="28" inTime="0" outTime="0" speed="1">
+    <AudioClip extentID="26" gapBefore="0.051604166666663787" mediaItemID="27" inTime="0.71999999999999997" outTime="3.8399790999999999" speed="1">
       <Effects />
       <Transitions />
       <BoundProperties>
@@ -96,20 +143,14 @@
         <BoundPropertyInt Name="rotateStepNinety" Value="0" />
       </BoundProperties>
     </ImageClip>
-    <ImageClip extentID="11" gapBefore="0" mediaItemID="19" duration="3">
+    <AudioClip extentID="28" gapBefore="-0.0053957666666661908" mediaItemID="28" inTime="0" outTime="0" speed="1">
       <Effects />
       <Transitions />
       <BoundProperties>
-        <BoundPropertyInt Name="rotateStepNinety" Value="0" />
+        <BoundPropertyBool Name="Mute" Value="false" />
+        <BoundPropertyFloat Name="Volume" Value="1" />
       </BoundProperties>
-    </ImageClip>
-    <ImageClip extentID="28" gapBefore="0" mediaItemID="4" duration="20">
-      <Effects />
-      <Transitions />
-      <BoundProperties>
-        <BoundPropertyInt Name="rotateStepNinety" Value="0" />
-      </BoundProperties>
-    </ImageClip>
+    </AudioClip>
     <AudioClip extentID="29" gapBefore="0" mediaItemID="20" inTime="0.54000000000000004" outTime="5.2266458" speed="1">
       <Effects />
       <Transitions />
@@ -118,7 +159,7 @@
         <BoundPropertyFloat Name="Volume" Value="1" />
       </BoundProperties>
     </AudioClip>
-    <AudioClip extentID="14" gapBefore="0.13318756666666687" mediaItemID="24" inTime="0.089999999999999997" outTime="6.5706458000000003" speed="1">
+    <AudioClip extentID="30" gapBefore="0.32891670000000062" mediaItemID="29" inTime="0.29999999999999999" outTime="2.1759791000000002" speed="1">
       <Effects />
       <Transitions />
       <BoundProperties>
@@ -126,13 +167,53 @@
         <BoundPropertyFloat Name="Volume" Value="1" />
       </BoundProperties>
     </AudioClip>
-    <ImageClip extentID="32" gapBefore="0" mediaItemID="2" duration="8">
+    <AudioClip extentID="13" gapBefore="-0.12697916666666487" mediaItemID="8" inTime="0" outTime="0" speed="1">
+      <Effects />
+      <Transitions />
+      <BoundProperties>
+        <BoundPropertyBool Name="Mute" Value="false" />
+        <BoundPropertyFloat Name="Volume" Value="1" />
+      </BoundProperties>
+    </AudioClip>
+    <AudioClip extentID="31" gapBefore="0.012041733333333582" mediaItemID="30" inTime="0.45000000000000001" outTime="11.0506458" speed="1">
+      <Effects />
+      <Transitions />
+      <BoundProperties>
+        <BoundPropertyBool Name="Mute" Value="false" />
+        <BoundPropertyFloat Name="Volume" Value="0.78431379795074463" />
+      </BoundProperties>
+    </AudioClip>
+    <AudioClip extentID="14" gapBefore="0.52335416666666568" mediaItemID="24" inTime="0.55770833333333247" outTime="6.5706458000000003" speed="1">
+      <Effects />
+      <Transitions />
+      <BoundProperties>
+        <BoundPropertyBool Name="Mute" Value="false" />
+        <BoundPropertyFloat Name="Volume" Value="1" />
+      </BoundProperties>
+    </AudioClip>
+    <AudioClip extentID="15" gapBefore="0.28281250000000568" mediaItemID="9" inTime="0" outTime="0" speed="1">
+      <Effects />
+      <Transitions />
+      <BoundProperties>
+        <BoundPropertyBool Name="Mute" Value="false" />
+        <BoundPropertyFloat Name="Volume" Value="0.40784317255020142" />
+      </BoundProperties>
+    </AudioClip>
+    <ImageClip extentID="32" gapBefore="0" mediaItemID="2" duration="7.0999999999999996">
       <Effects />
       <Transitions />
       <BoundProperties>
         <BoundPropertyInt Name="rotateStepNinety" Value="0" />
       </BoundProperties>
     </ImageClip>
+    <AudioClip extentID="33" gapBefore="2.2506875333333198" mediaItemID="10" inTime="0" outTime="0" speed="1">
+      <Effects />
+      <Transitions />
+      <BoundProperties>
+        <BoundPropertyBool Name="Mute" Value="false" />
+        <BoundPropertyFloat Name="Volume" Value="1" />
+      </BoundProperties>
+    </AudioClip>
     <ExtentSelector extentID="1" gapBefore="0" primaryTrack="true">
       <Effects />
       <Transitions />
@@ -141,9 +222,10 @@
         <ExtentRef id="5" />
         <ExtentRef id="32" />
         <ExtentRef id="27" />
-        <ExtentRef id="28" />
+        <ExtentRef id="6" />
         <ExtentRef id="10" />
-        <ExtentRef id="11" />
+        <ExtentRef id="69" />
+        <ExtentRef id="71" />
       </ExtentRefs>
     </ExtentSelector>
     <ExtentSelector extentID="2" gapBefore="0" primaryTrack="false">
@@ -158,14 +240,22 @@
       <BoundProperties />
       <ExtentRefs>
         <ExtentRef id="29" />
-        <ExtentRef id="9" />
+        <ExtentRef id="7" />
         <ExtentRef id="14" />
-        <ExtentRef id="58" />
-        <ExtentRef id="59" />
-        <ExtentRef id="60" />
-        <ExtentRef id="61" />
+        <ExtentRef id="23" />
+        <ExtentRef id="25" />
+        <ExtentRef id="26" />
+        <ExtentRef id="28" />
+        <ExtentRef id="30" />
+        <ExtentRef id="31" />
+        <ExtentRef id="24" />
+        <ExtentRef id="13" />
         <ExtentRef id="57" />
-        <ExtentRef id="56" />
+        <ExtentRef id="68" />
+        <ExtentRef id="15" />
+        <ExtentRef id="33" />
+        <ExtentRef id="34" />
+        <ExtentRef id="35" />
       </ExtentRefs>
     </ExtentSelector>
     <ExtentSelector extentID="4" gapBefore="0" primaryTrack="false">
@@ -179,17 +269,17 @@
     <BoundPlaceholder placeholderID="SingleExtentView" extentID="0" />
     <BoundPlaceholder placeholderID="Main" extentID="1" />
     <BoundPlaceholder placeholderID="SoundTrack" extentID="2" />
-    <BoundPlaceholder placeholderID="Narration" extentID="3" />
     <BoundPlaceholder placeholderID="Text" extentID="4" />
+    <BoundPlaceholder placeholderID="Narration" extentID="3" />
   </BoundPlaceholders>
   <BoundProperties>
     <BoundPropertyFloatSet Name="AspectRatio">
       <BoundPropertyFloatElement Value="1.7777776718139648" />
     </BoundPropertyFloatSet>
     <BoundPropertyFloat Name="DuckedNarrationAndSoundTrackMix" Value="0" />
-    <BoundPropertyFloat Name="DuckedVideoAndNarrationMix" Value="1" />
+    <BoundPropertyFloat Name="DuckedVideoAndNarrationMix" Value="0.5" />
     <BoundPropertyFloat Name="DuckedVideoAndSoundTrackMix" Value="0" />
-    <BoundPropertyFloat Name="SoundTrackMix" Value="1" />
+    <BoundPropertyFloat Name="SoundTrackMix" Value="0.5" />
   </BoundProperties>
   <ThemeOperationLog themeID="0">
     <MonolithicThemeOperations />
