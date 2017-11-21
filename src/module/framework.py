@@ -1,9 +1,11 @@
 from module.pico2d import *
 from module.constants import *
 
+from module.sprite import *
+
 __all__ = [
     "GameState", "change_state", "push_state", "pop_state", "quit", "run",
-    "io", "Camera", "game_begin", "game_end", "HWND", "current_time", "game_realtime",
+    "io", "Camera", "game_begin", "game_end", "HWND", "current_time", "game_realtime", "uiframe",
     "scene_width", "scene_height", "scene_set_size"
 ]
 
@@ -30,7 +32,7 @@ def game_end():
     close_canvas()
 
 
-def scene_set_size(w=scene_width, h=scene_height):
+def scene_set_size(w = scene_width, h = scene_height):
     global scene_width, scene_height
     scene_width = w
     scene_height = h
@@ -176,6 +178,50 @@ class oCamera:
 Camera = oCamera()
 
 
+class uiframe:
+    name = "frame"
+    x, y = 160, 90
+    width, height = 320, 180
+    depth = 0
+    visible: bool = true
+    clicked = false
+    
+    def __init__(self, ntype: str = "ui", nx = 180, ny = 90, nw = 320, nh = 180):
+        self.name = ntype
+        self.x, self.y, self.width, self.height = nx, ny, nw, nh
+        if self.name in ("button",):
+            global ui_focus
+            ui_focus = self
+        elif self.name == "frame":
+            global ui_top
+            ui_top = self
+        global ui_list
+        ui_list.append(self)
+    
+    def get_bbox(self):
+        return self.x, self.y, self.width, self.height
+    
+    def update(self, frame_time):
+        pass
+    
+    def draw(self, frame_time):
+        draw_set_alpha(1)
+        draw_set_color(255, 255, 255)
+        draw_rectangle(self.x, self.y, self.x + self.width, self.y + self.height, false)
+
+class uibutton(uiframe):
+    caption: str = "button"
+    depth = -100
+    
+    def __init__(self, caption, nx, ny, nw = 80, nh = 45):
+        super().__init__("button", nx, ny, nw, nh)
+        self.caption = caption
+    
+    def draw(self, frame_time):
+        super().draw(frame_time)
+        
+
+
 class GameState:
     def __init__(self, state):
         self.enter = state.enter
@@ -192,6 +238,25 @@ stack = None
 current_time: float = 0.0
 game_realtime: float = 0.0
 paused = false
+# Only UI frames
+ui_top = None
+# Only controllable component
+ui_focus = None
+ui_list = []
+
+
+def ui_update(frame_time):
+    global ui_list
+    if len(ui_list) > 0:
+        for inst in ui_list:
+            inst.update(frame_time)
+
+
+def ui_draw(frame_time):
+    global ui_list
+    if len(ui_list) > 0:
+        for inst in ui_list:
+            inst.draw(frame_time)
 
 
 def get_frame_time():
@@ -263,9 +328,11 @@ def run(start_state):
     while running:
         ftime = get_frame_time()
         keyboard_update()
+        ui_update(ftime)
         stack[-1].handle_events(ftime)
         stack[-1].update(ftime)
         stack[-1].draw(ftime)
+        ui_draw(ftime)
     # repeatedly delete the top of the stack
     while len(stack) > 0:
         stack[-1].exit()

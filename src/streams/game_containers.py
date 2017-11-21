@@ -222,7 +222,7 @@ class oPlayer(GObject):
                 else:
                     self.xFric = 0.6
                 
-                if io.key_check_pressed(SDLK_UP):
+                if io.key_check_pressed(ord('x')):
                     if not self.onAir:
                         self.yVel = 90
             
@@ -490,6 +490,7 @@ class oTorch(oDoodadParent):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sTorch")
+        self.image_index = irandom(4)
 
 
 # A tile of mil at intro

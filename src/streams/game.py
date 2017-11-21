@@ -106,6 +106,15 @@ def resume():
 
 
 class GameExecutor:
+    def clear(self):
+        global player_lives, instance_list, instance_list_spec, instance_draw_list
+        player_lives = 3
+        for inst in instance_list:
+            inst.destroy()
+        instance_list.clear()
+        instance_list_spec.clear()
+        instance_draw_list.clear()
+    
     def update_begin(self):
         global instance_list, instance_draw_list
         instance_draw_list = sorted(instance_list, key = lambda gobject: -gobject.depth)
@@ -116,7 +125,7 @@ class StageIntro(GameExecutor):
         Camera.set_pos(0, 0)
         io.key_add(SDLK_LEFT)
         io.key_add(SDLK_RIGHT)
-        io.key_add(SDLK_UP)
+        io.key_add(ord('x'))
         
         # Terrains
         tcontainer.signin("1", oBrickCastle)
