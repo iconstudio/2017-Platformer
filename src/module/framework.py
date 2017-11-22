@@ -13,7 +13,7 @@ HWND = None
 keylogger_list = []
 scene_width = screen_width
 scene_height = screen_height
-
+hFont, hFontLrg = None, None
 
 def game_begin():
     global HWND
@@ -26,10 +26,17 @@ def game_begin():
     hide_cursor()
     hide_lattice()
     draw_background_color_set(0, 0, 0)
+    
+    global hFont, hFontLrg
+    hFont = load_font(path_font + "윤고딕_310.ttf", 20)
+    hFontLrg = load_font(path_font + "윤고딕_310.ttf", 28)
 
 
 def game_end():
     close_canvas()
+
+    global hFont, hFontLrg
+    del hFont, hFontLrg
 
 
 def scene_set_size(w = scene_width, h = scene_height):
@@ -185,6 +192,8 @@ class uiframe:
     depth = 0
     visible: bool = true
     clicked = false
+    color = (255, 255, 255)
+    color_inner = (255, 255, 255)
     
     def __init__(self, ntype: str = "ui", nx = 180, ny = 90, nw = 320, nh = 180):
         self.name = ntype
@@ -206,19 +215,21 @@ class uiframe:
     
     def draw(self, frame_time):
         draw_set_alpha(1)
-        draw_set_color(255, 255, 255)
+        draw_set_color(*self.color)
         draw_rectangle(self.x, self.y, self.x + self.width, self.y + self.height, false)
 
 class uibutton(uiframe):
     caption: str = "button"
     depth = -100
+    color_inner = (0, 0, 0)
     
-    def __init__(self, caption, nx, ny, nw = 80, nh = 45):
+    def __init__(self, caption: str, nx, ny, nw = 80, nh = 45):
         super().__init__("button", nx, ny, nw, nh)
         self.caption = caption
     
     def draw(self, frame_time):
         super().draw(frame_time)
+        draw_set_color(*self.color_inner)
         
 
 

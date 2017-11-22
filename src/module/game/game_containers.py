@@ -5,7 +5,8 @@ from module.constants import *
 from module.framework import Camera
 from module.framework import io
 
-from module.gobject_header import *
+from game.gobject_header import __all__ as header_all
+from game.gobject_header import *
 from module.sprite import *
 
 __all__ = [
@@ -14,7 +15,7 @@ __all__ = [
     "oLushDecoration", "oMillHousechip", "oMillHousestone", "oMillHousechipL", "oMillHousechipR",
     "oMillHousechipM", "oTorch",
     "oPlayer", "oSoldier", "oSnake", "oCobra",
-]
+] + header_all
 
 # ==================================================================================================
 #                                               게임

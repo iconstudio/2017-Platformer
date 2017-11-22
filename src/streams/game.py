@@ -4,12 +4,11 @@ from module.constants import *
 from module import framework
 from module.framework import Camera
 from module.framework import io
-from streams import game_pause
-from streams.game_containers import *
-from module.gobject_header import *
+import game_pause
 
 from module.sprite import *
 from module.terrain import *
+from module.game.game_containers import *
 
 __all__ = [
     "name", "GameExecutor", "draw_clean", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
@@ -22,15 +21,12 @@ name = "game_state"
 background_sprite = "bgNight"
 
 def enter():
-    global hfont
-    hfont = load_font(path_font + "윤고딕_310.ttf", 20)
     StageIntro()
     delay(0.5)
 
 
 def exit():
-    global hfont
-    del hfont
+    pass
 
 
 def update(frame_time):
@@ -71,7 +67,7 @@ def draw_clean():
         draw_sprite(heart, 0, dx, dy)
         dx -= 40
 
-    hfont.draw(200, screen_height - 50, 'Time: %1.0f' % get_time())
+    framework.hFont.draw(200, screen_height - 50, 'Time: %1.0f' % get_time())
 
 
 def draw(frame_time):

@@ -1,11 +1,6 @@
-import sys
-from module.functions import *
-from module.constants import *
-
+from game.gobject_header import *
 from module import framework
-
-from module.gobject_header import *
-import pytmx
+from module.constants import *
 
 __all__ = [
     "tcontainer", "ThemeContainer", "TerrainManager", "TerrainAllocator"

@@ -1,9 +1,11 @@
-from module import framework
 from module.constants import *
-from module.sprite import *
+
+from module import framework
 from streams import main
 from streams import game
 from streams import begin
+
+from module.sprite import *
 
 """
         비고:
@@ -11,7 +13,9 @@ from streams import begin
             2. 맵 데이터:
                 1. 숫자는 지형이다. (숫자만 지형은 아니다)
                 2. @ 는 플레이어이다.
-                3. 
+                3.
+            3. 프레임워크:
+                1. hFontSml, hFont, hFontLrg 이외의 외부 폰트는 모두 소문자로 쓴다. (e.g. hfontsmall)
 
         수정 사항:
             1. pico2d.py 의 open_canvas 함수 수정 (창 핸들 반환)
@@ -105,5 +109,5 @@ if __name__ == "__main__":
                  path_effect + "stunned_2.png", path_effect + "stunned_3.png", path_effect + "stunned_4.png"], "Stun", 8, 8)
     
     
-    framework.run(game)
+    framework.run(begin)
     framework.game_end()
