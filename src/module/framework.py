@@ -14,6 +14,39 @@ keylogger_list = []
 scene_width = screen_width
 scene_height = screen_height
 hFont, hFontLrg = None, None
+hFontRetro = None
+
+
+class Font_sprite:
+    sprite_index: Sprite = None
+    char_list = {}
+    
+    def __init__(self, sprite: Sprite, data: str):
+        length = len(data)
+        if length > 0:
+            for i in range(length):
+                try:
+                    currchr = data[i]
+                except KeyError:
+                    break
+                except IndexError:
+                    break
+                self.char_list[currchr] = i
+            self.sprite_index = sprite
+    
+    def draw(self, x, y, caption: str, scale: float = 1.0):
+        sdl_color = draw_get_color()
+        fsurface = TTF_RenderUTF8_Blended(self.font, caption.encode('utf-8'), sdl_color)
+        texture = SDL_CreateTextureFromSurface(renderer, fsurface)
+        SDL_FreeSurface(fsurface)
+        image = Image(texture, None, None)
+        image.opacify(sdl_color.a / 255)
+        image.draw(x, y, int(scale * image.w), int(scale * image.h))
+    
+    def load_font(name, size = 20):
+        font = Font(name, size)
+        return font
+
 
 def game_begin():
     global HWND
@@ -27,14 +60,16 @@ def game_begin():
     hide_lattice()
     draw_background_color_set(0, 0, 0)
     
-    global hFont, hFontLrg
+    global hFont, hFontLrg, hFontRetro
     hFont = load_font(path_font + "윤고딕_310.ttf", 20)
     hFontLrg = load_font(path_font + "윤고딕_310.ttf", 28)
+    
+    tempstr = str('!"#$%&' + "'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 
 def game_end():
     close_canvas()
-
+    
     global hFont, hFontLrg
     del hFont, hFontLrg
 
@@ -218,6 +253,7 @@ class uiframe:
         draw_set_color(*self.color)
         draw_rectangle(self.x, self.y, self.x + self.width, self.y + self.height, false)
 
+
 class uibutton(uiframe):
     caption: str = "button"
     depth = -100
@@ -230,7 +266,6 @@ class uibutton(uiframe):
     def draw(self, frame_time):
         super().draw(frame_time)
         draw_set_color(*self.color_inner)
-        
 
 
 class GameState:

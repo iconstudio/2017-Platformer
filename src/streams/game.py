@@ -61,11 +61,12 @@ def draw_clean():
         raise RuntimeError("개체가 존재하지 않습니다!")
 
     global player_lives
-    heart = sprite_get("sHeart")
-    dx, dy = screen_width - 56, screen_height - 48
-    for i in range(0, player_lives):
-        draw_sprite(heart, 0, dx, dy)
-        dx -= 40
+    if player_lives > 0:
+        heart = sprite_get("sHeart")
+        dx, dy = screen_width - 56, screen_height - 48
+        for i in range(player_lives):
+            draw_sprite(heart, 0, dx, dy)
+            dx -= 40
 
     framework.hFont.draw(200, screen_height - 50, 'Time: %1.0f' % get_time())
 
