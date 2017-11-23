@@ -144,21 +144,21 @@ class oPlayer(GObject):
             self.oStatus = oStatusContainer.DEAD
             self.xVel = 0
         else:
-            self.invincible = delta_velocity(3)
+            self.invincible = 3
             io.clear()
             self.xVel = -dir * 20
             self.yVel += 5
-            self.controllable = delta_velocity(0.5)
+            self.controllable = 0.5
     
     def event_step(self, frame_time):
         super().event_step(frame_time)
         if self.invincible > 0:
-            self.invincible -= delta_velocity(frame_time)
+            self.invincible -= frame_time
             self.image_alpha = 0.5
         else:
             self.image_alpha = 1
         if self.controllable > 0:
-            self.controllable -= delta_velocity(frame_time)
+            self.controllable -= frame_time
         
         elist, ecount = instance_place(oEnemyParent, self.x, self.y)
         dlist, dcount = instance_place(oEnemyDamage, self.x, self.y)
@@ -193,7 +193,7 @@ class oPlayer(GObject):
                                 enemy.status_change(oStatusContainer.DEAD)
                             else:
                                 enemy.status_change(oStatusContainer.STUNNED)
-                                enemy.stunned = delta_velocity(5)
+                                enemy.stunned = 5
                         else:
                             enemy.collide_with_player = true
                             self.get_dmg(1, enemy.image_xscale)
@@ -302,7 +302,7 @@ class oEnemyParent(GObject):
             else:
                 self.status_change(oStatusContainer.DEAD)
         if not self.onAir:
-            self.stunned -= delta_velocity(frame_time)
+            self.stunned -= frame_time
     
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)

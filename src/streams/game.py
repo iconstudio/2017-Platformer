@@ -63,7 +63,7 @@ def draw_clean():
     global player_lives
     heart = sprite_get("sHeart")
     dx, dy = screen_width - 56, screen_height - 48
-    for i in range(player_lives):
+    for i in range(0, player_lives):
         draw_sprite(heart, 0, dx, dy)
         dx -= 40
 

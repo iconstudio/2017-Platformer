@@ -1,9 +1,6 @@
 from module.constants import *
 
 from module import framework
-from streams import main
-from streams import game
-from streams import begin
 
 from module.sprite import *
 
@@ -107,7 +104,9 @@ if __name__ == "__main__":
                  path_entity + "BloodTrail_6.png"], "BloodTrails", 4, 4)
     sprite_load([path_effect + "stunned_0.png", path_effect + "stunned_1.png",
                  path_effect + "stunned_2.png", path_effect + "stunned_3.png", path_effect + "stunned_4.png"], "Stun", 8, 8)
-    
-    
-    framework.run(begin)
+
+    from streams import main
+    from streams import game
+    from streams import begin
+    framework.run(game)
     framework.game_end()

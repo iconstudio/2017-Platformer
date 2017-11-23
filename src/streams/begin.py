@@ -15,9 +15,9 @@ __all__ = [
 #                                       프레임워크 함수
 # ==================================================================================================
 name = "begin_state"
-targ_time = delta_velocity(3)
+targ_time = 3
 logo_time = targ_time
-alpha_max = delta_velocity(2)
+alpha_max = 2
 alpha = alpha_max
 
 # noinspection PyGlobalUndefined,PyGlobalUndefined
@@ -36,9 +36,9 @@ def update(frame_time):
     global logo_time, targ_time, alpha_max, alpha
     if logo_time <= 0:
         logo_time = 0
-        alpha -= delta_velocity() * frame_time
+        alpha -= frame_time
     else:
-        logo_time -= delta_velocity() * frame_time
+        logo_time -= frame_time
     if alpha <= -alpha_max:
         framework.change_state(main)
 
@@ -63,6 +63,12 @@ def handle_events(frame_time):
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 framework.quit()
+            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RETURN):
+                global logo_time, alpha
+                if logo_time <= 0:
+                    alpha = 0
+                else:
+                    logo_time = 0
 
 
 def pause():
