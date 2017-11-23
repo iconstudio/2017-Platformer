@@ -20,6 +20,7 @@ __all__ = [
 name = "game_state"
 background_sprite = "bgNight"
 
+
 def enter():
     StageIntro()
     delay(0.5)
@@ -37,7 +38,7 @@ def update(frame_time):
 
 def draw_clean():
     back = sprite_get(background_sprite)
-    if background_sprite in ("bgCave", ):
+    if background_sprite in ("bgCave",):
         dx = -32
         for x in range(22):
             dy = -32
@@ -51,7 +52,7 @@ def draw_clean():
                 dx += screen_width
     elif background_sprite in ("bgNight",):
         draw_sprite(back, 0, 0, 0)
-    
+
     global instance_draw_list
     if len(instance_draw_list) > 0:
         for inst in instance_draw_list:
@@ -60,15 +61,11 @@ def draw_clean():
     else:
         raise RuntimeError("개체가 존재하지 않습니다!")
 
-    global player_lives
-    if player_lives > 0:
-        heart = sprite_get("sHeart")
-        dx, dy = screen_width - 56, screen_height - 48
-        for i in range(player_lives):
-            draw_sprite(heart, 0, dx, dy)
-            dx -= 40
-
-    framework.hFont.draw(200, screen_height - 50, 'Time: %1.0f' % get_time())
+    draw_set_alpha(1)
+    heart = sprite_get("sHeart")
+    draw_sprite(heart, 0, screen_width - 94, screen_height - 48)
+    framework.draw_text(str(player_get_lives()), screen_width - 50, screen_height - 4, scale = 2)
+    framework.draw_text("Time: %0.3f" % get_time(), 20, screen_height - 20)
 
 
 def draw(frame_time):
@@ -104,18 +101,19 @@ def resume():
 
 class GameExecutor:
     def clear(self):
-        global player_lives, instance_list, instance_list_spec, instance_draw_list
-        player_lives = 3
+        global instance_list, instance_list_spec, instance_draw_list
+        player_lives_clear(3)
         for inst in instance_list:
             inst.destroy()
         instance_list.clear()
         instance_list_spec.clear()
         instance_draw_list.clear()
-    
+
     def update_begin(self):
         global instance_list, instance_draw_list
         instance_draw_list = sorted(instance_list, key = lambda gobject: -gobject.depth)
-    
+
+
 class StageIntro(GameExecutor):
     def __init__(self):
         framework.scene_set_size(screen_width * 3)
@@ -123,7 +121,7 @@ class StageIntro(GameExecutor):
         io.key_add(SDLK_LEFT)
         io.key_add(SDLK_RIGHT)
         io.key_add(ord('x'))
-        
+
         # Terrains
         tcontainer.signin("1", oBrickCastle)
         tcontainer.signin("2", oLush)
@@ -137,8 +135,7 @@ class StageIntro(GameExecutor):
         tcontainer.signin("C", oCobra)
         tcontainer.signin("z", oSnake)
         tcontainer.signin("T", oTorch)
-        
-        
+
         first_scene = TerrainManager(0)
         first_scene.allocate(";;;;;;;;"
                              "0000 0000 00mm mmmm mm00 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000\n"
@@ -151,6 +148,6 @@ class StageIntro(GameExecutor):
                              "2122 2212 2222 2222 2222 2122 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222\n"
                              "2222 1211 2212 2222 2222 2222 2222 2211 2222 2211 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222 2222\n"
                              "0000 2022 0020 0000 0000 0000 0000 0022 0000 0022 0000 0000 0000")
-        
+
         first_scene.generate()
         self.update_begin()

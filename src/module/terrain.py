@@ -6,16 +6,17 @@ __all__ = [
     "tcontainer", "ThemeContainer", "TerrainManager", "TerrainAllocator"
 ]
 
+
 # ==================================================================================================
 #                                               지형
 # ==================================================================================================
 # Object : Terrain Container
 class ThemeContainer:
     mess = {}
-    
+
     def signin(self, string: str, ty: type):
         self.mess[string] = ty
-    
+
     def clear(self):
         self.mess.clear()
 
@@ -23,10 +24,10 @@ class ThemeContainer:
 # Object : Terrain Container
 class TerrainContainer:
     mess = {}
-    
+
     def signin(self, string: str, ty: type):
         self.mess[string] = ty
-    
+
     def clear(self):
         self.mess.clear()
 
@@ -39,7 +40,7 @@ class TerrainManager:
     def __init__(self, theme: int = 0):
         self.type_theme = theme
         self.data = TerrainAllocator(self.type_theme, 0, 0)
-    
+
     def allocate(self, world: str, nx = None, ny = None):
         try:
             print("Allocating a chunk.")
@@ -48,18 +49,18 @@ class TerrainManager:
                 self.data.x = nx
             if ny is not None:
                 self.data.y = ny
-        
+
         except IndexError:
             print("Cannot add new chunk!")
-    
+
     def generate(self):
         self.data.generate()
-        
+
         global instance_list_spec
         clist = instance_list_spec[ID_SOLID]
         for inst in clist:
             inst.tile_correction()
-    
+
     def __del__(self):
         del self.data
 
@@ -72,10 +73,10 @@ class TerrainAllocator:
     tile_w: int = 20
     tile_h: int = 20
     x, y, w, h, hsz, vsz = 0, 0, 0, 0, 0, 0
-    
+
     def __init__(self, nt: int, nx: int, ny: int, nw: int = screen_width, nh: int = screen_height):
         self.assignment(nt, nx, ny, nw, nh)
-    
+
     def assignment(self, nt: int, nx: int, ny: int, nw: int = screen_width, nh: int = screen_height):
         # The position of a map
         self.x, self.y = nx, ny
@@ -84,7 +85,7 @@ class TerrainAllocator:
         # The number of grid
         self.hsz, self.vsz = int(nw / self.tile_w), int(nh / self.tile_h)
         self.type_theme = nt
-    
+
     def generate(self):
         print("Generating a chunk.")
         newx = self.x
@@ -94,14 +95,14 @@ class TerrainAllocator:
         currlist: list = []
         prevlist: list = []
         j = 0
-        
+
         for i in range(len(self.data)):
             current = self.data[i]
-            
+
             # ignore blanks
             if current == ' ':
                 continue
-            
+
             if current is not ';' and current is not '0' and current is not '\n':
                 try:
                     whattocreate = tcontainer.mess[current]
@@ -119,7 +120,7 @@ class TerrainAllocator:
                         except IndexError:
                             pass
                     currlist.append(obj)  # save objects in current line
-                    
+
                     try:
                         tempspr = obj.sprite_index
                         obj.x += tempspr.xoffset
@@ -136,7 +137,7 @@ class TerrainAllocator:
                     newx = self.x
                     newy -= self.tile_h
                     continue
-            
+
             j += 1
             currln += current
             newx += self.tile_w
@@ -160,11 +161,11 @@ class TerrainAllocator:
                         except IndexError:
                             break
                         k += 1
-                
+
                 del prevlist
                 prevlist = currlist.copy()  # push current line back to previous line
                 currlist.clear()  # make new list
-    
+
     def allocate(self, data: str, newtype: int = 0):
         self.data = data
         self.type_theme = newtype

@@ -27,18 +27,18 @@ from module.sprite import *
 
 if __name__ == "__main__":
     framework.game_begin()
-    
+
     # UI
     sprite_load(path_image + "logo.png", "sLogo", None, None)
     sprite_load(path_ui + "loading.png", "sLoading", None, None)
     sprite_load(path_ui + "heart.png", "sHeart", 16, 16)
-    
+
     # Background
     sprite_load(path_background + "bgCastle.png", "bgCastle", 0, 0)
     sprite_load(path_background + "bgCave.png", "bgCave", 0, 0)
     sprite_load(path_background + "bgTemple.png", "bgTemple", 0, 0)
     sprite_load(path_background + "bgNight_0.png", "bgNight", 0, 0)
-    
+
     # Theme
     sprite_load([path_theme + "wood_0.png", path_theme + "wood_1.png", path_theme + "wood_2.png",
                  path_theme + "wood_3.png"], "sWood", 0, 0)
@@ -55,11 +55,11 @@ if __name__ == "__main__":
     sprite_load([path_theme + "TikiTorch_0.png", path_theme + "TikiTorch_1.png", path_theme + "TikiTorch_2.png",
                  path_theme + "TikiTorch_3.png", path_theme + "TikiTorch_4.png", path_theme + "TikiTorch_1.png"],
                 "sTorch", 8, 32)
-    
+
     # Doodads
     sprite_load([path_theme + "lush_top_0.png", path_theme + "lush_top_1.png", path_theme + "lush_top_2.png"],
                 "sLushDoodad", 0, 0)
-    
+
     # Entity
     sprite_load(path_entity + "vampire.png", "Player", 8, 8)
     sprite_load(path_entity + "VampireJump_0.png", "PlayerJump", 8, 8)
@@ -78,8 +78,7 @@ if __name__ == "__main__":
                  path_entity + "SoldierStunned_2.png", path_entity + "SoldierStunned_3.png",
                  path_entity + "SoldierStunned_4.png"], "SoldierStunned", 8, 8)
     sprite_load(path_entity + "SoldierDead.png", "SoldierDead", 8, 8)
-    
-    
+
     sprite_load(path_entity + "ManBeard_0.png", "ManBeardIdle", 8, 8)
     sprite_load([path_entity + "ManBeardWalk_0.png", path_entity + "ManBeardWalk_1.png",
                  path_entity + "ManBeardWalk_2.png", path_entity + "ManBeardWalk_3.png",
@@ -94,7 +93,7 @@ if __name__ == "__main__":
     sprite_load([path_entity + "CobraWalk_0.png", path_entity + "CobraWalk_1.png",
                  path_entity + "CobraWalk_2.png", path_entity + "CobraWalk_3.png",
                  path_entity + "CobraWalk_4.png", path_entity + "CobraWalk_5.png"], "CobraRun", 8, 8)
-    
+
     # Effect
     sprite_load([path_entity + "Blood_0.png", path_entity + "Blood_1.png",
                  path_entity + "Blood_2.png", path_entity + "Blood_2.png"], "Bloods", 4, 4)
@@ -103,10 +102,12 @@ if __name__ == "__main__":
                  path_entity + "BloodTrail_4.png", path_entity + "BloodTrail_5.png",
                  path_entity + "BloodTrail_6.png"], "BloodTrails", 4, 4)
     sprite_load([path_effect + "stunned_0.png", path_effect + "stunned_1.png",
-                 path_effect + "stunned_2.png", path_effect + "stunned_3.png", path_effect + "stunned_4.png"], "Stun", 8, 8)
+                 path_effect + "stunned_2.png", path_effect + "stunned_3.png", path_effect + "stunned_4.png"], "Stun",
+                8, 8)
 
     from streams import main
     from streams import game
     from streams import begin
+
     framework.run(game)
     framework.game_end()

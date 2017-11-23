@@ -18,7 +18,7 @@ class Sprite(object):
     isSeparate: bool = false
     xoffset, yoffset = 0, 0
     __data__ = []
-    
+
     def __init__(self, filepath: list or str, number, xoffset, yoffset):
         """
             이미지 불러오기, 이미지 분할, 리스트화 작업
@@ -27,7 +27,7 @@ class Sprite(object):
         if type(filepath) == list:  # 스프라이트가 여러 개의 이미지로 구성됨.
             self.isSeparate = true
             self.number = len(filepath)
-            
+
             try:
                 if self.number > 0:
                     for specpath in filepath:
@@ -44,7 +44,7 @@ class Sprite(object):
             # size of each index
             self.width = int(self.__data__[0].w / number)
             self.height = int(self.__data__[0].h)
-        
+
         self.xoffset, self.yoffset = self.__data__[0].xoffset, self.__data__[0].yoffset
         try:
             tempTy = type(number)
@@ -52,26 +52,26 @@ class Sprite(object):
                 raise RuntimeError("스프라이트 불러오기 시 인자가 숫자가 아닙니다.")
         except ZeroDivisionError:
             raise RuntimeError("스프라이트의 갯수는 0개가 될 수 없습니다.")
-    
+
     def __eq__(self, other) -> bool:
         if type(other) != Sprite:
             return false
         if self.__repr__() == other.__repr__():
             return true
         return false
-    
+
     def __repr__(self) -> str:
         return self.name
-    
-    def draw(self, index: int or float, x, y, xscale=float(1), yscale=float(1), rot=float(0.0),
-             alpha=float(1.0)) -> None:
+
+    def draw(self, index: int or float, x, y, xscale = float(1), yscale = float(1), rot = float(0.0),
+             alpha = float(1.0)) -> None:
         dx = 0
         if not self.isSeparate:
             data = self.__data__[0]
             dx = int(self.width * index)
         else:
             data = self.__data__[int(index % self.number)]
-            
+
         data.opacify(alpha)
         flipmod: str = ""
         if xscale < 0:
@@ -79,15 +79,15 @@ class Sprite(object):
         if yscale < 0:
             flipmod += "v"
         xscale, yscale = abs(xscale), abs(yscale)
-        
+
         data.clip_composite_draw_angle(dx, 0, self.width, self.height, rot, flipmod, x, y, int(self.width * xscale),
-                                 int(self.height * yscale))
-    
+                                       int(self.height * yscale))
+
     def get_handle(self):
         return self.__data__
 
 
-def sprite_load(filepaths, name=str("default"), xoffset=None, yoffset=None, number=int(1)) -> Sprite:
+def sprite_load(filepaths, name = str("default"), xoffset = None, yoffset = None, number = int(1)) -> Sprite:
     global sprite_list
     new = Sprite(filepaths, number, xoffset, yoffset)
     new.name = name
@@ -104,6 +104,6 @@ def sprite_get(name: str) -> Sprite:
     return val
 
 
-def draw_sprite(spr: Sprite, index=int(0) or float(0), x=int(0), y=int(0), xscale=float(1), yscale=float(1),
-                rot=float(0.0), alpha=float(1.0)) -> None:
+def draw_sprite(spr: Sprite, index = int(0) or float(0), x = int(0), y = int(0), xscale = float(1), yscale = float(1),
+                rot = float(0.0), alpha = float(1.0)) -> None:
     spr.draw(index, x, y, xscale, yscale, rot, alpha)

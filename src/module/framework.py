@@ -6,7 +6,8 @@ from module.sprite import *
 __all__ = [
     "GameState", "change_state", "push_state", "pop_state", "quit", "run",
     "io", "Camera", "game_begin", "game_end", "HWND", "current_time", "game_realtime", "uiframe",
-    "scene_width", "scene_height", "scene_set_size"
+    "scene_width", "scene_height", "scene_set_size",
+    "hFont", "hFontLrg", "hFontRetro", "draw_text",
 ]
 
 HWND = None
@@ -20,37 +21,41 @@ hFontRetro = None
 class Font_sprite:
     sprite_index: Sprite = None
     char_list = {}
-    
+    height = 0
+
     def __init__(self, sprite: Sprite, data: str):
         length = len(data)
         if length > 0:
             for i in range(length):
-                try:
-                    currchr = data[i]
-                except KeyError:
-                    break
-                except IndexError:
-                    break
+                currchr = data[i]
                 self.char_list[currchr] = i
             self.sprite_index = sprite
-    
+            self.height = sprite.height
+
     def draw(self, x, y, caption: str, scale: float = 1.0):
-        sdl_color = draw_get_color()
-        fsurface = TTF_RenderUTF8_Blended(self.font, caption.encode('utf-8'), sdl_color)
-        texture = SDL_CreateTextureFromSurface(renderer, fsurface)
-        SDL_FreeSurface(fsurface)
-        image = Image(texture, None, None)
-        image.opacify(sdl_color.a / 255)
-        image.draw(x, y, int(scale * image.w), int(scale * image.h))
-    
-    def load_font(name, size = 20):
-        font = Font(name, size)
-        return font
+        length = len(caption)
+        if length > 0:
+            dx, dy = x, y - scale * self.height * (caption.count('\n') + 1)
+            for i in range(length):
+                currchr: str = caption[i].upper()
+                if currchr in (" ", ' '):
+                    # print(currchr + " - ")
+                    dx += 16 * scale
+                    continue
+                elif currchr is '\n':
+                    dx = x
+                    dy -= self.height * scale
+                    continue
+                else:
+                    currind: int = self.char_list[currchr]
+                    # print(currchr + " - " + str(currind))
+                    draw_sprite(self.sprite_index, currind, dx, dy, scale, scale)
+                    dx += 16 * scale
 
 
 def game_begin():
     global HWND
-    HWND = open_canvas(screen_width, screen_height, full = true)
+    HWND = open_canvas(screen_width, screen_height, full = false)
     SDL_SetWindowTitle(HWND, "Vampire Exodus".encode("UTF-8"))
     # icon = load_texture(path_image + "icon.png")
     # SDL_SetWindowIcon(hwnd, icon)
@@ -59,17 +64,34 @@ def game_begin():
     hide_cursor()
     hide_lattice()
     draw_background_color_set(0, 0, 0)
-    
+
     global hFont, hFontLrg, hFontRetro
     hFont = load_font(path_font + "윤고딕_310.ttf", 20)
     hFontLrg = load_font(path_font + "윤고딕_310.ttf", 28)
-    
-    tempstr = str('!"#$%&' + "'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+    fontlist = []
+    for i in range(0, 58):
+        tempstr = "sFont_" + str(i)
+        fontlist.append(path_ui + tempstr + ".png")
+    ft = Sprite(fontlist, 59, 0, 20)
+
+    tempstr = str('!"' + "#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    hFontRetro = Font_sprite(ft, tempstr)
+
+
+def draw_text(caption: str, x, y, font: int = 2, scale: float = 1.0):
+    global hFont, hFontLrg, hFontRetro
+    dfont = hFontRetro
+    if font == 0:
+        dfont = hFont
+    elif font == 1:
+        dfont = hFontLrg
+    dfont.draw(x, y, caption, scale)
 
 
 def game_end():
     close_canvas()
-    
+
     global hFont, hFontLrg
     del hFont, hFontLrg
 
@@ -87,16 +109,16 @@ class oIOProc:
     key_map = {}
     # list of checking obj.
     checker_list = {}
-    
+
     class iochecker:
         code = None
         life = 2
         owner = None
-        
+
         def __init__(self, nowner, key: SDL_Keycode):
             self.owner = nowner
             self.code = key
-        
+
         def __del__(self):
             self.owner.timer = None
             try:
@@ -106,72 +128,72 @@ class oIOProc:
                 pass
             except AttributeError:
                 pass
-        
+
         def event_step(self):
             if self.life == 0:
                 self.owner.check_pressed = false
                 del self
             else:
                 self.life -= 1
-    
+
     class ionode:
         code = None
         timer = None
         check: bool = false
         check_pressed: bool = false
-        
+
         def __init__(self, key: SDL_Keycode):
             self.code = key
-        
+
         def enter(self):
             self.check = true
             self.check_pressed = true
-            
+
             if self.timer is None:
                 global io
                 self.timer = io.iochecker(self, self.code)
                 io.checker_list[self.code] = self.timer
-                
+
                 global keylogger_list
                 keylogger_list.append(self.timer)
-        
+
         def close(self):
             self.check = false
             self.check_pressed = false
-            
+
             if self.timer is not None:
                 del self.timer
                 self.timer = None
-    
+
     def key_add(self, key: SDL_Keycode):
         newnode = self.ionode(key)
         self.key_map[key] = newnode
         self.key_list.append(key)
         return newnode
-    
+
     def key_check(self, key: SDL_Keycode) -> bool:
         try:
             return (self.key_map[key]).check
         except KeyError:
             return false
-    
+
     def key_check_pressed(self, key: SDL_Keycode) -> bool:
         try:
             return (self.key_map[key]).check_pressed
         except KeyError:
             return false
-    
+
     def proceed(self, kevent):
         try:
             node = self.key_map[kevent.key]
-            
+
             if kevent.type == SDL_KEYDOWN:
                 node.enter()
             elif kevent.type == SDL_KEYUP:
                 node.close()
         except KeyError:
             return
-    
+
     def clear(self):
         if len(self.key_list) > 0:
             for codes in self.key_list:
@@ -196,19 +218,19 @@ class oCamera:
     y: float = 0
     lock: bool = false
     width, height = screen_width, screen_height
-    
+
     def limit(self):
         global screen_width, screen_height, scene_width, scene_height
         self.x = clamp(0, self.x, scene_width - screen_width)
-        self.y = clamp(40, self.y, scene_height - screen_height)
-    
+        self.y = clamp(20, self.y, scene_height - screen_height)
+
     def set_pos(self, x: float = None, y: float = None):
         if x is not None:
             self.x = x
         if y is not None:
             self.y = y
         self.limit()
-    
+
     def add_pos(self, x: float = None, y: float = None):
         if x is not None:
             self.x += x
@@ -229,7 +251,7 @@ class uiframe:
     clicked = false
     color = (255, 255, 255)
     color_inner = (255, 255, 255)
-    
+
     def __init__(self, ntype: str = "ui", nx = 180, ny = 90, nw = 320, nh = 180):
         self.name = ntype
         self.x, self.y, self.width, self.height = nx, ny, nw, nh
@@ -241,13 +263,13 @@ class uiframe:
             ui_top = self
         global ui_list
         ui_list.append(self)
-    
+
     def get_bbox(self):
         return self.x, self.y, self.width, self.height
-    
+
     def update(self, frame_time):
         pass
-    
+
     def draw(self, frame_time):
         draw_set_alpha(1)
         draw_set_color(*self.color)
@@ -258,11 +280,11 @@ class uibutton(uiframe):
     caption: str = "button"
     depth = -100
     color_inner = (0, 0, 0)
-    
+
     def __init__(self, caption: str, nx, ny, nw = 80, nh = 45):
         super().__init__("button", nx, ny, nw, nh)
         self.caption = caption
-    
+
     def draw(self, frame_time):
         super().draw(frame_time)
         draw_set_color(*self.color_inner)
@@ -307,7 +329,7 @@ def ui_draw(frame_time):
 
 def get_frame_time():
     global current_time, game_realtime, paused
-    
+
     frame_time = get_time() - current_time
     current_time += frame_time
     if not paused:
@@ -325,7 +347,7 @@ def change_state(state):
 
 def push_state(state):
     # close_canvas()
-    
+
     global stack
     if len(stack) > 0:
         stack[-1].pause()
@@ -342,7 +364,7 @@ def pop_state():
         stack[-1].exit()
         # remove the current state
         stack.pop()
-    
+
     # execute resume function of the previous state
     if len(stack) > 0:
         stack[-1].resume()
@@ -367,7 +389,7 @@ def unpause():
 def run(start_state):
     global running, stack, io, current_time
     running = True
-    
+
     stack = [start_state]
     start_state.enter()
     current_time = get_time()

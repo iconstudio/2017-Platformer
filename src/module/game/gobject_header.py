@@ -76,11 +76,11 @@ class GObject(object):
     name: str = "None"
     identify: str = ID_OTHERS
     next: object = None
-    
+
     # Advanced properties of object
     oStatus = oStatusContainer.IDLE
     stunned: int = 0
-    
+
     # Properties of sprite
     sprite_index: Sprite = None
     image_alpha: float = 1.0
@@ -89,10 +89,10 @@ class GObject(object):
     visible: bool = true
     depth: int = 0
     image_xscale: float = 1
-    
+
     # for optimization
     step_enable: bool = true
-    
+
     # Physics (real-scale: Km per hours)
     x, y = 0, 0
     xVel, yVel = 0, 0
@@ -102,7 +102,7 @@ class GObject(object):
     gravity_default: float = delta_gravity()
     gravity: float = 0
     onAir: bool = false
-    
+
     def __init__(self, ndepth = int(0), nx = int(0), ny = int(0)):
         if ndepth is not None:
             self.depth = ndepth
@@ -114,13 +114,13 @@ class GObject(object):
         instance_update = true
         if self.identify != "":
             instance_list_spec[self.identify].append(self)
-    
+
     def __str__(self):
         return self.name
-    
+
     def __del__(self):
-        
-        #self.destroy()
+
+        # self.destroy()
         pass
 
     def sprite_set(self, spr: Sprite or str):
@@ -129,7 +129,7 @@ class GObject(object):
         else:
             self.sprite_index = spr
         self.image_index = 0
-    
+
     def destroy(self):
         self.step_enable = false
         global instance_list, instance_list_spec, instance_update, instance_draw_list
@@ -140,32 +140,32 @@ class GObject(object):
         (instance_list_spec[self.identify]).remove(self)
         instance_draw_list.remove(self)
         del self
-    
+
     # Below methods are common-functions for all object that inherits graviton.
     def instance_collide(self, b):
         sx, sy, sw, sh = self.get_bbox()
         ox, oy, ow, oh = b.get_bbox()
-        
+
         if sx >= ox + ow: return False
         if sx + sw <= ox: return False
         if sy + sh <= oy: return False
         if sy >= oy + oh: return False
         return True
-    
+
     def get_bbox(self):
         data = self.sprite_index
         return int(self.x - data.xoffset), int(self.y - data.yoffset), data.width, data.height
-    
+
     def draw_bbox(self):
         draw_rectangle(*self.get_bbox())
-    
+
     # Check the place fits to self
     def place_free(self, vx = 0, vy = 0, olist = None) -> bool:
         clist = olist
         if clist is None:
             global instance_list_spec
             clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
-        
+
         length = len(clist)
         if length > 0:
             # print("Checking Place for one")
@@ -181,14 +181,14 @@ class GObject(object):
             return true
         else:
             return true
-    
+
     def move_contact_x(self, dist: float or int = 1, right: bool = false) -> bool:
         tdist = dist
         if dist < 0:
             tdist = 1000000
         if dist == 0:
             return false
-        
+
         global instance_list_spec
         clist = instance_list_spec["Solid"]
         length = len(clist)
@@ -207,7 +207,7 @@ class GObject(object):
             return false
         else:
             return false
-    
+
     def phy_collide(self, how: float or int):
         if self.xVel != 0:
             self.move_contact_x(abs(how), how > 0)
@@ -216,14 +216,14 @@ class GObject(object):
             else:
                 self.xVel = 0
         self.x = math.floor(self.x)
-    
+
     def move_contact_y(self, dist: float or int = 1, up: bool = false) -> bool:
         tdist = math.ceil(dist)
         if dist < 0:
             tdist = 1000000
         if dist == 0:
             return false
-        
+
         global instance_list_spec
         clist = instance_list_spec["Solid"]
         length = len(clist)
@@ -235,7 +235,7 @@ class GObject(object):
                 if bool(inst.y - inst.sprite_index.yoffset <= int(
                                         self.y - self.sprite_index.yoffset + self.sprite_index.height)) != up:
                     templist.append(inst)
-            
+
             while yprog <= tdist:
                 if not self.place_free(0, cy + sign(cy) * 2, templist):
                     self.y += cy
@@ -248,7 +248,7 @@ class GObject(object):
             return false
         else:
             return false
-    
+
     def phy_thud(self, how: float or int):
         if self.yVel != 0:
             if self.yVel > 0:
@@ -270,7 +270,7 @@ class GObject(object):
         else:
             self.onAir = false
         self.y = math.ceil(self.y)
-    
+
     def draw_self(self):  # Simply draws its sprite on its position.
         data = self.sprite_index
         if not data.__eq__(None):
@@ -279,7 +279,7 @@ class GObject(object):
                 draw_sprite(self.sprite_index, self.image_index, self.x - Camera.x, self.y - Camera.y,
                             self.image_xscale, 1, 0.0,
                             self.image_alpha)
-    
+
     def event_step(self, frame_time):  # The basic mechanisms of objects.
         try:
             count = self.sprite_index.number
@@ -290,10 +290,10 @@ class GObject(object):
                 self.image_index += self.image_speed * count * frame_time * 2.5
                 if self.image_index >= count:
                     self.image_index -= count
-        
+
         if not self.step_enable:
             return
-        
+
         if self.xVel != 0:
             xdist = delta_velocity(self.xVel) * frame_time
             xc = xdist + sign(xdist)
@@ -301,7 +301,7 @@ class GObject(object):
                 self.x += xdist
             else:
                 self.phy_collide(xdist)
-        
+
         ydist = delta_velocity(self.yVel) * frame_time
         if ydist > 0:  # Going up higher
             yc = ydist + 1
@@ -320,10 +320,10 @@ class GObject(object):
                 else:
                     self.xVel = 0
             self.phy_thud(ydist)
-        
+
         self.xVel = clamp(self.xVelMin, self.xVel, self.xVelMax)
         self.yVel = clamp(self.yVelMin, self.yVel, self.yVelMax)
-    
+
     def event_draw(self):  # This will be working for drawing.
         self.draw_self()
         # self.draw_bbox()
@@ -334,16 +334,16 @@ class Solid(GObject):
     # reset some inherited variables
     name = "Solid"
     identify = ID_SOLID
-    
+
     image_speed = 0
     depth = 10000
     step_enable = false
     gravity_default = 0
     xFric, yFric = 0, 0
-    
+
     tile_up: bool = false
     tile_down: bool = false
-    
+
     def tile_correction(self):
         pass
 
@@ -380,7 +380,7 @@ class oDoodadParent(GObject):
     gravity_default = 0
     step_enable = false
     depth = -100
-    
+
     def tile_correction(self):
         pass
 
