@@ -2,8 +2,10 @@ from module.pico2d import *
 from module.functions import *
 from module.constants import *
 
+from module import framework
 from module.framework import Camera
 from module.framework import io
+from streams import game_over
 
 from game.gobject_header import __all__ as header_all
 from game.gobject_header import *
@@ -153,11 +155,12 @@ class oPlayer(GObject):
         container_player = self
 
     def get_dmg(self, how: int = 1, dir = 1):
-        global player_lives
-        player_lives -= how
+        player_got_damage(how)
         if player_lives <= 0:
             self.oStatus = oStatusContainer.DEAD
             self.xVel = 0
+
+            framework.change_state(game_over)
         else:
             self.invincible = 3
             io.clear()
@@ -167,6 +170,10 @@ class oPlayer(GObject):
 
     def event_step(self, frame_time):
         super().event_step(frame_time)
+        if io.key_check_pressed(ord('9')):
+            self.get_dmg(3)
+            return
+
         if self.invincible > 0:
             self.invincible -= frame_time
             self.image_alpha = 0.5

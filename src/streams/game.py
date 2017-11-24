@@ -19,15 +19,22 @@ __all__ = [
 # ==================================================================================================
 name = "game_state"
 background_sprite = "bgNight"
+manager = None
 
 
 def enter():
-    StageIntro()
+    global manager
+    if manager is None:
+        manager = StageIntro()
     delay(0.5)
 
 
 def exit():
-    pass
+    global manager
+    if manager is not None:
+        manager.clear()
+        del manager
+        manager = None
 
 
 def update(frame_time):
@@ -52,6 +59,9 @@ def draw_clean():
                 dx += screen_width
     elif background_sprite in ("bgNight",):
         draw_sprite(back, 0, 0, 0)
+
+    if manager is None:
+        return
 
     global instance_draw_list
     if len(instance_draw_list) > 0:
@@ -105,8 +115,8 @@ class GameExecutor:
         player_lives_clear(3)
         for inst in instance_list:
             inst.destroy()
+            del inst
         instance_list.clear()
-        instance_list_spec.clear()
         instance_draw_list.clear()
 
     def update_begin(self):
@@ -121,6 +131,8 @@ class StageIntro(GameExecutor):
         io.key_add(SDLK_LEFT)
         io.key_add(SDLK_RIGHT)
         io.key_add(ord('x'))
+        io.key_add(ord('9'))
+        io.key_add(ord('8'))
 
         # Terrains
         tcontainer.signin("1", oBrickCastle)

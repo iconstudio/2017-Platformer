@@ -1,8 +1,10 @@
 from module.pico2d import *
+from module.functions import *
 from module.constants import *
 
 import module.framework as framework
 from streams import game
+from streams import main
 
 __all__ = [
     "name", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
@@ -11,30 +13,37 @@ __all__ = [
 # ==================================================================================================
 #                                       프레임워크 함수
 # ==================================================================================================
-name = "pause_state"
-
+name = "gameover_state"
+alpha: float = 0
+rpush: float = 0
+tpush: float = 0
 
 # noinspection PyGlobalUndefined
 def enter():
-    global logo
-    logo = load_image(path_ui + "paused.png")
-
+    global alpha, tpush
+    tpush = 0
 
 def exit():
-    global logo
-    del logo
     framework.unpause()
 
 
 def update(frame_time):
-    pass
+    global alpha, rpush, tpush
+    if tpush < 3:
+        alpha = bezier4(tpush / 3, 0.21, 0.61, 0.35, 1)
+        tpush += frame_time * 0.9
+    else:
+        alpha = 1
+        tpush = 3
 
 
 def draw(frame_time):
-    global logo
+    global alpha
     clear_canvas()
     game.draw_clean()
-    logo.draw(screen_width / 2, 40)
+    draw_set_color(0, 0, 0)
+    draw_set_alpha(alpha)
+    draw_rectangle(0, 0, screen_width, screen_height, false)
     update_canvas()
 
 
@@ -46,7 +55,7 @@ def handle_events(frame_time):
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_p) or (event.type, event.key) == (
                     SDL_KEYDOWN, SDLK_ESCAPE):
-                framework.pop_state()
+                framework.quit()
 
 
 def pause():

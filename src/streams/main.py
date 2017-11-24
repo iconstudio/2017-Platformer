@@ -17,6 +17,7 @@ __all__ = [
 # ==================================================================================================
 name = "main_state"
 
+manager = None
 menusy = screen_height - 180
 
 
@@ -33,21 +34,21 @@ class MainMenu:
     menu_hsize = 50
     depthlist = []
     currdepth = 0
-    
+
     def menu_init(self, default_selected: int = 0):
         newone = MenuEnumerator()
         self.depthlist.append(newone)
         newone.menusel = default_selected
         newone.menuold = default_selected
         newone.menupos = self.menu_hsize * default_selected
-    
+
     def menu_add(self, caption: str):
         menum = self.depthlist[self.currdepth]
         menum.menunod.append(caption)
         menum.menuscl.append(0)
         menum.menucnt += 1
         return menum.menucnt - 1
-    
+
     def update(self, frame_time):
         menum = self.depthlist[self.currdepth]
         vel = frame_time * delta_velocity(10)
@@ -58,12 +59,12 @@ class MainMenu:
                     menum.menuscl[i] -= menum.menuscl[i] / 5 * vel
             elif menum.menuscl[i] != 1:
                 menum.menuscl[i] += (1 - menum.menuscl[i]) / 5 * vel
-    
+
     def draw(self, frame_time):
         menum = self.depthlist[self.currdepth]
         ddx = screen_width / 2 + 160
         ddy = menusy + menum.menupos + 10
-        
+
         global hfont, hfontlrg
         for j in range(menum.menucnt):
             dhfont = hfont
@@ -83,43 +84,51 @@ class MainMenu:
 
 # noinspection PyGlobalUndefined
 def enter():
+    global manager
+
     io.key_add(SDLK_UP)
     io.key_add(SDLK_LEFT)
     io.key_add(SDLK_DOWN)
     io.key_add(ord('z'))
     io.key_add(ord('x'))
     io.key_add(SDLK_RETURN)
-    
-    global hfontsml, hfont, hfontlrg
-    hfontsml = load_font(path_font + "Contl___.ttf", 36)
-    hfont = load_font(path_font + "Contl___.ttf", 40)  # "윤고딕_310.ttf"
-    hfontlrg = load_font(path_font + "Contl___.ttf", 44)
 
-    draw_set_alpha(1)
-    global mainmenu, mn_begin, mn_opt, mn_credit, mn_end
-    mainmenu = MainMenu()
-    mainmenu.menu_init(0)
-    mn_begin = mainmenu.menu_add("begin game")
-    mn_opt = mainmenu.menu_add("option")
-    mn_credit = mainmenu.menu_add("credit")
-    mn_end = mainmenu.menu_add("end game")
+    if manager is None:
+        global hfontsml, hfont, hfontlrg
+        hfontsml = load_font(path_font + "Contl___.ttf", 36)
+        hfont = load_font(path_font + "Contl___.ttf", 40)  # "윤고딕_310.ttf"
+        hfontlrg = load_font(path_font + "Contl___.ttf", 44)
+
+        draw_set_alpha(1)
+        global mainmenu, mn_begin, mn_opt, mn_credit, mn_end
+        manager = mainmenu = MainMenu()
+        mainmenu.menu_init(0)
+        mn_begin = mainmenu.menu_add("begin game")
+        mn_opt = mainmenu.menu_add("option")
+        mn_credit = mainmenu.menu_add("credit")
+        mn_end = mainmenu.menu_add("end game")
 
 
 def exit():
     global hfontsml, hfont, hfontlrg
     del hfontsml, hfont, hfontlrg
 
+    global manager
+    if manager is not None:
+        del manager
+        manager = None
+
 
 def update(frame_time):
     global mainmenu
     mainmenu.update(frame_time)
     menum = mainmenu.depthlist[mainmenu.currdepth]
-    
+
     if io.key_check_pressed(ord('z')):
         io.clear()
     elif io.key_check_pressed(SDLK_RETURN) or io.key_check_pressed(ord('x')):
         io.clear()
-        
+
         if mn_begin == menum.menusel:
             framework.change_state(game)
         elif mn_opt == menum.menusel:

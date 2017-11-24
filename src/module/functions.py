@@ -8,7 +8,7 @@ from sdl2.rect import SDL_Rect
 import module.constants as constants
 
 __all__ = [
-    "sqr", "sign", "degtorad", "radtodeg", "direction", "point_distance", "oParser",
+    "sqr", "sign", "degtorad", "radtodeg", "direction", "point_distance", "oParser", "bezier4",
     "point_in_rectangle", "rect_in_rectangle", "rect_in_rectangle_opt", "delta_velocity", "delta_gravity",
     "irandom", "irandom_range", "distribute", "choose", "list_seek",
     "make_color_rgb"
@@ -38,7 +38,38 @@ def radtodeg(radian: float) -> float:
     return radian * 180 / math.pi
 
 
+def bezier4(t, x1, x2, x3, x4):
+    factor = 1 - t
+
+    return factor * (factor * (factor * x1 + t * x2)
+                     + t * (factor * x2 + t * x3)) + t * (factor * (factor * x2 + t * x3) + t * (factor * x3 + t * x4))
+
+
 # vector
+# distance
+def point_distance(x1, y1, x2, y2) -> float:
+    return math.hypot((x2 - x1), (y2 - y1))
+
+
+def point_in_rectangle(px1, py1, x1, y1, x2, y2) -> bool:
+    return x1 <= px1 <= x2 and y1 <= py1 <= y2
+
+
+def rect_in_rectangle_opt(pstr: SDL_Rect, dstr: SDL_Rect) -> bool:
+    first = pstr
+    second = dstr
+    result = bool(rect.SDL_HasIntersection(first, second))
+    return result
+
+
+def rect_in_rectangle(px1, py1, pw, ph, x1, y1, w, h) -> bool:
+    if px1 > x1 + w: return False
+    if px1 + pw < x1: return False
+    if py1 + ph < x1: return False
+    if py1 > y1 + h: return False
+
+    return True
+
 
 # Object : Parser
 class oParser:
@@ -125,31 +156,6 @@ class oParser:
 
 class direction(oParser):
     value_max = 360.0
-
-
-# distance
-def point_distance(x1, y1, x2, y2) -> float:
-    return math.hypot((x2 - x1), (y2 - y1))
-
-
-def point_in_rectangle(px1, py1, x1, y1, x2, y2) -> bool:
-    return x1 <= px1 <= x2 and y1 <= py1 <= y2
-
-
-def rect_in_rectangle_opt(pstr: SDL_Rect, dstr: SDL_Rect) -> bool:
-    first = pstr
-    second = dstr
-    result = bool(rect.SDL_HasIntersection(first, second))
-    return result
-
-
-def rect_in_rectangle(px1, py1, pw, ph, x1, y1, w, h) -> bool:
-    if px1 > x1 + w: return False
-    if px1 + pw < x1: return False
-    if py1 + ph < x1: return False
-    if py1 > y1 + h: return False
-
-    return True
 
 
 # physics

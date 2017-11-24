@@ -26,6 +26,7 @@ lattice_on: bool = True
 audio_on: bool = False
 background_color: SDL_Color = SDL_Color(210, 210, 210)
 draw_color: SDL_Color = SDL_Color()
+screen_rect = SDL_Rect(0, 0, screen_width, screen_height)
 
 __all__ = [
               "clamp", "get_time", "open_canvas", "close_canvas", "update_canvas", "clear_canvas", "clear_canvas_now",
@@ -33,7 +34,7 @@ __all__ = [
               "draw_set_color", "draw_get_color", "draw_set_alpha", "draw_background_color_set", "draw_rectangle",
               "get_events", "load_texture", "load_image", "load_font", "load_music", "load_wav",
               "Event", "Image", "Font",
-              "SDL_SetWindowTitle", "SDL_SetWindowIcon", "SDL_Color", "lattice_on", "audio_on",
+              "SDL_SetWindowTitle", "SDL_SetWindowIcon", "SDL_Color", "lattice_on", "audio_on", "screen_rect",
           ] + sdl2.render.__all__ + keyboard.__all__ + events.__all__ + keycode.__all__ + rect.__all__ + video.__all__
 
 
@@ -42,17 +43,19 @@ def clamp(minimum, x, maximum):
 
 
 def draw_set_color(newr: SDL_Color or int, newg = None, newb = None):
-    global draw_color
+    global renderer, draw_color
     if type(newr) == SDL_Color:
         draw_color = newr
     else:
         if newg is not None and newb is not None:
             draw_color.r, draw_color.g, draw_color.b = newr, newg, newb
+    SDL_SetRenderDrawColor(renderer, draw_color.r, draw_color.g, draw_color.b, draw_color.a)
 
 
 def draw_set_alpha(newa: float):
-    global draw_color
+    global renderer, draw_color
     draw_color.a = int(newa * 255)
+    SDL_SetRenderDrawColor(renderer, draw_color.r, draw_color.g, draw_color.b, draw_color.a)
 
 
 def draw_get_color():
@@ -73,6 +76,7 @@ def open_canvas(w = int(800), h = int(600), sync = False, full = False):
     global canvas_width, canvas_height
     global debug_font
     global audio_on
+    global rectangle
 
     canvas_width, canvas_height = w, h
 
@@ -109,6 +113,8 @@ def open_canvas(w = int(800), h = int(600), sync = False, full = False):
 
     if renderer is None:
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE)
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND)
+    rectangle = load_texture(path_image + "rectangle.png")
 
     # SDL_ShowCursor(SDL_DISABLE)
 
@@ -168,6 +174,7 @@ def clear_canvas():
             SDL_RenderDrawLine(renderer, x, 0, x, canvas_height)
         for y in range(canvas_height - 1, 0, -100):
             SDL_RenderDrawLine(renderer, 0, y, canvas_width, y)
+    SDL_SetRenderDrawColor(renderer, draw_color.r, draw_color.g, draw_color.b, draw_color.a)
 
 
 def clear_canvas_now():
@@ -207,13 +214,17 @@ def make_sdlrect(x, y, w, h):
 
 
 def draw_rectangle(x1, y1, x2, y2, outline: bool = false):
-    global draw_color
-    SDL_SetRenderDrawColor(renderer, draw_color.r, draw_color.g, draw_color.b, draw_color.a)
+
+    global renderer, rectangle, draw_color
+
     drect = SDL_Rect(int(x1), int(-y2 + canvas_height - 1), int(x2 - x1 + 1), int(y2 - y1 + 1))
-    if outline:
-        SDL_RenderDrawRect(renderer, drect)
-    else:
-        SDL_RenderFillRect(renderer, drect)
+    trect = SDL_Rect()
+    SDL_SetRenderTarget(renderer, rectangle)
+    SDL_SetRenderDrawColor(renderer, draw_color.r, draw_color.g, draw_color.b, draw_color.a)
+    SDL_RenderFillRect(renderer, drect)
+    SDL_RenderCopy(renderer, rectangle, trect, drect)
+
+    del drect, trect
 
 
 class Event:
@@ -373,6 +384,7 @@ class Image:
 def load_texture(name):
     global renderer
     texture = IMG_LoadTexture(renderer, name.encode('UTF-8'))
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND)
     if not texture:
         print('cannot load %s' % name)
         raise IOError
@@ -398,6 +410,7 @@ class Font:
         sdl_color = draw_get_color()
         fsurface = TTF_RenderUTF8_Blended(self.font, caption.encode('utf-8'), sdl_color)
         texture = SDL_CreateTextureFromSurface(renderer, fsurface)
+        SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND)
         SDL_FreeSurface(fsurface)
         image = Image(texture, None, None)
         image.opacify(sdl_color.a / 255)
