@@ -29,12 +29,16 @@ draw_color: SDL_Color = SDL_Color()
 screen_rect = SDL_Rect(0, 0, screen_width, screen_height)
 
 __all__ = [
-              "clamp", "get_time", "open_canvas", "close_canvas", "update_canvas", "clear_canvas", "clear_canvas_now",
-              "show_lattice", "hide_lattice", "hide_cursor", "delay", "background_color", "draw_color", "audio_on",
-              "draw_set_color", "draw_get_color", "draw_set_alpha", "draw_background_color_set", "draw_rectangle",
-              "get_events", "load_texture", "load_image", "load_font", "load_music", "load_wav",
-              "Event", "Image", "Font",
-              "SDL_SetWindowTitle", "SDL_SetWindowIcon", "SDL_Color", "lattice_on", "audio_on", "screen_rect",
+              "clamp", "get_time", "delay", "screen_rect",
+              "Event", "Image", "Font", "get_events", "load_texture", "load_image", "load_font",
+              "open_canvas", "close_canvas", "update_canvas", "clear_canvas", "clear_canvas_now",
+              "show_lattice", "hide_lattice", "lattice_on", "audio_on", "show_cursor", "hide_cursor",
+              "background_color", "draw_color", "draw_set_color", "draw_get_color", "draw_set_alpha",
+              "draw_background_color_set",
+              "draw_rectangle",
+              "load_music", "load_wav",
+
+              "SDL_SetWindowTitle", "SDL_SetWindowIcon", "SDL_Color",
           ] + sdl2.render.__all__ + keyboard.__all__ + events.__all__ + keycode.__all__ + rect.__all__ + video.__all__
 
 
@@ -214,7 +218,6 @@ def make_sdlrect(x, y, w, h):
 
 
 def draw_rectangle(x1, y1, x2, y2, outline: bool = false):
-
     global renderer, rectangle, draw_color
 
     drect = SDL_Rect(int(x1), int(-y2 + canvas_height - 1), int(x2 - x1 + 1), int(y2 - y1 + 1))
@@ -223,6 +226,7 @@ def draw_rectangle(x1, y1, x2, y2, outline: bool = false):
     SDL_SetRenderDrawColor(renderer, draw_color.r, draw_color.g, draw_color.b, draw_color.a)
     SDL_RenderFillRect(renderer, drect)
     SDL_RenderCopy(renderer, rectangle, trect, drect)
+
 
     del drect, trect
 

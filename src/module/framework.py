@@ -1,6 +1,8 @@
 from module.pico2d import *
 from module.constants import *
 
+import json
+
 from module.sprite import *
 
 __all__ = [
@@ -77,6 +79,12 @@ def game_begin():
 
     tempstr = str('!"' + "#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ")
     hFontRetro = Font_sprite(ft, tempstr)
+
+    with open(path_data + "option.json", "r") as opfile:
+        data = json.load(opfile)
+        volsfx: int = data["volume_sfx"]
+        volmus: int = data["volume_mus"]
+        optefx: bool = data["effect"]
 
 
 def draw_text(caption: str, x, y, font: int = 2, scale: float = 1.0):

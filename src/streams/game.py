@@ -6,6 +6,8 @@ from module.framework import Camera
 from module.framework import io
 import game_pause
 
+import json
+
 from module.sprite import *
 from module.terrain import *
 from module.game.game_containers import *
@@ -110,21 +112,6 @@ def resume():
 
 
 class GameExecutor:
-    def clear(self):
-        global instance_list, instance_list_spec, instance_draw_list
-        player_lives_clear(3)
-        for inst in instance_list:
-            inst.destroy()
-            del inst
-        instance_list.clear()
-        instance_draw_list.clear()
-
-    def update_begin(self):
-        global instance_list, instance_draw_list
-        instance_draw_list = sorted(instance_list, key = lambda gobject: -gobject.depth)
-
-
-class StageIntro(GameExecutor):
     def __init__(self):
         framework.scene_set_size(screen_width * 3)
         Camera.set_pos(0, 0)
@@ -133,11 +120,29 @@ class StageIntro(GameExecutor):
         io.key_add(ord('x'))
         io.key_add(ord('9'))
         io.key_add(ord('8'))
+        tcontainer.signin("@", oPlayer)
+
+    def clear(self):
+        global instance_list, instance_list_spec, instance_draw_list
+        player_lives_clear(3)
+        #for inst in instance_list:
+        #    inst.destroy()
+        #    del inst
+        #instance_list.clear()
+        #instance_draw_list.clear()
+
+    def update_begin(self):
+        global instance_list, instance_draw_list
+        instance_draw_list = sorted(instance_list, key = lambda gobject: -gobject.depth)
+
+
+class StageIntro(GameExecutor):
+    def __init__(self):
+        super().__init__()
 
         # Terrains
         tcontainer.signin("1", oBrickCastle)
         tcontainer.signin("2", oLush)
-        tcontainer.signin("@", oPlayer)
         tcontainer.signin("w", oMillHousechip)
         tcontainer.signin("l", oMillHousechipL)
         tcontainer.signin("r", oMillHousechipR)

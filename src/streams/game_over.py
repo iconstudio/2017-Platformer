@@ -44,6 +44,7 @@ def draw(frame_time):
     draw_set_color(0, 0, 0)
     draw_set_alpha(alpha)
     draw_rectangle(0, 0, screen_width, screen_height, false)
+    framework.draw_text("Game Over", screen_width / 2, screen_height / 2, scale = 2)
     update_canvas()
 
 

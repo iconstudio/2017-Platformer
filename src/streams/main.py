@@ -17,7 +17,6 @@ __all__ = [
 # ==================================================================================================
 name = "main_state"
 
-manager = None
 menusy = screen_height - 180
 
 
@@ -84,7 +83,7 @@ class MainMenu:
 
 # noinspection PyGlobalUndefined
 def enter():
-    global manager
+    global mainmenu
 
     io.key_add(SDLK_UP)
     io.key_add(SDLK_LEFT)
@@ -93,15 +92,15 @@ def enter():
     io.key_add(ord('x'))
     io.key_add(SDLK_RETURN)
 
-    if manager is None:
+    if mainmenu is None:
         global hfontsml, hfont, hfontlrg
         hfontsml = load_font(path_font + "Contl___.ttf", 36)
         hfont = load_font(path_font + "Contl___.ttf", 40)  # "윤고딕_310.ttf"
         hfontlrg = load_font(path_font + "Contl___.ttf", 44)
 
         draw_set_alpha(1)
-        global mainmenu, mn_begin, mn_opt, mn_credit, mn_end
-        manager = mainmenu = MainMenu()
+        global mn_begin, mn_opt, mn_credit, mn_end
+        mainmenu = MainMenu()
         mainmenu.menu_init(0)
         mn_begin = mainmenu.menu_add("begin game")
         mn_opt = mainmenu.menu_add("option")
@@ -113,10 +112,11 @@ def exit():
     global hfontsml, hfont, hfontlrg
     del hfontsml, hfont, hfontlrg
 
-    global manager
-    if manager is not None:
-        del manager
-        manager = None
+    global mainmenu
+    mainmenu.depthlist.clear()
+    if mainmenu is not None:
+        del mainmenu
+        mainmenu = None
 
 
 def update(frame_time):

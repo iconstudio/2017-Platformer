@@ -33,7 +33,7 @@ path_effect = path_image + "effect\\"
 path_background = path_image + "bg\\"
 path_ui = path_image + "ui\\"
 path_map = path_resource + "maps\\"
-path_data = "..\\data\\"
+path_data = ".\\data\\"
 
 
 # Colors

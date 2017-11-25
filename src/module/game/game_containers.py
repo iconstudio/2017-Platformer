@@ -170,6 +170,10 @@ class oPlayer(GObject):
 
     def event_step(self, frame_time):
         super().event_step(frame_time)
+        if player_get_lives() <= 0:
+            self.get_dmg()
+            return
+
         if io.key_check_pressed(ord('9')):
             self.get_dmg(3)
             return
