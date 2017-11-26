@@ -116,8 +116,11 @@ class GameExecutor:
     def __init__(self):
         framework.scene_set_size(screen_width * 3)
         Camera.set_pos(0, 0)
+
         io.key_add(SDLK_LEFT)
+        io.key_add(SDLK_UP)
         io.key_add(SDLK_RIGHT)
+        io.key_add(SDLK_DOWN)
         io.key_add(ord('x'))
         io.key_add(ord('9'))
         io.key_add(ord('8'))
@@ -125,6 +128,7 @@ class GameExecutor:
         terrain_tile_assign(1, oBrickCastle, 0)
         terrain_tile_assign(2, oBrickDirt, 0)
         terrain_tile_assign(3, oLush, 0)
+        terrain_tile_assign(5, oLadder, 0)
         terrain_tile_assign(26, oTorch, 1)
 
         terrain_tile_assign(25, oPlayer, 2)
@@ -157,6 +161,6 @@ class StageIntro(GameExecutor):
         terrain_tile_assign(21, oMillHousechipR, 3)
         terrain_tile_assign(22, oMillHousechipM, 3)
 
-        first_scene = TerrainGenerator("begin")
-        first_scene.generate()
+        scene = TerrainGenerator("begin")
+        scene.generate()
         self.update_begin()

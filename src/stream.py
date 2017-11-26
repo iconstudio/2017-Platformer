@@ -67,6 +67,7 @@ if __name__ == "__main__":
                 "sTorch", 8, 10)
     sprite_load([path_theme + "lush_top_0.png", path_theme + "lush_top_1.png", path_theme + "lush_top_2.png"],
                 "sLushDoodad", 0, 0)
+    sprite_load([path_theme + "brick_mine_top_0.png", path_theme + "brick_mine_top_1.png"], "sDirtBrickDoodad", 0, 0)
     sprite_load(path_theme + "flat_0.png", "FlatTop", 0, 0)
 
     # Entity

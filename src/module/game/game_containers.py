@@ -15,7 +15,7 @@ __all__ = [
               "instance_create", "player_got_damage", "player_lives_clear", "player_get_lives",
               "oBrickCastle", "oLush", "oBrickDirt", "oStonewall",
               "oLushDecoration", "oMillHousechip", "oMillHousestone", "oMillHousechipL", "oMillHousechipR",
-              "oMillHousechipM", "oTorch",
+              "oMillHousechipM", "oTorch", "oLadder",
               "oPlayer", "oSoldier", "oSnake", "oCobra",
           ] + header_all
 
@@ -122,6 +122,19 @@ class oBrickDirt(Solid):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sDirtBrick")
         self.image_index = choose(0, 0, 0, 0, 0, 0, 1, 1)
+
+    def tile_correction(self):
+        if not self.tile_up or not self.tile_down:
+            self.sprite_set("sDirtBrickDirectional")
+            if self.tile_up and not self.tile_down:
+                self.image_index = 0
+            elif self.tile_down:
+                self.image_index = 1
+            else:
+                self.image_index = 2
+            if not self.tile_up:
+                newdeco = instance_create(oDirtBrickDecorator, None, self.x, self.y + 19)
+                newdeco.parent = self
 
 
 # Stone Wall
@@ -497,6 +510,17 @@ class oCobra(oSnake):
         self.sprite_set("CobraIdle")
 
 
+# A Decorator of Dirt
+class oDirtBrickDecorator(oDoodadParent):
+    name = "Dirt Decoration"
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sDirtBrickDoodad")
+        self.image_speed = 0
+        self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 1, 1)
+
+
 # A Decorator of Lush
 class oLushDecoration(oDoodadParent):
     name = "Lush Decoration"
@@ -518,6 +542,17 @@ class oTorch(oDoodadParent):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sTorch")
         self.image_index = irandom(4)
+
+
+# Ladder
+class oLadder(oDoodadParent):
+    name = "Ladder"
+    depth = 900
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("Ladder")
+        self.image_speed = 0
 
 
 # A tile of mil at intro

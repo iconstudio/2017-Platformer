@@ -172,7 +172,6 @@ class TerrainGenerator:
         if length <= 0:
             return
 
-        entireln = []
         currln, prevln = [], []
         nx, ny = 0, self.map_grid_h * self.tile_h
         for i in range(length):
@@ -192,16 +191,18 @@ class TerrainGenerator:
                     if ny <= 20:
                         obj.tile_down = true
 
-                    length = len(entireln)
-                    if length > self.map_grid_w:
+                    if obj.identify == ID_SOLID:
+                        # print("solid")
                         try:
-                            if entireln[length - self.map_grid_w] == current:
+                            if i >= self.map_grid_w and self.data[i - self.map_grid_w] == current:
+                                #print(str(obj) + "<" + str(current) + "> (x = " + str(nx) + ", y = " + str(ny) + ")")
                                 obj.tile_up = true
+                            if i < length - self.map_grid_w and self.data[i + self.map_grid_w] == current:
+                                #print(str(obj) + "<" + str(current) + "> (x = " + str(nx) + ", y = " + str(ny) + ")")
+                                obj.tile_down = true
                         except IndexError:
                             pass
-                    currln.append(current)  # save objects in current line
-                    entireln.append(current)
-
+                    currln.append(current)
                     try:
                         if whattocreate[1] in (TYPE_INSTANCE, TYPE_DOODAD):
                             obj.x += self.tile_w / 2
@@ -219,3 +220,8 @@ class TerrainGenerator:
 
                 nx = 0
                 ny -= self.tile_h
+
+        global instance_list_spec
+        clist = instance_list_spec[ID_SOLID]
+        for inst in clist:
+            inst.tile_correction()
