@@ -269,7 +269,7 @@ class GObject(object):
                     self.yVel *= -0.6
         else:
             self.onAir = false
-        self.y = math.ceil(self.y)
+        self.y = math.floor(self.y)
 
     def draw_self(self):  # Simply draws its sprite on its position.
         data = self.sprite_index

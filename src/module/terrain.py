@@ -66,7 +66,7 @@ class TerrainManager:
             if current is not ';' and current is not '0' and current is not '\n':
                 try:
                     whattocreate = tile_mess[current]
-                    obj = whattocreate[0](None, newx, newy)
+                    obj = (whattocreate[0])(None, newx, newy)
                     if newy >= framework.scene_height - 20:
                         obj.tile_up = true
                     if newy <= 20:
@@ -152,7 +152,7 @@ class TerrainGenerator:
         # Parsing
         with open(path_data + paths + ".json", "r") as mapfile:
             self.parsed = json.load(mapfile)
-            self.data   = self.parsed["data"]
+            self.data = self.parsed["data"]
             self.number = self.parsed["number"]
             self.grid_w = self.parsed["grid_w"]
             self.grid_h = self.parsed["grid_h"]
@@ -172,6 +172,7 @@ class TerrainGenerator:
         if length <= 0:
             return
 
+        entireln = []
         currln, prevln = [], []
         nx, ny = 0, self.map_grid_h * self.tile_h
         for i in range(length):
@@ -179,26 +180,30 @@ class TerrainGenerator:
 
             if current is not '0':
                 try:
+                    def icreate(ty, depth, x, y):
+                        inst = ty(depth, x, y)
+                        return inst
+
                     whattocreate = tile_mess[current]
-                    print(current)
-                    obj = whattocreate[0](None, nx, ny)
-                    print(obj)
+                    obj = icreate(whattocreate[0], None, nx, ny)
+                    # print(str(obj) + "<" + str(current) + "> (x = " + str(nx) + ", y = " + str(ny) + ")")
                     if ny >= framework.scene_height - 20:
                         obj.tile_up = true
                     if ny <= 20:
                         obj.tile_down = true
 
-                    length = len(currln)
+                    length = len(entireln)
                     if length > self.map_grid_w:
                         try:
-                            if currln[length - self.map_grid_w] == current:
+                            if entireln[length - self.map_grid_w] == current:
                                 obj.tile_up = true
                         except IndexError:
                             pass
                     currln.append(current)  # save objects in current line
+                    entireln.append(current)
 
                     try:
-                        if whattocreate[1] == TYPE_INSTANCE:
+                        if whattocreate[1] in (TYPE_INSTANCE, TYPE_DOODAD):
                             obj.x += self.tile_w / 2
                             obj.y += self.tile_h / 2
                     except AttributeError:
@@ -207,6 +212,10 @@ class TerrainGenerator:
                     pass
 
             nx += self.tile_w
-            if nx >= self.map_grid_w:
+            if nx >= self.map_grid_w * self.tile_w:
+                del prevln
+                prevln = currln.copy()  # push current line back to previous line
+                currln.clear()  # make new list
+
                 nx = 0
                 ny -= self.tile_h

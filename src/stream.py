@@ -64,7 +64,7 @@ if __name__ == "__main__":
     sprite_load(path_theme + "ladder_0.png", "Ladder", 0, 0)
     sprite_load([path_theme + "TikiTorch_0.png", path_theme + "TikiTorch_1.png", path_theme + "TikiTorch_2.png",
                  path_theme + "TikiTorch_3.png", path_theme + "TikiTorch_4.png", path_theme + "TikiTorch_1.png"],
-                "sTorch", 8, 32)
+                "sTorch", 8, 10)
     sprite_load([path_theme + "lush_top_0.png", path_theme + "lush_top_1.png", path_theme + "lush_top_2.png"],
                 "sLushDoodad", 0, 0)
     sprite_load(path_theme + "flat_0.png", "FlatTop", 0, 0)
