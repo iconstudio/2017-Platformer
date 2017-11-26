@@ -1,96 +1,56 @@
-from game.gobject_header import *
-from module import framework
 from module.constants import *
+from module.functions import *
+
+from module import framework
+
+import json
+from game.gobject_header import *
 
 __all__ = [
-    "tcontainer", "ThemeContainer", "TerrainManager", "TerrainAllocator"
+    "terrain_tile_assign", "terrain_tile_clear", "TerrainManager", "TerrainGenerator",
+    "TYPE_TERRAIN", "TYPE_DOODAD", "TYPE_INSTANCE", "TYPE_BG"
 ]
-
 
 # ==================================================================================================
 #                                               지형
 # ==================================================================================================
-# Object : Terrain Container
-class ThemeContainer:
-    mess = {}
 
-    def signin(self, string: str, ty: type):
-        self.mess[string] = ty
-
-    def clear(self):
-        self.mess.clear()
+TYPE_TERRAIN = 0
+TYPE_DOODAD = 1
+TYPE_INSTANCE = 2
+TYPE_BG = 3
+tile_mess = {}
 
 
-# Object : Terrain Container
-class TerrainContainer:
-    mess = {}
-
-    def signin(self, string: str, ty: type):
-        self.mess[string] = ty
-
-    def clear(self):
-        self.mess.clear()
+def terrain_tile_assign(string: str or int, *ty: (type, int)):
+    global tile_mess
+    tile_mess[string] = (ty)
 
 
-tcontainer = TerrainContainer()
+def terrain_tile_clear(string: str, ty: type):
+    global tile_mess
+    tile_mess.clear()
 
 
-# Object : Terrain Manager
+# Terrain Manager
 class TerrainManager:
-    def __init__(self, theme: int = 0):
-        self.type_theme = theme
-        self.data = TerrainAllocator(self.type_theme, 0, 0)
+    data = ""
+    path_world = ""
 
-    def allocate(self, world: str, nx = None, ny = None):
-        try:
-            print("Allocating a chunk.")
-            self.data.allocate(world, self.type_theme)
-            if nx is not None:
-                self.data.x = nx
-            if ny is not None:
-                self.data.y = ny
+    def __init__(self, themepath: str):
+        self.path_world = themepath
 
-        except IndexError:
-            print("Cannot add new chunk!")
+    def allocate(self, world: str):
+        print("Allocating a chunk.")
+        self.data = world
 
     def generate(self):
-        self.data.generate()
-
-        global instance_list_spec
-        clist = instance_list_spec[ID_SOLID]
-        for inst in clist:
-            inst.tile_correction()
-
-    def __del__(self):
-        del self.data
-
-
-# Object : A Allocating block of Terrain
-class TerrainAllocator:
-    data: str = ""  # Determines what to generate
-    type_theme: int = 0
-    type_path: int = 0  # Determines how to do.
-    tile_w: int = 20
-    tile_h: int = 20
-    x, y, w, h, hsz, vsz = 0, 0, 0, 0, 0, 0
-
-    def __init__(self, nt: int, nx: int, ny: int, nw: int = screen_width, nh: int = screen_height):
-        self.assignment(nt, nx, ny, nw, nh)
-
-    def assignment(self, nt: int, nx: int, ny: int, nw: int = screen_width, nh: int = screen_height):
-        # The position of a map
-        self.x, self.y = nx, ny
-        # The size of a map
-        self.w, self.h = nw, nh
-        # The number of grid
-        self.hsz, self.vsz = int(nw / self.tile_w), int(nh / self.tile_h)
-        self.type_theme = nt
-
-    def generate(self):
+        global tile_mess
         print("Generating a chunk.")
-        newx = self.x
-        newy = self.y + self.h - self.tile_h
-        neww = self.hsz
+
+        newx = 0
+        newy = 16 * 20 - 20
+        neww = 32
         currln = ""
         currlist: list = []
         prevlist: list = []
@@ -105,8 +65,8 @@ class TerrainAllocator:
 
             if current is not ';' and current is not '0' and current is not '\n':
                 try:
-                    whattocreate = tcontainer.mess[current]
-                    obj = whattocreate(None, newx, newy)
+                    whattocreate = tile_mess[current]
+                    obj = whattocreate[0](None, newx, newy)
                     if newy >= framework.scene_height - 20:
                         obj.tile_up = true
                     if newy <= 20:
@@ -134,19 +94,19 @@ class TerrainAllocator:
                 if current == ';':
                     currlist.clear()
                     j = 0
-                    newx = self.x
-                    newy -= self.tile_h
+                    newx = 0
+                    newy -= 20
                     continue
 
             j += 1
             currln += current
-            newx += self.tile_w
+            newx += 20
             # Wrap
             if current == '\n':
                 neww = j
                 j = 0
-                newx = self.x
-                newy -= self.tile_h
+                newx = 0
+                newy -= 20
                 # Parsing
                 # """   * previous line     <- X [preprevlist.?]
                 # """   * current line      <- prevlist (but refered when parsing 'next' line)
@@ -166,6 +126,87 @@ class TerrainAllocator:
                 prevlist = currlist.copy()  # push current line back to previous line
                 currlist.clear()  # make new list
 
-    def allocate(self, data: str, newtype: int = 0):
-        self.data = data
-        self.type_theme = newtype
+        global instance_list_spec
+        clist = instance_list_spec[ID_SOLID]
+        for inst in clist:
+            inst.tile_correction()
+
+    def __del__(self):
+        del self.data
+
+
+# Terrain Generator
+class TerrainGenerator:
+    parsed: dict = {}
+    data: list = []
+    number: int = 0
+    grid_w: int = 32
+    grid_h: int = 18
+    tile_w: int = 20
+    tile_h: int = 20
+    map_grid_w: int = 32
+    map_grid_h: int = 16
+    time: float = 90
+
+    def __init__(self, paths: str):
+        # Parsing
+        with open(path_data + paths + ".json", "r") as mapfile:
+            self.parsed = json.load(mapfile)
+            self.data   = self.parsed["data"]
+            self.number = self.parsed["number"]
+            self.grid_w = self.parsed["grid_w"]
+            self.grid_h = self.parsed["grid_h"]
+            self.tile_w = self.parsed["tile_w"]
+            self.tile_h = self.parsed["tile_h"]
+            self.map_grid_w = self.parsed["map_grid_w"]
+            self.map_grid_h = self.parsed["map_grid_h"]
+            self.time = self.parsed["time"]
+
+    def get_stage_title(self) -> str:
+        return self.parsed["title"]
+
+    def generate(self):
+        print("Generating a chunk.")
+
+        length = len(self.data)
+        if length <= 0:
+            return
+
+        currln, prevln = [], []
+        nx, ny = 0, self.map_grid_h * self.tile_h
+        for i in range(length):
+            current = self.data[i]
+
+            if current is not '0':
+                try:
+                    whattocreate = tile_mess[current]
+                    print(current)
+                    obj = whattocreate[0](None, nx, ny)
+                    print(obj)
+                    if ny >= framework.scene_height - 20:
+                        obj.tile_up = true
+                    if ny <= 20:
+                        obj.tile_down = true
+
+                    length = len(currln)
+                    if length > self.map_grid_w:
+                        try:
+                            if currln[length - self.map_grid_w] == current:
+                                obj.tile_up = true
+                        except IndexError:
+                            pass
+                    currln.append(current)  # save objects in current line
+
+                    try:
+                        if whattocreate[1] == TYPE_INSTANCE:
+                            obj.x += self.tile_w / 2
+                            obj.y += self.tile_h / 2
+                    except AttributeError:
+                        pass
+                except KeyError:
+                    pass
+
+            nx += self.tile_w
+            if nx >= self.map_grid_w:
+                nx = 0
+                ny -= self.tile_h

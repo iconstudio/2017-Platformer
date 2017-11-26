@@ -44,6 +44,7 @@ if __name__ == "__main__":
                  path_theme + "wood_3.png"], "sWood", 0, 0)
     sprite_load([path_theme + "stonewall_0.png", path_theme + "stonewall_1.png", path_theme + "stonewall_2.png"],
                 "sStonewall", 0, 0)
+
     sprite_load([path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png",
                  path_theme + "brick_castle_2.png", path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
     sprite_load([path_theme + "lush_0.png", path_theme + "lush_1.png"], "sLush", 0, 0)
@@ -52,13 +53,21 @@ if __name__ == "__main__":
     sprite_load([path_theme + "brick_mine_0.png", path_theme + "brick_mine_1.png"], "sDirtBrick", 0, 0)
     sprite_load([path_theme + "brick_mine_down_0.png", path_theme + "brick_mine_up_0.png",
                  path_theme + "brick_mine_updown_0.png"], "sDirtBrickDirectional", 0, 0)
+    sprite_load([path_theme + "grave_0.png", path_theme + "grave_1.png", path_theme + "grave_2.png",
+                 path_theme + "grave_3.png", path_theme + "grave_4.png", path_theme + "grave_5.png"],
+                "Grave", 0, 0)
+    sprite_load(path_theme + "grave_ash_0.png", "GraveAsh", 0, 0)
+
+    sprite_load(path_theme + "elevator_0.png", "Elevator", 0, 0)
+
+    # Doodads
+    sprite_load(path_theme + "ladder_0.png", "Ladder", 0, 0)
     sprite_load([path_theme + "TikiTorch_0.png", path_theme + "TikiTorch_1.png", path_theme + "TikiTorch_2.png",
                  path_theme + "TikiTorch_3.png", path_theme + "TikiTorch_4.png", path_theme + "TikiTorch_1.png"],
                 "sTorch", 8, 32)
-
-    # Doodads
     sprite_load([path_theme + "lush_top_0.png", path_theme + "lush_top_1.png", path_theme + "lush_top_2.png"],
                 "sLushDoodad", 0, 0)
+    sprite_load(path_theme + "flat_0.png", "FlatTop", 0, 0)
 
     # Entity
     sprite_load(path_entity + "vampire.png", "Player", 8, 8)

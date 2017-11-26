@@ -83,7 +83,7 @@ def instance_place(Ty, fx, fy) -> (list, int):
 
 # Castle Brick
 class oBrickCastle(Solid):
-    name = "Brick of Mine"
+    name = "Brick of Castle"
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -120,7 +120,7 @@ class oBrickDirt(Solid):
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
-        self.sprite_set("sDirt")
+        self.sprite_set("sDirtBrick")
         self.image_index = choose(0, 0, 0, 0, 0, 0, 1, 1)
 
 

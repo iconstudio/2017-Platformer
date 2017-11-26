@@ -8,8 +8,8 @@
  "margin":0,
  "name":"Vampire Exodus Tileset v0.1",
  "spacing":0,
- "tilecount":11,
- "tileheight":20,
+ "tilecount":26,
+ "tileheight":32,
  "tiles":
     {
      "0":
@@ -30,11 +30,102 @@
          "imageheight":20,
          "imagewidth":20
         },
+     "11":
+        {
+         "image":"..\/..\/res\/img\/entity\/Snake_0.png",
+         "imageheight":16,
+         "imagewidth":16
+        },
+     "12":
+        {
+         "image":"..\/..\/res\/img\/entity\/Cobra_0.png",
+         "imageheight":16,
+         "imagewidth":16
+        },
+     "13":
+        {
+         "image":"..\/..\/res\/img\/entity\/Soldier.png",
+         "imageheight":16,
+         "imagewidth":16
+        },
+     "14":
+        {
+         "image":"..\/..\/res\/img\/entity\/ManBeard_0.png",
+         "imageheight":16,
+         "imagewidth":16
+        },
+     "15":
+        {
+         "image":"..\/..\/res\/img\/entity\/Toad_1.png",
+         "imageheight":16,
+         "imagewidth":16
+        },
+     "16":
+        {
+         "image":"..\/..\/res\/img\/entity\/BloodyBatHang_0.png",
+         "imageheight":16,
+         "imagewidth":16
+        },
+     "17":
+        {
+         "image":"..\/..\/res\/img\/item\/sRock_0.png",
+         "imageheight":8,
+         "imagewidth":8,
+         "type":"Stone"
+        },
+     "18":
+        {
+         "image":"..\/..\/res\/img\/theme\/wood_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "19":
+        {
+         "image":"..\/..\/res\/img\/theme\/wood_1.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
      "2":
         {
          "image":"..\/..\/res\/img\/theme\/lush_0.png",
          "imageheight":20,
          "imagewidth":20
+        },
+     "20":
+        {
+         "image":"..\/..\/res\/img\/theme\/wood_2.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "21":
+        {
+         "image":"..\/..\/res\/img\/theme\/wood_3.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "22":
+        {
+         "image":"..\/..\/res\/img\/theme\/brick_mine_flat_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "23":
+        {
+         "image":"..\/..\/res\/img\/theme\/lush_flat_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "24":
+        {
+         "image":"..\/..\/res\/img\/entity\/vampire.png",
+         "imageheight":16,
+         "imagewidth":16
+        },
+     "25":
+        {
+         "image":"..\/..\/res\/img\/theme\/TikiTorch_0.png",
+         "imageheight":32,
+         "imagewidth":16
         },
      "3":
         {
@@ -74,9 +165,9 @@
         },
      "9":
         {
-         "image":"..\/..\/res\/img\/theme\/sGrave_0.png",
-         "imageheight":16,
-         "imagewidth":16
+         "image":"..\/..\/res\/img\/theme\/grave_0.png",
+         "imageheight":20,
+         "imagewidth":20
         }
     },
  "tilewidth":20,
