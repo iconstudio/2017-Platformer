@@ -64,6 +64,7 @@ class oStatusContainer:
     TRACKING = 20
     ATTACKING = 40
     ATTACKING_END = 45
+    LADDERING = 50
     CHANNELING = 60
     STUNNED = 80
     DEAD = 98
@@ -269,7 +270,7 @@ class GObject(object):
                     self.yVel *= -0.6
         else:
             self.onAir = false
-        self.y = math.floor(self.y)
+        self.y = math.floor(self.y + 0.5)
 
     def draw_self(self):  # Simply draws its sprite on its position.
         data = self.sprite_index
@@ -302,6 +303,11 @@ class GObject(object):
             else:
                 self.phy_collide(xdist)
 
+        if self.yVel != 0 and self.yFric != 0:
+            if abs(self.yVel) > self.yFric:
+                self.yVel -= self.yFric * self.yVel
+            else:
+                self.xVel = 0
         ydist = delta_velocity(self.yVel) * frame_time
         if ydist > 0:  # Going up higher
             yc = ydist + 1

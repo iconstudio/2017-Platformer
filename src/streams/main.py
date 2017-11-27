@@ -18,7 +18,7 @@ __all__ = [
 name = "main_state"
 
 menusy = screen_height - 180
-
+mainmenu = None
 
 class MenuEnumerator:
     menunod = []  # A List of menu nodes
@@ -60,23 +60,25 @@ class MainMenu:
                 menum.menuscl[i] += (1 - menum.menuscl[i]) / 5 * vel
 
     def draw(self, frame_time):
+        bg = sprite_get("sMainTitle")
         menum = self.depthlist[self.currdepth]
         ddx = screen_width / 2 + 160
         ddy = menusy + menum.menupos + 10
 
+        draw_sprite(bg, 0, 0, 0)
         global hfont, hfontlrg
         for j in range(menum.menucnt):
             dhfont = hfont
             if j == menum.menusel:
                 dscl = 1 - menum.menuscl[j] / 5
                 dhfont = hfontlrg
-                draw_set_color(32, 32, 32)
+                draw_set_alpha(0.2)
                 draw_rectangle(0, ddy - 25, screen_width, ddy + 15)
             elif j == menum.menuold:
                 dscl = 1.2 - menum.menuscl[j] / 5
             else:
                 dscl = 1
-            draw_set_color(255, 255, 255)
+            draw_set_alpha(1)
             dhfont.draw(ddx, ddy, menum.menunod[j], dscl)
             ddy -= self.menu_hsize * dscl
 
@@ -91,6 +93,7 @@ def enter():
     io.key_add(ord('z'))
     io.key_add(ord('x'))
     io.key_add(SDLK_RETURN)
+    draw_set_color(255, 255, 255)
 
     if mainmenu is None:
         global hfontsml, hfont, hfontlrg

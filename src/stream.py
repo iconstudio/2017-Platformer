@@ -32,6 +32,7 @@ if __name__ == "__main__":
     sprite_load(path_image + "logo.png", "sLogo", None, None)
     sprite_load(path_ui + "loading.png", "sLoading", None, None)
     sprite_load(path_ui + "heart.png", "sHeart", 16, 16)
+    sprite_load(path_ui + "mainmenu.png", "sMainTitle", 0, 0)
 
     # Background
     sprite_load(path_background + "bgCastle.png", "bgCastle", 0, 0)

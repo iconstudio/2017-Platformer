@@ -17,11 +17,11 @@ __all__ = [
 
 # Global : Functions
 # arithmetics
-def sqr(v):
+def sqr(v) -> float:
     return v * v
 
 
-def sign(x):
+def sign(x) -> int:
     ret = 0
     if x > 0:
         ret = 1
@@ -38,7 +38,7 @@ def radtodeg(radian: float) -> float:
     return radian * 180 / math.pi
 
 
-def bezier4(t, x1, x2, x3, x4):
+def bezier4(t, x1, x2, x3, x4) -> float:
     factor = 1 - t
 
     return factor * (factor * (factor * x1 + t * x2)
@@ -51,8 +51,8 @@ def point_distance(x1, y1, x2, y2) -> float:
     return math.hypot((x2 - x1), (y2 - y1))
 
 
-def point_in_rectangle(px1, py1, x1, y1, x2, y2) -> bool:
-    return x1 <= px1 <= x2 and y1 <= py1 <= y2
+def point_in_rectangle(px1, py1, x, y, w, h) -> bool:
+    return 0 <= px1 - x <= w and 0 <= py1 - y <= h
 
 
 def rect_in_rectangle_opt(pstr: SDL_Rect, dstr: SDL_Rect) -> bool:
@@ -159,11 +159,11 @@ class direction(oParser):
 
 
 # physics
-def delta_velocity(spd = 1):
+def delta_velocity(spd = 1) -> float:
     return constants.phy_velocity * spd
 
 
-def delta_gravity():
+def delta_gravity() -> float:
     return constants.phy_gravity
 
 

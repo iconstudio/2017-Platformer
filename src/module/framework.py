@@ -234,7 +234,10 @@ class oCamera:
 
     def set_pos(self, x: float = None, y: float = None):
         if x is not None:
-            self.x = x
+            if abs(x - self.x) < 2:
+                self.x = x
+            elif self.x != x:
+                self.x += (x - self.x) / 5
         if y is not None:
             self.y = y
         self.limit()

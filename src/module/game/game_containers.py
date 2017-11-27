@@ -69,10 +69,7 @@ def instance_place(Ty, fx, fy) -> (list, int):
     length = len(clist)
     if length > 0:
         for inst in clist:
-            tempspr: Sprite = inst.sprite_index
-            otho_left = int(inst.x - tempspr.xoffset)
-            otho_top = int(inst.y - tempspr.yoffset)
-            if point_in_rectangle(fx, fy, otho_left, otho_top, otho_left + tempspr.width, otho_top + tempspr.height):
+            if isinstance(inst, Ty) and point_in_rectangle(fx, fy, *inst.get_bbox()):
                 __returns.append(inst)
 
     return __returns, len(__returns)
@@ -156,6 +153,7 @@ class oPlayer(GObject):
     held: object = None
     invincible: float = 0
     controllable: float = 0
+    wladder = None
 
     # real-scale: 54 km per hour
     xVelMin, xVelMax = -54, 54
@@ -178,10 +176,15 @@ class oPlayer(GObject):
             self.invincible = 3
             io.clear()
             self.xVel = -dir * 20
-            self.yVel += 5
+            self.yVel += 15
             self.controllable = 0.5
 
     def event_step(self, frame_time):
+        if (self.oStatus is oStatusContainer.LADDERING):
+            self.gravity_default = 0
+            self.gravity = 0
+        else:
+            self.gravity_default = delta_gravity()
         super().event_step(frame_time)
         if player_get_lives() <= 0:
             self.get_dmg()
@@ -221,10 +224,7 @@ class oPlayer(GObject):
                 for enemy in whothere:
                     if enemy.oStatus < oStatusContainer.STUNNED:
                         if enemy.name not in ("ManEater", "Lavaman",):  # Cannot stomping these kind of enemies.
-                            if self.yVel < -50:
-                                self.yVel *= -0.6
-                            else:
-                                self.yVel = 60
+                            self.yVel = 60
                             enemy.hp -= 1
                             enemy.yVel = 30
                             enemy.collide_with_player = false
@@ -247,33 +247,62 @@ class oPlayer(GObject):
                             self.get_dmg(1, enemy.image_xscale)
                         enemy.collide_with_player = true
 
-            mx = 0
+            mx, my = 0, 0
             if self.controllable <= 0:
                 if io.key_check(SDLK_LEFT): mx -= 1
                 if io.key_check(SDLK_RIGHT): mx += 1
+                if io.key_check(SDLK_UP): my += 1
+                if io.key_check(SDLK_DOWN): my -= 1
 
-                if mx != 0:
-                    self.xFric = 0
-                    if not self.onAir:
-                        self.xVel += mx * 5
+                if self.oStatus != oStatusContainer.LADDERING:
+                    if my != 0:  # Get on a ladder
+                        instl, cl = instance_place(oLadder, self.x, self.y)
+                        if cl > 0:  # get stick to the ladder
+                            if abs(instl[0].x - self.x) <= 4 and abs(instl[0].y - self.y) <= 10:
+                                self.wladder = instl[0]
+                                self.x = self.wladder.x + 10
+                                self.y = self.wladder.y + 10
+                                self.xVel, self.yVel = 0, 0
+                                self.oStatus = oStatusContainer.LADDERING
+                                self.sprite_set("Player")
+                                return  # change attributes only one time
+
+                    if mx != 0:
+                        self.xFric = 0
+                        if not self.onAir:
+                            self.xVel += mx * 5
+                        else:
+                            self.xVel += mx * 2
+                        self.image_xscale = mx
                     else:
-                        self.xVel += mx * 2
-                    self.image_xscale = mx
-                else:
-                    self.xFric = 0.6
+                        self.xFric = 0.6
 
-                if io.key_check_pressed(ord('x')):
+                    if io.key_check_pressed(ord('x')):
+                        if not self.onAir:
+                            self.yVel = 90
+
+                    self.yFric = 0
                     if not self.onAir:
-                        self.yVel = 90
+                        if self.xVel != 0:
+                            self.image_speed = 0.8
+                            self.sprite_index = sprite_get("PlayerRun")
+                        else:
+                            self.sprite_set("Player")
+                    else:
+                        self.sprite_set("PlayerJump")
+                else:  # On the ladder
+                    if my != 0:
+                        self.yFric = 0
+                        self.yVel = clamp(-10, self.yVel + my, 10)
+                    else:
+                        self.yFric = 0.8
 
-            if not self.onAir:
-                if self.xVel != 0:
-                    self.image_speed = 0.8
-                    self.sprite_index = sprite_get("PlayerRun")
-                else:
-                    self.sprite_set("Player")
-            else:
-                self.sprite_set("PlayerJump")
+                    if self.yVel != 0:  # Get off the ladder
+                        instl, cl = instance_place(oLadder, self.x, self.y + my * 4)
+                        if cl <= 0 or (my <= 0 and not self.onAir):  # If there is no ladder or it is grounded.
+                            self.oStatus = oStatusContainer.IDLE
+                            self.sprite_set("Player")
+
         else:  # It would be eventual, and uncontrollable
             self.image_alpha = 1
 
