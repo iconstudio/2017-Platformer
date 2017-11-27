@@ -7,12 +7,11 @@ from module.sprite import *
 
 __all__ = [
     "GameState", "change_state", "push_state", "pop_state", "quit", "run",
-    "io", "Camera", "game_begin", "game_end", "HWND", "current_time", "game_realtime", "uiframe",
+    "io", "Camera", "game_begin", "game_end", "current_time", "game_realtime", "uiframe",
     "scene_width", "scene_height", "scene_set_size",
     "hFont", "hFontLrg", "hFontRetro", "draw_text",
 ]
 
-HWND = None
 keylogger_list = []
 scene_width = screen_width
 scene_height = screen_height
@@ -56,7 +55,6 @@ class Font_sprite:
 
 
 def game_begin():
-    global HWND
     HWND = open_canvas(screen_width, screen_height, full = false)
     SDL_SetWindowTitle(HWND, "Vampire Exodus".encode("UTF-8"))
     # icon = load_texture(path_image + "icon.png")

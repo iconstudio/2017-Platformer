@@ -1,10 +1,12 @@
 from module.pico2d import *
 from module.constants import *
 
+import json
+
 __all__ = [
     "Sprite",
     "sprite_list",
-    "sprite_load", "sprite_get", "draw_sprite"
+    "sprite_load", "sprite_get", "draw_sprite", "sprite_json_loads"
 ]
 
 sprite_list: dict = {}  # 스프라이트는 이름으로 구분된다.
@@ -107,3 +109,12 @@ def sprite_get(name: str) -> Sprite:
 def draw_sprite(spr: Sprite, index = int(0) or float(0), x = int(0), y = int(0), xscale = float(1), yscale = float(1),
                 rot = float(0.0), alpha = float(1.0)) -> None:
     spr.draw(index, x, y, xscale, yscale, rot, alpha)
+
+
+def sprite_json_loads():
+    try:
+        with open(path_data + "sprite.json", "r") as mapfile:
+            parsed = json.load(mapfile)
+
+    except FileNotFoundError:
+        pass

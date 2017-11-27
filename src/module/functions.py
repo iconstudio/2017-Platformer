@@ -10,7 +10,7 @@ import module.constants as constants
 __all__ = [
     "sqr", "sign", "degtorad", "radtodeg", "direction", "point_distance", "oParser", "bezier4",
     "point_in_rectangle", "rect_in_rectangle", "rect_in_rectangle_opt", "delta_velocity", "delta_gravity",
-    "irandom", "irandom_range", "distribute", "choose", "list_seek",
+    "irandom", "irandom_range", "distribute", "choose", "list_seek", "instance_create",
     "make_color_rgb"
 ]
 
@@ -156,6 +156,14 @@ class oParser:
 
 class direction(oParser):
     value_max = 360.0
+
+
+# Object : Functions
+def instance_create(Ty, ndepth = 0 or None, nx = int(0), ny = int(0)) -> object:
+    temp = Ty(ndepth, nx, ny)
+    global instance_last
+    instance_last = temp
+    return temp
 
 
 # physics

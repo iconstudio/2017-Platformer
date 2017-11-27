@@ -161,6 +161,7 @@ class TerrainGenerator:
             self.map_grid_w = self.parsed["map_grid_w"]
             self.map_grid_h = self.parsed["map_grid_h"]
             self.time = self.parsed["time"]
+        framework.scene_set_size(self.tile_w * self.map_grid_w)
 
     def get_stage_title(self) -> str:
         return self.parsed["title"]

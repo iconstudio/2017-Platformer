@@ -114,7 +114,6 @@ def resume():
 
 class GameExecutor:
     def __init__(self):
-        framework.scene_set_size(screen_width * 3)
         Camera.set_pos(0, 0)
 
         io.key_add(SDLK_LEFT)
@@ -125,6 +124,7 @@ class GameExecutor:
         io.key_add(ord('9'))
         io.key_add(ord('8'))
 
+        # 아래의 타일들은 모든 스테이지에서 적용됨
         terrain_tile_assign(1, oBrickCastle, 0)
         terrain_tile_assign(2, oBrickDirt, 0)
         terrain_tile_assign(3, oLush, 0)

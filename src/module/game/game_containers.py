@@ -7,17 +7,19 @@ from module.framework import Camera
 from module.framework import io
 from streams import game_over
 
-from game.gobject_header import __all__ as header_all
+from game.gobject_header import __all__ as gobject_all
 from game.gobject_header import *
+from game.game_doodad import __all__ as doodad_all
+from game.game_doodad import *
+from game.game_solid import __all__ as solid_all
+from game.game_solid import *
+
 from module.sprite import *
 
 __all__ = [
-              "instance_create", "player_got_damage", "player_lives_clear", "player_get_lives",
-              "oBrickCastle", "oLush", "oBrickDirt", "oStonewall",
-              "oLushDecoration", "oMillHousechip", "oMillHousestone", "oMillHousechipL", "oMillHousechipR",
-              "oMillHousechipM", "oTorch", "oLadder",
+            "player_got_damage", "player_lives_clear", "player_get_lives",
               "oPlayer", "oSoldier", "oSnake", "oCobra",
-          ] + header_all
+          ] + gobject_all + doodad_all + solid_all
 
 # ==================================================================================================
 #                                               게임
@@ -45,20 +47,11 @@ def player_get_lives() -> int:
 # ==================================================================================================
 #                                    사용자 정의 객체 / 함수
 # ==================================================================================================
-# Object : Functions
-def instance_create(Ty, ndepth = 0 or None, nx = int(0), ny = int(0)) -> object:
-    temp = Ty(ndepth, nx, ny)
-    global instance_last
-    instance_last = temp
-    return temp
-
-
 def instance_place(Ty, fx, fy) -> (list, int):
     try:
         ibj = Ty.identify
     except AttributeError:
-        print("Cannot find variable 'identify' in %s" % (str(Ty)))
-        sys.exit(-1)
+        raise RuntimeError("Cannot find variable 'identify' in %s" % (str(Ty)))
 
     __returns = []
     global instance_list, instance_list_spec
@@ -77,71 +70,6 @@ def instance_place(Ty, fx, fy) -> (list, int):
 
 # Declaring of Special Objects ( Need a canvas )
 # Definitions of Special Objects
-
-# Castle Brick
-class oBrickCastle(Solid):
-    name = "Brick of Castle"
-
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.sprite_set("sCastleBrick")
-        self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3)
-
-
-# Lush
-class oLush(Solid):
-    name = "Brick of Forest"
-
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.sprite_set("sLush")
-        self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 1, 1)
-
-    def tile_correction(self):
-        if not self.tile_up or not self.tile_down:
-            self.sprite_set("sLushDirectional")
-            if self.tile_up and not self.tile_down:
-                self.image_index = 0
-            elif self.tile_down:
-                self.image_index = 1
-            else:
-                self.image_index = 2
-        if not self.tile_up:
-            newdeco = instance_create(oLushDecoration, None, self.x + 2, self.y + 20)
-            newdeco.parent = self
-
-
-# Dirt Brick
-class oBrickDirt(Solid):
-    name = "Brick of Mine"
-
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.sprite_set("sDirtBrick")
-        self.image_index = choose(0, 0, 0, 0, 0, 0, 1, 1)
-
-    def tile_correction(self):
-        if not self.tile_up or not self.tile_down:
-            self.sprite_set("sDirtBrickDirectional")
-            if self.tile_up and not self.tile_down:
-                self.image_index = 0
-            elif self.tile_down:
-                self.image_index = 1
-            else:
-                self.image_index = 2
-            if not self.tile_up:
-                newdeco = instance_create(oDirtBrickDecorator, None, self.x, self.y + 19)
-                newdeco.parent = self
-
-
-# Stone Wall
-class oStonewall(Solid):
-    name = "Brick of Stone"
-
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.sprite_set("sStonewall")
-        self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 0, 1, 2)
 
 
 # Player
@@ -186,6 +114,8 @@ class oPlayer(GObject):
         else:
             self.gravity_default = delta_gravity()
         super().event_step(frame_time)
+
+
         if player_get_lives() <= 0:
             self.get_dmg()
             return
@@ -202,6 +132,7 @@ class oPlayer(GObject):
         if self.controllable > 0:
             self.controllable -= frame_time
 
+        # ==================================================================================================
         elist, ecount = instance_place(oEnemyParent, self.x, self.y)
         dlist, dcount = instance_place(oEnemyDamage, self.x, self.y)
         tlist, tcount = elist + dlist, ecount + dcount
@@ -216,9 +147,10 @@ class oPlayer(GObject):
                         self.get_dmg(1, enemy.image_xscale)
                     enemy.collide_with_player = true
 
+        # ==================================================================================================
         if self.oStatus < oStatusContainer.CHANNELING:  # Player can control its character.
             Camera.set_pos(self.x - Camera.width / 2, self.y - Camera.height / 2)
-            # Stomp enemies under the character
+            # Stomps enemies under the character
             whothere, howmany = instance_place(oEnemyParent, self.x, self.y - 9)
             if howmany > 0 > self.yVel and self.onAir:
                 for enemy in whothere:
@@ -247,8 +179,9 @@ class oPlayer(GObject):
                             self.get_dmg(1, enemy.image_xscale)
                         enemy.collide_with_player = true
 
+            # ==================================================================================================
             mx, my = 0, 0
-            if self.controllable <= 0:
+            if self.controllable <= 0:  # Player can controllable
                 if io.key_check(SDLK_LEFT): mx -= 1
                 if io.key_check(SDLK_RIGHT): mx += 1
                 if io.key_check(SDLK_UP): my += 1
@@ -258,7 +191,7 @@ class oPlayer(GObject):
                     if my != 0:  # Get on a ladder
                         instl, cl = instance_place(oLadder, self.x, self.y)
                         if cl > 0:  # get stick to the ladder
-                            if abs(instl[0].x - self.x) <= 4 and abs(instl[0].y - self.y) <= 10:
+                            if abs(instl[0].x + 10 - self.x) <= 4 and abs(instl[0].y + 10 - self.y) <= 10:
                                 self.wladder = instl[0]
                                 self.x = self.wladder.x + 10
                                 self.y = self.wladder.y + 10
@@ -267,7 +200,7 @@ class oPlayer(GObject):
                                 self.sprite_set("Player")
                                 return  # change attributes only one time
 
-                    if mx != 0:
+                    if mx != 0:  # Move horizontal
                         self.xFric = 0
                         if not self.onAir:
                             self.xVel += mx * 5
@@ -277,31 +210,33 @@ class oPlayer(GObject):
                     else:
                         self.xFric = 0.6
 
-                    if io.key_check_pressed(ord('x')):
+                    if io.key_check_pressed(ord('x')):  # Jump
                         if not self.onAir:
                             self.yVel = 90
 
+                    # ==================================================================================================
                     self.yFric = 0
-                    if not self.onAir:
+                    if not self.onAir:  # Play Moving sprite
                         if self.xVel != 0:
                             self.image_speed = 0.8
                             self.sprite_index = sprite_get("PlayerRun")
-                        else:
+                        else:  # Play Idle sprite
                             self.sprite_set("Player")
-                    else:
+                    else:  # Play Jumping sprite
                         self.sprite_set("PlayerJump")
                 else:  # On the ladder
                     if my != 0:
                         self.yFric = 0
-                        self.yVel = clamp(-10, self.yVel + my, 10)
+                        self.yVel = clamp(-20, self.yVel + my, 20)
                     else:
                         self.yFric = 0.8
 
                     if self.yVel != 0:  # Get off the ladder
-                        instl, cl = instance_place(oLadder, self.x, self.y + my * 4)
+                        instl, cl = instance_place(oLadder, self.x, self.y)
                         if cl <= 0 or (my <= 0 and not self.onAir):  # If there is no ladder or it is grounded.
                             self.oStatus = oStatusContainer.IDLE
                             self.sprite_set("Player")
+                            self.y += 1
 
         else:  # It would be eventual, and uncontrollable
             self.image_alpha = 1
@@ -537,94 +472,6 @@ class oCobra(oSnake):
 
     def handle_be_idle(self):
         self.sprite_set("CobraIdle")
-
-
-# A Decorator of Dirt
-class oDirtBrickDecorator(oDoodadParent):
-    name = "Dirt Decoration"
-
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.sprite_set("sDirtBrickDoodad")
-        self.image_speed = 0
-        self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 1, 1)
-
-
-# A Decorator of Lush
-class oLushDecoration(oDoodadParent):
-    name = "Lush Decoration"
-
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.sprite_set("sLushDoodad")
-        self.image_speed = 0
-        self.image_index = choose(0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2)
-
-
-# Tiki Torch
-class oTorch(oDoodadParent):
-    name = "Torch"
-    image_speed = 0.6
-    step_enable = true
-
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.sprite_set("sTorch")
-        self.image_index = irandom(4)
-
-
-# Ladder
-class oLadder(oDoodadParent):
-    name = "Ladder"
-    depth = 900
-
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.sprite_set("Ladder")
-        self.image_speed = 0
-
-
-# A tile of mil at intro
-class oMillHousechip(oDoodadParent):
-    name = "Wood"
-    depth = 900
-
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.sprite_set("sWood")
-        self.image_speed = 0
-
-
-# A tile of mil at intro
-class oMillHousestone(oDoodadParent):
-    name = "Stone"
-    depth = 900
-    image_index = 0
-
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.sprite_set("sStonewall")
-
-
-# A tile of mil at intro
-class oMillHousechipL(oMillHousechip):
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.image_index = 1
-
-
-# A tile of mil at intro
-class oMillHousechipR(oMillHousechip):
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.image_index = 2
-
-
-# A tile of mil at intro
-class oMillHousechipM(oMillHousechip):
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.image_index = 3
 
 
 class oBlood(oEffectParent):

@@ -8,13 +8,32 @@ from module.sprite import *
         비고:
             1. UI 와 테마 스프라이트 이름 앞에는 s 가 붙는다.
             2. 맵 데이터:
-                1. 숫자는 지형이다. (숫자만 지형은 아니다)
-                2. @ 는 플레이어이다.
-                3.
+                1. 
             3. 프레임워크:
-                1. hFontSml, hFont, hFontLrg 이외의 외부 폰트는 모두 소문자로 쓴다. (e.g. hfontsmall)
+                1. hFontSml, hFont, hFontLrg 이외의 폰트는 모두 소문자로 쓴다. (e.g. hfontsmall)
+            4. 파일 별 설명:
+                01. stream.py : 실행부
+                02. streams\begin.py : 로고 표시
+                03. streams\main.py : 메인 메뉴
+                04. streams\game.py : 게임
+                05. streams\game_pause.py : 게임 일시 정지
+                06. streams\game_over.py : 게임 오버
+                07. module\pico2d.py : 수정된 PICO2D 파일
+                08. module\keycode.py : 수정된 키코드 파일
+                09. module\functions.py : 모든 곳에서 공통적으로 사용하는 함수 모음
+                    1. 계산 등
+                10. module\constants.py : 모든 곳에서 공통적으로 사용하는 상수 모음
+                    1. 전역 상수들 (색, 물리 상수 / 함수 등)
+                    2.
+                11. module\framework.py : 프레임워크
+                    1. 유저 입출력 관리 객체 io
+                    2. 카메라 객체 Camera
+                    3. 기타 전역 변수들
+                12. module\sprite.py : 스프라이트 관리 담당
+                13. module\terrain.py : 지형 생성 담당
+                
 
-        수정 사항:
+        외부 파일 수정 사항:
             1. pico2d.py 의 open_canvas 함수 수정 (창 핸들 반환)
             2. pico2d.py 의 image 클래스 수정 (중심점 설정: xoffset, yoffset), 설정 함수 추가
             3. pico2d.py 의 printfps 함수 실행부 삭제
@@ -28,6 +47,7 @@ from module.sprite import *
 if __name__ == "__main__":
     framework.game_begin()
 
+    sprite_json_loads()
     # UI
     sprite_load(path_image + "logo.png", "sLogo", None, None)
     sprite_load(path_ui + "loading.png", "sLoading", None, None)

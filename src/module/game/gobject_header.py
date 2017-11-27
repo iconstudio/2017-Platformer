@@ -84,12 +84,12 @@ class GObject(object):
 
     # Properties of sprite
     sprite_index: Sprite = None
-    image_alpha: float = 1.0
     image_index = float(0)
     image_speed = float(0)
+    image_xscale: float = 1.0
+    image_alpha: float = 1.0
     visible: bool = true
     depth: int = 0
-    image_xscale: float = 1
 
     # for optimization
     step_enable: bool = true
@@ -267,7 +267,7 @@ class GObject(object):
                     self.onAir = false
                     self.yVel = 0
                 else:
-                    self.yVel *= -0.6
+                    self.yVel *= -0.3
         else:
             self.onAir = false
         self.y = math.floor(self.y + 0.5)
