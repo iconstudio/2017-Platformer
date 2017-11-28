@@ -30,12 +30,24 @@ draw_color: SDL_Color = SDL_Color()
 screen_rect = SDL_Rect(0, 0, screen_width, screen_height)
 rectangle = None
 
+#   글자 정렬용 변수
+# | (halign, valign)               |
+# +----------+----------+----------+
+# |  (0, 0)  |  (1, 0)  |  (2, 0)  |
+# +----------+----------+----------+
+# |  (0, 1)  |  (1, 1)  |  (2, 1)  |
+# +----------+----------+----------+
+# |  (0, 2)  |  (1, 2)  |  (2, 2)  |
+# +----------+----------+----------+
+halign, valign = 0, 0
+
 __all__ = [
               "clamp", "get_time", "delay", "screen_rect",
-              "Event", "Image", "Font", "get_events", "load_texture", "load_image", "load_font",
+              "Event", "Image", "Font", "Font_sprite", "get_events", "load_texture", "load_image", "load_font",
               "open_canvas", "close_canvas", "update_canvas", "clear_canvas", "clear_canvas_now",
               "show_lattice", "hide_lattice", "lattice_on", "audio_on", "show_cursor", "hide_cursor",
               "background_color", "draw_color", "draw_set_color", "draw_get_color", "draw_set_alpha",
+              "draw_set_halign", "draw_set_valign",
               "draw_background_color_set",
               "draw_rectangle",
               "load_music", "load_wav",
@@ -64,9 +76,14 @@ def draw_set_alpha(newa: float):
     SDL_SetRenderDrawColor(renderer, draw_color.r, draw_color.g, draw_color.b, draw_color.a)
 
 
-def draw_get_color():
+def draw_get_color() -> SDL_Color:
     global draw_color
     return draw_color
+
+
+def draw_get_alpha() -> float:
+    global draw_color
+    return draw_color.a / 255
 
 
 def draw_background_color_set(cr: int, cg: int, cb: int, ca: int = 255):
@@ -75,6 +92,18 @@ def draw_background_color_set(cr: int, cg: int, cb: int, ca: int = 255):
     background_color.g = cg
     background_color.b = cb
     background_color.a = ca
+
+
+# 가로 정렬
+def draw_set_halign(arg: int):
+    global halign
+    halign = arg
+
+
+# 가로 정렬
+def draw_set_valign(arg: int):
+    global valign
+    valign = arg
 
 
 def open_canvas(w = int(800), h = int(600), sync = False, full = False):
@@ -419,7 +448,48 @@ class Font:
         SDL_FreeSurface(fsurface)
         image = Image(texture, None, None)
         image.opacify(sdl_color.a / 255)
-        image.draw(dx, dy, int(scale * image.w), int(scale * image.h))
+
+        global halign, valign
+        hscale, vscale = scale * image.w, scale * image.h
+        image.draw(dx - hscale * (halign - 1) / 2, dy + vscale * (valign - 1) / 2, int(hscale), int(vscale))
+
+
+class Font_sprite:
+    sprite_index = None
+    char_list = {}
+    height = 0
+
+    def __init__(self, sprite, data: str):
+        length = len(data)
+        if length > 0:
+            for i in range(length):
+                currchr = data[i]
+                self.char_list[currchr] = i
+            self.sprite_index = sprite
+            self.height = sprite.height
+
+    def draw(self, sx, sy, caption: str, scale: float = 1.0):
+        length = len(caption)
+        if length > 0:
+            dx, dy = sx, sy - scale * self.height * (caption.count('\n'))
+            for i in range(length):
+                currchr: str = caption[i].upper()
+                if currchr in (" ", ' '):
+                    # print(currchr + " - ")
+                    dx += 16 * scale
+                    continue
+                elif currchr is '\n':
+                    dx = sx
+                    dy -= self.height * scale
+                    continue
+                else:
+                    currind: int = self.char_list[currchr]
+                    # print(currchr + " - " + str(currind))
+                    global halign, valign
+                    hscale, vscale = scale * self.sprite_index.width, scale * self.sprite_index.height
+                    self.sprite_index.draw(currind, dx - hscale * (halign - 1) / 2, dy + hscale * (valign - 1) / 2,
+                                           scale, scale, 0, draw_get_alpha())
+                    dx += 16 * scale
 
 
 def load_font(name, size = 20):

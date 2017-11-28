@@ -73,8 +73,12 @@ def draw_clean():
     draw_set_alpha(1)
     heart = sprite_get("sHeart")
     draw_sprite(heart, 0, screen_width - 94, screen_height - 48)
-    framework.draw_text(str(player_get_lives()), screen_width - 50, screen_height - 4, scale = 2)
-    framework.draw_text("Time: %0.3f" % get_time(), 20, screen_height - 20)
+    draw_set_halign(1)
+    draw_set_valign(1)
+    framework.draw_text(str(player_get_lives()), screen_width - 50, screen_height - 38, scale = 2)
+    draw_set_halign(0)
+    draw_set_valign(0)
+    framework.draw_text("Time: %0.3f" % get_time(), 10, screen_height - 10)
 
 
 def draw(frame_time):

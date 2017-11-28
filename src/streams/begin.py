@@ -20,11 +20,15 @@ logo_time = targ_time
 alpha_max = 2
 alpha = alpha_max
 
+
 # noinspection PyGlobalUndefined,PyGlobalUndefined
 def enter():
     global logo, hfont
     logo = sprite_get("sLogo")
     hfont = load_font(path_font + "윤고딕_310.ttf", 32)
+
+    draw_set_halign(1)
+    draw_set_valign(0)
 
 
 def exit():
@@ -46,7 +50,7 @@ def update(frame_time):
 def draw(frame_time):
     global hfont, alpha_max, alpha
     clear_canvas()
-    
+
     valuea = float(max(0, alpha) / alpha_max)
     draw_sprite(logo, 0, screen_width / 2, screen_height / 2, 1, 1, 0, valuea)
     draw_set_color(255, 255, 255)
@@ -66,7 +70,8 @@ def handle_events(frame_time):
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RETURN):
                 global logo_time, alpha
                 if logo_time <= 0:
-                    alpha = 0
+                    if alpha > -alpha_max / 2:
+                        alpha = -alpha_max / 2
                 else:
                     logo_time = 0
 

@@ -70,7 +70,7 @@ class MainMenu:
     def draw(self, frame_time):
         bg = sprite_get("sMainTitle")
         menum = self.depthlist[self.currdepth]
-        ddx = screen_width / 2 + 160
+        ddx = screen_width / 2 + 50
         ddy = menusy + menum.menupos + 10
 
         draw_sprite(bg, 0, 0, 0)
@@ -101,6 +101,8 @@ def enter():
     io.key_add(ord('x'))
     io.key_add(SDLK_RETURN)
     draw_set_color(255, 255, 255)
+    draw_set_halign(0)
+    draw_set_valign(1)
 
     if mainmenu is None:
         draw_set_alpha(1)

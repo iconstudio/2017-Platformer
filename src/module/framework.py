@@ -20,41 +20,6 @@ hFont, hFontLrg = None, None
 hFontRetro = None
 
 
-class Font_sprite:
-    sprite_index: Sprite = None
-    char_list = {}
-    height = 0
-
-    def __init__(self, sprite: Sprite, data: str):
-        length = len(data)
-        if length > 0:
-            for i in range(length):
-                currchr = data[i]
-                self.char_list[currchr] = i
-            self.sprite_index = sprite
-            self.height = sprite.height
-
-    def draw(self, sx, sy, caption: str, scale: float = 1.0):
-        length = len(caption)
-        if length > 0:
-            dx, dy = sx, sy - scale * self.height * (caption.count('\n') + 1)
-            for i in range(length):
-                currchr: str = caption[i].upper()
-                if currchr in (" ", ' '):
-                    # print(currchr + " - ")
-                    dx += 16 * scale
-                    continue
-                elif currchr is '\n':
-                    dx = sx
-                    dy -= self.height * scale
-                    continue
-                else:
-                    currind: int = self.char_list[currchr]
-                    # print(currchr + " - " + str(currind))
-                    draw_sprite(self.sprite_index, currind, dx, dy, scale, scale)
-                    dx += 16 * scale
-
-
 # noinspection PyUnusedLocal
 def game_begin():
     HWND = open_canvas(screen_width, screen_height, full = false)
