@@ -260,6 +260,90 @@
     "xoffset": 8,
     "yoffset": 8,
     "number": 1
+  },
+  {
+    "name": "SoldierStunned",
+    "path": [
+      "..\\res\\img\\entity\\SoldierStunned_0.png",
+      "..\\res\\img\\entity\\SoldierStunned_1.png",
+      "..\\res\\img\\entity\\SoldierStunned_2.png",
+      "..\\res\\img\\entity\\SoldierStunned_3.png",
+      "..\\res\\img\\entity\\SoldierStunned_4.png"
+    ],
+    "xoffset": 8,
+    "yoffset": 8,
+    "number": 1
+  },
+  {
+    "name": "SoldierDead",
+    "path": "..\\res\\img\\entity\\SoldierDead.png",
+    "xoffset": 8,
+    "yoffset": 8,
+    "number": 1
+  },
+  {
+    "name": "ManBeardIdle",
+    "path": "..\\res\\img\\entity\\ManBeard_0.png",
+    "xoffset": 8,
+    "yoffset": 8,
+    "number": 1
+  },
+  {
+    "name": "ManBeardRun",
+    "path": [
+      "..\\res\\img\\entity\\ManBeardWalk_0.png",
+      "..\\res\\img\\entity\\ManBeardWalk_1.png",
+      "..\\res\\img\\entity\\ManBeardWalk_2.png",
+      "..\\res\\img\\entity\\ManBeardWalk_3.png",
+      "..\\res\\img\\entity\\ManBeardWalk_4.png",
+      "..\\res\\img\\entity\\ManBeardWalk_5.png",
+      "..\\res\\img\\entity\\ManBeardWalk_2.png",
+      "..\\res\\img\\entity\\ManBeardWalk_1.png"
+    ],
+    "xoffset": 8,
+    "yoffset": 8,
+    "number": 1
+  },
+  {
+    "name": "SnakeIdle",
+    "path": "..\\res\\img\\entity\\Snake_0.png",
+    "xoffset": 8,
+    "yoffset": 8,
+    "number": 1
+  },
+  {
+    "name": "SnakeRun",
+    "path": [
+      "..\\res\\img\\entity\\SnakeWalk_0.png",
+      "..\\res\\img\\entity\\SnakeWalk_1.png",
+      "..\\res\\img\\entity\\SnakeWalk_2.png",
+      "..\\res\\img\\entity\\SnakeWalk_3.png",
+      "..\\res\\img\\entity\\SnakeWalk_4.png",
+      "..\\res\\img\\entity\\SnakeWalk_5.png"
+    ],
+    "xoffset": 8,
+    "yoffset": 8,
+    "number": 1
+  },
+  {
+    "name": "CobraIdle",
+    "path": "..\\res\\img\\entity\\Cobra_0.png",
+    "xoffset": 8,
+    "yoffset": 8,
+    "number": 1
+  },
+  {
+    "name": "CobraRun",
+    "path": [
+      "..\\res\\img\\entity\\CobraWalk_0.png",
+      "..\\res\\img\\entity\\CobraWalk_1.png",
+      "..\\res\\img\\entity\\CobraWalk_2.png",
+      "..\\res\\img\\entity\\CobraWalk_3.png",
+      "..\\res\\img\\entity\\CobraWalk_4.png",
+      "..\\res\\img\\entity\\CobraWalk_5.png"
+    ],
+    "xoffset": 8,
+    "yoffset": 8,
+    "number": 1
   }
 ]
-

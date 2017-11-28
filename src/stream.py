@@ -56,26 +56,6 @@ if __name__ == "__main__":
 
     sprite_json_loads()
 
-    sprite_load([path_entity + "SoldierStunned_0.png", path_entity + "SoldierStunned_1.png",
-                 path_entity + "SoldierStunned_2.png", path_entity + "SoldierStunned_3.png",
-                 path_entity + "SoldierStunned_4.png"], "SoldierStunned", 8, 8)
-    sprite_load(path_entity + "SoldierDead.png", "SoldierDead", 8, 8)
-
-    sprite_load(path_entity + "ManBeard_0.png", "ManBeardIdle", 8, 8)
-    sprite_load([path_entity + "ManBeardWalk_0.png", path_entity + "ManBeardWalk_1.png",
-                 path_entity + "ManBeardWalk_2.png", path_entity + "ManBeardWalk_3.png",
-                 path_entity + "ManBeardWalk_4.png", path_entity + "ManBeardWalk_5.png",
-                 path_entity + "ManBeardWalk_2.png", path_entity + "ManBeardWalk_1.png"], "ManBeardRun", 8, 8)
-
-    sprite_load(path_entity + "Snake_0.png", "SnakeIdle", 8, 8)
-    sprite_load([path_entity + "SnakeWalk_0.png", path_entity + "SnakeWalk_1.png",
-                 path_entity + "SnakeWalk_2.png", path_entity + "SnakeWalk_3.png",
-                 path_entity + "SnakeWalk_4.png", path_entity + "SnakeWalk_5.png"], "SnakeRun", 8, 8)
-    sprite_load(path_entity + "Cobra_0.png", "CobraIdle", 8, 8)
-    sprite_load([path_entity + "CobraWalk_0.png", path_entity + "CobraWalk_1.png",
-                 path_entity + "CobraWalk_2.png", path_entity + "CobraWalk_3.png",
-                 path_entity + "CobraWalk_4.png", path_entity + "CobraWalk_5.png"], "CobraRun", 8, 8)
-
     # Effect
     sprite_load([path_entity + "Blood_0.png", path_entity + "Blood_1.png",
                  path_entity + "Blood_2.png", path_entity + "Blood_2.png"], "Bloods", 4, 4)
@@ -87,9 +67,9 @@ if __name__ == "__main__":
                  path_effect + "stunned_2.png", path_effect + "stunned_3.png", path_effect + "stunned_4.png"], "Stun",
                 8, 8)
 
-    from streams import main
-    from streams import game
-    from streams import begin
+from streams import main
+from streams import game
+from streams import begin
 
-    framework.run(game)
-    framework.game_end()
+framework.run(game)
+framework.game_end()
