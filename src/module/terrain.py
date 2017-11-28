@@ -24,10 +24,10 @@ tile_mess = {}
 
 def terrain_tile_assign(string: str or int, *ty: (type, int)):
     global tile_mess
-    tile_mess[string] = (ty)
+    tile_mess[string] = ty
 
 
-def terrain_tile_clear(string: str, ty: type):
+def terrain_tile_clear():
     global tile_mess
     tile_mess.clear()
 
@@ -126,9 +126,7 @@ class TerrainManager:
                 prevlist = currlist.copy()  # push current line back to previous line
                 currlist.clear()  # make new list
 
-        global instance_list_spec
-        clist = instance_list_spec[ID_SOLID]
-        for inst in clist:
+        for inst in get_instance_list(ID_SOLID):
             inst.tile_correction()
 
     def __del__(self):
@@ -150,7 +148,7 @@ class TerrainGenerator:
 
     def __init__(self, paths: str):
         # Parsing
-        with open(path_data + paths + ".json", "r") as mapfile:
+        with open(path_data + paths + ".json") as mapfile:
             self.parsed = json.load(mapfile)
             self.data = self.parsed["data"]
             self.number = self.parsed["number"]
@@ -181,8 +179,8 @@ class TerrainGenerator:
             if current is not '0':
                 try:
                     def icreate(ty, depth, x, y):
-                        inst = ty(depth, x, y)
-                        return inst
+                        ninst = ty(depth, x, y)
+                        return ninst
 
                     whattocreate = tile_mess[current]
                     obj = icreate(whattocreate[0], None, nx, ny)
@@ -222,7 +220,6 @@ class TerrainGenerator:
                 nx = 0
                 ny -= self.tile_h
 
-        global instance_list_spec
-        clist = instance_list_spec[ID_SOLID]
+        clist = get_instance_list(ID_SOLID)
         for inst in clist:
             inst.tile_correction()

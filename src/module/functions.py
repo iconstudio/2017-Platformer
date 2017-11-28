@@ -9,9 +9,10 @@ import module.constants as constants
 
 __all__ = [
     "sqr", "sign", "degtorad", "radtodeg", "direction", "point_distance", "oParser", "bezier4",
+    "get_screen_width", "get_screen_height",
     "point_in_rectangle", "rect_in_rectangle", "rect_in_rectangle_opt", "delta_velocity", "delta_gravity",
     "irandom", "irandom_range", "distribute", "choose", "list_seek", "instance_create",
-    "make_color_rgb"
+    "make_color_rgb",
 ]
 
 
@@ -46,6 +47,15 @@ def bezier4(t, x1, x2, x3, x4) -> float:
 
 
 # vector
+# scale
+def get_screen_width():
+    return constants.screen_width
+
+
+def get_screen_height():
+    return constants.screen_height
+
+
 # distance
 def point_distance(x1, y1, x2, y2) -> float:
     return math.hypot((x2 - x1), (y2 - y1))

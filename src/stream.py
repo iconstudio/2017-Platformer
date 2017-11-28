@@ -51,25 +51,12 @@ from module.sprite import *
 ]
 """
 
+# noinspection PyUnresolvedReferences
 if __name__ == "__main__":
     framework.game_begin()
-
     sprite_json_loads()
-
-    # Effect
-    sprite_load([path_entity + "Blood_0.png", path_entity + "Blood_1.png",
-                 path_entity + "Blood_2.png", path_entity + "Blood_2.png"], "Bloods", 4, 4)
-    sprite_load([path_entity + "BloodTrail_0.png", path_entity + "BloodTrail_1.png",
-                 path_entity + "BloodTrail_2.png", path_entity + "BloodTrail_3.png",
-                 path_entity + "BloodTrail_4.png", path_entity + "BloodTrail_5.png",
-                 path_entity + "BloodTrail_6.png"], "BloodTrails", 4, 4)
-    sprite_load([path_effect + "stunned_0.png", path_effect + "stunned_1.png",
-                 path_effect + "stunned_2.png", path_effect + "stunned_3.png", path_effect + "stunned_4.png"], "Stun",
-                8, 8)
-
-from streams import main
-from streams import game
-from streams import begin
-
-framework.run(game)
-framework.game_end()
+    from streams import main
+    from streams import game
+    from streams import begin
+    framework.run(game)
+    framework.game_end()

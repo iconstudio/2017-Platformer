@@ -10,10 +10,11 @@ from module.sprite import *
 __all__ = [
     "oStatusContainer",
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
+    "get_instance_list", "draw_list_sort",
     "container_player", "GObject", "Solid", "oPlayerDamage", "oEnemyDamage", "oItemParent", "oDoodadParent",
     "oEffectParent",
-    "ID_OTHERS", "ID_SOLID", "ID_DMG_PLAYER", "ID_DMG_ENEMY", "ID_ENEMY", "ID_ITEM", "ID_PARTICLE", "ID_DOODAD",
-    "ID_EFFECT"
+    "ID_OVERALL", "ID_DRAW", "ID_OTHERS", "ID_SOLID", "ID_DMG_PLAYER", "ID_DMG_ENEMY", "ID_ENEMY", "ID_ITEM",
+    "ID_PARTICLE", "ID_DOODAD", "ID_EFFECT"
 ]
 # Global : Variables
 instance_last = None  # 마지막 개체
@@ -32,6 +33,10 @@ instance_list_spec: dict = {}  # 객체 종류 별 목록
 instance_draw_list: list = []  # 개체 그리기 목록
 instance_update: bool = true  # 개체 갱신 여부
 
+# Special constants.
+ID_OVERALL: str = "All"
+ID_DRAW: str = "Draw"
+#
 ID_OTHERS: str = "Objects"
 ID_SOLID: str = "Solid"
 ID_PARTICLE: str = "Particle"
@@ -52,6 +57,25 @@ instance_list_spec[ID_ITEM] = []
 instance_list_spec[ID_EFFECT] = []
 
 container_player = None
+
+
+def get_instance_list(identific: str) -> list:
+    global instance_list, instance_draw_list, instance_list_spec
+    if identific is ID_OVERALL:
+        return instance_list
+    elif identific is ID_DRAW:
+        return instance_draw_list
+    else:
+        try:
+            return instance_list_spec[identific]
+        except KeyError:
+            print("Not available key of list")
+            return []
+
+
+def draw_list_sort():
+    global instance_list, instance_draw_list
+    instance_draw_list = sorted(instance_list, key = lambda gobject: -gobject.depth)
 
 
 # Object : A container of Status
@@ -143,9 +167,9 @@ class GObject(object):
         del self
 
     # Below methods are common-functions for all object that inherits graviton.
-    def instance_collide(self, b):
+    def instance_collide(self, othero):
         sx, sy, sw, sh = self.get_bbox()
-        ox, oy, ow, oh = b.get_bbox()
+        ox, oy, ow, oh = othero.get_bbox()
 
         if sx >= ox + ow: return False
         if sx + sw <= ox: return False
@@ -197,7 +221,7 @@ class GObject(object):
         cx = 0
         if length > 0:
             while xprog <= tdist:
-                if not self.place_free(cx + sign(cx) * 2, 0):
+                if not self.place_free(cx + sign(cx) * 2):
                     self.x += cx
                     return true
                 if right:
@@ -298,7 +322,7 @@ class GObject(object):
         if self.xVel != 0:
             xdist = delta_velocity(self.xVel) * frame_time
             xc = xdist + sign(xdist)
-            if self.place_free(xc, 0):
+            if self.place_free(xc):
                 self.x += xdist
             else:
                 self.phy_collide(xdist)

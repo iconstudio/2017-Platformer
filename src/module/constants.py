@@ -38,7 +38,7 @@ path_data = ".\\data\\"
 
 # Colors
 # 흑백
-c_white = SDL_Color(255, 255, 255)
+c_white = SDL_Color()
 c_ltgray = SDL_Color(192, 192, 192)
 c_gray = SDL_Color(128, 128, 128)
 c_dkgray = SDL_Color(64, 64, 64)

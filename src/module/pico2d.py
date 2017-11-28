@@ -2,6 +2,7 @@ import ctypes
 import math
 import sys
 
+# noinspection PyUnresolvedReferences
 try:
     from sdl2 import *
     from sdl2.sdlimage import *
@@ -27,6 +28,7 @@ audio_on: bool = False
 background_color: SDL_Color = SDL_Color(210, 210, 210)
 draw_color: SDL_Color = SDL_Color()
 screen_rect = SDL_Rect(0, 0, screen_width, screen_height)
+rectangle = None
 
 __all__ = [
               "clamp", "get_time", "delay", "screen_rect",
@@ -42,8 +44,8 @@ __all__ = [
           ] + sdl2.render.__all__ + keyboard.__all__ + events.__all__ + keycode.__all__ + rect.__all__ + video.__all__
 
 
-def clamp(minimum, x, maximum):
-    return max(minimum, min(x, maximum))
+def clamp(minimum, val, maximum):
+    return max(minimum, min(val, maximum))
 
 
 def draw_set_color(newr: SDL_Color or int, newg = None, newb = None):
@@ -67,12 +69,12 @@ def draw_get_color():
     return draw_color
 
 
-def draw_background_color_set(r: int, g: int, b: int, a: int = 255):
+def draw_background_color_set(cr: int, cg: int, cb: int, ca: int = 255):
     global background_color
-    background_color.r = r
-    background_color.g = g
-    background_color.b = b
-    background_color.a = a
+    background_color.r = cr
+    background_color.g = cg
+    background_color.b = cb
+    background_color.a = ca
 
 
 def open_canvas(w = int(800), h = int(600), sync = False, full = False):
@@ -168,16 +170,16 @@ def clear_canvas():
     SDL_RenderClear(renderer)
     if lattice_on:
         SDL_SetRenderDrawColor(renderer, 180, 180, 180, 255)
-        for x in range(0, canvas_width, 10):
-            SDL_RenderDrawLine(renderer, x, 0, x, canvas_height)
-        for y in range(canvas_height - 1, 0, -10):
-            SDL_RenderDrawLine(renderer, 0, y, canvas_width, y)
+        for gx in range(0, canvas_width, 10):
+            SDL_RenderDrawLine(renderer, gx, 0, gx, canvas_height)
+        for gy in range(canvas_height - 1, 0, -10):
+            SDL_RenderDrawLine(renderer, 0, gy, canvas_width, gy)
         SDL_SetRenderDrawColor(renderer, 160, 160, 160, 255)
 
-        for x in range(0, canvas_width, 100):
-            SDL_RenderDrawLine(renderer, x, 0, x, canvas_height)
-        for y in range(canvas_height - 1, 0, -100):
-            SDL_RenderDrawLine(renderer, 0, y, canvas_width, y)
+        for gx in range(0, canvas_width, 100):
+            SDL_RenderDrawLine(renderer, gx, 0, gx, canvas_height)
+        for gy in range(canvas_height - 1, 0, -100):
+            SDL_RenderDrawLine(renderer, 0, gy, canvas_width, gy)
     SDL_SetRenderDrawColor(renderer, draw_color.r, draw_color.g, draw_color.b, draw_color.a)
 
 
@@ -213,11 +215,11 @@ def get_time():
     return SDL_GetTicks() / 1000.0
 
 
-def make_sdlrect(x, y, w, h):
-    return SDL_Rect(int(x), int(-y + canvas_height - h), int(w), int(h))
+def make_sdlrect(rx, ry, w, h):
+    return SDL_Rect(int(rx), int(-ry + canvas_height - h), int(w), int(h))
 
 
-def draw_rectangle(x1, y1, x2, y2, outline: bool = false):
+def draw_rectangle(x1, y1, x2, y2):
     global renderer, rectangle, draw_color
 
     drect = SDL_Rect(int(x1), int(-y2 + canvas_height - 1), int(x2 - x1 + 1), int(y2 - y1 + 1))
@@ -226,7 +228,6 @@ def draw_rectangle(x1, y1, x2, y2, outline: bool = false):
     SDL_SetRenderDrawColor(renderer, draw_color.r, draw_color.g, draw_color.b, draw_color.a)
     SDL_RenderFillRect(renderer, drect)
     SDL_RenderCopy(renderer, rectangle, trect, drect)
-
 
     del drect, trect
 
@@ -295,17 +296,17 @@ class Image:
     def make_draw_region_origin(self, dx, dy, dw, dh):
         return make_sdlrect(dx, dy, dw, dh)
 
-    def rotate_draw(self, rad, x, y, w = None, h = None):
+    def rotate_draw(self, rad, dx, dy, w = None, h = None):
         """Rotate(in radian unit) and draw image to back buffer, center of rotation is the image center"""
         if w is None and h is None:
             w, h = self.w, self.h
-        drect = self.make_draw_region(x, y, w, h)
+        drect = self.make_draw_region(dx, dy, w, h)
         SDL_RenderCopyEx(renderer, self.texture, None, drect, math.degrees(-rad), None, SDL_FLIP_NONE)
 
-    def composite_draw(self, rad, flip: str, x, y, w = None, h = None):
+    def composite_draw(self, rad, flip: str, dx, dy, w = None, h = None):
         if w is None and h is None:
             w, h = self.w, self.h
-        drect = self.make_draw_region(x, y, w, h)
+        drect = self.make_draw_region(dx, dy, w, h)
         flip_flag = SDL_FLIP_NONE
         if 'h' in flip:
             flip_flag |= SDL_FLIP_HORIZONTAL
@@ -313,33 +314,33 @@ class Image:
             flip_flag |= SDL_FLIP_VERTICAL
         SDL_RenderCopyEx(renderer, self.texture, None, drect, math.degrees(-rad), None, flip_flag)
 
-    def draw(self, x, y, w = None, h = None):
+    def draw(self, dx, dy, w = None, h = None):
         """Draw image to back buffer"""
         if w is None and h is None:
             w, h = self.w, self.h
-        drect = self.make_draw_region(x, y, w, h)
+        drect = self.make_draw_region(dx, dy, w, h)
         SDL_RenderCopy(renderer, self.texture, None, drect)
 
-    def draw_to_origin(self, x, y, w = None, h = None):
+    def draw_to_origin(self, dx, dy, w = None, h = None):
         """Draw image to back buffer"""
         if w is None and h is None:
             w, h = self.w, self.h
-        drect = self.make_draw_region_origin(x, y, w, h)
+        drect = self.make_draw_region_origin(dx, dy, w, h)
         SDL_RenderCopy(renderer, self.texture, None, drect)
 
-    def clip_draw(self, left, bottom, width, height, x, y, w = None, h = None):
+    def clip_draw(self, left, bottom, width, height, dx, dy, w = None, h = None):
         """Clip a rectangle from image and draw"""
         if w is None and h is None:
             w, h = width, height
         src_rect = SDL_Rect(left, self.h - bottom - height, width, height)
-        dest_rect = self.make_draw_region(x, y, w, h)
+        dest_rect = self.make_draw_region(dx, dy, w, h)
         SDL_RenderCopy(renderer, self.texture, src_rect, dest_rect)
 
-    def clip_composite_draw(self, left, bottom, width, height, rad, flip: str, x, y, w = None, h = None):
+    def clip_composite_draw(self, left, bottom, width, height, rad, flip: str, dx, dy, w = None, h = None):
         if w is None and h is None:
             w, h = self.w, self.h
         src_rect = SDL_Rect(left, self.h - bottom - height, width, height)
-        dst_rect = self.make_draw_region(x, y, w, h)
+        dst_rect = self.make_draw_region(dx, dy, w, h)
         flip_flag = SDL_FLIP_NONE
         if 'h' in flip:
             flip_flag |= SDL_FLIP_HORIZONTAL
@@ -347,11 +348,11 @@ class Image:
             flip_flag |= SDL_FLIP_VERTICAL
         SDL_RenderCopyEx(renderer, self.texture, src_rect, dst_rect, math.degrees(-rad), None, flip_flag)
 
-    def clip_composite_draw_angle(self, left, bottom, width, height, deg, flip: str, x, y, w = None, h = None):
+    def clip_composite_draw_angle(self, left, bottom, width, height, deg, flip: str, dx, dy, w = None, h = None):
         if w is None and h is None:
             w, h = self.w, self.h
         src_rect = SDL_Rect(left, self.h - bottom - height, width, height)
-        dst_rect = self.make_draw_region(x, y, w, h)
+        dst_rect = self.make_draw_region(dx, dy, w, h)
         flip_flag = SDL_FLIP_NONE
         if 'h' in flip:
             flip_flag |= SDL_FLIP_HORIZONTAL
@@ -359,24 +360,24 @@ class Image:
             flip_flag |= SDL_FLIP_VERTICAL
         SDL_RenderCopyEx(renderer, self.texture, src_rect, dst_rect, deg, None, flip_flag)
 
-    def clip_draw_to_origin(self, left, bottom, width, height, x, y, w = None, h = None):
+    def clip_draw_to_origin(self, left, bottom, width, height, dx, dy, w = None, h = None):
         """Clip a rectangle from image and draw"""
         if w is None and h is None:
             w, h = width, height
         src_rect = SDL_Rect(left, self.h - bottom - height, width, height)
-        dest_rect = self.make_draw_region_origin(x, y, w, h)
+        dest_rect = self.make_draw_region_origin(dx, dy, w, h)
         SDL_RenderCopy(renderer, self.texture, src_rect, dest_rect)
 
-    def draw_now(self, x, y, w = None, h = None):
+    def draw_now(self, dx, dy, w = None, h = None):
         """Draw image to canvas immediately"""
-        self.draw(x, y, w, h)
+        self.draw(dx, dy, w, h)
         update_canvas()
-        self.draw(x, y, w, h)
+        self.draw(dx, dy, w, h)
         update_canvas()
         '''
         if w == None and h == None:
             w,h = self.w, self.h
-        rect = make_sdlrect(x-w/2, y-h/2, w, h)
+        rect = make_sdlrect(dx-w/2, dy-h/2, w, h)
         SDL_RenderCopy(renderer, self.texture, None, rect);
         SDL_RenderPresent(renderer)
         '''
@@ -410,15 +411,15 @@ class Font:
             print('cannot load %s' % name)
             raise IOError
 
-    def draw(self, x, y, caption: str, scale: float = 1.0):
+    def draw(self, dx, dy, caption: str, scale: float = 1.0):
         sdl_color = draw_get_color()
-        fsurface = TTF_RenderUTF8_Blended(self.font, caption.encode('utf-8'), sdl_color)
+        fsurface = TTF_RenderUTF8_Blended(self.font, caption.encode(), sdl_color)
         texture = SDL_CreateTextureFromSurface(renderer, fsurface)
         SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND)
         SDL_FreeSurface(fsurface)
         image = Image(texture, None, None)
         image.opacify(sdl_color.a / 255)
-        image.draw(x, y, int(scale * image.w), int(scale * image.h))
+        image.draw(dx, dy, int(scale * image.w), int(scale * image.h))
 
 
 def load_font(name, size = 20):

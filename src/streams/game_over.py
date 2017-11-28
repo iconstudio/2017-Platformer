@@ -24,7 +24,7 @@ def enter():
     tpush = 0
 
 def exit():
-    framework.unpause()
+    pass
 
 
 def update(frame_time):
@@ -43,7 +43,7 @@ def draw(frame_time):
     game.draw_clean()
     draw_set_color(0, 0, 0)
     draw_set_alpha(alpha)
-    draw_rectangle(0, 0, screen_width, screen_height, false)
+    draw_rectangle(0, 0, screen_width, screen_height)
     framework.draw_text("Game Over", screen_width / 2, screen_height / 2, scale = 2)
     update_canvas()
 

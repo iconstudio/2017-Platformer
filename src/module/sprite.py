@@ -65,7 +65,7 @@ class Sprite(object):
     def __repr__(self) -> str:
         return self.name
 
-    def draw(self, index: int or float, x, y, xscale = float(1), yscale = float(1), rot = float(0.0),
+    def draw(self, index: int or float, sx, sy, xscale = float(1), yscale = float(1), rot = float(0.0),
              alpha = float(1.0)) -> None:
         dx = 0
         if not self.isSeparate:
@@ -82,7 +82,7 @@ class Sprite(object):
             flipmod += "v"
         xscale, yscale = abs(xscale), abs(yscale)
 
-        data.clip_composite_draw_angle(dx, 0, self.width, self.height, rot, flipmod, x, y, int(self.width * xscale),
+        data.clip_composite_draw_angle(dx, 0, self.width, self.height, rot, flipmod, sx, sy, int(self.width * xscale),
                                        int(self.height * yscale))
 
     def get_handle(self):
@@ -106,14 +106,13 @@ def sprite_get(name: str) -> Sprite:
     return val
 
 
-def draw_sprite(spr: Sprite, index = int(0) or float(0), x = int(0), y = int(0), xscale = float(1), yscale = float(1),
-                rot = float(0.0), alpha = float(1.0)) -> None:
-    spr.draw(index, x, y, xscale, yscale, rot, alpha)
+def draw_sprite(spr: Sprite, index = int(0) or float(0), sx = int(0), sy = int(0), xscale = float(1), yscale = float(1), rot = float(0.0), alpha = float(1.0)) -> None:
+    spr.draw(index, sx, sy, xscale, yscale, rot, alpha)
 
 
 def sprite_json_loads():
     try:
-        with open(path_data + "sprite.json", "r") as sprfile:
+        with open(path_data + "sprite.json") as sprfile:
             parsed: list = json.load(sprfile)
 
             for content in parsed:

@@ -1,349 +1,388 @@
 [
   {
-    "name": "sLogo",
-    "path": "..\\res\\img\\logo.png",
-    "xoffset": null,
-    "yoffset": null,
-    "number": 1
+	"name": "sLogo",
+	"path": "..\\res\\img\\logo.png",
+	"xoffset": null,
+	"yoffset": null,
+	"number": 1
   },
   {
-    "name": "sHeart",
-    "path": "..\\res\\img\\ui\\heart.png",
-    "xoffset": 16,
-    "yoffset": 16,
-    "number": 1
+	"name": "sHeart",
+	"path": "..\\res\\img\\ui\\heart.png",
+	"xoffset": 16,
+	"yoffset": 16,
+	"number": 1
   },
   {
-    "name": "sMainTitle",
-    "path": "..\\res\\img\\ui\\mainmenu.png",
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "sMainTitle",
+	"path": "..\\res\\img\\ui\\mainmenu.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "bgCastle",
-    "path": "..\\res\\img\\bg\\bgCastle.png",
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "bgCastle",
+	"path": "..\\res\\img\\bg\\bgCastle.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "bgCave",
-    "path": "..\\res\\img\\bg\\bgCave.png",
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "bgCave",
+	"path": "..\\res\\img\\bg\\bgCave.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "bgTemple",
-    "path": "..\\res\\img\\bg\\bgTemple.png",
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "bgTemple",
+	"path": "..\\res\\img\\bg\\bgTemple.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "bgNight",
-    "path": "..\\res\\img\\bg\\bgNight_0.png",
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "bgNight",
+	"path": "..\\res\\img\\bg\\bgNight_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "sWood",
-    "path": [
-      "..\\res\\img\\theme\\wood_0.png",
-      "..\\res\\img\\theme\\wood_1.png",
-      "..\\res\\img\\theme\\wood_2.png"
-    ],
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "sWood",
+	"path": [
+	  "..\\res\\img\\theme\\wood_0.png",
+	  "..\\res\\img\\theme\\wood_1.png",
+	  "..\\res\\img\\theme\\wood_2.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "sStonewall",
-    "path": [
-      "..\\res\\img\\theme\\stonewall_0.png",
-      "..\\res\\img\\theme\\stonewall_1.png",
-      "..\\res\\img\\theme\\stonewall_2.png"
-    ],
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "sStonewall",
+	"path": [
+	  "..\\res\\img\\theme\\stonewall_0.png",
+	  "..\\res\\img\\theme\\stonewall_1.png",
+	  "..\\res\\img\\theme\\stonewall_2.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "sCastleBrick",
-    "path": [
-      "..\\res\\img\\theme\\brick_castle_0.png",
-      "..\\res\\img\\theme\\brick_castle_1.png",
-      "..\\res\\img\\theme\\brick_castle_2.png",
-      "..\\res\\img\\theme\\brick_castle_3.png"
-    ],
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "sCastleBrick",
+	"path": [
+	  "..\\res\\img\\theme\\brick_castle_0.png",
+	  "..\\res\\img\\theme\\brick_castle_1.png",
+	  "..\\res\\img\\theme\\brick_castle_2.png",
+	  "..\\res\\img\\theme\\brick_castle_3.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "sLush",
-    "path": [
-      "..\\res\\img\\theme\\lush_0.png",
-      "..\\res\\img\\theme\\lush_1.png"
-    ],
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 2
+	"name": "sLush",
+	"path": [
+	  "..\\res\\img\\theme\\lush_0.png",
+	  "..\\res\\img\\theme\\lush_1.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 2
   },
   {
-    "name": "sLushDirectional",
-    "path": [
-      "..\\res\\img\\theme\\lush_down_0.png",
-      "..\\res\\img\\theme\\lush_up_0.png",
-      "..\\res\\img\\theme\\lush_updown_0.png"
-    ],
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "sLushDirectional",
+	"path": [
+	  "..\\res\\img\\theme\\lush_down_0.png",
+	  "..\\res\\img\\theme\\lush_up_0.png",
+	  "..\\res\\img\\theme\\lush_updown_0.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "sDirtBrick",
-    "path": [
-      "..\\res\\img\\theme\\brick_mine_0.png",
-      "..\\res\\img\\theme\\brick_mine_1.png"
-    ],
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "sDirtBrick",
+	"path": [
+	  "..\\res\\img\\theme\\brick_mine_0.png",
+	  "..\\res\\img\\theme\\brick_mine_1.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "sDirtBrickDirectional",
-    "path": [
-      "..\\res\\img\\theme\\brick_mine_down_0.png",
-      "..\\res\\img\\theme\\brick_mine_up_0.png",
-      "..\\res\\img\\theme\\brick_mine_updown_0.png"
-    ],
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "sDirtBrickDirectional",
+	"path": [
+	  "..\\res\\img\\theme\\brick_mine_down_0.png",
+	  "..\\res\\img\\theme\\brick_mine_up_0.png",
+	  "..\\res\\img\\theme\\brick_mine_updown_0.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "Grave",
-    "path": [
-      "..\\res\\img\\theme\\grave_0.png",
-      "..\\res\\img\\theme\\grave_1.png",
-      "..\\res\\img\\theme\\grave_2.png",
-      "..\\res\\img\\theme\\grave_3.png",
-      "..\\res\\img\\theme\\grave_4.png",
-      "..\\res\\img\\theme\\grave_5.png"
-    ],
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "Grave",
+	"path": [
+	  "..\\res\\img\\theme\\grave_0.png",
+	  "..\\res\\img\\theme\\grave_1.png",
+	  "..\\res\\img\\theme\\grave_2.png",
+	  "..\\res\\img\\theme\\grave_3.png",
+	  "..\\res\\img\\theme\\grave_4.png",
+	  "..\\res\\img\\theme\\grave_5.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "GraveAsh",
-    "path": "..\\res\\img\\theme\\grave_ash_0.png",
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "GraveAsh",
+	"path": "..\\res\\img\\theme\\grave_ash_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "Elevator",
-    "path": "..\\res\\img\\theme\\elevator_0.png",
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "Elevator",
+	"path": "..\\res\\img\\theme\\elevator_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "Ladder",
-    "path": "..\\res\\img\\theme\\ladder_0.png",
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "Ladder",
+	"path": "..\\res\\img\\theme\\ladder_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "sTorch",
-    "path": [
-      "..\\res\\img\\theme\\TikiTorch_0.png",
-      "..\\res\\img\\theme\\TikiTorch_1.png",
-      "..\\res\\img\\theme\\TikiTorch_2.png",
-      "..\\res\\img\\theme\\TikiTorch_3.png",
-      "..\\res\\img\\theme\\TikiTorch_4.png",
-      "..\\res\\img\\theme\\TikiTorch_1.png"
-    ],
-    "xoffset": 8,
-    "yoffset": 10,
-    "number": 1
+	"name": "sTorch",
+	"path": [
+	  "..\\res\\img\\theme\\TikiTorch_0.png",
+	  "..\\res\\img\\theme\\TikiTorch_1.png",
+	  "..\\res\\img\\theme\\TikiTorch_2.png",
+	  "..\\res\\img\\theme\\TikiTorch_3.png",
+	  "..\\res\\img\\theme\\TikiTorch_4.png",
+	  "..\\res\\img\\theme\\TikiTorch_1.png"
+	],
+	"xoffset": 8,
+	"yoffset": 10,
+	"number": 1
   },
   {
-    "name": "sLushDoodad",
-    "path": [
-      "..\\res\\img\\theme\\lush_top_0.png",
-      "..\\res\\img\\theme\\lush_top_1.png",
-      "..\\res\\img\\theme\\lush_top_2.png"
-    ],
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "sLushDoodad",
+	"path": [
+	  "..\\res\\img\\theme\\lush_top_0.png",
+	  "..\\res\\img\\theme\\lush_top_1.png",
+	  "..\\res\\img\\theme\\lush_top_2.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "sDirtBrickDoodad",
-    "path": [
-      "..\\res\\img\\theme\\brick_mine_top_0.png",
-      "..\\res\\img\\theme\\brick_mine_top_1.png"
-    ],
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "sDirtBrickDoodad",
+	"path": [
+	  "..\\res\\img\\theme\\brick_mine_top_0.png",
+	  "..\\res\\img\\theme\\brick_mine_top_1.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "FlatTop",
-    "path": "..\\res\\img\\theme\\flat_0.png",
-    "xoffset": 0,
-    "yoffset": 0,
-    "number": 1
+	"name": "FlatTop",
+	"path": "..\\res\\img\\theme\\flat_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
   },
   {
-    "name": "Player",
-    "path": "..\\res\\img\\entity\\vampire.png",
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "Player",
+	"path": "..\\res\\img\\entity\\vampire.png",
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   },
   {
-    "name": "PlayerJump",
-    "path": "..\\res\\img\\entity\\VampireJump_0.png",
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "PlayerJump",
+	"path": "..\\res\\img\\entity\\VampireJump_0.png",
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   },
   {
-    "name": "PlayerDead",
-    "path": "..\\res\\img\\entity\\VampireDead_0.png",
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "PlayerDead",
+	"path": "..\\res\\img\\entity\\VampireDead_0.png",
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   },
   {
-    "name": "PlayerRun",
-    "path": [
-      "..\\res\\img\\entity\\VampireRun_0.png",
-      "..\\res\\img\\entity\\VampireRun_1.png",
-      "..\\res\\img\\entity\\VampireRun_2.png",
-      "..\\res\\img\\entity\\VampireRun_3.png",
-      "..\\res\\img\\entity\\VampireRun_4.png",
-      "..\\res\\img\\entity\\VampireRun_5.png",
-      "..\\res\\img\\entity\\VampireRun_2.png",
-      "..\\res\\img\\entity\\VampireRun_1.png"
-    ],
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "PlayerRun",
+	"path": [
+	  "..\\res\\img\\entity\\VampireRun_0.png",
+	  "..\\res\\img\\entity\\VampireRun_1.png",
+	  "..\\res\\img\\entity\\VampireRun_2.png",
+	  "..\\res\\img\\entity\\VampireRun_3.png",
+	  "..\\res\\img\\entity\\VampireRun_4.png",
+	  "..\\res\\img\\entity\\VampireRun_5.png",
+	  "..\\res\\img\\entity\\VampireRun_2.png",
+	  "..\\res\\img\\entity\\VampireRun_1.png"
+	],
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   },
   {
-    "name": "SoldierIdle",
-    "path": "..\\res\\img\\entity\\Soldier.png",
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "SoldierIdle",
+	"path": "..\\res\\img\\entity\\Soldier.png",
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   },
   {
-    "name": "SoldierRun",
-    "path": [
-      "..\\res\\img\\entity\\SolidierWalk_0.png",
-      "..\\res\\img\\entity\\SolidierWalk_1.png",
-      "..\\res\\img\\entity\\SolidierWalk_2.png",
-      "..\\res\\img\\entity\\SolidierWalk_3.png",
-      "..\\res\\img\\entity\\SolidierWalk_4.png",
-      "..\\res\\img\\entity\\SolidierWalk_5.png",
-      "..\\res\\img\\entity\\SolidierWalk_2.png",
-      "..\\res\\img\\entity\\SolidierWalk_1.png"
-    ],
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "SoldierRun",
+	"path": [
+	  "..\\res\\img\\entity\\SolidierWalk_0.png",
+	  "..\\res\\img\\entity\\SolidierWalk_1.png",
+	  "..\\res\\img\\entity\\SolidierWalk_2.png",
+	  "..\\res\\img\\entity\\SolidierWalk_3.png",
+	  "..\\res\\img\\entity\\SolidierWalk_4.png",
+	  "..\\res\\img\\entity\\SolidierWalk_5.png",
+	  "..\\res\\img\\entity\\SolidierWalk_2.png",
+	  "..\\res\\img\\entity\\SolidierWalk_1.png"
+	],
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   },
   {
-    "name": "SoldierStunned",
-    "path": [
-      "..\\res\\img\\entity\\SoldierStunned_0.png",
-      "..\\res\\img\\entity\\SoldierStunned_1.png",
-      "..\\res\\img\\entity\\SoldierStunned_2.png",
-      "..\\res\\img\\entity\\SoldierStunned_3.png",
-      "..\\res\\img\\entity\\SoldierStunned_4.png"
-    ],
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "SoldierStunned",
+	"path": [
+	  "..\\res\\img\\entity\\SoldierStunned_0.png",
+	  "..\\res\\img\\entity\\SoldierStunned_1.png",
+	  "..\\res\\img\\entity\\SoldierStunned_2.png",
+	  "..\\res\\img\\entity\\SoldierStunned_3.png",
+	  "..\\res\\img\\entity\\SoldierStunned_4.png"
+	],
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   },
   {
-    "name": "SoldierDead",
-    "path": "..\\res\\img\\entity\\SoldierDead.png",
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "SoldierDead",
+	"path": "..\\res\\img\\entity\\SoldierDead.png",
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   },
   {
-    "name": "ManBeardIdle",
-    "path": "..\\res\\img\\entity\\ManBeard_0.png",
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "ManBeardIdle",
+	"path": "..\\res\\img\\entity\\ManBeard_0.png",
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   },
   {
-    "name": "ManBeardRun",
-    "path": [
-      "..\\res\\img\\entity\\ManBeardWalk_0.png",
-      "..\\res\\img\\entity\\ManBeardWalk_1.png",
-      "..\\res\\img\\entity\\ManBeardWalk_2.png",
-      "..\\res\\img\\entity\\ManBeardWalk_3.png",
-      "..\\res\\img\\entity\\ManBeardWalk_4.png",
-      "..\\res\\img\\entity\\ManBeardWalk_5.png",
-      "..\\res\\img\\entity\\ManBeardWalk_2.png",
-      "..\\res\\img\\entity\\ManBeardWalk_1.png"
-    ],
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "ManBeardRun",
+	"path": [
+	  "..\\res\\img\\entity\\ManBeardWalk_0.png",
+	  "..\\res\\img\\entity\\ManBeardWalk_1.png",
+	  "..\\res\\img\\entity\\ManBeardWalk_2.png",
+	  "..\\res\\img\\entity\\ManBeardWalk_3.png",
+	  "..\\res\\img\\entity\\ManBeardWalk_4.png",
+	  "..\\res\\img\\entity\\ManBeardWalk_5.png",
+	  "..\\res\\img\\entity\\ManBeardWalk_2.png",
+	  "..\\res\\img\\entity\\ManBeardWalk_1.png"
+	],
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   },
   {
-    "name": "SnakeIdle",
-    "path": "..\\res\\img\\entity\\Snake_0.png",
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "SnakeIdle",
+	"path": "..\\res\\img\\entity\\Snake_0.png",
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   },
   {
-    "name": "SnakeRun",
-    "path": [
-      "..\\res\\img\\entity\\SnakeWalk_0.png",
-      "..\\res\\img\\entity\\SnakeWalk_1.png",
-      "..\\res\\img\\entity\\SnakeWalk_2.png",
-      "..\\res\\img\\entity\\SnakeWalk_3.png",
-      "..\\res\\img\\entity\\SnakeWalk_4.png",
-      "..\\res\\img\\entity\\SnakeWalk_5.png"
-    ],
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "SnakeRun",
+	"path": [
+	  "..\\res\\img\\entity\\SnakeWalk_0.png",
+	  "..\\res\\img\\entity\\SnakeWalk_1.png",
+	  "..\\res\\img\\entity\\SnakeWalk_2.png",
+	  "..\\res\\img\\entity\\SnakeWalk_3.png",
+	  "..\\res\\img\\entity\\SnakeWalk_4.png",
+	  "..\\res\\img\\entity\\SnakeWalk_5.png"
+	],
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   },
   {
-    "name": "CobraIdle",
-    "path": "..\\res\\img\\entity\\Cobra_0.png",
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "CobraIdle",
+	"path": "..\\res\\img\\entity\\Cobra_0.png",
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   },
   {
-    "name": "CobraRun",
-    "path": [
-      "..\\res\\img\\entity\\CobraWalk_0.png",
-      "..\\res\\img\\entity\\CobraWalk_1.png",
-      "..\\res\\img\\entity\\CobraWalk_2.png",
-      "..\\res\\img\\entity\\CobraWalk_3.png",
-      "..\\res\\img\\entity\\CobraWalk_4.png",
-      "..\\res\\img\\entity\\CobraWalk_5.png"
-    ],
-    "xoffset": 8,
-    "yoffset": 8,
-    "number": 1
+	"name": "CobraRun",
+	"path": [
+	  "..\\res\\img\\entity\\CobraWalk_0.png",
+	  "..\\res\\img\\entity\\CobraWalk_1.png",
+	  "..\\res\\img\\entity\\CobraWalk_2.png",
+	  "..\\res\\img\\entity\\CobraWalk_3.png",
+	  "..\\res\\img\\entity\\CobraWalk_4.png",
+	  "..\\res\\img\\entity\\CobraWalk_5.png"
+	],
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
+  },
+  {
+	"name": "Bloods",
+	"path": [
+	  "..\\res\\img\\effect\\Blood_0.png",
+	  "..\\res\\img\\effect\\Blood_1.png",
+	  "..\\res\\img\\effect\\Blood_2.png"
+	],
+	"xoffset": 4,
+	"yoffset": 4,
+	"number": 1
+  },
+  {
+	"name": "BloodTrails",
+	"path": [
+	  "..\\res\\img\\effect\\BloodTrail_0.png",
+	  "..\\res\\img\\effect\\BloodTrail_1.png",
+	  "..\\res\\img\\effect\\BloodTrail_2.png",
+	  "..\\res\\img\\effect\\BloodTrail_3.png",
+	  "..\\res\\img\\effect\\BloodTrail_4.png",
+	  "..\\res\\img\\effect\\BloodTrail_5.png",
+	  "..\\res\\img\\effect\\BloodTrail_6.png"
+	],
+	"xoffset": 4,
+	"yoffset": 4,
+	"number": 1
+  },
+  {
+	"name": "StunMark",
+	"path": [
+	  "..\\res\\img\\effect\\stunned_0.png",
+	  "..\\res\\img\\effect\\stunned_1.png",
+	  "..\\res\\img\\effect\\stunned_2.png",
+	  "..\\res\\img\\effect\\stunned_3.png",
+	  "..\\res\\img\\effect\\stunned_4.png"
+	],
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   }
 ]

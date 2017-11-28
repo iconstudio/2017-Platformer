@@ -6,10 +6,7 @@ from module.framework import Camera
 from module.framework import io
 import game_pause
 
-import json
-
 from module.sprite import *
-#import module.terrain as terrain
 from module.terrain import *
 from module.game.game_containers import *
 
@@ -35,7 +32,7 @@ def enter():
 def exit():
     global manager
     if manager is not None:
-        manager.clear()
+        # manager.clear()
         del manager
         manager = None
 
@@ -50,7 +47,7 @@ def draw_clean():
     back = sprite_get(background_sprite)
     if background_sprite in ("bgCave",):
         dx = -32
-        for x in range(22):
+        for _ in range(22):
             dy = -32
             for y in range(13):
                 draw_sprite(back, 0, dx, dy)
@@ -63,16 +60,15 @@ def draw_clean():
     elif background_sprite in ("bgNight",):
         draw_sprite(back, 0, 0, 0)
 
-    if manager is None:
-        return
-
-    global instance_draw_list
-    if len(instance_draw_list) > 0:
-        for inst in instance_draw_list:
+    if len(get_instance_list(ID_DRAW)) > 0:
+        for inst in get_instance_list(ID_DRAW):
             if inst.visible:
                 inst.event_draw()
     else:
         raise RuntimeError("개체가 존재하지 않습니다!")
+
+    if manager is None:  # Drawing UI
+        return
 
     draw_set_alpha(1)
     heart = sprite_get("sHeart")
@@ -125,29 +121,28 @@ class GameExecutor:
         io.key_add(ord('8'))
 
         # 아래의 타일들은 모든 스테이지에서 적용됨
-        terrain_tile_assign(1, oBrickCastle, 0)
-        terrain_tile_assign(2, oBrickDirt, 0)
-        terrain_tile_assign(3, oLush, 0)
-        terrain_tile_assign(5, oLadder, 0)
-        terrain_tile_assign(26, oTorch, 1)
+        terrain_tile_assign(1, oBrickCastle, TYPE_TERRAIN)
+        terrain_tile_assign(2, oBrickDirt, TYPE_TERRAIN)
+        terrain_tile_assign(3, oLush, TYPE_TERRAIN)
+        terrain_tile_assign(5, oLadder, TYPE_TERRAIN)
+        terrain_tile_assign(26, oTorch, TYPE_DOODAD)
 
-        terrain_tile_assign(25, oPlayer, 2)
-        terrain_tile_assign(14, oSoldier, 2)
-        terrain_tile_assign(13, oCobra, 2)
-        terrain_tile_assign(12, oSnake, 2)
+        terrain_tile_assign(25, oPlayer, TYPE_INSTANCE)
+        terrain_tile_assign(14, oSoldier, TYPE_INSTANCE)
+        terrain_tile_assign(13, oCobra, TYPE_INSTANCE)
+        terrain_tile_assign(12, oSnake, TYPE_INSTANCE)
 
     def clear(self):
-        global instance_list, instance_list_spec, instance_draw_list
-        player_lives_clear(3)
-        #for inst in instance_list:
+        player_lives_clear()
+        # alllist, drawlist = get_instance_list(ID_OVERALL), get_instance_list(ID_DRAW)
+        # for inst in alllist:
         #    inst.destroy()
         #    del inst
-        #instance_list.clear()
-        #instance_draw_list.clear()
+        # alllist.clear()
+        # drawlist.clear()
 
     def update_begin(self):
-        global instance_list, instance_draw_list
-        instance_draw_list = sorted(instance_list, key = lambda gobject: -gobject.depth)
+        draw_list_sort()
 
 
 class StageIntro(GameExecutor):
@@ -155,11 +150,11 @@ class StageIntro(GameExecutor):
         super().__init__()
 
         # Terrains
-        terrain_tile_assign(4, oMillHousestone, 3)
-        terrain_tile_assign(19, oMillHousechip, 3)
-        terrain_tile_assign(20, oMillHousechipL, 3)
-        terrain_tile_assign(21, oMillHousechipR, 3)
-        terrain_tile_assign(22, oMillHousechipM, 3)
+        terrain_tile_assign(4, oMillHousestone, TYPE_BG)
+        terrain_tile_assign(19, oMillHousechip, TYPE_BG)
+        terrain_tile_assign(20, oMillHousechipL, TYPE_BG)
+        terrain_tile_assign(21, oMillHousechipR, TYPE_BG)
+        terrain_tile_assign(22, oMillHousechipM, TYPE_BG)
 
         scene = TerrainGenerator("begin")
         scene.generate()

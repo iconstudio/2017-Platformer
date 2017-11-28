@@ -34,6 +34,14 @@ class MainMenu:
     depthlist = []
     currdepth = 0
 
+    def __init__(self):
+        self.hfontsml = load_font(path_font + "Contl___.ttf", 36)
+        self.hfont = load_font(path_font + "Contl___.ttf", 40)  # "윤고딕_310.ttf"
+        self.hfontlrg = load_font(path_font + "Contl___.ttf", 44)
+
+    def __del__(self):
+        del self.hfontsml, self.hfont, self.hfontlrg
+
     def menu_init(self, default_selected: int = 0):
         newone = MenuEnumerator()
         self.depthlist.append(newone)
@@ -66,12 +74,11 @@ class MainMenu:
         ddy = menusy + menum.menupos + 10
 
         draw_sprite(bg, 0, 0, 0)
-        global hfont, hfontlrg
         for j in range(menum.menucnt):
-            dhfont = hfont
+            dhfont = self.hfont
             if j == menum.menusel:
                 dscl = 1 - menum.menuscl[j] / 5
-                dhfont = hfontlrg
+                dhfont = self.hfontlrg
                 draw_set_alpha(0.2)
                 draw_rectangle(0, ddy - 25, screen_width, ddy + 15)
             elif j == menum.menuold:
@@ -96,15 +103,10 @@ def enter():
     draw_set_color(255, 255, 255)
 
     if mainmenu is None:
-        global hfontsml, hfont, hfontlrg
-        hfontsml = load_font(path_font + "Contl___.ttf", 36)
-        hfont = load_font(path_font + "Contl___.ttf", 40)  # "윤고딕_310.ttf"
-        hfontlrg = load_font(path_font + "Contl___.ttf", 44)
-
         draw_set_alpha(1)
         global mn_begin, mn_opt, mn_credit, mn_end
         mainmenu = MainMenu()
-        mainmenu.menu_init(0)
+        mainmenu.menu_init()
         mn_begin = mainmenu.menu_add("begin game")
         mn_opt = mainmenu.menu_add("option")
         mn_credit = mainmenu.menu_add("credit")
@@ -112,9 +114,6 @@ def enter():
 
 
 def exit():
-    global hfontsml, hfont, hfontlrg
-    del hfontsml, hfont, hfontlrg
-
     global mainmenu
     mainmenu.depthlist.clear()
     if mainmenu is not None:

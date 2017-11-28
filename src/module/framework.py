@@ -1,4 +1,5 @@
 from module.pico2d import *
+from module.functions import *
 from module.constants import *
 
 import json
@@ -33,10 +34,10 @@ class Font_sprite:
             self.sprite_index = sprite
             self.height = sprite.height
 
-    def draw(self, x, y, caption: str, scale: float = 1.0):
+    def draw(self, sx, sy, caption: str, scale: float = 1.0):
         length = len(caption)
         if length > 0:
-            dx, dy = x, y - scale * self.height * (caption.count('\n') + 1)
+            dx, dy = sx, sy - scale * self.height * (caption.count('\n') + 1)
             for i in range(length):
                 currchr: str = caption[i].upper()
                 if currchr in (" ", ' '):
@@ -44,7 +45,7 @@ class Font_sprite:
                     dx += 16 * scale
                     continue
                 elif currchr is '\n':
-                    dx = x
+                    dx = sx
                     dy -= self.height * scale
                     continue
                 else:
@@ -54,6 +55,7 @@ class Font_sprite:
                     dx += 16 * scale
 
 
+# noinspection PyUnusedLocal
 def game_begin():
     HWND = open_canvas(screen_width, screen_height, full = false)
     SDL_SetWindowTitle(HWND, "Vampire Exodus".encode("UTF-8"))
@@ -66,7 +68,7 @@ def game_begin():
     draw_background_color_set(0, 0, 0)
 
     global hFont, hFontLrg, hFontRetro
-    hFont = load_font(path_font + "윤고딕_310.ttf", 20)
+    hFont = load_font(path_font + "윤고딕_310.ttf")
     hFontLrg = load_font(path_font + "윤고딕_310.ttf", 28)
 
     fontlist = []
@@ -78,21 +80,21 @@ def game_begin():
     tempstr = str('!"' + "#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ")
     hFontRetro = Font_sprite(ft, tempstr)
 
-    with open(path_data + "option.json", "r") as opfile:
+    with open(path_data + "option.json") as opfile:
         data = json.load(opfile)
         volsfx: int = data["volume_sfx"]
         volmus: int = data["volume_mus"]
         optefx: bool = data["effect"]
 
 
-def draw_text(caption: str, x, y, font: int = 2, scale: float = 1.0):
+def draw_text(caption: str, dx, dy, font: int = 2, scale: float = 1.0):
     global hFont, hFontLrg, hFontRetro
     dfont = hFontRetro
     if font == 0:
         dfont = hFont
     elif font == 1:
         dfont = hFontLrg
-    dfont.draw(x, y, caption, scale)
+    dfont.draw(dx, dy, caption, scale)
 
 
 def game_end():
@@ -226,25 +228,25 @@ class oCamera:
     width, height = screen_width, screen_height
 
     def limit(self):
-        global screen_width, screen_height, scene_width, scene_height
-        self.x = clamp(0, int(self.x), scene_width - screen_width)
-        self.y = clamp(20, int(self.y), scene_height - screen_height)
+        global scene_width, scene_height
+        self.x = clamp(0, int(self.x), scene_width - get_screen_width())
+        self.y = clamp(20, int(self.y), scene_height - get_screen_height())
 
-    def set_pos(self, x: float = None, y: float = None):
-        if x is not None:
-            if abs(x - self.x) < 2:
-                self.x = x
-            elif self.x != x:
-                self.x += (x - self.x) / 5
-        if y is not None:
-            self.y = y
+    def set_pos(self, nx: float = None, ny: float = None):
+        if nx is not None:
+            if abs(nx - self.x) < 2:
+                self.x = nx
+            elif self.x != nx:
+                self.x += (nx - self.x) / 5
+        if ny is not None:
+            self.y = ny
         self.limit()
 
-    def add_pos(self, x: float = None, y: float = None):
-        if x is not None:
-            self.x += x
-        if y is not None:
-            self.y += y
+    def add_pos(self, ax: float = None, ay: float = None):
+        if ax is not None:
+            self.x += ax
+        if ay is not None:
+            self.y += ay
         self.limit()
 
 
@@ -282,7 +284,7 @@ class uiframe:
     def draw(self, frame_time):
         draw_set_alpha(1)
         draw_set_color(*self.color)
-        draw_rectangle(self.x, self.y, self.x + self.width, self.y + self.height, false)
+        draw_rectangle(self.x, self.y, self.x + self.width, self.y + self.height)
 
 
 class uibutton(uiframe):

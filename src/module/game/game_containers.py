@@ -54,11 +54,10 @@ def instance_place(Ty, fx, fy) -> (list, int):
         raise RuntimeError("Cannot find variable 'identify' in %s" % (str(Ty)))
 
     __returns = []
-    global instance_list, instance_list_spec
     if ibj == "":
-        clist = instance_list
+        clist = get_instance_list(ID_OVERALL)
     else:
-        clist = instance_list_spec[ibj]
+        clist = get_instance_list(ibj)
     length = len(clist)
     if length > 0:
         for inst in clist:
@@ -81,6 +80,7 @@ class oPlayer(GObject):
     held: object = None
     invincible: float = 0
     controllable: float = 0
+    laddercount: float = 0
     wladder = None
 
     # real-scale: 54 km per hour
@@ -90,35 +90,44 @@ class oPlayer(GObject):
         super().__init__(ndepth, nx, ny)
         self.sprite_index = sprite_get("Player")
 
+        # noinspection PyGlobalUndefined
         global container_player
         container_player = self
 
+    def status_change(self, what):
+        self.oStatus = what
+
     def get_dmg(self, how: int = 1, dir = 1):
         player_got_damage(how)
-        if player_lives <= 0:
-            self.oStatus = oStatusContainer.DEAD
+        if player_get_lives() <= 0:
+            self.status_change(oStatusContainer.DEAD)
             self.xVel = 0
 
             framework.change_state(game_over)
         else:
-            self.invincible = 3
+            if self.oStatus is oStatusContainer.LADDERING:
+                self.status_change(oStatusContainer.IDLE)
+            self.invincible = 3  # 3 seconds
             io.clear()
             self.xVel = -dir * 20
-            self.yVel += 15
-            self.controllable = 0.5
+            self.yVel += 15  # Bounces
+            self.controllable = 0.5  # 0.5 seconds
 
     def event_step(self, frame_time):
-        if (self.oStatus is oStatusContainer.LADDERING):
+        if self.oStatus is oStatusContainer.LADDERING:
             self.gravity_default = 0
             self.gravity = 0
         else:
             self.gravity_default = delta_gravity()
+            self.yFric = 0
         super().event_step(frame_time)
 
-        if player_get_lives() <= 0:
-            self.get_dmg()
+        # Fall through void
+        if self.y < -60:
+            self.get_dmg(999)
             return
 
+        # Use cheat of death
         if io.key_check_pressed(ord('9')):
             self.get_dmg(3)
             return
@@ -130,8 +139,10 @@ class oPlayer(GObject):
             self.image_alpha = 1
         if self.controllable > 0:
             self.controllable -= frame_time
+        if self.laddercount > 0:
+            self.laddercount -= frame_time
 
-        # ==================================================================================================
+        # ===============================================================================================
         elist, ecount = instance_place(oEnemyParent, self.x, self.y)
         dlist, dcount = instance_place(oEnemyDamage, self.x, self.y)
         tlist, tcount = elist + dlist, ecount + dcount
@@ -146,7 +157,7 @@ class oPlayer(GObject):
                         self.get_dmg(1, enemy.image_xscale)
                     enemy.collide_with_player = true
 
-        # ==================================================================================================
+        # ===============================================================================================
         if self.oStatus < oStatusContainer.CHANNELING:  # Player can control its character.
             Camera.set_pos(self.x - Camera.width / 2, self.y - Camera.height / 2)
             # Stomps enemies under the character
@@ -171,14 +182,14 @@ class oPlayer(GObject):
                 for enemy in whothere:
                     enemy.collide_with_player = false
                     if enemy.oStatus < oStatusContainer.STUNNED:
-                        if enemy.name in (
-                                "ManEater", "Lavaman",):  # Cannot ignore getting damages from these kind of enemies.
+                        if enemy.name in ("ManEater", "Lavaman",):
+                            # Cannot ignore getting damages from these kind of enemies.
                             self.get_dmg(1, enemy.image_xscale)
                         elif self.invincible <= 0:
                             self.get_dmg(1, enemy.image_xscale)
                         enemy.collide_with_player = true
 
-            # ==================================================================================================
+            # ===============================================================================================
             mx, my = 0, 0
             if self.controllable <= 0:  # Player can controllable
                 if io.key_check(SDLK_LEFT): mx -= 1
@@ -187,15 +198,15 @@ class oPlayer(GObject):
                 if io.key_check(SDLK_DOWN): my -= 1
 
                 if self.oStatus != oStatusContainer.LADDERING:
-                    if my != 0:  # Get on a ladder
+                    if my != 0 and self.laddercount <= 0:  # Get on a ladder
                         instl, cl = instance_place(oLadder, self.x, self.y)
                         if cl > 0:  # get stick to the ladder
-                            if abs(instl[0].x + 10 - self.x) <= 4 and abs(instl[0].y + 10 - self.y) <= 10:
+                            if abs(instl[0].x + 10 - self.x) <= 4 and abs(instl[0].y + 10 - self.y) <= 6:
                                 self.wladder = instl[0]
                                 self.x = self.wladder.x + 10
-                                self.y = self.wladder.y + 10
+                                # self.y = self.wladder.y + 10
                                 self.xVel, self.yVel = 0, 0
-                                self.oStatus = oStatusContainer.LADDERING
+                                self.status_change(oStatusContainer.LADDERING)
                                 self.sprite_set("Player")
                                 return  # change attributes only one time
 
@@ -213,8 +224,7 @@ class oPlayer(GObject):
                         if not self.onAir:
                             self.yVel = 90
 
-                    # ==================================================================================================
-                    self.yFric = 0
+                    # ===============================================================================================
                     if not self.onAir:  # Play Moving sprite
                         if self.xVel != 0:
                             self.image_speed = 0.8
@@ -225,18 +235,36 @@ class oPlayer(GObject):
                         self.sprite_set("PlayerJump")
 
                 else:  # On the ladder
+                    if mx != 0:
+                        self.image_xscale = mx
+
+                    if io.key_check_pressed(ord('x')):  # Jump
+                        if self.place_free(0, my + 4):
+                            if mx != 0:
+                                distance = delta_velocity(self.xVelMax / 2) * mx
+                                if self.place_free(distance, 0):
+                                    self.xVel = self.xVelMax / 2 * mx
+                            if my != -1:
+                                self.yVel = 80  # Jumps higher
+                            self.status_change(oStatusContainer.IDLE)
+                            self.sprite_set("PlayerJump")
+                            self.y += 1
+                            self.laddercount = 0.3  # seconds
+                            return
+
                     if my != 0:
                         self.yFric = 0
-                        self.yVel = clamp(-20, self.yVel + my, 20)
+                        self.yVel = clamp(-20, self.yVel + my, 20)  # Climing slowly
                     else:
-                        self.yFric = 0.8
+                        self.yFric = 1
 
                     if self.yVel != 0:  # Get off the ladder
                         instl, cl = instance_place(oLadder, self.x, self.y)
                         if cl <= 0 or (my <= 0 and not self.onAir):  # If there is no ladder or it is grounded.
-                            self.oStatus = oStatusContainer.IDLE
+                            self.status_change(oStatusContainer.IDLE)
                             self.sprite_set("Player")
                             self.y += 1
+                            self.laddercount = 0.2
 
         else:  # It would be eventual, and uncontrollable
             self.image_alpha = 1
