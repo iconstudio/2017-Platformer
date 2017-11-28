@@ -17,7 +17,7 @@ from game.game_solid import *
 from module.sprite import *
 
 __all__ = [
-            "player_got_damage", "player_lives_clear", "player_get_lives",
+              "player_got_damage", "player_lives_clear", "player_get_lives",
               "oPlayer", "oSoldier", "oSnake", "oCobra",
           ] + gobject_all + doodad_all + solid_all
 
@@ -114,7 +114,6 @@ class oPlayer(GObject):
         else:
             self.gravity_default = delta_gravity()
         super().event_step(frame_time)
-
 
         if player_get_lives() <= 0:
             self.get_dmg()
@@ -224,6 +223,7 @@ class oPlayer(GObject):
                             self.sprite_set("Player")
                     else:  # Play Jumping sprite
                         self.sprite_set("PlayerJump")
+
                 else:  # On the ladder
                     if my != 0:
                         self.yFric = 0

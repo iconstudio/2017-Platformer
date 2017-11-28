@@ -31,6 +31,13 @@ from module.sprite import *
                     3. 기타 전역 변수들
                 12. module\sprite.py : 스프라이트 관리 담당
                 13. module\terrain.py : 지형 생성 담당
+                14. module\game : 본 게임에 쓰이는 파일 모음
+                15. data\map_template.json : 지도 틀
+                16. data\option.json : 옵션 파일
+                17. data\sprite.json : 불러올 스프라이트 목록 파일
+                18. 
+                19. 
+                20. 
                 
 
         외부 파일 수정 사항:
@@ -48,62 +55,6 @@ if __name__ == "__main__":
     framework.game_begin()
 
     sprite_json_loads()
-    # UI
-    sprite_load(path_image + "logo.png", "sLogo", None, None)
-    sprite_load(path_ui + "loading.png", "sLoading", None, None)
-    sprite_load(path_ui + "heart.png", "sHeart", 16, 16)
-    sprite_load(path_ui + "mainmenu.png", "sMainTitle", 0, 0)
-
-    # Background
-    sprite_load(path_background + "bgCastle.png", "bgCastle", 0, 0)
-    sprite_load(path_background + "bgCave.png", "bgCave", 0, 0)
-    sprite_load(path_background + "bgTemple.png", "bgTemple", 0, 0)
-    sprite_load(path_background + "bgNight_0.png", "bgNight", 0, 0)
-
-    # Theme
-    sprite_load([path_theme + "wood_0.png", path_theme + "wood_1.png", path_theme + "wood_2.png",
-                 path_theme + "wood_3.png"], "sWood", 0, 0)
-    sprite_load([path_theme + "stonewall_0.png", path_theme + "stonewall_1.png", path_theme + "stonewall_2.png"],
-                "sStonewall", 0, 0)
-
-    sprite_load([path_theme + "brick_castle_0.png", path_theme + "brick_castle_1.png",
-                 path_theme + "brick_castle_2.png", path_theme + "brick_castle_3.png"], "sCastleBrick", 0, 0)
-    sprite_load([path_theme + "lush_0.png", path_theme + "lush_1.png"], "sLush", 0, 0)
-    sprite_load([path_theme + "lush_down_0.png", path_theme + "lush_up_0.png", path_theme + "lush_updown_0.png"],
-                "sLushDirectional", 0, 0)
-    sprite_load([path_theme + "brick_mine_0.png", path_theme + "brick_mine_1.png"], "sDirtBrick", 0, 0)
-    sprite_load([path_theme + "brick_mine_down_0.png", path_theme + "brick_mine_up_0.png",
-                 path_theme + "brick_mine_updown_0.png"], "sDirtBrickDirectional", 0, 0)
-    sprite_load([path_theme + "grave_0.png", path_theme + "grave_1.png", path_theme + "grave_2.png",
-                 path_theme + "grave_3.png", path_theme + "grave_4.png", path_theme + "grave_5.png"],
-                "Grave", 0, 0)
-    sprite_load(path_theme + "grave_ash_0.png", "GraveAsh", 0, 0)
-
-    sprite_load(path_theme + "elevator_0.png", "Elevator", 0, 0)
-
-    # Doodads
-    sprite_load(path_theme + "ladder_0.png", "Ladder", 0, 0)
-    sprite_load([path_theme + "TikiTorch_0.png", path_theme + "TikiTorch_1.png", path_theme + "TikiTorch_2.png",
-                 path_theme + "TikiTorch_3.png", path_theme + "TikiTorch_4.png", path_theme + "TikiTorch_1.png"],
-                "sTorch", 8, 10)
-    sprite_load([path_theme + "lush_top_0.png", path_theme + "lush_top_1.png", path_theme + "lush_top_2.png"],
-                "sLushDoodad", 0, 0)
-    sprite_load([path_theme + "brick_mine_top_0.png", path_theme + "brick_mine_top_1.png"], "sDirtBrickDoodad", 0, 0)
-    sprite_load(path_theme + "flat_0.png", "FlatTop", 0, 0)
-
-    # Entity
-    sprite_load(path_entity + "vampire.png", "Player", 8, 8)
-    sprite_load(path_entity + "VampireJump_0.png", "PlayerJump", 8, 8)
-    sprite_load([path_entity + "VampireRun_0.png", path_entity + "VampireRun_1.png",
-                 path_entity + "VampireRun_2.png", path_entity + "VampireRun_3.png",
-                 path_entity + "VampireRun_4.png", path_entity + "VampireRun_5.png",
-                 path_entity + "VampireRun_2.png", path_entity + "VampireRun_1.png"], "PlayerRun", 8, 8)
-    sprite_load(path_entity + "VampireDead_0.png", "PlayerDead", 8, 8)
-    sprite_load(path_entity + "Soldier.png", "SoldierIdle", 8, 8)
-    sprite_load([path_entity + "SolidierWalk_0.png", path_entity + "SolidierWalk_1.png",
-                 path_entity + "SolidierWalk_2.png", path_entity + "SolidierWalk_3.png",
-                 path_entity + "SolidierWalk_4.png", path_entity + "SolidierWalk_5.png",
-                 path_entity + "SolidierWalk_2.png", path_entity + "SolidierWalk_1.png"], "SoldierRun", 8, 8)
 
     sprite_load([path_entity + "SoldierStunned_0.png", path_entity + "SoldierStunned_1.png",
                  path_entity + "SoldierStunned_2.png", path_entity + "SoldierStunned_3.png",

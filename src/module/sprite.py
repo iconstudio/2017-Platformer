@@ -113,8 +113,11 @@ def draw_sprite(spr: Sprite, index = int(0) or float(0), x = int(0), y = int(0),
 
 def sprite_json_loads():
     try:
-        with open(path_data + "sprite.json", "r") as mapfile:
-            parsed = json.load(mapfile)
+        with open(path_data + "sprite.json", "r") as sprfile:
+            parsed: list = json.load(sprfile)
+
+            for content in parsed:
+                sprite_load(content["path"], content["name"], content["xoffset"], content["yoffset"], content["number"])
 
     except FileNotFoundError:
         pass
