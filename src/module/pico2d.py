@@ -473,7 +473,7 @@ class Font_sprite:
         if length > 0:
             dx, dy = sx, sy - scale * self.height * (caption.count('\n'))
             for i in range(length):
-                currchr: str = caption[i].upper()
+                currchr = caption[i].upper()
                 if currchr in (" ", ' '):
                     # print(currchr + " - ")
                     dx += 16 * scale

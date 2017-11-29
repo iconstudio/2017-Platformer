@@ -52,8 +52,8 @@ class TerrainManager:
         newy = 16 * 20 - 20
         neww = 32
         currln = ""
-        currlist: list = []
-        prevlist: list = []
+        currlist = []
+        prevlist = []
         j = 0
 
         for i in range(len(self.data)):

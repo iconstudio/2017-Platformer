@@ -47,7 +47,7 @@ def game_begin():
 
     with open(path_data + "option.json") as opfile:
         data = json.load(opfile)
-        volsfx: int = data["volume_sfx"]
+        volsfx = data["volume_sfx"]
         volmus: int = data["volume_mus"]
         optefx: bool = data["effect"]
 

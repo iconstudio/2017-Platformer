@@ -113,7 +113,7 @@ def draw_sprite(spr: Sprite, index = int(0) or float(0), sx = int(0), sy = int(0
 def sprite_json_loads():
     try:
         with open(path_data + "sprite.json") as sprfile:
-            parsed: list = json.load(sprfile)
+            parsed = json.load(sprfile)
 
             for content in parsed:
                 sprite_load(content["path"], content["name"], content["xoffset"], content["yoffset"], content["number"])

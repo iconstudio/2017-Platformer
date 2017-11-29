@@ -44,6 +44,22 @@ def player_get_lives() -> int:
     return player_lives
 
 
+player_ability = {}
+
+
+def player_ability_get_status(what: str) -> bool:
+    global player_ability
+    try:
+        return player_ability[what]
+    except KeyError:
+        return false
+
+
+def player_ability_activate(what: str) -> None:
+    global player_ability
+    player_ability[what] = true
+
+
 # ==================================================================================================
 #                                    사용자 정의 객체 / 함수
 # ==================================================================================================
