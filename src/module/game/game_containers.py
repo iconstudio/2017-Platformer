@@ -99,6 +99,10 @@ class oPlayer(GObject):
     laddercount: float = 0
     wladder = None
 
+    ability_jump_count = 1
+    ability_dash_count = 1
+    ability_blink_count = 1
+
     # real-scale: 54 km per hour
     xVelMin, xVelMax = -54, 54
 
@@ -109,6 +113,15 @@ class oPlayer(GObject):
         # noinspection PyGlobalUndefined
         global container_player
         container_player = self
+
+    def phy_thud(self, how: float or int):
+        super().phy_thud(how)
+
+        # PLAYER ABILITY : DOUBLE JUMP
+        if player_ability_get_status("DoubleJump"):
+            self.ability_jump_count = 2
+        else:
+            self.ability_jump_count = 1
 
     def status_change(self, what):
         self.oStatus = what
@@ -237,7 +250,15 @@ class oPlayer(GObject):
                         self.xFric = 0.6
 
                     if io.key_check_pressed(ord('x')):  # Jump
-                        if not self.onAir:
+                        do_jump: bool = false
+                        if not self.onAir: # On ground
+                            do_jump = true
+                        else:
+                            if self.ability_jump_count == 2: # Can jump while on air if player can double-jump!
+                                self.ability_jump_count = 0
+                                do_jump = true
+
+                        if do_jump:
                             self.yVel = 90
 
                     # ===============================================================================================
@@ -261,7 +282,7 @@ class oPlayer(GObject):
                                 if self.place_free(distance, 0):
                                     self.xVel = self.xVelMax / 2 * mx
                             if my != -1:
-                                self.yVel = 80  # Jumps higher
+                                self.yVel = 70  # Jumps higher
                             self.status_change(oStatusContainer.IDLE)
                             self.sprite_set("PlayerJump")
                             self.y += 1
