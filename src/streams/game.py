@@ -18,7 +18,6 @@ __all__ = [
 #                                       프레임워크 함수
 # ==================================================================================================
 name = "game_state"
-background_sprite = "bgNight"
 manager = None
 
 
@@ -30,11 +29,7 @@ def enter():
 
 
 def exit():
-    global manager
-    if manager is not None:
-        # manager.clear()
-        del manager
-        manager = None
+    pass
 
 
 def update(frame_time):
@@ -44,8 +39,8 @@ def update(frame_time):
 
 
 def draw_clean():
-    back = sprite_get(background_sprite)
-    if background_sprite in ("bgCave",):
+    back = sprite_get(manager.background_sprite)
+    if manager.background_sprite in ("bgCave",):
         dx = -32
         for _ in range(22):
             dy = -32
@@ -57,7 +52,7 @@ def draw_clean():
                 dx -= screen_width
             elif dx < 0:
                 dx += screen_width
-    elif background_sprite in ("bgNight",):
+    elif manager.background_sprite in ("bgNight",):
         draw_sprite(back, 0, 0, 0)
 
     if len(get_instance_list(ID_DRAW)) > 0:
@@ -66,9 +61,6 @@ def draw_clean():
                 inst.event_draw()
     else:
         raise RuntimeError("개체가 존재하지 않습니다!")
-
-    if manager is None:  # Drawing UI
-        return
 
     draw_set_alpha(1)
     heart = sprite_get("sHeart")
@@ -148,10 +140,15 @@ class GameExecutor:
     def update_begin(self):
         draw_list_sort()
 
+    def draw(self):
+        pass
+
 
 class StageIntro(GameExecutor):
     def __init__(self):
         super().__init__()
+
+        self.background_sprite = "bgNight"
 
         # Terrains
         terrain_tile_assign(4, oMillHousestone, TYPE_BG)

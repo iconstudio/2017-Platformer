@@ -4,7 +4,9 @@ from module.constants import *
 
 from game.gobject_header import *
 
-__all__ = [
+__all__ = []
+__all__ += [
+    "__all__",
     "oLushDecoration", "oDirtBrickDecoration",
     "oMillHousechip", "oMillHousestone", "oMillHousechipL", "oMillHousechipR",
     "oMillHousechipM", "oTorch", "oLadder",

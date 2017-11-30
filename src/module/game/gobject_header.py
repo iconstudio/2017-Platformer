@@ -7,7 +7,9 @@ from module.framework import Camera
 
 from module.sprite import *
 
-__all__ = [
+__all__ = []
+__all__ += [
+    "__all__",
     "oStatusContainer",
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
     "get_instance_list", "draw_list_sort",
@@ -258,7 +260,7 @@ class GObject(object):
             templist = []
             for inst in clist:
                 if bool(inst.y - inst.sprite_index.yoffset <= int(
-                                        self.y - self.sprite_index.yoffset + self.sprite_index.height)) != up:
+                        self.y - self.sprite_index.yoffset + self.sprite_index.height)) != up:
                     templist.append(inst)
 
             while yprog <= tdist:
@@ -410,6 +412,12 @@ class oDoodadParent(GObject):
     gravity_default = 0
     step_enable = false
     depth = -100
+
+    def parent_set(self, id):
+        self.parent = id
+
+    def parent_get(self, id):
+        return self.parent
 
     def tile_correction(self):
         pass

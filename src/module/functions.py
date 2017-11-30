@@ -169,7 +169,7 @@ class direction(oParser):
 
 
 # Object : Functions
-def instance_create(Ty, ndepth = 0 or None, nx = int(0), ny = int(0)) -> object:
+def instance_create(Ty, ndepth = 0 or None, nx = int(0), ny = int(0)):
     temp = Ty(ndepth, nx, ny)
     global instance_last
     instance_last = temp

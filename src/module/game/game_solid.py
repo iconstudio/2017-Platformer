@@ -5,7 +5,9 @@ from module.constants import *
 from game.gobject_header import *
 from game.game_doodad import *
 
-__all__ = [
+__all__ = []
+__all__ += [
+    "__all__",
     "oBrickCastle", "oLush", "oBrickDirt", "oStonewall",
 ]
 
@@ -40,7 +42,7 @@ class oLush(Solid):
                 self.image_index = 2
         if not self.tile_up:
             newdeco = instance_create(oLushDecoration, None, self.x + 2, self.y + 20)
-            newdeco.parent = self
+            newdeco.parent_set(self)
 
 
 # Dirt Brick
@@ -63,7 +65,7 @@ class oBrickDirt(Solid):
                 self.image_index = 2
             if not self.tile_up:
                 newdeco = instance_create(oDirtBrickDecoration, None, self.x, self.y + 19)
-                newdeco.parent = self
+                newdeco.parent_set(self)
 
 
 # Stone Wall
@@ -74,4 +76,3 @@ class oStonewall(Solid):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sStonewall")
         self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 0, 1, 2)
-
