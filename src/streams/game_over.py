@@ -4,7 +4,6 @@ from module.constants import *
 
 import module.framework as framework
 from streams import game
-from streams import main
 
 __all__ = [
     "name", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
@@ -40,10 +39,10 @@ def update(frame_time):
 def draw(frame_time):
     global alpha
     clear_canvas()
-    game.draw_clean()
+    game.draw_clean(frame_time)
     draw_set_alpha(alpha)
     draw_set_color(0, 0, 0)
-    draw_set_halign(1)
+    draw_set_halign(0)
     draw_set_valign(1)
     draw_rectangle(0, 0, screen_width, screen_height)
     framework.draw_text("Game Over", screen_width / 2, screen_height / 2, scale = 2)

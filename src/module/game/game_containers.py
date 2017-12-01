@@ -7,19 +7,16 @@ from module.framework import Camera
 from module.framework import io
 from streams import game_over
 
-from game.gobject_header import __all__ as gobject_all
-from game.gobject_header import *
-from game.game_doodad import __all__ as doodad_all
-from game.game_doodad import *
-from game.game_solid import __all__ as solid_all
-from game.game_solid import *
+from module.game.game_doodad import *
+from module.game.game_solid import *
+from module.game.gobject_header import *
 
 from module.sprite import *
 
 __all__ = [
-              "player_got_damage", "player_lives_clear", "player_get_lives",
-              "oPlayer", "oSoldier", "oSnake", "oCobra",
-          ] + gobject_all + doodad_all + solid_all
+    "player_got_damage", "player_lives_clear", "player_get_lives",
+    "oPlayer", "oSoldier", "oSnake", "oCobra",
+]
 
 # ==================================================================================================
 #                                               게임
@@ -103,6 +100,8 @@ class oPlayer(GObject):
     ability_dash_count = 1
     ability_blink_count = 1
 
+    key_jump = ord('z')
+
     # real-scale: 54 km per hour
     xVelMin, xVelMax = -54, 54
 
@@ -128,7 +127,7 @@ class oPlayer(GObject):
 
     def get_dmg(self, how: int = 1, dir = 1):
         player_got_damage(how)
-        if player_get_lives() <= 0:
+        if player_get_lives() <= 0: # GAME OVER
             self.status_change(oStatusContainer.DEAD)
             self.xVel = 0
 
@@ -142,7 +141,7 @@ class oPlayer(GObject):
             self.yVel += 15  # Bounces
             self.controllable = 0.5  # 0.5 seconds
 
-    def event_step(self, frame_time):
+    def event_step(self, frame_time) -> None:
         if self.oStatus is oStatusContainer.LADDERING:
             self.gravity_default = 0
             self.gravity = 0
@@ -249,12 +248,12 @@ class oPlayer(GObject):
                     else:
                         self.xFric = 0.6
 
-                    if io.key_check_pressed(ord('x')):  # Jump
+                    if io.key_check_pressed(self.key_jump):  # Jump
                         do_jump: bool = false
-                        if not self.onAir: # On ground
+                        if not self.onAir:  # On ground
                             do_jump = true
                         else:
-                            if self.ability_jump_count == 2: # Can jump while on air if player can double-jump!
+                            if self.ability_jump_count == 2:  # Can jump while on air if player can double-jump!
                                 self.ability_jump_count = 0
                                 do_jump = true
 
@@ -275,7 +274,7 @@ class oPlayer(GObject):
                     if mx != 0:
                         self.image_xscale = mx
 
-                    if io.key_check_pressed(ord('x')):  # Jump
+                    if io.key_check_pressed(self.key_jump):  # Jump
                         if self.place_free(0, my + 4):
                             if mx != 0:
                                 distance = delta_velocity(self.xVelMax / 2) * mx

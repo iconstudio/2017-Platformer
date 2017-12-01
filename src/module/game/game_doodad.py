@@ -2,14 +2,12 @@ from module.pico2d import *
 from module.functions import *
 from module.constants import *
 
-from game.gobject_header import *
+from module.game.gobject_header import *
 
-__all__ = []
-__all__ += [
-    "__all__",
+__all__ = [
     "oLushDecoration", "oDirtBrickDecoration",
     "oMillHousechip", "oMillHousestone", "oMillHousechipL", "oMillHousechipR",
-    "oMillHousechipM", "oTorch", "oLadder",
+    "oMillHousechipM", "oTorch", "oLadder"
 ]
 
 

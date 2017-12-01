@@ -9,7 +9,7 @@ from streams import game
 from module.sprite import *
 
 __all__ = [
-    "name", "menu_begin", "Menu", "MenuNode", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
+    "name", "MainMenu", "MenuEnumerator", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
 ]
 
 # ==================================================================================================

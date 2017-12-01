@@ -7,9 +7,7 @@ from module.framework import Camera
 
 from module.sprite import *
 
-__all__ = []
-__all__ += [
-    "__all__",
+__all__ = [
     "oStatusContainer",
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
     "get_instance_list", "draw_list_sort",
@@ -18,6 +16,7 @@ __all__ += [
     "ID_OVERALL", "ID_DRAW", "ID_OTHERS", "ID_SOLID", "ID_DMG_PLAYER", "ID_DMG_ENEMY", "ID_ENEMY", "ID_ITEM",
     "ID_PARTICLE", "ID_DOODAD", "ID_EFFECT"
 ]
+
 # Global : Variables
 instance_last = None  # 마지막 개체
 instance_list: list = []  # 개체는 순서가 있다.
@@ -298,7 +297,7 @@ class GObject(object):
             self.onAir = false
         self.y = math.floor(self.y + 0.5)
 
-    def draw_self(self):  # Simply draws its sprite on its position.
+    def draw_self(self) -> None:  # Simply draws its sprite on its position.
         data = self.sprite_index
         if not data.__eq__(None):
             dx, dy = self.x - data.xoffset, self.y - data.yoffset
@@ -307,7 +306,7 @@ class GObject(object):
                             self.image_xscale, 1, 0.0,
                             self.image_alpha)
 
-    def event_step(self, frame_time):  # The basic mechanisms of objects.
+    def event_step(self, frame_time) -> None:  # The basic mechanisms of objects.
         try:
             count = self.sprite_index.number
         except AttributeError:

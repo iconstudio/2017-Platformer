@@ -38,6 +38,11 @@ from module.sprite import *
                 18. 
                 19. 
                 20. 
+            5. 게임 실행 순서:
+                1. stream.py -> framework.py
+                2. begin.py
+                3. main.py
+                4. game.py -> game_executor.py -> game_container.py -> ...
                 
 
         외부 파일 수정 사항:
@@ -55,8 +60,8 @@ from module.sprite import *
 if __name__ == "__main__":
     framework.game_begin()
     sprite_json_loads()
-    from streams import main
+    # from streams import main
     from streams import game
-    from streams import begin
+    # from streams import begin
     framework.run(game)
     framework.game_end()

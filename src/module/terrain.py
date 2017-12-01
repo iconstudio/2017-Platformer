@@ -1,13 +1,12 @@
 from module.constants import *
-from module.functions import *
 
 from module import framework
 
 import json
-from game.gobject_header import *
+from module.game.gobject_header import *
 
 __all__ = [
-    "terrain_tile_assign", "terrain_tile_clear", "TerrainManager", "TerrainGenerator",
+    "terrain_tile_assign", "terrain_tile_clear", "TerrainGenerator",
     "TYPE_TERRAIN", "TYPE_DOODAD", "TYPE_INSTANCE", "TYPE_BG"
 ]
 
@@ -30,107 +29,6 @@ def terrain_tile_assign(string: str or int, *ty: (type, int)):
 def terrain_tile_clear():
     global tile_mess
     tile_mess.clear()
-
-
-# Terrain Manager
-class TerrainManager:
-    data = ""
-    path_world = ""
-
-    def __init__(self, themepath: str):
-        self.path_world = themepath
-
-    def allocate(self, world: str):
-        print("Allocating a chunk.")
-        self.data = world
-
-    def generate(self):
-        global tile_mess
-        print("Generating a chunk.")
-
-        newx = 0
-        newy = 16 * 20 - 20
-        neww = 32
-        currln = ""
-        currlist = []
-        prevlist = []
-        j = 0
-
-        for i in range(len(self.data)):
-            current = self.data[i]
-
-            # ignore blanks
-            if current == ' ':
-                continue
-
-            if current is not ';' and current is not '0' and current is not '\n':
-                try:
-                    whattocreate = tile_mess[current]
-                    obj = (whattocreate[0])(None, newx, newy)
-                    if newy >= framework.scene_height - 20:
-                        obj.tile_up = true
-                    if newy <= 20:
-                        obj.tile_down = true
-
-                    length = len(currln)
-                    if length > 0:
-                        try:
-                            if currln[length - neww] == current:
-                                obj.tile_up = true
-                        except IndexError:
-                            pass
-                    currlist.append(obj)  # save objects in current line
-
-                    try:
-                        tempspr = obj.sprite_index
-                        obj.x += tempspr.xoffset
-                        obj.y += tempspr.yoffset
-                    except AttributeError:
-                        pass
-                except KeyError:
-                    pass
-            else:
-                # Skip this line
-                if current == ';':
-                    currlist.clear()
-                    j = 0
-                    newx = 0
-                    newy -= 20
-                    continue
-
-            j += 1
-            currln += current
-            newx += 20
-            # Wrap
-            if current == '\n':
-                neww = j
-                j = 0
-                newx = 0
-                newy -= 20
-                # Parsing
-                # """   * previous line     <- X [preprevlist.?]
-                # """   * current line      <- prevlist (but refered when parsing 'next' line)
-                # """   * next line         <- currlist
-                length = len(currlist)
-                if len(prevlist) > 0 and length > 0:
-                    k = 0
-                    for inst in range(length):
-                        try:
-                            if prevlist[k].name is currlist[k].name:
-                                prevlist[k].tile_down = true
-                        except IndexError:
-                            break
-                        k += 1
-
-                del prevlist
-                prevlist = currlist.copy()  # push current line back to previous line
-                currlist.clear()  # make new list
-
-        for inst in get_instance_list(ID_SOLID):
-            inst.tile_correction()
-
-    def __del__(self):
-        del self.data
 
 
 # Terrain Generator

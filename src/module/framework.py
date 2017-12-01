@@ -189,6 +189,7 @@ io = oIOProc()
 class oCamera:
     x: float = 0
     y: float = 0
+    target_object = None
     lock: bool = false
     width, height = screen_width, screen_height
 

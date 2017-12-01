@@ -1,4 +1,5 @@
 import ctypes
+import cmath
 import math
 import sys
 
@@ -487,7 +488,7 @@ class Font_sprite:
                     # print(currchr + " - " + str(currind))
                     global halign, valign
                     hscale, vscale = scale * self.sprite_index.width, scale * self.sprite_index.height
-                    self.sprite_index.draw(currind, dx - hscale * (halign - 1) / 2, dy + hscale * (valign - 1) / 2,
+                    self.sprite_index.draw(currind, dx - hscale * (halign - 1) / 2, dy + vscale * (valign - 1) / 2,
                                            scale, scale, 0, draw_get_alpha())
                     dx += 16 * scale
 

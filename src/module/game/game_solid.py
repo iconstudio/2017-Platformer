@@ -1,14 +1,10 @@
-from module.pico2d import *
 from module.functions import *
-from module.constants import *
 
-from game.gobject_header import *
-from game.game_doodad import *
+from module.game.gobject_header import *
+from module.game.game_doodad import *
 
-__all__ = []
-__all__ += [
-    "__all__",
-    "oBrickCastle", "oLush", "oBrickDirt", "oStonewall",
+__all__ = [
+    "oBrickCastle", "oLush", "oBrickDirt", "oStonewall"
 ]
 
 
