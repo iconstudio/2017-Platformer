@@ -52,7 +52,7 @@ class oLadder(oDoodadParent):
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
-        self.sprite_set("Ladder")
+        self.sprite_set("sLadder")
         self.image_speed = 0
 
 

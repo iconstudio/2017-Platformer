@@ -14,7 +14,6 @@ name = "game_state"
 
 def enter():
     manager_create(0)
-    delay(0.5)
 
 
 def exit():

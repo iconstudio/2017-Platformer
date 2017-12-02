@@ -19,6 +19,8 @@ __all__ = [
     "StageIntro", "manager_create", "manager_get_id", "manager_update", "manager_draw", "manager_handle_events"
 ]
 
+time_local = 0 # a Timer of current stage
+time_total = 0
 manager = None
 
 
@@ -41,8 +43,22 @@ class GameExecutor:
         terrain.terrain_tile_assign(1, oBrickCastle, terrain.TYPE_TERRAIN)
         terrain.terrain_tile_assign(2, oBrickDirt, terrain.TYPE_TERRAIN)
         terrain.terrain_tile_assign(3, oLush, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(23, oDirtBrickFlat, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(24, oLushFlat, terrain.TYPE_TERRAIN)
+
+        terrain.terrain_tile_assign(28, oTreeTrunk, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(29, oTreeTop, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(30, oTreeTopDead, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(31, oTreeBranch, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(32, oTreeBranchDead, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(33, oTreeLeavesEnd, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(34, oTreeLeavesDeadEnd, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(36, oTreeLeaves, terrain.TYPE_TERRAIN)
+
         terrain.terrain_tile_assign(5, oLadder, terrain.TYPE_TERRAIN)
         terrain.terrain_tile_assign(26, oTorch, terrain.TYPE_DOODAD)
+        terrain.terrain_tile_assign(10, oGravestone, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(27, oGravestoneAsh, terrain.TYPE_TERRAIN)
 
         terrain.terrain_tile_assign(25, oPlayer, terrain.TYPE_INSTANCE)
         terrain.terrain_tile_assign(14, oSoldier, terrain.TYPE_INSTANCE)
@@ -51,12 +67,12 @@ class GameExecutor:
 
     def clear(self):
         player_lives_clear()
-        # alllist, drawlist = get_instance_list(ID_OVERALL), get_instance_list(ID_DRAW)
-        # for inst in alllist:
-        #    inst.destroy()
-        #    del inst
-        # alllist.clear()
-        # drawlist.clear()
+        alllist, drawlist = get_instance_list(ID_OVERALL), get_instance_list(ID_DRAW)
+        for inst in alllist:
+            inst.destroy()
+            del inst
+        alllist.clear()
+        drawlist.clear()
 
     def update_begin(self):
         draw_list_sort()

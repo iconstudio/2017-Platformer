@@ -60,26 +60,6 @@ def player_ability_activate(what: str) -> None:
 # ==================================================================================================
 #                                    사용자 정의 객체 / 함수
 # ==================================================================================================
-def instance_place(Ty, fx, fy) -> (list, int):
-    try:
-        ibj = Ty.identify
-    except AttributeError:
-        raise RuntimeError("Cannot find variable 'identify' in %s" % (str(Ty)))
-
-    __returns = []
-    if ibj == "":
-        clist = get_instance_list(ID_OVERALL)
-    else:
-        clist = get_instance_list(ibj)
-    length = len(clist)
-    if length > 0:
-        for inst in clist:
-            if isinstance(inst, Ty) and point_in_rectangle(fx, fy, *inst.get_bbox()):
-                __returns.append(inst)
-
-    return __returns, len(__returns)
-
-
 # Declaring of Special Objects ( Need a canvas )
 # Definitions of Special Objects
 
@@ -94,6 +74,7 @@ class oPlayer(GObject):
     invincible: float = 0
     controllable: float = 0
     laddercount: float = 0
+    attack_delay: float = 0
     wladder = None
 
     ability_jump_count = 1
@@ -101,6 +82,8 @@ class oPlayer(GObject):
     ability_blink_count = 1
 
     key_jump = ord('z')
+    key_attack = ord('x')
+    key_action = ord('c')
 
     # real-scale: 54 km per hour
     xVelMin, xVelMax = -54, 54
@@ -112,6 +95,9 @@ class oPlayer(GObject):
         # noinspection PyGlobalUndefined
         global container_player
         container_player = self
+
+    def get_bbox(self):
+        return self.x - 8, self.y - 8, 16, 16
 
     def phy_thud(self, how: float or int):
         super().phy_thud(how)

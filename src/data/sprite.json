@@ -125,6 +125,26 @@
 	"number": 1
   },
   {
+	"name": "sLushFlat",
+	"path": [
+	  "..\\res\\img\\theme\\lush_flat_0.png",
+	  "..\\res\\img\\theme\\lush_flat_down_0.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sDirtBrickFlat",
+	"path": [
+	  "..\\res\\img\\theme\\brick_mine_flat_0.png",
+	  "..\\res\\img\\theme\\brick_mine_flat_down_0.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
 	"name": "Grave",
 	"path": [
 	  "..\\res\\img\\theme\\grave_0.png",
@@ -146,14 +166,14 @@
 	"number": 1
   },
   {
-	"name": "Elevator",
+	"name": "sElevator",
 	"path": "..\\res\\img\\theme\\elevator_0.png",
 	"xoffset": 0,
 	"yoffset": 0,
 	"number": 1
   },
   {
-	"name": "Ladder",
+	"name": "sLadder",
 	"path": "..\\res\\img\\theme\\ladder_0.png",
 	"xoffset": 0,
 	"yoffset": 0,
@@ -195,8 +215,46 @@
 	"number": 1
   },
   {
-	"name": "FlatTop",
+	"name": "sFlatTop",
 	"path": "..\\res\\img\\theme\\flat_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sTreeTrunk",
+	"path": "..\\res\\img\\theme\\tree_trunk_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sTreeTop",
+	"path": [
+	  "..\\res\\img\\theme\\tree_top_0.png",
+	  "..\\res\\img\\theme\\tree_top_1.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sTreeBranches",
+	"path": [
+	  "..\\res\\img\\theme\\tree_branch_0.png",
+	  "..\\res\\img\\theme\\tree_branch_1.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sTreeLeaves",
+	"path": [
+	  "..\\res\\img\\theme\\tree_leaves_0.png",
+	  "..\\res\\img\\theme\\tree_leaves_1.png",
+	  "..\\res\\img\\theme\\tree_leaves_2.png"
+	],
 	"xoffset": 0,
 	"yoffset": 0,
 	"number": 1

@@ -8,7 +8,7 @@
  "margin":0,
  "name":"Vampire Exodus Tileset v0.1",
  "spacing":0,
- "tilecount":26,
+ "tilecount":35,
  "tileheight":32,
  "tiles":
     {
@@ -127,9 +127,63 @@
          "imageheight":32,
          "imagewidth":16
         },
+     "26":
+        {
+         "image":"..\/..\/res\/img\/theme\/grave_ash_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "27":
+        {
+         "image":"..\/..\/res\/img\/theme\/tree_trunk_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "28":
+        {
+         "image":"..\/..\/res\/img\/theme\/tree_top_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "29":
+        {
+         "image":"..\/..\/res\/img\/theme\/tree_top_1.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
      "3":
         {
          "image":"..\/..\/res\/img\/theme\/stonewall_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "30":
+        {
+         "image":"..\/..\/res\/img\/theme\/tree_branch_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "31":
+        {
+         "image":"..\/..\/res\/img\/theme\/tree_branch_1.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "32":
+        {
+         "image":"..\/..\/res\/img\/theme\/tree_leaves_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "33":
+        {
+         "image":"..\/..\/res\/img\/theme\/tree_leaves_1.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "35":
+        {
+         "image":"..\/..\/res\/img\/theme\/tree_leaves_2.png",
          "imageheight":20,
          "imagewidth":20
         },

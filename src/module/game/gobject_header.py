@@ -8,7 +8,7 @@ from module.framework import Camera
 from module.sprite import *
 
 __all__ = [
-    "oStatusContainer",
+    "oStatusContainer", "instance_place", "instance_list_remove_something",
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
     "get_instance_list", "draw_list_sort",
     "container_player", "GObject", "Solid", "oPlayerDamage", "oEnemyDamage", "oItemParent", "oDoodadParent",
@@ -72,6 +72,16 @@ def get_instance_list(identific: str) -> list:
         except KeyError:
             print("Not available key of list")
             return []
+
+
+def instance_list_remove_something(identific: str, content):
+    where = get_instance_list(identific)
+    try:
+        where.remove(content)
+    except KeyError:
+        pass
+    except ValueError:
+        pass
 
 
 def draw_list_sort():
@@ -168,17 +178,28 @@ class GObject(object):
         del self
 
     # Below methods are common-functions for all object that inherits graviton.
-    def instance_collide(self, othero):
+    def instance_collide(self, othero) -> bool:
         sx, sy, sw, sh = self.get_bbox()
         ox, oy, ow, oh = othero.get_bbox()
 
-        if sx >= ox + ow: return False
-        if sx + sw <= ox: return False
-        if sy + sh <= oy: return False
-        if sy >= oy + oh: return False
+        throughBot = false
+        try:
+            throughBot = othero.isPlatform
+        except AttributeError:
+            throughBot = false
+        if throughBot:
+            if sy >= oy + oh:
+                if sy + sh <= oy: return False
+                if sx >= ox + ow: return False
+                if sx + sw <= ox: return False
+        else:
+            if sx >= ox + ow: return False  # Right
+            if sx + sw <= ox: return False  # Left
+            if sy + sh <= oy: return False  # Top
+            if sy >= oy + oh: return False  # Bottom
         return True
 
-    def get_bbox(self):
+    def get_bbox(self) -> tuple:
         data = self.sprite_index
         return int(self.x - data.xoffset), int(self.y - data.yoffset), data.width, data.height
 
@@ -198,6 +219,8 @@ class GObject(object):
             self.x += vx
             self.y += vy
             for inst in clist:
+                if self is inst:
+                    continue
                 if self.instance_collide(inst):
                     self.x -= vx
                     self.y -= vy
@@ -366,12 +389,17 @@ class Solid(GObject):
     name = "Solid"
     identify = ID_SOLID
 
+    # 아래에서 통과가능한지의 여부
+    isPlatform: bool = false
+
     image_speed = 0
     depth = 10000
     step_enable = false
     gravity_default = 0
     xFric, yFric = 0, 0
 
+    tile_left: bool = false
+    tile_right: bool = false
     tile_up: bool = false
     tile_down: bool = false
 
@@ -412,10 +440,13 @@ class oDoodadParent(GObject):
     step_enable = false
     depth = -100
 
+    tile_up: bool = false
+    tile_down: bool = false
+
     def parent_set(self, id):
         self.parent = id
 
-    def parent_get(self, id):
+    def parent_get(self):
         return self.parent
 
     def tile_correction(self):
@@ -428,3 +459,23 @@ class oEffectParent(GObject):
     identify = ID_EFFECT
     image_speed = 0.5
     depth = -400
+
+
+def instance_place(Ty, fx, fy) -> (list, int):
+    try:
+        ibj = Ty.identify
+    except AttributeError:
+        raise RuntimeError("Cannot find variable 'identify' in %s" % (str(Ty)))
+
+    __returns = []
+    if ibj == "":
+        clist = get_instance_list(ID_OVERALL)
+    else:
+        clist = get_instance_list(ibj)
+    length = len(clist)
+    if length > 0:
+        for inst in clist:
+            if isinstance(inst, Ty) and point_in_rectangle(fx, fy, *inst.get_bbox()):
+                __returns.append(inst)
+
+    return __returns, len(__returns)

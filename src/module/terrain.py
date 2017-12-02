@@ -90,13 +90,20 @@ class TerrainGenerator:
 
                     if obj.identify == ID_SOLID:
                         # print("solid")
+
                         try:
                             if i >= self.map_grid_w and self.data[i - self.map_grid_w] == current:
-                                #print(str(obj) + "<" + str(current) + "> (x = " + str(nx) + ", y = " + str(ny) + ")")
                                 obj.tile_up = true
                             if i < length - self.map_grid_w and self.data[i + self.map_grid_w] == current:
-                                #print(str(obj) + "<" + str(current) + "> (x = " + str(nx) + ", y = " + str(ny) + ")")
                                 obj.tile_down = true
+                        except IndexError:
+                            pass
+                        try:
+                            if nx < self.tile_w or (i > 0 and self.data[i - 1] == current):
+                                obj.tile_left = true
+                            if nx >= (self.map_grid_w - 1) * self.tile_w \
+                                    and (i <= length - 1) and self.data[i + 1] == current:
+                                obj.tile_right = true
                         except IndexError:
                             pass
                     currln.append(current)
@@ -121,3 +128,9 @@ class TerrainGenerator:
         clist = get_instance_list(ID_SOLID)
         for inst in clist:
             inst.tile_correction()
+
+        # Optimization
+        for inst in clist:
+            if inst.tile_left and inst.tile_up and inst.tile_right and inst.tile_down:
+                instance_list_remove_something(ID_SOLID, inst)
+                continue
