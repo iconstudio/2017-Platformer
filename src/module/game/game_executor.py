@@ -16,12 +16,14 @@ from module.game.gobject_header import *
 from module.game.game_containers import *
 
 __all__ = [
+    "stage_init",
     "StageIntro", "manager_create", "manager_get_id", "manager_update", "manager_draw", "manager_handle_events"
 ]
 
-time_local = 0 # a Timer of current stage
+time_local = 0  # a Timer of current stage
 time_total = 0
 manager = None
+stagelist = []
 
 
 class GameExecutor:
@@ -45,6 +47,9 @@ class GameExecutor:
         terrain.terrain_tile_assign(3, oLush, terrain.TYPE_TERRAIN)
         terrain.terrain_tile_assign(23, oDirtBrickFlat, terrain.TYPE_TERRAIN)
         terrain.terrain_tile_assign(24, oLushFlat, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(37, oBlock, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(9, oBlockMetal, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(6, oBlockBlack, terrain.TYPE_TERRAIN)
 
         terrain.terrain_tile_assign(28, oTreeTrunk, terrain.TYPE_TERRAIN)
         terrain.terrain_tile_assign(29, oTreeTop, terrain.TYPE_TERRAIN)
@@ -59,6 +64,10 @@ class GameExecutor:
         terrain.terrain_tile_assign(26, oTorch, terrain.TYPE_DOODAD)
         terrain.terrain_tile_assign(10, oGravestone, terrain.TYPE_TERRAIN)
         terrain.terrain_tile_assign(27, oGravestoneAsh, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(11, oDoor, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(7, oDoorMetalic, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(38, oLamp, terrain.TYPE_TERRAIN)
+        terrain.terrain_tile_assign(39, oWeb, terrain.TYPE_TERRAIN)
 
         terrain.terrain_tile_assign(25, oPlayer, terrain.TYPE_INSTANCE)
         terrain.terrain_tile_assign(14, oSoldier, terrain.TYPE_INSTANCE)
@@ -83,22 +92,22 @@ class GameExecutor:
                 inst.event_step(frame_time)
 
     def draw(self, frame_time):
-        global manager
-        back = sprite_get(self.background_sprite)
-        if self.background_sprite in ("bgCave",):
-            dx = -32
-            for _ in range(22):
-                dy = -32
-                for y in range(13):
-                    draw_sprite(back, 0, dx, dy)
-                    dy += 32
-                dx += 32
-                if dx > screen_width:
-                    dx -= screen_width
-                elif dx < 0:
-                    dx += screen_width
-        elif self.background_sprite in ("bgNight",):
-            draw_sprite(back, 0, 0, 0)
+        if self.background_sprite is not None:
+            back = sprite_get(self.background_sprite)
+            if self.background_sprite in ("bgCave",):
+                dx = -32
+                for _ in range(22):
+                    dy = -32
+                    for y in range(13):
+                        draw_sprite(back, 0, dx, dy)
+                        dy += 32
+                    dx += 32
+                    if dx > screen_width:
+                        dx -= screen_width
+                    elif dx < 0:
+                        dx += screen_width
+            elif self.background_sprite in ("bgNight",):
+                draw_sprite(back, 0, 0, 0)
 
         if len(get_instance_list(ID_DRAW)) > 0:
             for inst in get_instance_list(ID_DRAW):
@@ -145,9 +154,31 @@ class StageIntro(GameExecutor):
         terrain.terrain_tile_assign(21, oMillHousechipR, terrain.TYPE_BG)
         terrain.terrain_tile_assign(22, oMillHousechipM, terrain.TYPE_BG)
 
+        framework.scene_set_size(screen_width * 3)
         scene = terrain.TerrainGenerator("begin")
         scene.generate()
         self.update_begin()
+
+
+class Stage01(GameExecutor):
+    def __init__(self):
+        super().__init__()
+
+        self.background_sprite = None
+
+        scene = terrain.TerrainGenerator("stage01")
+        scene.generate()
+        self.update_begin()
+        framework.scene_set_size(scene.tile_w * scene.map_grid_w, screen_height * 2)
+
+
+def stage_add(arg):
+    global stagelist
+    stagelist.append(arg)
+
+
+def stage_generate(self, stage_number: int):
+    pass
 
 
 def manager_get_id() -> GameExecutor:
@@ -155,15 +186,22 @@ def manager_get_id() -> GameExecutor:
     return manager
 
 
+def stage_init():
+    stage_add(StageIntro)
+    stage_add(Stage01)
+
+
 def manager_create(stage_number: int) -> GameExecutor:
     """
     :param stage_number: 스테이지 번호. 0 ~
     :return:
     """
+
+    global stagelist
+    stg_type = stagelist[stage_number]
     global manager
     if manager is None:
-        if stage_number == 0: # 첫번째
-            manager = StageIntro()
+        manager = stg_type()
     return manager
 
 

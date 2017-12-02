@@ -5,10 +5,31 @@ from module.constants import *
 from module.game.gobject_header import *
 
 __all__ = [
-    "oLushDecoration", "oDirtBrickDecoration",
+    "oDoor", "oDoorMetalic", "oLushDecoration", "oDirtBrickDecoration",
     "oMillHousechip", "oMillHousestone", "oMillHousechipL", "oMillHousechipR",
-    "oMillHousechipM", "oTorch", "oLadder"
+    "oMillHousechipM", "oTorch", "oLadder", "oLamp", "oWeb"
 ]
+
+
+# Door
+class oDoor(oDoodadParent):
+    name = "Door"
+    depth = 1000
+    image_speed = 0
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sDoor")
+
+
+# Metal Door
+class oDoorMetalic(oDoor):
+    name = "Metal Door"
+    depth = 1000
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sDoorMetal")
 
 
 # A Decorator of Dirt
@@ -18,7 +39,6 @@ class oDirtBrickDecoration(oDoodadParent):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sDirtBrickDoodad")
-        self.image_speed = 0
         self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 1, 1)
 
 
@@ -29,7 +49,6 @@ class oLushDecoration(oDoodadParent):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sLushDoodad")
-        self.image_speed = 0
         self.image_index = choose(0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2)
 
 
@@ -53,6 +72,28 @@ class oLadder(oDoodadParent):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sLadder")
+        self.image_speed = 0
+
+
+# Lamp
+class oLamp(oDoodadParent):
+    name = "Lamp"
+    depth = 900
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sLamp")
+        self.image_speed = 0.6
+
+
+# Web
+class oWeb(oDoodadParent):
+    name = "Web"
+    depth = 10
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sWeb")
         self.image_speed = 0
 
 

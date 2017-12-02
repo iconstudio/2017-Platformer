@@ -69,7 +69,7 @@ def game_end():
     del hFont, hFontLrg
 
 
-def scene_set_size(w = scene_width, h = scene_height):
+def scene_set_size(w = screen_width, h = screen_height):
     global scene_width, scene_height
     scene_width = w
     scene_height = h

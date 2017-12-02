@@ -1,5 +1,3 @@
-from module.constants import *
-
 from module import framework
 
 from module.sprite import *

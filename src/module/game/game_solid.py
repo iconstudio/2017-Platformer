@@ -5,8 +5,8 @@ from module.game.gobject_header import *
 from module.game.game_doodad import oLushDecoration, oDirtBrickDecoration
 
 __all__ = [
-    "oBrickCastle", "oLush", "oBrickDirt", "oStonewall", "oLushFlat", "oDirtBrickFlat",
-    "oGravestone", "oGravestoneAsh", "oTreeTrunk", "oTreeTop", "oTreeTopDead", "oTreeLeaves",
+    "oBrickCastle", "oLush", "oBrickDirt", "oStonewall", "oLushFlat", "oDirtBrickFlat", "oBlock", "oBlockMetal",
+    "oBlockBlack", "oGravestone", "oGravestoneAsh", "oTreeTrunk", "oTreeTop", "oTreeTopDead", "oTreeLeaves",
     "oTreeLeavesEnd", "oTreeLeavesDeadEnd", "oTreeBranch", "oTreeBranchDead"
 ]
 
@@ -31,15 +31,15 @@ class oLush(Solid):
         self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 1, 1)
 
     def tile_correction(self):
-        if not self.tile_up or not self.tile_down:
+        if self.tile_up != 1 or self.tile_down != 1:
             self.sprite_set("sLushDirectional")
-            if self.tile_up and not self.tile_down:
+            if self.tile_up == 1 and self.tile_down != 1:
                 self.image_index = 0
-            elif self.tile_down:
+            elif self.tile_down == 1:
                 self.image_index = 1
             else:
                 self.image_index = 2
-        if not self.tile_up:
+        if self.tile_up != 1:
             newdeco = instance_create(oLushDecoration, None, self.x + 2, self.y + 20)
             newdeco.parent_set(self)
 
@@ -54,15 +54,15 @@ class oBrickDirt(Solid):
         self.image_index = choose(0, 0, 0, 0, 0, 0, 1, 1)
 
     def tile_correction(self):
-        if not self.tile_up or not self.tile_down:
+        if self.tile_up != 1 or self.tile_down != 1:
             self.sprite_set("sDirtBrickDirectional")
-            if self.tile_up and not self.tile_down:
+            if self.tile_up == 1 and self.tile_down != 1:
                 self.image_index = 0
-            elif self.tile_down:
+            elif self.tile_down == 1:
                 self.image_index = 1
             else:
                 self.image_index = 2
-            if not self.tile_up:
+            if self.tile_up != 1:
                 newdeco = instance_create(oDirtBrickDecoration, None, self.x, self.y + 19)
                 newdeco.parent_set(self)
 
@@ -86,21 +86,48 @@ class oLushFlat(Solid):
         self.sprite_set("sLushFlat")
 
     def tile_correction(self):
-        if self.tile_down:
+        if self.tile_down != 0:
             self.image_index = 1
 
 
-# Flat wood of dir
+# Flat wood of Dirt
 class oDirtBrickFlat(Solid):
-    name = "Flat of Lush"
+    name = "Flat of Dirt"
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
-        self.sprite_set("sLushFlat")
+        self.sprite_set("sDirtBrickFlat")
 
     def tile_correction(self):
-        if self.tile_down:
+        if self.tile_down != 0:
             self.image_index = 1
+
+
+# Block (Brown)
+class oBlock(Solid):
+    name = "oBlock"
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sBlock")
+
+
+# Block (Metal)
+class oBlockMetal(Solid):
+    name = "oBlock"
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sBlockMetal")
+
+
+# Block (Black)
+class oBlockBlack(Solid):
+    name = "Gravestone"
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sBlockBlack")
 
 
 # Gravestone
@@ -109,16 +136,16 @@ class oGravestone(Solid):
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
-        self.sprite_set("Grave")
+        self.sprite_set("sGrave")
 
 
 # Ash Gravestone
 class oGravestoneAsh(Solid):
-    name = "Gravestone"
+    name = "Ash Gravestone"
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
-        self.sprite_set("GraveAsh")
+        self.sprite_set("sGraveAsh")
 
 
 # Body of Tree
@@ -130,7 +157,7 @@ class oTreeTrunk(Solid):
         self.sprite_set("sTreeTrunk")
 
     def tile_correction(self):
-        if not self.tile_up:
+        if self.tile_up == 0:
             self.image_index = 1
 
 
@@ -160,7 +187,7 @@ class oTreeLeaves(Solid):
         self.image_index = 2
 
     def tile_correction(self):
-        if self.tile_right:
+        if self.tile_right != 0:
             self.image_xscale = -1
 
 

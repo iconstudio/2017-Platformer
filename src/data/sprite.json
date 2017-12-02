@@ -145,7 +145,28 @@
 	"number": 1
   },
   {
-	"name": "Grave",
+	"name": "sBlock",
+	"path": "..\\res\\img\\theme\\block_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sBlockMetal",
+	"path": "..\\res\\img\\theme\\block_metal_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sBlockBlack",
+	"path": "..\\res\\img\\theme\\metalic_black_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sGrave",
 	"path": [
 	  "..\\res\\img\\theme\\grave_0.png",
 	  "..\\res\\img\\theme\\grave_1.png",
@@ -159,7 +180,7 @@
 	"number": 1
   },
   {
-	"name": "GraveAsh",
+	"name": "sGraveAsh",
 	"path": "..\\res\\img\\theme\\grave_ash_0.png",
 	"xoffset": 0,
 	"yoffset": 0,
@@ -194,6 +215,26 @@
 	"number": 1
   },
   {
+	"name": "sLamp",
+	"path": [
+	  "..\\res\\img\\theme\\lamp_0.png",
+	  "..\\res\\img\\theme\\lamp_1.png",
+	  "..\\res\\img\\theme\\lamp_2.png",
+	  "..\\res\\img\\theme\\lamp_3.png",
+	  "..\\res\\img\\theme\\lamp_4.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sWeb",
+	"path": "..\\res\\img\\theme\\web_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
 	"name": "sLushDoodad",
 	"path": [
 	  "..\\res\\img\\theme\\lush_top_0.png",
@@ -217,6 +258,20 @@
   {
 	"name": "sFlatTop",
 	"path": "..\\res\\img\\theme\\flat_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sDoor",
+	"path": "..\\res\\img\\theme\\door_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sDoorMetal",
+	"path": "..\\res\\img\\theme\\door_metalic_0.png",
 	"xoffset": 0,
 	"yoffset": 0,
 	"number": 1
@@ -291,6 +346,22 @@
 	  "..\\res\\img\\entity\\VampireRun_5.png",
 	  "..\\res\\img\\entity\\VampireRun_2.png",
 	  "..\\res\\img\\entity\\VampireRun_1.png"
+	],
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
+  },
+  {
+	"name": "PlayerAttack",
+	"path": [
+	  "..\\res\\img\\entity\\VampireAttack_0.png",
+	  "..\\res\\img\\entity\\VampireAttack_1.png",
+	  "..\\res\\img\\entity\\VampireAttack_2.png",
+	  "..\\res\\img\\entity\\VampireAttack_3.png",
+	  "..\\res\\img\\entity\\VampireAttack_4.png",
+	  "..\\res\\img\\entity\\VampireAttack_5.png",
+	  "..\\res\\img\\entity\\VampireAttack_6.png",
+	  "..\\res\\img\\entity\\VampireAttack_5.png"
 	],
 	"xoffset": 8,
 	"yoffset": 8,

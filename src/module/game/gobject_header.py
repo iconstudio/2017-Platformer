@@ -188,10 +188,12 @@ class GObject(object):
         except AttributeError:
             throughBot = false
         if throughBot:
-            if sy >= oy + oh:
-                if sy + sh <= oy: return False
+            if sy < oy + oh:
+                if sy <= oy: return False
                 if sx >= ox + ow: return False
                 if sx + sw <= ox: return False
+            else:
+                return False
         else:
             if sx >= ox + ow: return False  # Right
             if sx + sw <= ox: return False  # Left
@@ -322,14 +324,22 @@ class GObject(object):
 
     def draw_self(self) -> None:  # Simply draws its sprite on its position.
         data = self.sprite_index
-        if not data.__eq__(None):
-            dx, dy = self.x - data.xoffset, self.y - data.yoffset
-            if dx <= Camera.x + Camera.width and Camera.x <= dx + data.width and Camera.y <= dy + data.height and dy <= Camera.y + Camera.height:
-                draw_sprite(self.sprite_index, self.image_index, self.x - Camera.x, self.y - Camera.y,
-                            self.image_xscale, 1, 0.0,
-                            self.image_alpha)
+        if data is not None:
+            draw_sprite(self.sprite_index, self.image_index, self.x - Camera.x, self.y - Camera.y,
+                        self.image_xscale, 1, 0.0,
+                        self.image_alpha)
 
     def event_step(self, frame_time) -> None:  # The basic mechanisms of objects.
+        data = self.sprite_index
+        dx, dy = self.x - data.xoffset, self.y - data.yoffset
+        if dx <= Camera.x + Camera.width and Camera.x <= dx + data.width \
+            and Camera.y <= dy + data.height and dy <= Camera.y + Camera.height:
+            self.visible = true
+        else:
+            self.visible = false
+        if not self.visible:
+            return
+
         try:
             count = self.sprite_index.number
         except AttributeError:
@@ -379,6 +389,9 @@ class GObject(object):
         self.yVel = clamp(self.yVelMin, self.yVel, self.yVelMax)
 
     def event_draw(self):  # This will be working for drawing.
+        if not self.visible:
+            return
+
         self.draw_self()
         # self.draw_bbox()
 
@@ -398,10 +411,10 @@ class Solid(GObject):
     gravity_default = 0
     xFric, yFric = 0, 0
 
-    tile_left: bool = false
-    tile_right: bool = false
-    tile_up: bool = false
-    tile_down: bool = false
+    tile_left: int = 0
+    tile_right: int = 0
+    tile_up: int = 0
+    tile_down: int = 0
 
     def tile_correction(self):
         pass

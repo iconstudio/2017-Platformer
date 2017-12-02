@@ -8,7 +8,7 @@
  "margin":0,
  "name":"Vampire Exodus Tileset v0.1",
  "spacing":0,
- "tilecount":35,
+ "tilecount":39,
  "tileheight":32,
  "tiles":
     {
@@ -187,6 +187,30 @@
          "imageheight":20,
          "imagewidth":20
         },
+     "36":
+        {
+         "image":"..\/..\/res\/img\/theme\/Block_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "37":
+        {
+         "image":"..\/..\/res\/img\/theme\/Lamp_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "38":
+        {
+         "image":"..\/..\/res\/img\/theme\/web_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "39":
+        {
+         "image":"..\/..\/..\/..\/Programming\/MY_GAMEs\/Roguelike\/Highway.gmx\/sprites\/images\/sThorns_0.png",
+         "imageheight":16,
+         "imagewidth":16
+        },
      "4":
         {
          "image":"..\/..\/res\/img\/theme\/Ladder_0.png",
@@ -201,7 +225,7 @@
         },
      "6":
         {
-         "image":"..\/..\/res\/img\/theme\/metalic_door.png",
+         "image":"..\/..\/res\/img\/theme\/door_metalic_0.png",
          "imageheight":20,
          "imagewidth":20
         },
