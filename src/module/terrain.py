@@ -79,52 +79,60 @@ class TerrainGenerator:
                     def icreate(ty, depth, x, y):
                         ninst = ty(depth, x, y)
                         return ninst
+
                     def get_createtype(char: str):
                         return tile_mess[char]
 
                     whattocreate = get_createtype(current)
                     obj = icreate(whattocreate[0], None, nx, ny)
                     # print(str(obj) + "<" + str(current) + "> (x = " + str(nx) + ", y = " + str(ny) + ")")
-                    if ny >= framework.scene_height - 20:
-                        obj.tile_up = 1
-                    if ny <= 20:
-                        obj.tile_down = 1
 
                     if obj.identify == ID_SOLID:
-                        # print("solid")
+                        # if ny >= framework.scene_height - 20:
+                        #    obj.tile_up = 1
+                        # if ny <= 20:
+                        #    obj.tile_down = 1
 
                         try:
-                            if i >= self.map_grid_w: # check top
+                            if i >= self.map_grid_w:  # check top
                                 getu = self.data[i - self.map_grid_w]
                                 whattocheck: str = get_createtype(getu)[0].identify
                                 if getu == current:
                                     obj.tile_up = 1
                                 elif getu != 0 and whattocheck is ID_SOLID:
                                     obj.tile_up = 2
+                            else:
+                                obj.tile_up = 1
 
-                            if i < length - self.map_grid_w: #  check bottom
+                            if i < length - self.map_grid_w:  # check bottom
                                 getd = self.data[i + self.map_grid_w]
                                 whattocheck: str = get_createtype(getd)[0].identify
                                 if getd == current:
                                     obj.tile_down = 1
                                 elif getd != 0 and whattocheck is ID_SOLID:
                                     obj.tile_down = 2
+                            else:
+                                obj.tile_down = 1
 
-                            if i > 0: # check left
+                            if i > 0:  # check left
                                 getl = self.data[i - 1]
                                 whattocheck: str = get_createtype(getl)[0].identify
                                 if getl == current:
                                     obj.tile_left = 1
                                 elif getl != 0 and whattocheck is ID_SOLID:
                                     obj.tile_left = 2
+                            else:
+                                obj.tile_left = 1
 
-                            if i <= length - 1: # check right
+                            if i <= length - 1:  # check right
                                 getr = self.data[i + 1]
                                 whattocheck: str = get_createtype(getr)[0].identify
                                 if getr == current:
                                     obj.tile_right = 1
                                 elif getr != 0 and whattocheck is ID_SOLID:
                                     obj.tile_right = 2
+                            else:
+                                obj.tile_right = 1
                         except IndexError:
                             pass
                     currln.append(obj)
@@ -147,18 +155,17 @@ class TerrainGenerator:
                 ny -= self.tile_h
 
         clist = get_instance_list(ID_SOLID)
+
         # Optimization
         rlist = []
         for inst in clist:
-            if inst.tile_left != 0 and inst.tile_up != 0 and inst.tile_right and inst.tile_down != 0:
-            #if (inst.tile_left, inst.tile_up, inst.tile_right, inst.tile_down) \
-            #        is (2, 2, 2, 2):
+            if inst.tile_left != 0 and inst.tile_up != 0 and inst.tile_right != 0 and inst.tile_down != 0:
                 rlist.append(inst)
-
-        for inst in rlist:
-            instance_list_remove_something(ID_SOLID, inst)
-            #inst.destroy()
 
         clist = get_instance_list(ID_SOLID)
         for inst in clist:
             inst.tile_correction()
+
+        for inst in rlist:
+            instance_list_remove_something(ID_SOLID_EX, inst)
+            # inst.destroy()

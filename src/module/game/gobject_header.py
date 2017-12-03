@@ -14,7 +14,7 @@ __all__ = [
     "container_player", "GObject", "Solid", "oPlayerDamage", "oEnemyDamage", "oItemParent", "oDoodadParent",
     "oEffectParent",
     "ID_OVERALL", "ID_DRAW", "ID_OTHERS", "ID_SOLID", "ID_DMG_PLAYER", "ID_DMG_ENEMY", "ID_ENEMY", "ID_ITEM",
-    "ID_PARTICLE", "ID_DOODAD", "ID_EFFECT"
+    "ID_PARTICLE", "ID_DOODAD", "ID_EFFECT", "ID_SOLID_EX"
 ]
 
 # Global : Variables
@@ -40,6 +40,7 @@ ID_DRAW: str = "Draw"
 #
 ID_OTHERS: str = "Objects"
 ID_SOLID: str = "Solid"
+ID_SOLID_EX: str = "Solid_Explicit"
 ID_PARTICLE: str = "Particle"
 ID_DOODAD: str = "Doodad"
 ID_DMG_PLAYER: str = "HurtPlayer"
@@ -49,6 +50,7 @@ ID_ITEM: str = "Items"
 ID_EFFECT: str = "Effect"
 instance_list_spec[ID_OTHERS] = []
 instance_list_spec[ID_SOLID] = []
+instance_list_spec[ID_SOLID_EX] = []
 instance_list_spec[ID_PARTICLE] = []
 instance_list_spec[ID_DOODAD] = []
 instance_list_spec[ID_DMG_PLAYER] = []
@@ -150,6 +152,8 @@ class GObject(object):
         instance_update = true
         if self.identify != "":
             instance_list_spec[self.identify].append(self)
+            if self.identify is ID_SOLID:
+                instance_list_spec[ID_SOLID_EX].append(self)
 
     def __str__(self):
         return self.name
@@ -182,46 +186,46 @@ class GObject(object):
         sx, sy, sw, sh = self.get_bbox()
         ox, oy, ow, oh = othero.get_bbox()
 
-        throughBot = false
         try:
-            throughBot = othero.isPlatform
+            throughBot = othero.isPlatform  # 밑에서 위로 통과할 수 있다면
         except AttributeError:
             throughBot = false
-        if throughBot:
-            if sy < oy + oh:
-                if sy <= oy: return False
-                if sx >= ox + ow: return False
-                if sx + sw <= ox: return False
-            else:
-                return False
-        else:
-            if sx >= ox + ow: return False  # Right
-            if sx + sw <= ox: return False  # Left
-            if sy + sh <= oy: return False  # Top
-            if sy >= oy + oh: return False  # Bottom
-        return True
+
+        if not throughBot or (throughBot and sy >= oy):
+            if sx >= ox + ow: return false  # Right
+            if sx + sw <= ox: return false  # Left
+            if sy + sh <= oy: return false  # Top
+            if sy >= oy + oh: return false  # Bottom
+        elif throughBot:
+            return false
+        return true
 
     def get_bbox(self) -> tuple:
         data = self.sprite_index
         return int(self.x - data.xoffset), int(self.y - data.yoffset), data.width, data.height
 
     def draw_bbox(self):
-        draw_rectangle(*self.get_bbox())
+        draw_set_alpha(1)
+        draw_set_color(255, 0, 0)
+        draw_rectangle_outline(*self.get_bbox(), Camera.x, Camera.y)
 
     # Check the place fits to self
     def place_free(self, vx = 0, vy = 0, olist = None) -> bool:
         clist = olist
         if clist is None:
             global instance_list_spec
-            clist = instance_list_spec["Solid"]  # 고체 개체 목록 불러오기
+            clist = instance_list_spec[ID_SOLID_EX]  # 고체 개체 목록 불러오기
 
+        toUp = false
+        if vy > 0:
+            toUp = true
         length = len(clist)
         if length > 0:
             # print("Checking Place for one")
             self.x += vx
             self.y += vy
             for inst in clist:
-                if self is inst:
+                if self is inst or (toUp and inst.isPlatform):
                     continue
                 if self.instance_collide(inst):
                     self.x -= vx
@@ -241,7 +245,7 @@ class GObject(object):
             return false
 
         global instance_list_spec
-        clist = instance_list_spec["Solid"]
+        clist = instance_list_spec[ID_SOLID_EX]
         length = len(clist)
         xprog = 0
         cx = 0
@@ -276,7 +280,7 @@ class GObject(object):
             return false
 
         global instance_list_spec
-        clist = instance_list_spec["Solid"]
+        clist = instance_list_spec[ID_SOLID_EX]
         length = len(clist)
         yprog = 0
         cy = 0
@@ -284,7 +288,8 @@ class GObject(object):
             templist = []
             for inst in clist:
                 if bool(inst.y - inst.sprite_index.yoffset <= int(
-                        self.y - self.sprite_index.yoffset + self.sprite_index.height)) != up:
+                        self.y - self.sprite_index.yoffset + self.sprite_index.height)) != up and \
+                        ((not up and inst.isPlatform) or not up):
                     templist.append(inst)
 
             while yprog <= tdist:
@@ -333,7 +338,7 @@ class GObject(object):
         data = self.sprite_index
         dx, dy = self.x - data.xoffset, self.y - data.yoffset
         if dx <= Camera.x + Camera.width and Camera.x <= dx + data.width \
-            and Camera.y <= dy + data.height and dy <= Camera.y + Camera.height:
+                and Camera.y <= dy + data.height and dy <= Camera.y + Camera.height:
             self.visible = true
         else:
             self.visible = false

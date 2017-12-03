@@ -37,7 +37,7 @@ class oLush(Solid):
                 self.image_index = 0
             elif self.tile_down == 1:
                 self.image_index = 1
-            else:
+            elif self.tile_up == 0 and self.tile_down == 0:
                 self.image_index = 2
         if self.tile_up != 1:
             newdeco = instance_create(oLushDecoration, None, self.x + 2, self.y + 20)
@@ -60,7 +60,7 @@ class oBrickDirt(Solid):
                 self.image_index = 0
             elif self.tile_down == 1:
                 self.image_index = 1
-            else:
+            elif self.tile_up == 0 and self.tile_down == 0:
                 self.image_index = 2
             if self.tile_up != 1:
                 newdeco = instance_create(oDirtBrickDecoration, None, self.x, self.y + 19)
@@ -186,20 +186,25 @@ class oTreeLeaves(Solid):
         self.sprite_set("sTreeLeaves")
         self.image_index = 2
 
+
+# Leaves of Tree at End
+class oTreeLeavesEnd(Solid):
+    isPlatform = true
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sTreeLeaves")
+        self.image_index = 0
+        self.image_speed = 0
+
     def tile_correction(self):
-        if self.tile_right != 0:
+        if not instance_place(oTreeTop, self.x + 21, self.y + 10) \
+                and not instance_place(oTreeLeaves, self.x + 21, self.y):
             self.image_xscale = -1
 
 
-# Leaves of Tree at End
-class oTreeLeavesEnd(oTreeLeaves):
-    def __init__(self, ndepth, nx, ny):
-        super().__init__(ndepth, nx, ny)
-        self.image_index = 0
-
-
 # Died Leaves of Tree at End
-class oTreeLeavesDeadEnd(oTreeLeaves):
+class oTreeLeavesDeadEnd(oTreeLeavesEnd):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.image_index = 1
@@ -214,7 +219,7 @@ class oTreeBranch(Solid):
         self.sprite_set("sTreeBranches")
 
     def tile_correction(self):
-        if not instance_place(oTreeTrunk, self.x + 21, self.y + 10):
+        if instance_place(oTreeTrunk, self.x, self.y + 4):
             self.image_xscale = -1
 
 

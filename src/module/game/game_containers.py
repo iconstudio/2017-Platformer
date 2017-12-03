@@ -416,8 +416,8 @@ class oSoldier(oEnemyParent):
             This method does not mean literally stopping when idle.
             Some gobjects can move while idle status.
         """
-        self.count += delta_velocity() * args[0]
-        if self.count >= delta_velocity(1) and irandom(99) == 0:
+        self.count += args[0]
+        if self.count >= 1 and irandom(99) == 0:
             self.status_change(oStatusContainer.WALK)
             self.count = 0
             if irandom(4) == 0:
@@ -481,27 +481,30 @@ class oSnake(oEnemyParent):
             self.count = 0
 
     def handle_walk(self, *args):
-        checkl, checkr = self.place_free(-10, -10), self.place_free(10, -10)
+        checkl, checkr = self.place_free(-20, -10), self.place_free( +20, -10)
         if checkl and checkr:
+            self.xVel = 0
             self.status_change(oStatusContainer.IDLE)
             return
 
-        distance = delta_velocity(15) * args[0]
-        self.count += delta_velocity() * args[0]
+        vel = 15
+        distance = delta_velocity(vel) * args[0]
+        self.count += args[0]
+
         if self.image_xscale == 1:
-            if self.place_free(distance + 10, 0) and not self.place_free(distance + 10, -10):
-                self.xVel = 15
+            if self.place_free(distance + vel, 0) and not self.place_free(distance + vel, -10):
+                self.xVel = vel
             else:
                 self.image_xscale = -1
-                self.xVel = -15
+                self.xVel = -vel
         else:
-            if self.place_free(distance - 10, 0) and not self.place_free(distance - 10, -10):
-                self.xVel = -15
+            if self.place_free(distance - vel, 0) and not self.place_free(distance - vel, -10):
+                self.xVel = -vel
             else:
                 self.image_xscale = 1
-                self.xVel = 15
+                self.xVel = vel
 
-        if self.count >= delta_velocity(20):
+        if self.count >= 20:
             if irandom(99) == 0:
                 self.xVel = 0
                 self.status_change(oStatusContainer.IDLE)

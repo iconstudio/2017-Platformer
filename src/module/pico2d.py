@@ -50,10 +50,9 @@ __all__ = [
               "background_color", "draw_color", "draw_set_color", "draw_get_color", "draw_set_alpha",
               "draw_set_halign", "draw_set_valign",
               "draw_background_color_set",
-              "draw_rectangle",
+              "draw_rectangle", "draw_rectangle_sized", "draw_rectangle_outline",
               "load_music", "load_wav",
-
-              "SDL_SetWindowTitle", "SDL_SetWindowIcon", "SDL_Color",
+              "SDL_SetWindowTitle", "SDL_SetWindowIcon", "SDL_Color"
           ] + sdl2.render.__all__ + keyboard.__all__ + events.__all__ + keycode.__all__ + rect.__all__ + video.__all__
 
 
@@ -260,6 +259,16 @@ def draw_rectangle(x1, y1, x2, y2):
     SDL_RenderCopy(renderer, rectangle, trect, drect)
 
     del drect, trect
+
+
+def draw_rectangle_sized(dx, dy, dw, dh):
+    draw_rectangle(dx, dy, dx + dw, dy + dh)
+
+
+def draw_rectangle_outline(dx, dy, dw, dh, camx, camy):
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255)
+    rect = SDL_Rect(int(dx - camx), int(-dy - dh + canvas_height - 1 - camy), int(dw + 1), int(dh + 1))
+    SDL_RenderDrawRect(renderer, rect)
 
 
 class Event:
@@ -509,7 +518,7 @@ def print_fps():
     cur_time += dt
     dt = max(dt, 0.0001)
     caption = (
-        'Pico2D Canvas (' + str(canvas_width) + 'x' + str(canvas_height) + ')' + ' %4.2f FPS' % (1.0 / dt)).encode(
+            'Pico2D Canvas (' + str(canvas_width) + 'x' + str(canvas_height) + ')' + ' %4.2f FPS' % (1.0 / dt)).encode(
         'UTF-8')
     SDL_SetWindowTitle(window, caption)
 
