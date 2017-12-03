@@ -316,7 +316,7 @@ class GObject(object):
                 if abs(how) <= 3:
                     self.yVel = 0
                     if self.onAir:
-                        audio_play("sndThud")
+                        audio_play("sndBounce")
                         self.onAir = false
                 else:
                     self.yVel *= -0.4

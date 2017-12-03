@@ -18,7 +18,7 @@ scene_width = screen_width
 scene_height = screen_height
 hFont, hFontLrg = None, None
 hFontRetro = None
-
+volsfx, volmus, optefx = 10, 8, true
 
 # noinspection PyUnusedLocal
 def game_begin():
@@ -46,6 +46,7 @@ def game_begin():
     hFontRetro = Font_sprite(ft, tempstr)
 
     with open(path_data + "option.json") as opfile:
+        global volsfx, volmus, optefx
         data = json.load(opfile)
         volsfx = data["volume_sfx"]
         volmus: int = data["volume_mus"]
@@ -318,6 +319,7 @@ def change_state(state):
     global stack
     pop_state()
     stack.append(state)
+    print(": " + state.name + " begins")
     state.enter()
     io.clear()
 

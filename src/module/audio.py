@@ -42,6 +42,7 @@ def audio_get(name: str) -> Wav or Music:
 def audio_play(name: str):
     sfx: Wav = audio_get(name)
     sfx.play()
+    sfx.set_volume()
 
 
 def audio_stream_play(name: str):

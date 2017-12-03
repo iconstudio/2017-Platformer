@@ -1,5 +1,15 @@
 [
   {
+	"name": "sndPopup",
+	"path": "..\\res\\audio\\popup.ogg",
+	"muse": false
+  },
+  {
+	"name": "sndMsgUp",
+	"path": "..\\res\\audio\\msgup.ogg",
+	"muse": false
+  },
+  {
 	"name": "sndJump",
 	"path": "..\\res\\audio\\jump.ogg",
 	"muse": false
@@ -41,7 +51,7 @@
   },
   {
 	"name": "sndThrow",
-	"path": "..\\res\\audio\\throw.ogg",
+	"path": "..\\res\\audio\\throw_item.ogg",
 	"muse": false
   },
   {
@@ -72,6 +82,16 @@
   {
 	"name": "sndSnakeAttack",
 	"path": "..\\res\\audio\\snakebite.ogg",
+	"muse": false
+  },
+  {
+	"name": "sndPauseIn",
+	"path": "..\\res\\audio\\pause_in.ogg",
+	"muse": false
+  },
+  {
+	"name": "sndPauseOut",
+	"path": "..\\res\\audio\\pause_out.ogg",
 	"muse": false
   }
 ]

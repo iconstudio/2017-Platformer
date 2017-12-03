@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
     # from streams import main
     from streams import game
-    # from streams import begin
+    from streams import begin
     framework.run(game)
 
     framework.game_end()

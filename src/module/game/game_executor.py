@@ -1,5 +1,4 @@
 from module.pico2d import *
-from module.functions import *
 from module.constants import *
 
 from module import framework
@@ -8,6 +7,7 @@ from module.framework import io
 import game_pause
 
 from module.sprite import *
+from module.audio import *
 import module.terrain as terrain
 from module.game.game_doodad import *
 from module.game.game_solid import *
@@ -16,8 +16,9 @@ from module.game.gobject_header import *
 from module.game.game_containers import *
 
 __all__ = [
-    "stage_init",
-    "manager_create", "manager_get_id", "manager_update", "manager_draw", "manager_handle_events"
+    "stage_init", "stage_add", "stage_complete",
+    "stage_create", "manager_get_id", "manager_update", "manager_draw",
+    "manager_handle_events"
 ]
 
 time_local = 0  # a Timer of current stage
@@ -27,6 +28,8 @@ stagelist = []
 
 
 class GameExecutor:
+    terrain_generator = None
+
     def __init__(self):
         global time_local
 
@@ -77,7 +80,7 @@ class GameExecutor:
         terrain.terrain_tile_assign(13, oCobra, terrain.TYPE_INSTANCE)
         terrain.terrain_tile_assign(12, oSnake, terrain.TYPE_INSTANCE)
 
-    def clear(self):
+    def __del__(self):
         global time_local
         time_local = 0
         player_lives_clear()
@@ -125,7 +128,7 @@ class GameExecutor:
         draw_set_alpha(1)
         heart = sprite_get("sHeart")
         draw_sprite(heart, 0, screen_width - 94, screen_height - 48)
-        draw_set_halign(1)
+        draw_set_halign(0)
         draw_set_valign(1)
         framework.draw_text(str(player_get_lives()), screen_width - 50, screen_height - 38, scale = 2)
         draw_set_halign(0)
@@ -143,6 +146,7 @@ class GameExecutor:
                 framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
                 io.clear()
+                audio_play("sndPauseIn")
                 framework.pause()
                 framework.push_state(game_pause)
             else:
@@ -163,8 +167,8 @@ class StageIntro(GameExecutor):
         terrain.terrain_tile_assign(22, oMillHousechipM, terrain.TYPE_BG)
 
         framework.scene_set_size(screen_width * 3)
-        scene = terrain.TerrainGenerator("begin")
-        scene.generate()
+        self.terrain_generator = terrain.TerrainGenerator("begin")
+        self.terrain_generator.generate()
         self.update_begin()
 
 
@@ -174,10 +178,11 @@ class Stage01(GameExecutor):
 
         self.background_sprite = None
 
-        scene = terrain.TerrainGenerator("stage01")
-        scene.generate()
+        self.terrain_generator = terrain.TerrainGenerator("stage01")
+        self.terrain_generator.generate()
         self.update_begin()
-        framework.scene_set_size(scene.tile_w * scene.map_grid_w, screen_height * 2)
+        framework.scene_set_size(self.terrain_generator.tile_w * self.terrain_generator.map_grid_w,
+                                 screen_height * 2)
 
 
 def stage_add(arg):
@@ -185,8 +190,14 @@ def stage_add(arg):
     stagelist.append(arg)
 
 
-def stage_generate(self, stage_number: int):
-    pass
+def stage_complete():
+    global manager
+    # current_stage_number: int = manager.terrain_generator.get_stage_number()
+
+    del manager
+    manager = None
+
+    stage_create()
 
 
 def manager_get_id() -> GameExecutor:
@@ -199,14 +210,9 @@ def stage_init():
     stage_add(Stage01)
 
 
-def manager_create(stage_number: int) -> GameExecutor:
-    """
-    :param stage_number: 스테이지 번호. 0 ~
-    :return:
-    """
-
+def stage_create() -> GameExecutor:
     global stagelist
-    stg_type = stagelist[stage_number]
+    stg_type = stagelist.pop()
     global manager
     if manager is None:
         manager = stg_type()

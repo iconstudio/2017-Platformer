@@ -192,6 +192,7 @@ class oPlayer(GObject):
                             else:
                                 enemy.status_change(oStatusContainer.STUNNED)
                                 enemy.stunned = 5
+                            audio_play("sndHit")
                         else:
                             enemy.collide_with_player = true
                             self.get_dmg(1, enemy.image_xscale)

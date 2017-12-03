@@ -467,7 +467,7 @@ class Font:
 class Font_sprite:
     sprite_index = None
     char_list = {}
-    height = 0
+    width, height = 0, 0
 
     def __init__(self, sprite, data: str):
         length = len(data)
@@ -476,30 +476,33 @@ class Font_sprite:
                 currchr = data[i]
                 self.char_list[currchr] = i
             self.sprite_index = sprite
+            self.width = sprite.width
             self.height = sprite.height
 
     def draw(self, sx, sy, caption: str, scale: float = 1.0):
         length = len(caption)
         if length > 0:
-            dx, dy = sx, sy - scale * self.height * (caption.count('\n'))
+            global halign, valign
+            hscale, vscale = scale * self.width, scale * self.height
+            sdx = sx - hscale * halign * length / 2
+            sdy = sy + vscale * (valign - 1) / 2
+            dx, dy = sdx, sdy - scale * self.height * (caption.count('\n'))
             for i in range(length):
                 currchr = caption[i].upper()
                 if currchr in (" ", ' '):
                     # print(currchr + " - ")
-                    dx += 16 * scale
+                    dx += hscale / 2
                     continue
                 elif currchr is '\n':
-                    dx = sx
+                    dx = sdx
                     dy -= self.height * scale
                     continue
                 else:
                     currind: int = self.char_list[currchr]
                     # print(currchr + " - " + str(currind))
-                    global halign, valign
-                    hscale, vscale = scale * self.sprite_index.width, scale * self.sprite_index.height
-                    self.sprite_index.draw(currind, dx - hscale * (halign - 1) / 2, dy + vscale * (valign - 1) / 2,
+                    self.sprite_index.draw(currind, dx, dy,
                                            scale, scale, 0, draw_get_alpha())
-                    dx += 16 * scale
+                    dx += hscale
 
 
 def load_font(name, size = 20):

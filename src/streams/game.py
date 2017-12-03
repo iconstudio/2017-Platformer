@@ -14,7 +14,7 @@ name = "game_state"
 
 def enter():
     stage_init()
-    manager_create(1)
+    stage_create()
 
 
 def exit():

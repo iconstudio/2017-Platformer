@@ -4,6 +4,8 @@ from module.constants import *
 import module.framework as framework
 from streams import game
 
+from module.audio import *
+
 __all__ = [
     "name", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
 ]
@@ -16,13 +18,9 @@ name = "pause_state"
 
 # noinspection PyGlobalUndefined
 def enter():
-    global logo
-    logo = load_image(path_ui + "paused.png")
-
+    pass
 
 def exit():
-    global logo
-    del logo
     framework.unpause()
 
 
@@ -31,10 +29,13 @@ def update(frame_time):
 
 
 def draw(frame_time):
-    global logo
     clear_canvas()
-    game.draw_clean()
-    logo.draw(screen_width / 2, 40)
+    game.draw_clean(frame_time)
+    draw_set_alpha(1)
+    draw_set_color(255, 255, 255)
+    draw_set_halign(1)
+    draw_set_valign(1)
+    framework.draw_text("Paused", screen_width / 2, 32, scale = 2)
     update_canvas()
 
 
@@ -47,6 +48,7 @@ def handle_events(frame_time):
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_p) or (event.type, event.key) == (
                     SDL_KEYDOWN, SDLK_ESCAPE):
                 framework.pop_state()
+                audio_play("sndPauseIn")
 
 
 def pause():
