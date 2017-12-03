@@ -9,7 +9,8 @@ from module.sprite import *
 __all__ = [
     "GameState", "change_state", "push_state", "pop_state", "quit", "run",
     "io", "Camera", "game_begin", "game_end", "current_time", "game_realtime", "uiframe",
-    "scene_width", "scene_height", "scene_set_size",
+    "scene_width", "scene_height", "scene_set_size", "audio_get_volume_sfx_global",
+    "audio_get_volume_music_global",
     "hFont", "hFontLrg", "hFontRetro", "draw_text",
 ]
 
@@ -19,6 +20,7 @@ scene_height = screen_height
 hFont, hFontLrg = None, None
 hFontRetro = None
 volsfx, volmus, optefx = 10, 8, true
+
 
 # noinspection PyUnusedLocal
 def game_begin():
@@ -49,8 +51,8 @@ def game_begin():
         global volsfx, volmus, optefx
         data = json.load(opfile)
         volsfx = data["volume_sfx"]
-        volmus: int = data["volume_mus"]
-        optefx: bool = data["effect"]
+        volmus = data["volume_mus"]
+        optefx = data["effect"]
 
 
 def draw_text(caption: str, dx, dy, font: int = 2, scale: float = 1.0):
@@ -74,6 +76,16 @@ def scene_set_size(w = screen_width, h = screen_height):
     global scene_width, scene_height
     scene_width = w
     scene_height = h
+
+
+def audio_get_volume_sfx_global():
+    global volsfx
+    return int(volsfx / 10 * 128)
+
+
+def audio_get_volume_music_global():
+    global volmus
+    return int(volmus / 10 * 128)
 
 
 # Object : IO procedure

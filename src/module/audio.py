@@ -3,6 +3,8 @@ from module.constants import *
 
 import json
 
+from module.framework import audio_get_volume_sfx_global, audio_get_volume_music_global
+
 __all__ = [
     "audio_list",
     "audio_load", "audio_stream_load", "audio_get", "audio_json_loads",
@@ -42,7 +44,7 @@ def audio_get(name: str) -> Wav or Music:
 def audio_play(name: str):
     sfx: Wav = audio_get(name)
     sfx.play()
-    sfx.set_volume()
+    sfx.set_volume(audio_get_volume_sfx_global())
 
 
 def audio_stream_play(name: str):

@@ -20,6 +20,7 @@ name = "pause_state"
 def enter():
     pass
 
+
 def exit():
     framework.unpause()
 
@@ -45,10 +46,10 @@ def handle_events(frame_time):
         if event.type == SDL_QUIT:
             framework.quit()
         else:
-            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_p) or (event.type, event.key) == (
-                    SDL_KEYDOWN, SDLK_ESCAPE):
-                framework.pop_state()
-                audio_play("sndPauseIn")
+            if event.type == SDL_KEYDOWN:
+                if event.key in (SDLK_p, SDLK_ESCAPE):
+                    framework.pop_state()
+                    audio_play("sndPauseIn")
 
 
 def pause():
