@@ -88,11 +88,6 @@ class TerrainGenerator:
                     # print(str(obj) + "<" + str(current) + "> (x = " + str(nx) + ", y = " + str(ny) + ")")
 
                     if obj.identify == ID_SOLID:
-                        # if ny >= framework.scene_height - 20:
-                        #    obj.tile_up = 1
-                        # if ny <= 20:
-                        #    obj.tile_down = 1
-
                         try:
                             if i >= self.map_grid_w:  # check top
                                 getu = self.data[i - self.map_grid_w]

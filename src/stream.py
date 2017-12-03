@@ -1,6 +1,7 @@
 from module import framework
 
 from module.sprite import *
+from module.audio import *
 
 """
         비고:
@@ -58,8 +59,11 @@ from module.sprite import *
 if __name__ == "__main__":
     framework.game_begin()
     sprite_json_loads()
+    audio_json_loads()
+
     # from streams import main
     from streams import game
     # from streams import begin
     framework.run(game)
+
     framework.game_end()

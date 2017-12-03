@@ -6,6 +6,7 @@ import math
 from module.framework import Camera
 
 from module.sprite import *
+from module.audio import *
 
 __all__ = [
     "oStatusContainer", "instance_place", "instance_list_remove_something",
@@ -313,16 +314,23 @@ class GObject(object):
                 self.move_contact_y(abs(how) + 1)
             if self.oStatus >= oStatusContainer.STUNNED:
                 if abs(how) <= 3:
-                    self.onAir = false
                     self.yVel = 0
+                    if self.onAir:
+                        audio_play("sndThud")
+                        self.onAir = false
                 else:
                     self.yVel *= -0.4
+                    audio_play("sndBounce")
             else:
                 if self.yVel <= 0:
-                    self.onAir = false
                     self.yVel = 0
+                    self.y = math.floor(self.y)
+                    if self.onAir:
+                        self.onAir = false
+                        audio_play("sndLand")
                 else:
                     self.yVel *= -0.3
+                    audio_play("sndBounceLit")
         else:
             self.onAir = false
         self.y = math.floor(self.y + 0.5)

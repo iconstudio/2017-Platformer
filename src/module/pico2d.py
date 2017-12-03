@@ -51,7 +51,7 @@ __all__ = [
               "draw_set_halign", "draw_set_valign",
               "draw_background_color_set",
               "draw_rectangle", "draw_rectangle_sized", "draw_rectangle_outline",
-              "load_music", "load_wav",
+              "load_music", "load_wav", "Wav", "Music",
               "SDL_SetWindowTitle", "SDL_SetWindowIcon", "SDL_Color"
           ] + sdl2.render.__all__ + keyboard.__all__ + events.__all__ + keycode.__all__ + rect.__all__ + video.__all__
 

@@ -12,6 +12,7 @@ from module.game.game_solid import *
 from module.game.gobject_header import *
 
 from module.sprite import *
+from module.audio import *
 
 __all__ = [
     "player_got_damage", "player_lives_clear", "player_get_lives",
@@ -117,6 +118,7 @@ class oPlayer(GObject):
             self.status_change(oStatusContainer.DEAD)
             self.xVel = 0
 
+            audio_play("sndDie")
             framework.change_state(game_over)
         else:
             if self.oStatus is oStatusContainer.LADDERING:
@@ -126,6 +128,7 @@ class oPlayer(GObject):
             self.xVel = -dir * 20
             self.yVel += 15  # Bounces
             self.controllable = 0.5  # 0.5 seconds
+            audio_play("sndHurt")
 
     def event_step(self, frame_time) -> None:
         if self.oStatus is oStatusContainer.LADDERING:
@@ -245,6 +248,7 @@ class oPlayer(GObject):
 
                         if do_jump:
                             self.yVel = 90
+                            audio_play("sndJump")
 
                     # ===============================================================================================
                     if not self.onAir:  # Play Moving sprite
@@ -270,6 +274,7 @@ class oPlayer(GObject):
                                 self.yVel = 70  # Jumps higher
                             self.status_change(oStatusContainer.IDLE)
                             self.sprite_set("PlayerJump")
+                            audio_play("sndJump")
                             self.y += 1
                             self.laddercount = 0.3  # seconds
                             return

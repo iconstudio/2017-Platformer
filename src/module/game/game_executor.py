@@ -17,7 +17,7 @@ from module.game.game_containers import *
 
 __all__ = [
     "stage_init",
-    "StageIntro", "manager_create", "manager_get_id", "manager_update", "manager_draw", "manager_handle_events"
+    "manager_create", "manager_get_id", "manager_update", "manager_draw", "manager_handle_events"
 ]
 
 time_local = 0  # a Timer of current stage
@@ -28,8 +28,11 @@ stagelist = []
 
 class GameExecutor:
     def __init__(self):
+        global time_local
+
         self.background_sprite = "bgCave"
         Camera.set_pos(0, 0)
+        time_local = 0
 
         io.key_add(SDLK_LEFT)
         io.key_add(SDLK_UP)
@@ -75,6 +78,8 @@ class GameExecutor:
         terrain.terrain_tile_assign(12, oSnake, terrain.TYPE_INSTANCE)
 
     def clear(self):
+        global time_local
+        time_local = 0
         player_lives_clear()
         alllist, drawlist = get_instance_list(ID_OVERALL), get_instance_list(ID_DRAW)
         for inst in alllist:
@@ -87,6 +92,9 @@ class GameExecutor:
         draw_list_sort()
 
     def update(self, frame_time):
+        global time_local, time_total
+        time_local += frame_time
+        time_total += frame_time
         if len(get_instance_list(ID_OVERALL)) > 0:
             for inst in get_instance_list(ID_OVERALL):
                 inst.event_step(frame_time)
@@ -122,7 +130,7 @@ class GameExecutor:
         framework.draw_text(str(player_get_lives()), screen_width - 50, screen_height - 38, scale = 2)
         draw_set_halign(0)
         draw_set_valign(0)
-        framework.draw_text("Time: %0.3f" % get_time(), 10, screen_height - 10)
+        framework.draw_text("Time: %0.1f / %.0f" % (time_local, time_total), 10, screen_height - 10)
 
     def handle_events(self, frame_time):
         event_queue = get_events()

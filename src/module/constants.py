@@ -1,12 +1,13 @@
 from sdl2.pixels import SDL_Color
 
-__all__ = [
-    "false", "true", "screen_width", "screen_height", "screen_scale",
-    "path_resource", "path_image", "path_font", "path_theme", "path_entity", "path_background", "path_ui", "path_map",
-    "path_effect", "path_data",
-    "fps_target", "phy_mess", "phy_velocity", "phy_gravity",
-    "c_white", "c_ltgray", "c_gray", "c_dkgray", "c_black", "c_red", "c_green", "c_blue", "c_lime",
-]
+# __all__ = [
+#    "false", "true", "screen_width", "screen_height", "screen_scale",
+#    "path_resource", "path_image", "path_font", "path_theme", "path_entity", "path_background",
+#    "path_ui", "path_map",
+#    "path_effect", "path_data",
+#    "fps_target", "phy_mess", "phy_velocity", "phy_gravity",
+#    "c_white", "c_ltgray", "c_gray", "c_dkgray", "c_black", "c_red", "c_green", "c_blue", "c_lime",
+# ]
 
 # Global : Constants
 false = False
@@ -33,8 +34,8 @@ path_effect = path_image + "effect\\"
 path_background = path_image + "bg\\"
 path_ui = path_image + "ui\\"
 path_map = path_resource + "maps\\"
+path_audio = path_resource + "audio\\"
 path_data = ".\\data\\"
-
 
 # Colors
 # 흑백

@@ -476,6 +476,25 @@
 	"number": 1
   },
   {
+	"name": "BloodyBat",
+	"path": [
+	  "..\\res\\img\\entity\\BloodyBat_0.png",
+	  "..\\res\\img\\entity\\BloodyBat_1.png",
+	  "..\\res\\img\\entity\\BloodyBat_2.png",
+	  "..\\res\\img\\entity\\BloodyBat_3.png"
+	],
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
+  },
+  {
+	"name": "BloodyBatHang",
+	"path": "..\\res\\img\\entity\\BloodyBatHang_0.png",
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
+  },
+  {
 	"name": "Bloods",
 	"path": [
 	  "..\\res\\img\\effect\\Blood_0.png",
