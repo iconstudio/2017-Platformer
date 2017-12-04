@@ -1,8 +1,7 @@
 from module.constants import *
 
-from module import framework
-
 import json
+from module.camera import *
 from module.game.gobject_header import *
 
 __all__ = [
@@ -57,7 +56,7 @@ class TerrainGenerator:
             self.map_grid_w = self.parsed["map_grid_w"]
             self.map_grid_h = self.parsed["map_grid_h"]
             self.time = self.parsed["time"]
-        framework.scene_set_size(self.tile_w * self.map_grid_w)
+        scene_set_size(self.tile_w * self.map_grid_w)
 
     def get_stage_title(self) -> str:
         return self.parsed["title"]

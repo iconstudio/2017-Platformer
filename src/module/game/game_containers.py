@@ -3,12 +3,11 @@ from module.functions import *
 from module.constants import *
 
 from module import framework
-from module.framework import Camera
+from module.camera import *
 from module.framework import io
 from streams import game_over
 
 from module.game.game_doodad import *
-from module.game.game_solid import *
 from module.game.gobject_header import *
 
 from module.sprite import *
@@ -227,9 +226,9 @@ class oPlayer(GObject):
             if self.controllable <= 0:  # Player can controllable
                 if io.key_check_pressed(ord('c')):
                     if not self.onAir and instance_place(oDoor, self.x, self.y):
-                        import streams.game_complete as game_complete
+                        import stages.game_complete as game_complete
                         audio_play("sndEnterDoor")
-                        framework.push_state(game_complete)
+                        framework.change_state(game_complete)
                         return
 
                 if io.key_check(SDLK_LEFT): mx -= 1

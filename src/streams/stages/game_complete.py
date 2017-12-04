@@ -3,7 +3,7 @@ from module.functions import *
 from module.constants import *
 
 import module.framework as framework
-from streams import game
+from stages import stage_intro
 from module.game.game_executor import stage_get_number, manager_delete, stage_create
 
 __all__ = [
@@ -52,7 +52,7 @@ def update(frame_time):
 def draw(frame_time):
     global alpha
     clear_canvas()
-    game.draw_clean(frame_time)
+    stage_intro.draw_clean(frame_time)
     draw_set_alpha(alpha)
     draw_set_color(0, 0, 0)
     draw_set_alpha(1)
@@ -70,8 +70,7 @@ def handle_events(frame_time):
             framework.quit()
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, ord('x')):
-                #framework.change_state(game)
-                framework.pop_state()
+                framework.change_state(stage_intro)
                 manager_delete()
                 stage_create()
 

@@ -4,7 +4,7 @@ from module.constants import *
 
 from module import framework
 from module.framework import io
-from streams import game
+from stages import stage_intro
 
 from module.sprite import *
 
@@ -94,12 +94,6 @@ class MainMenu:
 def enter():
     global mainmenu
 
-    io.key_add(SDLK_UP)
-    io.key_add(SDLK_LEFT)
-    io.key_add(SDLK_DOWN)
-    io.key_add(ord('z'))
-    io.key_add(ord('x'))
-    io.key_add(SDLK_RETURN)
     draw_set_color(255, 255, 255)
     draw_set_halign(0)
     draw_set_valign(1)
@@ -134,7 +128,7 @@ def update(frame_time):
         io.clear()
 
         if mn_begin == menum.menusel:
-            framework.change_state(game)
+            framework.change_state(stage_intro)
         elif mn_opt == menum.menusel:
             pass
         elif mn_credit == menum.menusel:

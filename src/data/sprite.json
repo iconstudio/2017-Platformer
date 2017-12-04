@@ -235,6 +235,13 @@
 	"number": 1
   },
   {
+	"name": "sThorns",
+	"path": "..\\res\\img\\theme\\thorns_0.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
 	"name": "sLushDoodad",
 	"path": [
 	  "..\\res\\img\\theme\\lush_top_0.png",

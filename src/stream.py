@@ -14,7 +14,7 @@ from module.audio import *
                 01. stream.py : 실행부
                 02. streams\begin.py : 로고 표시
                 03. streams\main.py : 메인 메뉴
-                04. streams\game.py : 게임
+                04. streams\stage_intro.py : 게임
                 05. streams\game_pause.py : 게임 일시 정지
                 06. streams\game_over.py : 게임 오버
                 07. module\pico2d.py : 수정된 PICO2D 파일
@@ -41,7 +41,7 @@ from module.audio import *
                 1. stream.py -> framework.py
                 2. begin.py
                 3. main.py
-                4. game.py -> game_executor.py -> game_container.py -> ...
+                4. stage_intro.py -> game_executor.py -> game_container.py -> ...
                 
 
         외부 파일 수정 사항:
@@ -61,9 +61,9 @@ if __name__ == "__main__":
     sprite_json_loads()
     audio_json_loads()
 
-    # from streams import main
-    from streams import game
-    from streams import begin
-    framework.run(game)
+    from streams import main
+    from stages import stage_intro
+
+    framework.run(main)
 
     framework.game_end()

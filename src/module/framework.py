@@ -8,15 +8,12 @@ from module.sprite import *
 
 __all__ = [
     "GameState", "change_state", "push_state", "pop_state", "quit", "run",
-    "io", "Camera", "game_begin", "game_end", "current_time", "game_realtime", "uiframe",
-    "scene_width", "scene_height", "scene_set_size", "audio_get_volume_sfx_global",
-    "audio_get_volume_music_global",
+    "io", "game_begin", "game_end", "current_time", "game_realtime", "uiframe",
+    "audio_get_volume_sfx_global", "audio_get_volume_music_global",
     "hFont", "hFontLrg", "hFontRetro", "draw_text",
 ]
 
 keylogger_list = []
-scene_width = screen_width
-scene_height = screen_height
 hFont, hFontLrg = None, None
 hFontRetro = None
 volsfx, volmus, optefx = 10, 8, true
@@ -70,12 +67,6 @@ def game_end():
 
     global hFont, hFontLrg
     del hFont, hFontLrg
-
-
-def scene_set_size(w = screen_width, h = screen_height):
-    global scene_width, scene_height
-    scene_width = w
-    scene_height = h
 
 
 def audio_get_volume_sfx_global():
@@ -198,40 +189,6 @@ def keyboard_update():
 io = oIOProc()
 
 
-# Object : View Camera
-class oCamera:
-    x: float = 0
-    y: float = 0
-    target_object = None
-    lock: bool = false
-    width, height = screen_width, screen_height
-
-    def limit(self):
-        global scene_width, scene_height
-        self.x = clamp(0, int(self.x), scene_width - get_screen_width())
-        self.y = clamp(20, int(self.y), scene_height - get_screen_height())
-
-    def set_pos(self, nx: float = None, ny: float = None):
-        if nx is not None:
-            if abs(nx - self.x) < 2:
-                self.x = nx
-            elif self.x != nx:
-                self.x += (nx - self.x) / 5
-        if ny is not None:
-            self.y = ny
-        self.limit()
-
-    def add_pos(self, ax: float = None, ay: float = None):
-        if ax is not None:
-            self.x += ax
-        if ay is not None:
-            self.y += ay
-        self.limit()
-
-
-Camera = oCamera()
-
-
 class uiframe:
     name = "frame"
     x, y = 160, 90
@@ -338,7 +295,7 @@ def change_state(state):
 
 def push_state(state):
     global stack
-    if (len(stack) > 0):
+    if len(stack) > 0:
         stack[-1].pause()
     stack.append(state)
     state.enter()
@@ -378,6 +335,17 @@ def unpause():
 def run(start_state):
     global running, stack, io, current_time
     running = True
+
+    io.key_add(SDLK_LEFT)
+    io.key_add(SDLK_UP)
+    io.key_add(SDLK_RIGHT)
+    io.key_add(SDLK_DOWN)
+    io.key_add(SDLK_RETURN)
+    io.key_add(ord('z'))
+    io.key_add(ord('x'))
+    io.key_add(ord('c'))
+    io.key_add(ord('9'))
+    io.key_add(ord('8'))
 
     stack = [start_state]
     start_state.enter()

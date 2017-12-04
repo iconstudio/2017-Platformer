@@ -1,4 +1,3 @@
-from module.pico2d import *
 from module.functions import *
 from module.constants import *
 
@@ -7,7 +6,7 @@ from module.game.gobject_header import *
 __all__ = [
     "oDoor", "oDoorMetalic", "oLushDecoration", "oDirtBrickDecoration",
     "oMillHousechip", "oMillHousestone", "oMillHousechipL", "oMillHousechipR",
-    "oMillHousechipM", "oTorch", "oLadder", "oLamp", "oWeb"
+    "oMillHousechipM", "oTorch", "oLadder", "oLamp", "oWeb", "oThorns"
 ]
 
 
@@ -86,7 +85,7 @@ class oLamp(oDoodadParent):
         self.image_speed = 0.6
 
 
-# Web
+# Trap : Web
 class oWeb(oDoodadParent):
     name = "Web"
     depth = 10
@@ -94,6 +93,17 @@ class oWeb(oDoodadParent):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sWeb")
+        self.image_speed = 0
+
+
+# Trap : Thorns
+class oThorns(oDoodadParent):
+    name = "Lamp"
+    depth = -50
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sThorns")
         self.image_speed = 0
 
 

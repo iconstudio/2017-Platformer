@@ -2,7 +2,7 @@ from module.pico2d import *
 from module.constants import *
 
 import module.framework as framework
-from streams import game
+from stages import stage_intro
 
 from module.audio import *
 
@@ -31,7 +31,7 @@ def update(frame_time):
 
 def draw(frame_time):
     clear_canvas()
-    game.draw_clean(frame_time)
+    stage_intro.draw_clean(frame_time)
     draw_set_alpha(1)
     draw_set_color(255, 255, 255)
     draw_set_halign(1)

@@ -3,7 +3,7 @@ from module.functions import *
 from module.constants import *
 
 import math
-from module.framework import Camera
+from module.camera import *
 
 from module.sprite import *
 from module.audio import *
