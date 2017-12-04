@@ -9,7 +9,7 @@ from module.sprite import *
 from module.audio import *
 
 __all__ = [
-    "oStatusContainer", "instance_place", "instance_list_remove_something",
+    "oStatusContainer", "instance_place", "instance_list_remove_something", "instance_list_clear",
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
     "get_instance_list", "draw_list_sort",
     "container_player", "GObject", "Solid", "oPlayerDamage", "oEnemyDamage", "oItemParent", "oDoodadParent",
@@ -85,6 +85,19 @@ def instance_list_remove_something(identific: str, content):
         pass
     except ValueError:
         pass
+
+
+def instance_list_clear(identific: str):
+    global instance_list, instance_draw_list, instance_list_spec
+    if identific is ID_OVERALL:
+        instance_list.clear()
+    elif identific is ID_DRAW:
+        instance_draw_list.clear()
+    else:
+        try:
+            instance_list_spec[identific].clear()
+        except KeyError:
+            print("Not available key of list")
 
 
 def draw_list_sort():

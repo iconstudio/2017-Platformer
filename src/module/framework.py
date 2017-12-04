@@ -331,20 +331,18 @@ def change_state(state):
     global stack
     pop_state()
     stack.append(state)
-    print(": " + state.name + " begins")
     state.enter()
+    print(": " + state.name + " begins")
     io.clear()
 
 
 def push_state(state):
-    # close_canvas()
-
     global stack
-    if len(stack) > 0:
+    if (len(stack) > 0):
         stack[-1].pause()
     stack.append(state)
-    print(": " + state.name + " begins")
     state.enter()
+    print(": " + state.name + " begins")
     io.clear()
 
 

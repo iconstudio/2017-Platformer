@@ -140,8 +140,10 @@ class oPlayer(GObject):
         super().event_step(frame_time)
 
         # Fall through void
-        if self.y < -60:
-            self.get_dmg(999)
+        if self.y <= 15:
+            io.clear()
+            audio_play("sndDie")
+            framework.change_state(game_over)
             return
 
         # Use cheat of death
@@ -227,7 +229,8 @@ class oPlayer(GObject):
                     if not self.onAir and instance_place(oDoor, self.x, self.y):
                         import streams.game_complete as game_complete
                         audio_play("sndEnterDoor")
-                        framework.change_state(game_complete)
+                        framework.push_state(game_complete)
+                        return
 
                 if io.key_check(SDLK_LEFT): mx -= 1
                 if io.key_check(SDLK_RIGHT): mx += 1

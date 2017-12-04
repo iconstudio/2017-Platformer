@@ -4,7 +4,7 @@ from module.constants import *
 
 import module.framework as framework
 from streams import game
-from module.game.game_executor import stage_get_number, manager_delete
+from module.game.game_executor import stage_get_number, manager_delete, stage_create
 
 __all__ = [
     "name", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
@@ -70,8 +70,10 @@ def handle_events(frame_time):
             framework.quit()
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, ord('x')):
+                #framework.change_state(game)
                 framework.pop_state()
                 manager_delete()
+                stage_create()
 
 
 def pause():
