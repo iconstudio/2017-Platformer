@@ -149,6 +149,19 @@ class oPlayer(GObject):
             self.get_dmg(3)
             return
 
+        # Use cheat of going exit
+        if io.key_check_pressed(ord('8')):
+            clist = get_instance_list(ID_DOODAD)
+            door = None
+            for inst in clist:
+                if isinstance(inst, oDoor):
+                    door = inst
+                    break
+            if door is not None:
+                self.x = door.x + 10
+                self.y = door.y + 20
+            return
+
         if self.invincible > 0:
             self.invincible -= frame_time
             self.image_alpha = 0.5
@@ -210,6 +223,12 @@ class oPlayer(GObject):
             # ===============================================================================================
             mx, my = 0, 0
             if self.controllable <= 0:  # Player can controllable
+                if io.key_check_pressed(ord('c')):
+                    if not self.onAir and instance_place(oDoor, self.x, self.y):
+                        import streams.game_complete as game_complete
+                        audio_play("sndEnterDoor")
+                        framework.change_state(game_complete)
+
                 if io.key_check(SDLK_LEFT): mx -= 1
                 if io.key_check(SDLK_RIGHT): mx += 1
                 if io.key_check(SDLK_UP): my += 1

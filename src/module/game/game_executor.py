@@ -16,8 +16,8 @@ from module.game.gobject_header import *
 from module.game.game_containers import *
 
 __all__ = [
-    "stage_init", "stage_add", "stage_complete",
-    "stage_create", "manager_get_id", "manager_update", "manager_draw",
+    "stage_init", "stage_add", "stage_complete", "stage_get_number",
+    "stage_create", "manager_get_id", "manager_update", "manager_draw", "manager_delete",
     "manager_handle_events"
 ]
 
@@ -25,6 +25,7 @@ time_local = 0  # a Timer of current stage
 time_total = 0
 manager = None
 stagelist = []
+stage_number = 0
 
 
 class GameExecutor:
@@ -191,13 +192,22 @@ def stage_add(arg):
 
 
 def stage_complete():
-    global manager
-    # current_stage_number: int = manager.terrain_generator.get_stage_number()
+    global manager, stage_number
+    stage_number = manager.terrain_generator.get_stage_number()
 
+    import streams.game_complete as game_complete
+    framework.push_state(game_complete)
+
+
+def stage_get_number() -> int:
+    global stage_number
+    return stage_number
+
+
+def manager_delete():
+    global manager
     del manager
     manager = None
-
-    stage_create()
 
 
 def manager_get_id() -> GameExecutor:
@@ -208,6 +218,7 @@ def manager_get_id() -> GameExecutor:
 def stage_init():
     stage_add(StageIntro)
     stage_add(Stage01)
+    stagelist.reverse()
 
 
 def stage_create() -> GameExecutor:

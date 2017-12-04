@@ -1,97 +1,102 @@
 [
-  {
-	"name": "sndPopup",
-	"path": "..\\res\\audio\\popup.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndMsgUp",
-	"path": "..\\res\\audio\\msgup.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndJump",
-	"path": "..\\res\\audio\\jump.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndLand",
-	"path": "..\\res\\audio\\land.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndPickup",
-	"path": "..\\res\\audio\\pickup.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndThud",
-	"path": "..\\res\\audio\\thud.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndDropItem",
-	"path": "..\\res\\audio\\item_drop.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndDropItemOnWater",
-	"path": "..\\res\\audio\\item_splash.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndBounce",
-	"path": "..\\res\\audio\\bounce.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndBounceLit",
-	"path": "..\\res\\audio\\bounce_light.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndThrow",
-	"path": "..\\res\\audio\\throw_item.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndKnifePickup",
-	"path": "..\\res\\audio\\knifepickup.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndKnifeAttack",
-	"path": "..\\res\\audio\\knifeattack.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndHurt",
-	"path": "..\\res\\audio\\hurt.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndHit",
-	"path": "..\\res\\audio\\hit.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndDie",
-	"path": "..\\res\\audio\\die.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndSnakeAttack",
-	"path": "..\\res\\audio\\snakebite.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndPauseIn",
-	"path": "..\\res\\audio\\pause_in.ogg",
-	"muse": false
-  },
-  {
-	"name": "sndPauseOut",
-	"path": "..\\res\\audio\\pause_out.ogg",
-	"muse": false
-  }
+	{
+		"name": "sndPopup",
+		"path": "..\\res\\audio\\popup.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndMsgUp",
+		"path": "..\\res\\audio\\msgup.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndJump",
+		"path": "..\\res\\audio\\jump.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndLand",
+		"path": "..\\res\\audio\\land.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndPickup",
+		"path": "..\\res\\audio\\pickup.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndThud",
+		"path": "..\\res\\audio\\thud.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndDropItem",
+		"path": "..\\res\\audio\\item_drop.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndDropItemOnWater",
+		"path": "..\\res\\audio\\item_splash.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndBounce",
+		"path": "..\\res\\audio\\bounce.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndBounceLit",
+		"path": "..\\res\\audio\\bounce_light.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndThrow",
+		"path": "..\\res\\audio\\throw_item.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndKnifePickup",
+		"path": "..\\res\\audio\\knifepickup.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndKnifeAttack",
+		"path": "..\\res\\audio\\knifeattack.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndHurt",
+		"path": "..\\res\\audio\\hurt.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndHit",
+		"path": "..\\res\\audio\\hit.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndDie",
+		"path": "..\\res\\audio\\die.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndSnakeAttack",
+		"path": "..\\res\\audio\\snakebite.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndPauseIn",
+		"path": "..\\res\\audio\\pause_in.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndPauseOut",
+		"path": "..\\res\\audio\\pause_out.ogg",
+		"muse": false
+	},
+	{
+		"name": "sndEnterDoor",
+		"path": "..\\res\\audio\\intodoor.ogg",
+		"muse": false
+	}
 ]

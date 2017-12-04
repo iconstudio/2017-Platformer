@@ -117,3 +117,4 @@ ENV/
 /images
 /src/data/_pre
 /*.lnk
+/s.h
