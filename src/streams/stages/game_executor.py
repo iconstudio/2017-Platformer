@@ -1,4 +1,5 @@
 from module.pico2d import *
+from module.functions import *
 from module.constants import *
 
 from module import framework
@@ -62,8 +63,35 @@ terrain.terrain_tile_assign(13, oCobra, terrain.TYPE_INSTANCE)
 terrain.terrain_tile_assign(12, oSnake, terrain.TYPE_INSTANCE)
 
 
+class ui_PopupStage(GObject):
+    sprite_index = sprite_get("sPopupStage")
+    life = 6
+    dmode = 0
+    caption = "Stage"
+    identify = ID_UI
+
+    def event_step(self, frame_time):
+        if self.life <= 0:
+            self.destroy()
+        else:
+            if self.life < 3:
+                self.x = (bezier4(self.life / 3, 0.165, 0.84, 0.44, 1.2)  - 1.3) * 20
+            else:
+                self.x -= bezier4(self.life / 3, 0.47, 0, 0.745, 0.715) * 20
+
+            self.life -= frame_time
+
+    def event_draw(self):
+        draw_sprite(self.sprite_index)
+        draw_set_alpha(1)
+        draw_set_color(255, 255, 255)
+        framework.draw_text(self.caption, self.x, screen_height - 32, 1)
+
+
 class GameExecutor:
     terrain_generator = None
+    where: str = ""
+    popup = None
 
     def __init__(self):
         global time_local
@@ -79,6 +107,9 @@ class GameExecutor:
 
     def update_begin(self):
         draw_list_sort()
+
+        self.popup = ui_PopupStage(-10000)
+        self.popup.caption = self.terrain_generator.get_stage_title()
 
     def update(self, frame_time):
         global time_local, time_total
@@ -111,15 +142,16 @@ class GameExecutor:
                 if inst.visible and inst in get_instance_list(ID_DRAW):
                     inst.event_draw()
 
-        draw_set_alpha(1)
-        heart = sprite_get("sHeart")
-        draw_sprite(heart, 0, screen_width - 94, screen_height - 48)
-        draw_set_halign(0)
-        draw_set_valign(1)
-        framework.draw_text(str(player_get_lives()), screen_width - 50, screen_height - 38, scale = 2)
-        draw_set_halign(0)
-        draw_set_valign(0)
-        framework.draw_text("Time: %0.1f / %.0f" % (time_local, time_total), 10, screen_height - 10)
+        if not self.popup.visible:
+            draw_set_alpha(1)
+            heart = sprite_get("sHeart")
+            draw_sprite(heart, 0, screen_width - 94, screen_height - 48)
+            draw_set_halign(0)
+            draw_set_valign(1)
+            framework.draw_text(str(player_get_lives()), screen_width - 50, screen_height - 38, )
+            draw_set_halign(0)
+            draw_set_valign(0)
+            framework.draw_text("Time: %0.1f / %.0f" % (time_local, time_total), 10, screen_height - 10)
 
     def handle_events(self, frame_time):
         event_queue = get_events()
@@ -138,12 +170,18 @@ class GameExecutor:
             else:
                 io.proceed(event)
 
+    def generate(self):
+        self.terrain_generator = terrain.TerrainGenerator(self.where)
+        self.terrain_generator.generate()
+        self.update_begin()
+
 
 class StageIntro(GameExecutor):
     def __init__(self):
         super().__init__()
 
         self.background_sprite = "bgNight"
+        self.where = "stage00"
 
         # Terrains
         terrain.terrain_tile_assign(4, oMillHousestone, terrain.TYPE_BG)
@@ -152,25 +190,13 @@ class StageIntro(GameExecutor):
         terrain.terrain_tile_assign(21, oMillHousechipR, terrain.TYPE_BG)
         terrain.terrain_tile_assign(22, oMillHousechipM, terrain.TYPE_BG)
 
-        self.terrain_generator = terrain.TerrainGenerator("begin")
-        self.terrain_generator.generate()
-        self.update_begin()
-
-        scene_set_size(self.terrain_generator.tile_w * self.terrain_generator.map_grid_w)
-
 
 class Stage01(GameExecutor):
     def __init__(self):
         super().__init__()
 
         self.background_sprite = None
-
-        self.terrain_generator = terrain.TerrainGenerator("stage01")
-        self.terrain_generator.generate()
-        self.update_begin()
-
-        scene_set_size(self.terrain_generator.tile_w * self.terrain_generator.map_grid_w,
-                       screen_height * 2)
+        self.where = "stage01"
 
 
 def stage_add(arg):
@@ -191,6 +217,7 @@ def stage_create() -> GameExecutor:
     global manager
     if manager is None:
         manager = stg_type()
+    manager.generate()
     manager.update_begin()
     return manager
 

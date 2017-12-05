@@ -2,6 +2,7 @@ from module.constants import *
 
 import json
 from module.camera import *
+from module.game.game_item import *
 from module.game.gobject_header import *
 
 __all__ = [
@@ -166,3 +167,5 @@ class TerrainGenerator:
         for inst in rlist:
             instance_list_remove_something(ID_SOLID_EX, inst)
             # inst.destroy()
+
+        scene_set_size(self.tile_w * self.map_grid_w, self.tile_h * self.map_grid_h)

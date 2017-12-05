@@ -8,6 +8,7 @@ from module.framework import io
 from streams import game_over
 
 from module.game.game_doodad import *
+from module.game.game_item import *
 from module.game.gobject_header import *
 
 from module.sprite import *
@@ -137,6 +138,7 @@ class oPlayer(GObject):
             self.gravity_default = delta_gravity()
             self.yFric = 0
         super().event_step(frame_time)
+        self.x = clamp(0, self.x, scene_width)
 
         # Fall through void
         if self.y <= 15:

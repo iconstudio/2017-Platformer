@@ -15,7 +15,7 @@ __all__ = [
     "container_player", "GObject", "Solid", "oPlayerDamage", "oEnemyDamage", "oItemParent", "oDoodadParent",
     "oEffectParent",
     "ID_OVERALL", "ID_DRAW", "ID_OTHERS", "ID_SOLID", "ID_DMG_PLAYER", "ID_DMG_ENEMY", "ID_ENEMY", "ID_ITEM",
-    "ID_PARTICLE", "ID_DOODAD", "ID_EFFECT", "ID_SOLID_EX"
+    "ID_PARTICLE", "ID_DOODAD", "ID_EFFECT", "ID_SOLID_EX", "ID_UI"
 ]
 
 # Global : Variables
@@ -49,6 +49,7 @@ ID_DMG_ENEMY: str = "HurtEnemy"
 ID_ENEMY: str = "Enemy"
 ID_ITEM: str = "Items"
 ID_EFFECT: str = "Effect"
+ID_UI: str = "UI"
 instance_list_spec[ID_OTHERS] = []
 instance_list_spec[ID_SOLID] = []
 instance_list_spec[ID_SOLID_EX] = []
@@ -59,6 +60,7 @@ instance_list_spec[ID_DMG_ENEMY] = []
 instance_list_spec[ID_ENEMY] = []
 instance_list_spec[ID_ITEM] = []
 instance_list_spec[ID_EFFECT] = []
+instance_list_spec[ID_UI] = []
 
 container_player = None
 
@@ -483,6 +485,7 @@ class oItemParent(GObject):
     identify = ID_ITEM
     gravity_default = 0
     depth = 400
+    image_speed = 0
 
 
 # Parent of Terrain Doodads

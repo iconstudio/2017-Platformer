@@ -57,7 +57,7 @@ def handle_events(frame_time):
     for event in bevents:
         if event.type == SDL_QUIT:
             framework.quit()
-        elif tpush > 2.5:
+        elif tpush > 1:
             if event.type == SDL_KEYDOWN:
                 framework.quit()
 

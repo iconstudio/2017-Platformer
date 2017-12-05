@@ -55,7 +55,7 @@ def draw(frame_time):
     draw_sprite(logo, 0, screen_width / 2, screen_height / 2, 1, 1, 0, valuea)
     draw_set_color(255, 255, 255)
     draw_set_alpha(valuea)
-    hfont.draw(screen_width / 2, screen_height / 2 - 100, "iconstudio")
+    framework.draw_text("iconstudio", screen_width / 2, screen_height / 2 - 100, 0)
     update_canvas()
 
 
