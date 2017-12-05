@@ -51,6 +51,7 @@ def audio_stream_play(name: str):
     sfx: Music = audio_get(name)
     global music_last
     music_last = sfx
+    sfx.set_volume(audio_get_volume_music_global())
     sfx.repeat_play()
 
 

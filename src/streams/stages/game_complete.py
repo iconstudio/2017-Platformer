@@ -3,8 +3,8 @@ from module.functions import *
 from module.constants import *
 
 import module.framework as framework
-from stages import stage_intro
-from module.game.game_executor import stage_get_number, manager_delete, stage_create
+from stages import game
+from stages.game_executor import stage_clear, stage_get_number
 
 __all__ = [
     "name", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
@@ -40,26 +40,17 @@ def update(frame_time):
             alpha = 1
             tpush = 5
             dmode = 1
-    elif dmode == 1:
-        if tpush > 0:
-            alpha = 0.2 + bezier4(1 - tpush / 5, .77, 0, .47, 0)
-            tpush -= frame_time
-        else:
-            alpha = 0.2
-            tpush = 0
 
 
 def draw(frame_time):
     global alpha
     clear_canvas()
-    stage_intro.draw_clean(frame_time)
     draw_set_alpha(alpha)
     draw_set_color(0, 0, 0)
-    draw_set_alpha(1)
     draw_rectangle(0, 0, screen_width, screen_height)
     draw_set_halign(0)
     draw_set_valign(1)
-    framework.draw_text("Stage %d Complete!" % (stage_get_number() + 1), 20, 60, scale = 2)
+    framework.draw_text("Stage %d Complete!" % (stage_get_number() + 1), 20, 60)
     update_canvas()
 
 
@@ -70,9 +61,7 @@ def handle_events(frame_time):
             framework.quit()
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, ord('x')):
-                framework.change_state(stage_intro)
-                manager_delete()
-                stage_create()
+                framework.change_state(game)
 
 
 def pause():

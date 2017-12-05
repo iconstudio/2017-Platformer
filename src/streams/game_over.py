@@ -3,7 +3,7 @@ from module.functions import *
 from module.constants import *
 
 import module.framework as framework
-from stages import stage_intro
+from stages import game
 
 __all__ = [
     "name", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
@@ -39,7 +39,7 @@ def update(frame_time):
 def draw(frame_time):
     global alpha
     clear_canvas()
-    stage_intro.draw_clean(frame_time)
+    game.draw_clean(frame_time)
     draw_set_alpha(alpha)
     draw_set_color(0, 0, 0)
     draw_set_halign(1)

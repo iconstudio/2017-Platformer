@@ -17,15 +17,15 @@ from module.game.game_containers import *
 
 __all__ = [
     "stage_init", "stage_add", "stage_complete", "stage_get_number",
-    "stage_create", "manager_get_id", "manager_update", "manager_draw", "manager_delete",
-    "manager_handle_events"
+    "stage_create", "game_update", "game_draw", "stage_clear",
+    "game_handle_events"
 ]
 
 time_local = 0  # a Timer of current stage
 time_total = 0
 manager = None
 stagelist = []
-stage_number = 0
+stage_number: int = 0
 
 # 아래의 타일들은 모든 스테이지에서 적용됨
 terrain.terrain_tile_assign(1, oBrickCastle, terrain.TYPE_TERRAIN)
@@ -61,25 +61,21 @@ terrain.terrain_tile_assign(14, oSoldier, terrain.TYPE_INSTANCE)
 terrain.terrain_tile_assign(13, oCobra, terrain.TYPE_INSTANCE)
 terrain.terrain_tile_assign(12, oSnake, terrain.TYPE_INSTANCE)
 
+
 class GameExecutor:
     terrain_generator = None
 
     def __init__(self):
         global time_local
 
+        Camera.set_pos(0, 0)
         self.background_sprite = "bgCave"
         time_local = 0
 
     def clear(self):
         global time_local
         time_local = 0
-        player_lives_clear()
-        alllist, drawlist = get_instance_list(ID_OVERALL), get_instance_list(ID_DRAW)
-        for inst in alllist:
-            inst.visible = false
-            inst.destroy()
-        instance_list_clear(ID_OVERALL)
-        instance_list_clear(ID_DRAW)
+        instance_clear_all()
 
     def update_begin(self):
         draw_list_sort()
@@ -112,7 +108,7 @@ class GameExecutor:
 
         if len(get_instance_list(ID_DRAW)) > 0:
             for inst in get_instance_list(ID_DRAW):
-                if inst.visible:
+                if inst.visible and inst in get_instance_list(ID_DRAW):
                     inst.event_draw()
 
         draw_set_alpha(1)
@@ -156,10 +152,11 @@ class StageIntro(GameExecutor):
         terrain.terrain_tile_assign(21, oMillHousechipR, terrain.TYPE_BG)
         terrain.terrain_tile_assign(22, oMillHousechipM, terrain.TYPE_BG)
 
-        scene_set_size(screen_width * 3)
         self.terrain_generator = terrain.TerrainGenerator("begin")
         self.terrain_generator.generate()
         self.update_begin()
+
+        scene_set_size(self.terrain_generator.tile_w * self.terrain_generator.map_grid_w)
 
 
 class Stage01(GameExecutor):
@@ -173,7 +170,7 @@ class Stage01(GameExecutor):
         self.update_begin()
 
         scene_set_size(self.terrain_generator.tile_w * self.terrain_generator.map_grid_w,
-                                 screen_height * 2)
+                       screen_height * 2)
 
 
 def stage_add(arg):
@@ -181,34 +178,8 @@ def stage_add(arg):
     stagelist.append(arg)
 
 
-def stage_complete():
-    global manager, stage_number
-    stage_number = manager.terrain_generator.get_stage_number()
-
-    import stages.game_complete as game_complete
-    framework.push_state(game_complete)
-
-
-def stage_get_number() -> int:
-    global stage_number
-    return stage_number
-
-
-def manager_delete():
-    global manager
-    manager.clear()
-    del manager
-    manager = None
-
-
-def manager_get_id() -> GameExecutor:
-    global manager
-    return manager
-
-
+# 이 함수는 main.py 에서 실행됨
 def stage_init():
-    Camera.set_pos(0, 0)
-
     stage_add(StageIntro)
     stage_add(Stage01)
     stagelist.reverse()
@@ -220,22 +191,44 @@ def stage_create() -> GameExecutor:
     global manager
     if manager is None:
         manager = stg_type()
+    manager.update_begin()
     return manager
 
 
-def manager_update(frame_time):
+def stage_complete():
+    global manager, stage_number
+    stage_number = manager.terrain_generator.get_stage_number()
+
+    stage_clear()
+    import stages.game_complete as game_complete
+    framework.push_state(game_complete)
+
+
+def stage_clear():
+    global manager
+    manager.clear()
+    del manager
+    manager = None
+
+
+def stage_get_number() -> int:
+    global stage_number
+    return stage_number
+
+
+def game_update(frame_time):
     global manager
     if manager is not None:
         manager.update(frame_time)
 
 
-def manager_draw(frame_time):
+def game_draw(frame_time):
     global manager
     if manager is not None:
         manager.draw(frame_time)
 
 
-def manager_handle_events(frame_time):
+def game_handle_events(frame_time):
     global manager
     if manager is not None:
         manager.handle_events(frame_time)

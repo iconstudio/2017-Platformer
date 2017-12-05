@@ -9,7 +9,7 @@ from module.sprite import *
 from module.audio import *
 
 __all__ = [
-    "oStatusContainer", "instance_place", "instance_list_remove_something", "instance_list_clear",
+    "oStatusContainer", "instance_place", "instance_list_remove_something", "instance_list_clear", "instance_clear_all",
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
     "get_instance_list", "draw_list_sort",
     "container_player", "GObject", "Solid", "oPlayerDamage", "oEnemyDamage", "oItemParent", "oDoodadParent",
@@ -91,13 +91,29 @@ def instance_list_clear(identific: str):
     global instance_list, instance_draw_list, instance_list_spec
     if identific is ID_OVERALL:
         instance_list.clear()
+        instance_list = []
     elif identific is ID_DRAW:
         instance_draw_list.clear()
+        instance_draw_list = []
     else:
         try:
             instance_list_spec[identific].clear()
+            instance_list_spec[identific] = []
         except KeyError:
             print("Not available key of list")
+
+
+def instance_clear_all():
+    global instance_list, instance_draw_list, instance_list_spec
+    for inst in instance_list:
+        inst.destroy()
+
+    instance_list_clear(ID_OVERALL)
+    instance_list_clear(ID_DRAW)
+    instance_list_clear(ID_DOODAD)
+    instance_list_clear(ID_EFFECT)
+    instance_list_clear(ID_OTHERS)
+    instance_list_clear(ID_ENEMY)
 
 
 def draw_list_sort():
@@ -197,6 +213,8 @@ class GObject(object):
 
     # Below methods are common-functions for all object that inherits graviton.
     def instance_collide(self, othero) -> bool:
+        if not self.visible or not othero.visible:
+            return false
         sx, sy, sw, sh = self.get_bbox()
         ox, oy, ow, oh = othero.get_bbox()
 
@@ -415,9 +433,6 @@ class GObject(object):
         self.yVel = clamp(self.yVelMin, self.yVel, self.yVelMax)
 
     def event_draw(self):  # This will be working for drawing.
-        if not self.visible:
-            return
-
         self.draw_self()
         # self.draw_bbox()
 

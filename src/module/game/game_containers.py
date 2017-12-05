@@ -226,9 +226,9 @@ class oPlayer(GObject):
             if self.controllable <= 0:  # Player can controllable
                 if io.key_check_pressed(ord('c')):
                     if not self.onAir and instance_place(oDoor, self.x, self.y):
-                        import stages.game_complete as game_complete
                         audio_play("sndEnterDoor")
-                        framework.change_state(game_complete)
+                        from stages.game_executor import stage_complete
+                        stage_complete()
                         return
 
                 if io.key_check(SDLK_LEFT): mx -= 1

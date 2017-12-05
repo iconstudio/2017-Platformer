@@ -62,7 +62,7 @@ if __name__ == "__main__":
     audio_json_loads()
 
     from streams import main
-    from stages import stage_intro
+    from stages import game
 
     framework.run(main)
 

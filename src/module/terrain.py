@@ -62,7 +62,7 @@ class TerrainGenerator:
         return self.parsed["title"]
 
     def get_stage_number(self) -> int:
-        return self.parsed["data"]
+        return self.parsed["number"]
 
     def generate(self):
         print("Generating a chunk.")
