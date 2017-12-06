@@ -378,7 +378,9 @@ class GObject(object):
     def event_step(self, frame_time) -> None:  # The basic mechanisms of objects.
         data = self.sprite_index
         dx, dy = self.x - data.xoffset, self.y - data.yoffset
-        if dx <= Camera.x + Camera.width and Camera.x <= dx + data.width \
+        if self.name == "Player":
+            self.visible = true
+        elif dx <= Camera.x + Camera.width and Camera.x <= dx + data.width \
                 and Camera.y <= dy + data.height and dy <= Camera.y + Camera.height:
             self.visible = true
         else:

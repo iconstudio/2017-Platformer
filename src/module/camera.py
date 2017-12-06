@@ -3,7 +3,7 @@ from module.functions import *
 from module.constants import *
 
 __all__ = [
-    "Camera", "scene_set_size", "scene_width", "scene_height"
+    "Camera", "scene_set_size", "scene_get_width", "scene_get_height"
 ]
 
 scene_width = screen_width
@@ -14,6 +14,16 @@ def scene_set_size(w = screen_width, h = screen_height):
     global scene_width, scene_height
     scene_width = w
     scene_height = h
+
+
+def scene_get_width():
+    global scene_width
+    return scene_width
+
+
+def scene_get_height():
+    global scene_height
+    return scene_height
 
 
 # Object : View Camera

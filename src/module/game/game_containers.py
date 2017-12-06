@@ -138,7 +138,7 @@ class oPlayer(GObject):
             self.gravity_default = delta_gravity()
             self.yFric = 0
         super().event_step(frame_time)
-        self.x = clamp(0, self.x, scene_width)
+        self.x = clamp(0, self.x, scene_get_width())
 
         # Fall through void
         if self.y <= 15:
