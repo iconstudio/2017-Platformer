@@ -32,12 +32,11 @@ class oCamera:
     y: float = 0
     target_object = None
     lock: bool = false
-    width, height = screen_width, screen_height
 
     def limit(self):
         global scene_width, scene_height
         self.x = clamp(0, int(self.x), scene_width - get_screen_width())
-        self.y = clamp(20, int(self.y), scene_height - get_screen_height())
+        self.y = clamp(-40, int(self.y), scene_height - get_screen_height())
 
     def set_pos(self, nx: float = None, ny: float = None):
         if nx is not None:
