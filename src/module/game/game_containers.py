@@ -192,7 +192,7 @@ class oPlayer(GObject):
 
         # ===============================================================================================
         if self.oStatus < oStatusContainer.CHANNELING:  # Player can control its character.
-            Camera.set_pos(self.x - Camera.width / 2, self.y - Camera.height / 2)
+            Camera.set_pos(self.x - get_screen_width() / 2, self.y - get_screen_height() / 2)
             # Stomps enemies under the character
             whothere, howmany = instance_place(oEnemyParent, self.x, self.y - 9)
             if howmany > 0 > self.yVel and self.onAir:

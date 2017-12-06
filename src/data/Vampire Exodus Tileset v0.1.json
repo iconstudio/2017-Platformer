@@ -68,7 +68,7 @@
         },
      "17":
         {
-         "image":"..\/..\/res\/img\/item\/sRock_0.png",
+         "image":"..\/..\/res\/img\/item\/rock_0.png",
          "imageheight":8,
          "imagewidth":8,
          "type":"Stone"
@@ -207,7 +207,7 @@
         },
      "39":
         {
-         "image":"..\/..\/..\/..\/Programming\/MY_GAMEs\/Roguelike\/Highway.gmx\/sprites\/images\/sThorns_0.png",
+         "image":"..\/..\/res\/img\/theme\/thorns_0.png",
          "imageheight":16,
          "imagewidth":16
         },

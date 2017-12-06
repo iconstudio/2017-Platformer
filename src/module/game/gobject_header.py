@@ -204,6 +204,8 @@ class GObject(object):
 
     def destroy(self):
         self.step_enable = false
+        self.depth = 1000000
+        self.image_xscale = 0
         global instance_list, instance_list_spec, instance_update, instance_draw_list
         instance_update = true
 
@@ -380,8 +382,8 @@ class GObject(object):
         dx, dy = self.x - data.xoffset, self.y - data.yoffset
         if self.name == "Player":
             self.visible = true
-        elif dx <= Camera.x + scene_get_width() and Camera.x <= dx + data.width \
-                and Camera.y <= dy + data.height and dy <= Camera.y + scene_get_height():
+        elif dx <= Camera.x + get_screen_width() and Camera.x <= dx + data.width \
+                and Camera.y <= dy + data.height and dy <= Camera.y + get_screen_height():
             self.visible = true
         else:
             self.visible = false
@@ -501,6 +503,9 @@ class oDoodadParent(GObject):
 
     tile_up: bool = false
     tile_down: bool = false
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
 
     def parent_set(self, id):
         self.parent = id

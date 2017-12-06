@@ -88,6 +88,7 @@ class TerrainGenerator:
 
                     whattocreate = get_createtype(current)
                     obj = icreate(whattocreate[0], None, nx, ny)
+                    obj_identify = obj.identify
                     # print(str(obj) + "<" + str(current) + "> (x = " + str(nx) + ", y = " + str(ny) + ")")
 
                     if obj.identify == ID_SOLID:
@@ -129,6 +130,10 @@ class TerrainGenerator:
                                     obj.tile_right = 1
                                 elif getr != 0 and whattocheck is ID_SOLID:
                                     obj.tile_right = 2
+
+                                if current == 31:
+                                    #if getr == 28: # Tree Trunk
+                                        obj.image_xscale = -1
                             else:
                                 obj.tile_right = 1
                         except IndexError:
@@ -157,12 +162,9 @@ class TerrainGenerator:
         # Optimization
         rlist = []
         for inst in clist:
+            inst.tile_correction()
             if inst.tile_left != 0 and inst.tile_up != 0 and inst.tile_right != 0 and inst.tile_down != 0:
                 rlist.append(inst)
-
-        clist = get_instance_list(ID_SOLID)
-        for inst in clist:
-            inst.tile_correction()
 
         for inst in rlist:
             instance_list_remove_something(ID_SOLID_EX, inst)

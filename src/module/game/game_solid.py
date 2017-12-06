@@ -31,15 +31,16 @@ class oLush(Solid):
         self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 1, 1)
 
     def tile_correction(self):
-        if self.tile_up != 1 or self.tile_down != 1:
+        onUp, onDown = (self.tile_up == 1), (self.tile_down == 1)
+        if not onUp or not onDown:
             self.sprite_set("sLushDirectional")
-            if self.tile_up == 1 and self.tile_down != 1:
+            if onUp and not onDown:
                 self.image_index = 0
-            elif self.tile_down == 1:
+            elif onDown:
                 self.image_index = 1
-            elif self.tile_up == 0 and self.tile_down == 0:
+            else:
                 self.image_index = 2
-        if self.tile_up != 1:
+        if not onUp:
             newdeco = instance_create(oLushDecoration, None, self.x + 2, self.y + 20)
             newdeco.parent_set(self)
 
@@ -60,7 +61,7 @@ class oBrickDirt(Solid):
                 self.image_index = 0
             elif self.tile_down == 1:
                 self.image_index = 1
-            elif self.tile_up == 0 and self.tile_down == 0:
+            else:
                 self.image_index = 2
             if self.tile_up != 1:
                 newdeco = instance_create(oDirtBrickDecoration, None, self.x, self.y + 19)
@@ -105,7 +106,7 @@ class oDirtBrickFlat(Solid):
 
 # Block (Brown)
 class oBlock(Solid):
-    name = "oBlock"
+    name = "Block"
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -114,7 +115,7 @@ class oBlock(Solid):
 
 # Block (Metal)
 class oBlockMetal(Solid):
-    name = "oBlock"
+    name = "Block"
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -150,6 +151,7 @@ class oGravestoneAsh(Solid):
 
 # Body of Tree
 class oTreeTrunk(Solid):
+    name = "Tree Trunk"
     depth = 1000
 
     def __init__(self, ndepth, nx, ny):
@@ -163,6 +165,7 @@ class oTreeTrunk(Solid):
 
 # Top of Tree
 class oTreeTop(Solid):
+    name = "Tree Top"
     depth = 1000
 
     def __init__(self, ndepth, nx, ny):
@@ -179,6 +182,7 @@ class oTreeTopDead(oTreeTop):
 
 # Leaves of Tree
 class oTreeLeaves(Solid):
+    name = "Tree Leaves"
     isPlatform = true
 
     def __init__(self, ndepth, nx, ny):
@@ -189,6 +193,7 @@ class oTreeLeaves(Solid):
 
 # Leaves of Tree at End
 class oTreeLeavesEnd(Solid):
+    name = "End of Tree Leaves"
     isPlatform = true
 
     def __init__(self, ndepth, nx, ny):
@@ -212,15 +217,12 @@ class oTreeLeavesDeadEnd(oTreeLeavesEnd):
 
 # Branch of Tree
 class oTreeBranch(Solid):
+    name = "Tree Branches"
     isPlatform = true
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sTreeBranches")
-
-    def tile_correction(self):
-        if instance_place(oTreeTrunk, self.x, self.y + 4):
-            self.image_xscale = -1
 
 
 # Body of Tree

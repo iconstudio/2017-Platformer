@@ -74,10 +74,10 @@ class ui_PopupStage(GObject):
         if self.life <= 0:
             self.destroy()
         else:
-            if self.life < 3:
-                self.x = (bezier4(self.life / 3, 0.165, 0.84, 0.44, 1.2)  - 1.3) * 20
+            if self.life >= 1:
+                self.x += (100 - self.x) / 20
             else:
-                self.x -= bezier4(self.life / 3, 0.47, 0, 0.745, 0.715) * 20
+                self.x += (-200 - self.x) / 10
 
             self.life -= frame_time
 
@@ -148,7 +148,7 @@ class GameExecutor:
             draw_sprite(heart, 0, screen_width - 94, screen_height - 48)
             draw_set_halign(0)
             draw_set_valign(1)
-            framework.draw_text(str(player_get_lives()), screen_width - 50, screen_height - 38, )
+            framework.draw_text(str(player_get_lives()), screen_width - 50, screen_height - 38, scale = 2)
             draw_set_halign(0)
             draw_set_valign(0)
             framework.draw_text("Time: %0.1f / %.0f" % (time_local, time_total), 10, screen_height - 10)
