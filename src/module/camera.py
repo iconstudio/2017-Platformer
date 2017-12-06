@@ -33,6 +33,9 @@ class oCamera:
     target_object = None
     lock: bool = false
 
+    def set_taget(self, arg):
+        self.target_object = arg
+
     def limit(self):
         global scene_width, scene_height
         self.x = clamp(0, int(self.x), scene_width - get_screen_width())
@@ -54,6 +57,9 @@ class oCamera:
         if ay is not None:
             self.y += ay
         self.limit()
+
+    def event_step(self):
+        pass
 
 
 Camera = oCamera()

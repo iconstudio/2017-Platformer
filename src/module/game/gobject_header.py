@@ -380,8 +380,8 @@ class GObject(object):
         dx, dy = self.x - data.xoffset, self.y - data.yoffset
         if self.name == "Player":
             self.visible = true
-        elif dx <= Camera.x + Camera.width and Camera.x <= dx + data.width \
-                and Camera.y <= dy + data.height and dy <= Camera.y + Camera.height:
+        elif dx <= Camera.x + scene_get_width() and Camera.x <= dx + data.width \
+                and Camera.y <= dy + data.height and dy <= Camera.y + scene_get_height():
             self.visible = true
         else:
             self.visible = false

@@ -329,6 +329,15 @@ class Image:
         else:
             self.xoffset, self.yoffset = self.w / 2, self.h / 2
 
+    def clip_image(self, left, bottom, width, height):
+        clip_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height)
+        # SDL_SetTextureBlendMode(clip_texture, SDL_BLENDMODE_NONE)
+        SDL_SetRenderTarget(renderer, clip_texture)
+        src_rect = SDL_Rect(left, self.h - bottom - height, width, height)
+        SDL_RenderCopy(renderer, self.texture, src_rect, None)
+        SDL_SetRenderTarget(renderer, None)
+        return Image(clip_texture, None, None)
+
     def make_draw_region(self, dx, dy, dw, dh):
         return make_sdlrect(dx - self.xoffset, dy - self.yoffset, dw, dh)
 
