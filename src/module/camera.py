@@ -59,7 +59,8 @@ class oCamera:
         self.limit()
 
     def event_step(self):
-        pass
+        if self.target_object is not None and self.target_object.visible:
+            self.set_pos(self.target_object.x - get_screen_width() / 2, self.target_object.y - get_screen_height() / 2)
 
 
 Camera = oCamera()

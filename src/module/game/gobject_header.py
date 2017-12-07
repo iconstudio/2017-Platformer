@@ -422,7 +422,10 @@ class GObject(object):
         else:  # Going down
             yc = ydist - 1
         if self.place_free(0, yc):
-            self.y += ydist  # let it moves first.
+            if frame_time < 0.05:
+                self.y += ydist  # let it moves first.
+            else:
+                self.move_contact_y(ydist, self.yVel > 0)
             self.gravity = self.gravity_default
             self.yVel -= self.gravity * frame_time
             self.onAir = true

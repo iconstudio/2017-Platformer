@@ -131,18 +131,21 @@ class TerrainGenerator:
                                 elif getr != 0 and whattocheck is ID_SOLID:
                                     obj.tile_right = 2
 
-                                if current == 31:
-                                    #if getr == 28: # Tree Trunk
-                                        obj.image_xscale = -1
+                                if 30 <= current <= 36:
+                                    # if getr == 28: # Tree Trunk
+                                    obj.image_xscale = -1
                             else:
                                 obj.tile_right = 1
                         except IndexError:
                             pass
                     currln.append(obj)
                     try:
-                        if whattocreate[1] in (TYPE_INSTANCE, TYPE_DOODAD):
+                        if whattocreate[1] is TYPE_DOODAD:
                             obj.x += self.tile_w / 2
                             obj.y += self.tile_h / 2
+                        elif whattocreate[1] is TYPE_INSTANCE:
+                            obj.x += self.tile_w / 2
+                            obj.y += self.tile_h
                     except AttributeError:
                         pass
                 except KeyError:

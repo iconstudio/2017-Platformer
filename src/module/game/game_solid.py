@@ -40,9 +40,9 @@ class oLush(Solid):
                 self.image_index = 1
             else:
                 self.image_index = 2
-        if not onUp:
-            newdeco = instance_create(oLushDecoration, None, self.x + 2, self.y + 20)
-            newdeco.parent_set(self)
+            if self.image_index != 0:
+                newdeco = instance_create(oLushDecoration, None, self.x + 2, self.y + 20)
+                newdeco.parent_set(self)
 
 
 # Dirt Brick

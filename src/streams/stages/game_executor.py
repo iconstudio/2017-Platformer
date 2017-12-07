@@ -118,6 +118,7 @@ class GameExecutor:
         if len(get_instance_list(ID_OVERALL)) > 0:
             for inst in get_instance_list(ID_OVERALL):
                 inst.event_step(frame_time)
+        Camera.event_step()
 
     def draw(self, frame_time):
         if self.background_sprite is not None:

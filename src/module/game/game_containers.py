@@ -93,9 +93,9 @@ class oPlayer(GObject):
         super().__init__(ndepth, nx, ny)
         self.sprite_index = sprite_get("Player")
 
-        # noinspection PyGlobalUndefined
         global container_player
         container_player = self
+        Camera.set_taget(self)
 
     def get_bbox(self):
         return self.x - 8, self.y - 8, 16, 16
@@ -114,7 +114,7 @@ class oPlayer(GObject):
 
     def get_dmg(self, how: int = 1, dir = 1):
         player_got_damage(how)
-        if player_get_lives() <= 0: # GAME OVER
+        if player_get_lives() <= 0:  # GAME OVER
             self.status_change(oStatusContainer.DEAD)
             self.xVel = 0
 
@@ -192,7 +192,6 @@ class oPlayer(GObject):
 
         # ===============================================================================================
         if self.oStatus < oStatusContainer.CHANNELING:  # Player can control its character.
-            Camera.set_pos(self.x - get_screen_width() / 2, self.y - get_screen_height() / 2)
             # Stomps enemies under the character
             whothere, howmany = instance_place(oEnemyParent, self.x, self.y - 9)
             if howmany > 0 > self.yVel and self.onAir:
@@ -227,7 +226,7 @@ class oPlayer(GObject):
             mx, my = 0, 0
             if self.controllable <= 0:  # Player can controllable
                 if io.key_check_pressed(ord('c')):
-                    if not self.onAir and instance_place(oDoor, self.x, self.y):
+                    if not self.onAir and instance_place(oDoor, self.x, self.y)[1] > 0:
                         audio_play("sndEnterDoor")
                         from stages.game_executor import stage_complete
                         stage_complete()
@@ -510,7 +509,7 @@ class oSnake(oEnemyParent):
             self.count = 0
 
     def handle_walk(self, *args):
-        checkl, checkr = self.place_free(-20, -10), self.place_free( +20, -10)
+        checkl, checkr = self.place_free(-20, -10), self.place_free(+20, -10)
         if checkl and checkr:
             self.xVel = 0
             self.status_change(oStatusContainer.IDLE)
