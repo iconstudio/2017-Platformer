@@ -323,6 +323,7 @@ class oPlayer(GObject):
                 self.sprite_set("PlayerDead")
 
 
+# =======================================================
 # Parent of Enemies
 class oEnemyParent(GObject):
     """
@@ -355,6 +356,9 @@ class oEnemyParent(GObject):
     def handle_be_track(self, *args):
         pass
 
+    def handle_be_attack(self, *args):
+        pass
+
     def handle_be_stunned(self, *args):
         pass
 
@@ -371,6 +375,9 @@ class oEnemyParent(GObject):
         pass
 
     def handle_track(self, *args):
+        pass
+
+    def handle_attack(self, *args):
         pass
 
     def handle_dead(self, *args):
@@ -392,6 +399,7 @@ class oEnemyParent(GObject):
             oStatusContainer.WALK: (self.handle_walk, self.handle_be_walk),
             oStatusContainer.PATROL: (self.handle_patrol, self.handle_be_patrol),
             oStatusContainer.TRACKING: (self.handle_track, self.handle_be_track),
+            oStatusContainer.ATTACKING: (self.handle_attack, self.handle_be_attack),
             oStatusContainer.STUNNED: (self.handle_stunned, self.handle_be_stunned),
             oStatusContainer.DEAD: (self.handle_dead, self.handle_be_dead)
         }
@@ -407,6 +415,7 @@ class oEnemyParent(GObject):
         (self.table[self.oStatus])[0](frame_time)
 
 
+# =======================================================
 class oSoldier(oEnemyParent):
     hp, maxhp = 4, 4
     name = "Soldier"
@@ -484,6 +493,7 @@ class oSoldier(oEnemyParent):
         super().handle_stunned(frame_time)
 
 
+# =======================================================
 class oSnake(oEnemyParent):
     hp, maxhp = 1, 1
     name = "Snake"
@@ -503,8 +513,8 @@ class oSnake(oEnemyParent):
         self.image_speed = 0.65
 
     def handle_idle(self, *args):
-        self.count += delta_velocity()
-        if self.count >= delta_velocity(irandom_range(8, 12)) and irandom(99) == 0:
+        self.count += args[0]
+        if self.count >= irandom_range(4, 12) and irandom(99) == 0:
             self.status_change(oStatusContainer.WALK)
             self.count = 0
 
@@ -542,6 +552,7 @@ class oSnake(oEnemyParent):
         self.destroy()
 
 
+# =======================================================
 class oCobra(oSnake):
     name = "Cobra"
 
@@ -555,6 +566,39 @@ class oCobra(oSnake):
         self.sprite_set("CobraIdle")
 
 
+# =======================================================
+class oToad(oEnemyParent):
+    hp, maxhp = 1, 1
+    name = "Toad"
+    count = 0
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("ToadIdle")
+        self.jumpspr = sprite_get("ToadJump")
+        self.image_speed = 0.4
+
+    def handle_be_idle(self):
+        self.sprite_set("ToadIdle")
+
+    def handle_be_attack(self, *args):
+        self.sprite_index = self.jumpspr
+
+    def handle_idle(self, *args):
+        self.count += delta_velocity()
+        if self.count >= delta_velocity(irandom_range(8, 12)) and irandom(99) == 0:
+            self.status_change(oStatusContainer.WALK)
+            self.count = 0
+
+    def handle_walk(self, *args):
+        checkl, checkr = self.place_free(-20, -10), self.place_free(+20, -10)
+        if checkl and checkr:
+            self.xVel = 0
+            self.status_change(oStatusContainer.IDLE)
+            return
+
+
+# =======================================================
 class oBlood(oEffectParent):
     name = "Blood"
     depth = 700
