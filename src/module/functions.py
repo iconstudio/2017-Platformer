@@ -7,14 +7,6 @@ from sdl2.rect import SDL_Rect
 
 import module.constants as constants
 
-__all__ = [
-    "sqr", "sign", "degtorad", "radtodeg", "direction", "point_distance", "oParser", "bezier4",
-    "get_screen_width", "get_screen_height",
-    "point_in_rectangle", "rect_in_rectangle", "rect_in_rectangle_opt", "delta_velocity", "delta_gravity",
-    "irandom", "irandom_range", "distribute", "choose", "list_seek", "instance_create",
-    "make_color_rgb",
-]
-
 
 # Global : Functions
 # arithmetics
@@ -202,6 +194,10 @@ def distribute(x1, x2, ratio: float):
         return x1
     else:
         return x2
+
+
+def probability_test(max) -> bool:
+    return bool(irandom(max) == 0)
 
 
 # choice random

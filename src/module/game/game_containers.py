@@ -585,10 +585,11 @@ class oToad(oEnemyParent):
         self.sprite_index = self.jumpspr
 
     def handle_idle(self, *args):
-        self.count += delta_velocity()
-        if self.count >= delta_velocity(irandom_range(8, 12)) and irandom(99) == 0:
-            self.status_change(oStatusContainer.WALK)
-            self.count = 0
+        if not self.onAir:
+            self.count += args[0]
+            if self.count >= 3 and irandom(99) == 0:
+                self.status_change(oStatusContainer.WALK)
+                self.count = 0
 
     def handle_walk(self, *args):
         checkl, checkr = self.place_free(-20, -10), self.place_free(+20, -10)
