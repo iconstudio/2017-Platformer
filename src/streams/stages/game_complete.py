@@ -5,6 +5,7 @@ from module.constants import *
 import module.framework as framework
 from stages import game
 from stages.game_executor import stage_clear, stage_get_number
+from module.game.game_containers import killcount_get, killcount_increase, killcount_clear
 
 __all__ = [
     "name", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
@@ -57,13 +58,18 @@ def draw(frame_time):
     ui_height = screen_height - ui_bot - 10
     draw_set_color(255, 255, 255)
     draw_rectangle_sized(ui_left - 10, ui_bot - 10, ui_width + 20, ui_height + 20)
-    draw_set_color(0, 0, 0)
-    draw_rectangle_sized(ui_left, ui_bot, ui_width, ui_height)
     draw_set_halign(2)
     draw_set_valign(1)
     framework.draw_text("Press X to continue", screen_width - 10, ui_bot - 20)
     draw_set_halign(0)
     framework.draw_text("Stage %d Complete!" % (stage_get_number() + 1), 20, ui_bot - 60, scale = 1.5)
+
+    draw_set_alpha(1)
+    draw_set_color(0, 0, 0)
+    draw_rectangle_sized(ui_left, ui_bot, ui_width, ui_height)
+    draw_set_alpha(alpha)
+    draw_set_halign(0)
+    framework.draw_text("Kills: %d / %d" % (killcount_get()), ui_left + 20, ui_bot + 30, scale = 1)
     update_canvas()
 
 
@@ -77,6 +83,7 @@ def handle_events(frame_time):
         elif tpush > 1.2:
             if (event.type, event.key) == (SDL_KEYDOWN, ord('x')):
                 framework.change_state(game)
+                killcount_clear()
 
 
 def pause():

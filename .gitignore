@@ -118,3 +118,4 @@ ENV/
 /src/data/_pre
 /*.lnk
 /s.h
+/slides/res/*.jpg

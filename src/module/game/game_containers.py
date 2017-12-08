@@ -15,8 +15,9 @@ from module.sprite import *
 from module.audio import *
 
 __all__ = [
-    "player_got_damage", "player_lives_clear", "player_get_lives",
-    "oPlayer", "oSoldier", "oSnake", "oCobra",
+    "player_got_damage", "player_lives_clear", "player_get_lives", "killcount_get", "killcount_increase",
+    "kill_local",
+    "oPlayer", "oSoldier", "oSnake", "oCobra", "oToad"
 ]
 
 # ==================================================================================================
@@ -58,6 +59,27 @@ def player_ability_activate(what: str) -> None:
     player_ability[what] = true
 
 
+kill_local = 0  # Count of killed enemy
+kill_total = 0
+
+
+# Killing count be treated with methods
+def killcount_get() -> (int, int):
+    global kill_local, kill_total
+    return kill_local, kill_total
+
+
+def killcount_increase():
+    global kill_local, kill_total
+    kill_local += 1
+    kill_total += 1
+
+
+def killcount_clear():
+    global kill_local
+    kill_local = 0
+
+
 # ==================================================================================================
 #                                    사용자 정의 객체 / 함수
 # ==================================================================================================
@@ -96,6 +118,11 @@ class oPlayer(GObject):
         global container_player
         container_player = self
         Camera.set_taget(self)
+
+    def __del__(self):
+        global container_player
+        container_player = None
+        Camera.set_taget(None)
 
     def get_bbox(self):
         return self.x - 8, self.y - 8, 16, 16
@@ -202,9 +229,11 @@ class oPlayer(GObject):
                             enemy.hp -= 1
                             enemy.yVel = 30
                             enemy.collide_with_player = false
-                            if enemy.hp <= 0:
+                            if enemy.hp <= 0:  # Kzill the enemy
                                 enemy.status_change(oStatusContainer.DEAD)
-                            else:
+
+                                killcount_increase()
+                            else:  # Just make stunned
                                 enemy.status_change(oStatusContainer.STUNNED)
                                 enemy.stunned = 5
                             audio_play("sndHit")
@@ -340,6 +369,10 @@ class oEnemyParent(GObject):
     image_speed = 0
     collide_with_player: bool = false
     attack_delay = 0
+    sound_attack_delay = 0
+
+    def handle_sound_attack(self, snd_delay):
+        pass
 
     def handle_none(self, *args):
         pass
@@ -412,7 +445,10 @@ class oEnemyParent(GObject):
     def event_step(self, frame_time):
         super().event_step(frame_time)
 
-        (self.table[self.oStatus])[0](frame_time)
+        if self.visible:
+            (self.table[self.oStatus])[0](frame_time)
+            if self.sound_attack_delay > 0:
+                self.sound_attack_delay -= frame_time
 
 
 # =======================================================
@@ -454,7 +490,7 @@ class oSoldier(oEnemyParent):
             Some gobjects can move while idle status.
         """
         self.count += args[0]
-        if self.count >= 1 and irandom(99) == 0:
+        if self.count >= 1 and probability_test(100):
             self.status_change(oStatusContainer.WALK)
             self.count = 0
             if irandom(4) == 0:
@@ -482,7 +518,7 @@ class oSoldier(oEnemyParent):
                 self.image_xscale = 1
                 self.xVel = 10
 
-        if irandom(99) == 0:
+        if probability_test(100):
             self.xVel = 0
             self.status_change(oStatusContainer.IDLE)
 
@@ -505,11 +541,16 @@ class oSnake(oEnemyParent):
         self.runspr = sprite_get("SnakeRun")
         self.image_speed = 0
 
+    def handle_sound_attack(self, snd_delay):
+        if self.sound_attack_delay <= 0:
+            self.sound_attack_delay = snd_delay
+            audio_play("sndSnakeAttack")
+
     def handle_be_idle(self):
         self.sprite_set("SnakeIdle")
 
     def handle_be_walk(self, *args):
-        self.sprite_index = self.runspr
+        self.sprite_set(self.runspr)
         self.image_speed = 0.65
 
     def handle_idle(self, *args):
@@ -543,7 +584,7 @@ class oSnake(oEnemyParent):
                 self.xVel = vel
 
         if self.count >= 20:
-            if irandom(99) == 0:
+            if probability_test(100):
                 self.xVel = 0
                 self.status_change(oStatusContainer.IDLE)
                 self.count = 0
@@ -571,32 +612,63 @@ class oToad(oEnemyParent):
     hp, maxhp = 1, 1
     name = "Toad"
     count = 0
+    xFric = 1
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("ToadIdle")
         self.jumpspr = sprite_get("ToadJump")
-        self.image_speed = 0.4
+        self.image_speed = 0.6
+
+    def phy_collide(self, how: float or int):
+        if self.xVel != 0:
+            self.move_contact_x(abs(how), how > 0)
+            if self.xVel >= 3:
+                self.xVel *= -0.3
+            else:
+                self.xVel = 0
+        self.x = math.floor(self.x)
 
     def handle_be_idle(self):
         self.sprite_set("ToadIdle")
+        self.image_speed = 0.6
 
     def handle_be_attack(self, *args):
-        self.sprite_index = self.jumpspr
+        self.sprite_set(self.jumpspr)
+        if container_player.x > self.x:
+            self.image_xscale = 1
+        elif container_player.x < self.x:
+            self.image_xscale = -1
+        self.image_speed = 0
+        audio_play("sndFrogJump")
 
     def handle_idle(self, *args):
+        global container_player
+        if container_player is None:
+            return
+
         if not self.onAir:
             self.count += args[0]
-            if self.count >= 3 and irandom(99) == 0:
-                self.status_change(oStatusContainer.WALK)
+            if self.count >= 4:
+                self.status_change(oStatusContainer.ATTACKING)
                 self.count = 0
+                self.yVel = 80
+                if container_player.x > self.x:
+                    self.xVel = 40
+                elif container_player.x < self.x:
+                    self.xVel = -40
+            elif self.sound_attack_delay <= 0 and probability_test(200):
+                audio_play("sndFrog")
+                self.sound_attack_delay = 2
 
-    def handle_walk(self, *args):
-        checkl, checkr = self.place_free(-20, -10), self.place_free(+20, -10)
-        if checkl and checkr:
+    def handle_attack(self, *args):
+        if not self.onAir:
             self.xVel = 0
             self.status_change(oStatusContainer.IDLE)
-            return
+            self.sound_attack_delay = 1
+
+    def handle_be_dead(self, *args):
+        self.destroy()
 
 
 # =======================================================

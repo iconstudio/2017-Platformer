@@ -197,7 +197,7 @@ def distribute(x1, x2, ratio: float):
 
 
 def probability_test(max) -> bool:
-    return bool(irandom(max) == 0)
+    return bool(irandom(max - 1) == 0)
 
 
 # choice random

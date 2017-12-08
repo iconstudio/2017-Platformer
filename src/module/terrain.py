@@ -88,7 +88,7 @@ class TerrainGenerator:
 
                     whattocreate = get_createtype(current)
                     obj = icreate(whattocreate[0], None, nx, ny)
-                    obj_identify = obj.identify
+                    # obj_identify = obj.identify
                     # print(str(obj) + "<" + str(current) + "> (x = " + str(nx) + ", y = " + str(ny) + ")")
 
                     if obj.identify == ID_SOLID:

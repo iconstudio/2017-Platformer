@@ -19,7 +19,7 @@ from module.game.game_containers import *
 __all__ = [
     "stage_init", "stage_add", "stage_complete", "stage_get_number",
     "stage_create", "game_update", "game_draw", "stage_clear",
-    "game_handle_events"
+    "game_handle_events", "killcount_get", "killcount_increase"
 ]
 
 time_local = 0  # a Timer of current stage
@@ -27,6 +27,7 @@ time_total = 0
 manager = None
 stagelist = []
 stage_number: int = 0
+
 
 # 아래의 타일들은 모든 스테이지에서 적용됨
 terrain.terrain_tile_assign(1, oBrickCastle, terrain.TYPE_TERRAIN)
@@ -61,6 +62,7 @@ terrain.terrain_tile_assign(25, oPlayer, terrain.TYPE_INSTANCE)
 terrain.terrain_tile_assign(14, oSoldier, terrain.TYPE_INSTANCE)
 terrain.terrain_tile_assign(13, oCobra, terrain.TYPE_INSTANCE)
 terrain.terrain_tile_assign(12, oSnake, terrain.TYPE_INSTANCE)
+terrain.terrain_tile_assign(16, oToad, terrain.TYPE_INSTANCE)
 
 
 class ui_PopupStage(GObject):
@@ -94,15 +96,17 @@ class GameExecutor:
     popup = None
 
     def __init__(self):
-        global time_local
+        global time_local, kill_local
 
         Camera.set_pos(0, 0)
         self.background_sprite = "bgCave"
         time_local = 0
+        kill_local = 0
 
     def clear(self):
-        global time_local
+        global time_local, kill_local
         time_local = 0
+        kill_local = 0
         instance_clear_all()
 
     def update_begin(self):

@@ -203,8 +203,8 @@ class oTreeLeavesEnd(Solid):
         self.image_speed = 0
 
     def tile_correction(self):
-        if not instance_place(oTreeTop, self.x + 21, self.y + 10) \
-                and not instance_place(oTreeLeaves, self.x + 21, self.y):
+        if instance_place(oTreeTop, self.x + 21, self.y) \
+                or instance_place(oTreeLeaves, self.x + 21, self.y):
             self.image_xscale = -1
 
 
