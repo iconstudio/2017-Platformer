@@ -28,7 +28,6 @@ manager = None
 stagelist = []
 stage_number: int = 0
 
-
 # 아래의 타일들은 모든 스테이지에서 적용됨
 terrain.terrain_tile_assign(1, oBrickCastle, terrain.TYPE_TERRAIN)
 terrain.terrain_tile_assign(2, oBrickDirt, terrain.TYPE_TERRAIN)
@@ -68,27 +67,35 @@ terrain.terrain_tile_assign(16, oToad, terrain.TYPE_INSTANCE)
 
 class ui_PopupStage(GObject):
     sprite_index = sprite_get("sPopupStage")
-    life = 6
+    life = 4
     dmode = 0
     caption = "Stage"
     identify = ID_UI
+    depth = -100000
+    alpha = 1
 
     def event_step(self, frame_time):
-        if self.life <= 0:
+        if self.alpha <= 0.01:
             self.destroy()
-        else:
+            return
+
+        if self.life > 0:
             if self.life >= 1:
-                self.x += (100 - self.x) / 20
+                self.x += (110 - self.x) / 20
             else:
                 self.x += (-200 - self.x) / 10
 
             self.life -= frame_time
+        if self.x <= -100:
+            self.alpha -= self.alpha / 8
 
     def event_draw(self):
-        draw_sprite(self.sprite_index)
-        draw_set_alpha(1)
+        draw_sprite(self.sprite_index, alpha = self.alpha)
+        draw_set_alpha(self.alpha)
         draw_set_color(255, 255, 255)
-        framework.draw_text(self.caption, self.x, screen_height - 32, 1)
+        draw_set_halign(0)
+        draw_set_valign(1)
+        framework.draw_text(self.caption, self.x - 100, screen_height - 32, 1)
 
 
 class GameExecutor:
@@ -129,6 +136,7 @@ class GameExecutor:
         Camera.event_step()
 
     def draw(self, frame_time):
+        draw_set_alpha(1)
         if self.background_sprite is not None:
             back = sprite_get(self.background_sprite)
             if self.background_sprite in ("bgCave",):
@@ -207,15 +215,23 @@ class Stage01(GameExecutor):
         self.where = "stage01"
 
 
+class Stage02(GameExecutor):
+    def __init__(self):
+        super().__init__()
+
+        self.background_sprite = None
+        self.where = "stage02"
+
+
 def stage_add(arg):
     global stagelist
     stagelist.append(arg)
 
 
-# 이 함수는 main.py 에서 실행됨
 def stage_init():
     stage_add(StageIntro)
     stage_add(Stage01)
+    stage_add(Stage02)
     stagelist.reverse()
 
 

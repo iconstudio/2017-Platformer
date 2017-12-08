@@ -5,7 +5,6 @@ from module.constants import *
 from module import framework
 from module.framework import io
 from stages import game
-from stages.game_executor import *
 
 from module.sprite import *
 
@@ -93,8 +92,6 @@ class MainMenu:
 
 # noinspection PyGlobalUndefined
 def enter():
-    stage_init()
-
     global mainmenu
 
     draw_set_color(255, 255, 255)

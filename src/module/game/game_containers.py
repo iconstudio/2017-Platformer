@@ -44,6 +44,10 @@ def player_get_lives() -> int:
 
 
 player_ability = {}
+PLAYER_AB_DOUBLEJUMP = "DoubleJump"
+PLAYER_AB_SPIKESHOES = "SpikeShoes"
+PLAYER_AB_SPRINSHOES = "SprinShoes"
+PLAYER_AB_DASH = "Dash"
 
 
 def player_ability_get_status(what: str) -> bool:
@@ -98,7 +102,6 @@ class oPlayer(GObject):
     controllable: float = 0
     laddercount: float = 0
     attack_delay: float = 0
-    wladder = None
 
     ability_jump_count = 1
     ability_dash_count = 1
@@ -131,7 +134,7 @@ class oPlayer(GObject):
         super().phy_thud(how)
 
         # PLAYER ABILITY : DOUBLE JUMP
-        if player_ability_get_status("DoubleJump"):
+        if player_ability_get_status(PLAYER_AB_DOUBLEJUMP):
             self.ability_jump_count = 2
         else:
             self.ability_jump_count = 1
@@ -453,7 +456,7 @@ class oEnemyParent(GObject):
 
 # =======================================================
 class oManBeard(oEnemyParent):
-    hp, maxhp = 4, 4
+    hp, maxhp = 3, 3
     name = "Human"
     xVelMin, xVelMax = -32, 32
     count = 0
@@ -472,7 +475,7 @@ class oManBeard(oEnemyParent):
             self.image_xscale *= -1
 
     def handle_be_idle(self):
-        self.sprite_set("SoldierIdle")
+        self.sprite_set("ManBeardIdle")
 
     def handle_be_walk(self, *args):
         self.sprite_index = self.runspr
@@ -585,14 +588,20 @@ class oSoldier(oEnemyParent):
             if self.place_free(distance + 10, 0) and not self.place_free(distance + 10, -10):
                 self.xVel = 10
             else:
-                self.image_xscale = -1
-                self.xVel = -10
+                if self.place_free(distance - 10, 0):
+                    self.image_xscale = -1
+                    self.xVel = -10
+                else:
+                    self.xVel = 0
         else:
             if self.place_free(distance - 10, 0) and not self.place_free(distance - 10, -10):
                 self.xVel = -10
             else:
-                self.image_xscale = 1
-                self.xVel = 10
+                if self.place_free(distance + 10, 0):
+                    self.image_xscale = 1
+                    self.xVel = 10
+                else:
+                    self.xVel = 0
 
         if probability_test(100):
             self.xVel = 0
@@ -616,6 +625,7 @@ class oSnake(oEnemyParent):
         self.sprite_set("SnakeIdle")
         self.runspr = sprite_get("SnakeRun")
         self.image_speed = 0
+        self.image_xscale = choose(-1, 1)
 
     def handle_sound_attack(self, snd_delay):
         if self.sound_attack_delay <= 0:
@@ -636,7 +646,7 @@ class oSnake(oEnemyParent):
             self.count = 0
 
     def handle_walk(self, *args):
-        checkl, checkr = self.place_free(-20, -10), self.place_free(+20, -10)
+        checkl, checkr = self.place_free(-10, -10), self.place_free(+10, -10)
         if checkl and checkr:
             self.xVel = 0
             self.status_change(oStatusContainer.IDLE)
@@ -647,13 +657,13 @@ class oSnake(oEnemyParent):
         self.count += args[0]
 
         if self.image_xscale == 1:
-            if self.place_free(distance + vel, 0) and not self.place_free(distance + vel, -10):
+            if self.place_free(distance + 5, 0) and not self.place_free(distance + 5, -10):
                 self.xVel = vel
             else:
                 self.image_xscale = -1
                 self.xVel = -vel
         else:
-            if self.place_free(distance - vel, 0) and not self.place_free(distance - vel, -10):
+            if self.place_free(distance - 5, 0) and not self.place_free(distance - 5, -10):
                 self.xVel = -vel
             else:
                 self.image_xscale = 1
