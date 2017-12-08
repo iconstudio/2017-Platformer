@@ -60,6 +60,7 @@ terrain.terrain_tile_assign(40, oThorns, terrain.TYPE_TERRAIN)
 
 terrain.terrain_tile_assign(25, oPlayer, terrain.TYPE_INSTANCE)
 terrain.terrain_tile_assign(14, oSoldier, terrain.TYPE_INSTANCE)
+terrain.terrain_tile_assign(15, oManBeard, terrain.TYPE_INSTANCE)
 terrain.terrain_tile_assign(13, oCobra, terrain.TYPE_INSTANCE)
 terrain.terrain_tile_assign(12, oSnake, terrain.TYPE_INSTANCE)
 terrain.terrain_tile_assign(16, oToad, terrain.TYPE_INSTANCE)
@@ -107,6 +108,9 @@ class GameExecutor:
         global time_local, kill_local
         time_local = 0
         kill_local = 0
+
+        for inst in get_instance_list(ID_OVERALL):
+            inst.x = -10000
         instance_clear_all()
 
     def update_begin(self):
@@ -144,8 +148,7 @@ class GameExecutor:
 
         if len(get_instance_list(ID_DRAW)) > 0:
             for inst in get_instance_list(ID_DRAW):
-                if inst.visible and inst in get_instance_list(ID_DRAW):
-                    inst.event_draw()
+                inst.event_draw()
 
         if not self.popup.visible:
             draw_set_alpha(1)

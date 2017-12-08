@@ -217,8 +217,9 @@ class GObject(object):
 
     # Below methods are common-functions for all object that inherits graviton.
     def instance_collide(self, othero) -> bool:
-        if not self.visible or not othero.visible:
+        if not self.visible:
             return false
+
         sx, sy, sw, sh = self.get_bbox()
         ox, oy, ow, oh = othero.get_bbox()
 
@@ -442,7 +443,8 @@ class GObject(object):
         self.yVel = clamp(self.yVelMin, self.yVel, self.yVelMax)
 
     def event_draw(self):  # This will be working for drawing.
-        self.draw_self()
+        if self.visible:
+            self.draw_self()
         # self.draw_bbox()
 
 

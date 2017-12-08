@@ -6,7 +6,7 @@
   "grid_h": 18,
   "tile_w": 20,
   "tile_h": 20,
-  "map_grid_w": 96,
-  "map_grid_h": 32,
+  "map_grid_w": 32,
+  "map_grid_h": 90,
   "time": 90
 }

@@ -448,6 +448,27 @@
 	"number": 1
   },
   {
+	"name": "ManBeardStunned",
+	"path": [
+	  "..\\res\\img\\entity\\ManBeardStunned_0.png",
+	  "..\\res\\img\\entity\\ManBeardStunned_1.png",
+	  "..\\res\\img\\entity\\ManBeardStunned_2.png",
+	  "..\\res\\img\\entity\\ManBeardStunned_3.png",
+	  "..\\res\\img\\entity\\ManBeardStunned_4.png",
+	  "..\\res\\img\\entity\\ManBeardStunned_5.png"
+	],
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
+  },
+  {
+	"name": "ManBeardDead",
+	"path": "..\\res\\img\\entity\\ManBeardDead_0.png",
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
+  },
+  {
 	"name": "SnakeIdle",
 	"path": "..\\res\\img\\entity\\Snake_0.png",
 	"xoffset": 8,

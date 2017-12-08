@@ -17,7 +17,7 @@ from module.audio import *
 __all__ = [
     "player_got_damage", "player_lives_clear", "player_get_lives", "killcount_get", "killcount_increase",
     "kill_local",
-    "oPlayer", "oSoldier", "oSnake", "oCobra", "oToad"
+    "oPlayer", "oSoldier", "oManBeard", "oSnake", "oCobra", "oToad"
 ]
 
 # ==================================================================================================
@@ -452,6 +452,82 @@ class oEnemyParent(GObject):
 
 
 # =======================================================
+class oManBeard(oEnemyParent):
+    hp, maxhp = 4, 4
+    name = "Human"
+    xVelMin, xVelMax = -32, 32
+    count = 0
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("ManBeardIdle")
+        self.runspr = sprite_get("ManBeardRun")
+        self.image_speed = 0
+        self.image_xscale = choose(-1, 1)
+
+    def phy_collide(self, how: float or int):
+        super().phy_collide(how)
+        if self.oStatus < oStatusContainer.STUNNED and abs(how) > 1:
+            self.xVel *= -1
+            self.image_xscale *= -1
+
+    def handle_be_idle(self):
+        self.sprite_set("SoldierIdle")
+
+    def handle_be_walk(self, *args):
+        self.sprite_index = self.runspr
+        self.image_speed = 0.7
+
+    def handle_be_stunned(self):
+        self.sprite_set("ManBeardStunned")
+
+    def handle_be_dead(self):
+        self.sprite_set("ManBeardDead")
+
+    def handle_idle(self, *args):
+        """
+            This method does not mean literally stopping when idle.
+            Some gobjects can move while idle status.
+        """
+        self.count += args[0]
+        if self.count >= 1 and probability_test(100):
+            self.status_change(oStatusContainer.WALK)
+            self.count = 0
+            if irandom(4) == 0:
+                self.image_xscale *= -1
+
+    # moves slowly
+    def handle_walk(self, *args):
+        checkl, checkr = self.place_free(-10, -10), self.place_free(10, -10)
+        if checkl and checkr:
+            self.status_change(oStatusContainer.IDLE)
+            return
+
+        distance = delta_velocity(10) * args[0]
+        if self.image_xscale == 1:
+            if self.place_free(distance + 10, 0) and not self.place_free(distance + 10, -10):
+                self.xVel = 10
+            else:
+                self.image_xscale = -1
+                self.xVel = -10
+        else:
+            if self.place_free(distance - 10, 0) and not self.place_free(distance - 10, -10):
+                self.xVel = -10
+            else:
+                self.image_xscale = 1
+                self.xVel = 10
+
+        if probability_test(100):
+            self.xVel = 0
+            self.status_change(oStatusContainer.IDLE)
+
+    def handle_dead(self, *args):
+        pass
+
+    def handle_stunned(self, frame_time):
+        super().handle_stunned(frame_time)
+
+
 class oSoldier(oEnemyParent):
     hp, maxhp = 4, 4
     name = "Soldier"
