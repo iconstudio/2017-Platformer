@@ -6,8 +6,8 @@ __all__ = [
     "Camera", "scene_set_size", "scene_get_width", "scene_get_height"
 ]
 
-scene_width = screen_width
-scene_height = screen_height
+scene_width = 0
+scene_height = 0
 
 
 def scene_set_size(w = screen_width, h = screen_height):
@@ -59,7 +59,7 @@ class oCamera:
         self.limit()
 
     def event_step(self):
-        if self.target_object is not None and self.target_object.visible:
+        if self.target_object is not None:
             self.set_pos(self.target_object.x - get_screen_width() / 2, self.target_object.y - get_screen_height() / 2)
 
 

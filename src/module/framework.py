@@ -10,13 +10,14 @@ __all__ = [
     "GameState", "change_state", "push_state", "pop_state", "quit", "run",
     "io", "game_begin", "game_end", "current_time", "game_realtime", "uiframe",
     "audio_get_volume_sfx_global", "audio_get_volume_music_global",
-    "hFont", "hFontLrg", "hFontRetro", "draw_text",
+    "hFont", "hFontLrg", "hFontRetro", "draw_text", "stage_number"
 ]
 
 keylogger_list = []
 hFont, hFontLrg = None, None
 hFontRetro = None
 volsfx, volmus, optefx = 10, 8, true
+stage_number = 0
 
 
 # noinspection PyUnusedLocal

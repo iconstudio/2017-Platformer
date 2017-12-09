@@ -122,10 +122,14 @@ class oPlayer(GObject):
         container_player = self
         Camera.set_taget(self)
 
+        print("Player Created!")
+
     def __del__(self):
         global container_player
         container_player = None
         Camera.set_taget(None)
+
+        print("Player Destroyed!")
 
     def get_bbox(self):
         return self.x - 8, self.y - 8, 16, 16
@@ -187,7 +191,7 @@ class oPlayer(GObject):
             clist = get_instance_list(ID_DOODAD)
             door = None
             for inst in clist:
-                if isinstance(inst, oDoor):
+                if type(inst) == oDoor:  # isinstance(inst, oDoor):
                     door = inst
                     break
             if door is not None:
@@ -260,6 +264,7 @@ class oPlayer(GObject):
                 if io.key_check_pressed(ord('c')):
                     if not self.onAir and instance_place(oDoor, self.x, self.y)[1] > 0:
                         audio_play("sndEnterDoor")
+                        self.destroy()
                         from stages.game_executor import stage_complete
                         stage_complete()
                         return

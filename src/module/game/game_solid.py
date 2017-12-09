@@ -79,7 +79,7 @@ class oStonewall(Solid):
 
 
 # Flat wood of Lush
-class oLushFlat(Solid):
+class oLushFlat(oLush):
     name = "Flat of Lush"
 
     def __init__(self, ndepth, nx, ny):
@@ -87,12 +87,12 @@ class oLushFlat(Solid):
         self.sprite_set("sLushFlat")
 
     def tile_correction(self):
-        if self.tile_down != 0:
+        if self.tile_down != 1:
             self.image_index = 1
 
 
 # Flat wood of Dirt
-class oDirtBrickFlat(Solid):
+class oDirtBrickFlat(oBrickDirt):
     name = "Flat of Dirt"
 
     def __init__(self, ndepth, nx, ny):
@@ -100,7 +100,7 @@ class oDirtBrickFlat(Solid):
         self.sprite_set("sDirtBrickFlat")
 
     def tile_correction(self):
-        if self.tile_down != 0:
+        if self.tile_down != 1:
             self.image_index = 1
 
 

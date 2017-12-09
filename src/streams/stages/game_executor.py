@@ -5,6 +5,7 @@ from module.constants import *
 from module import framework
 from module.framework import io
 import game_pause
+import stages.game_complete as game_complete
 
 from module.camera import *
 from module.sprite import *
@@ -27,43 +28,6 @@ time_total = 0
 manager = None
 stagelist = []
 stage_number: int = 0
-
-# 아래의 타일들은 모든 스테이지에서 적용됨
-terrain.terrain_tile_assign(1, oBrickCastle, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(2, oBrickDirt, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(3, oLush, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(23, oDirtBrickFlat, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(24, oLushFlat, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(37, oBlock, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(9, oBlockMetal, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(6, oBlockBlack, terrain.TYPE_TERRAIN)
-
-terrain.terrain_tile_assign(28, oTreeTrunk, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(29, oTreeTop, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(30, oTreeTopDead, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(31, oTreeBranch, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(32, oTreeBranchDead, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(33, oTreeLeavesEnd, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(34, oTreeLeavesDeadEnd, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(36, oTreeLeaves, terrain.TYPE_TERRAIN)
-
-terrain.terrain_tile_assign(5, oLadder, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(26, oTorch, terrain.TYPE_DOODAD)
-terrain.terrain_tile_assign(10, oGravestone, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(27, oGravestoneAsh, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(11, oDoor, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(7, oDoorMetalic, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(38, oLamp, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(39, oWeb, terrain.TYPE_TERRAIN)
-terrain.terrain_tile_assign(40, oThorns, terrain.TYPE_TERRAIN)
-
-terrain.terrain_tile_assign(25, oPlayer, terrain.TYPE_INSTANCE)
-terrain.terrain_tile_assign(14, oSoldier, terrain.TYPE_INSTANCE)
-terrain.terrain_tile_assign(15, oManBeard, terrain.TYPE_INSTANCE)
-terrain.terrain_tile_assign(13, oCobra, terrain.TYPE_INSTANCE)
-terrain.terrain_tile_assign(12, oSnake, terrain.TYPE_INSTANCE)
-terrain.terrain_tile_assign(16, oToad, terrain.TYPE_INSTANCE)
-
 
 class ui_PopupStage(GObject):
     sprite_index = sprite_get("sPopupStage")
@@ -118,7 +82,12 @@ class GameExecutor:
 
         for inst in get_instance_list(ID_OVERALL):
             inst.x = -10000
+            inst.y = 100
         instance_clear_all()
+        for inst in get_instance_list(ID_OVERALL):
+            inst.x = 100
+            print(inst)
+            del inst
 
     def update_begin(self):
         draw_list_sort()
@@ -221,6 +190,7 @@ class Stage02(GameExecutor):
 
         self.background_sprite = None
         self.where = "stage02"
+        Camera.set_pos(ny = 0)
 
 
 def stage_add(arg):
@@ -229,10 +199,47 @@ def stage_add(arg):
 
 
 def stage_init():
+    # 아래의 타일들은 모든 스테이지에서 적용됨
+    terrain.terrain_tile_assign(1, oBrickCastle, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(2, oBrickDirt, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(3, oLush, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(23, oDirtBrickFlat, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(24, oLushFlat, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(37, oBlock, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(9, oBlockMetal, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(6, oBlockBlack, terrain.TYPE_TERRAIN)
+
+    terrain.terrain_tile_assign(28, oTreeTrunk, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(29, oTreeTop, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(30, oTreeTopDead, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(31, oTreeBranch, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(32, oTreeBranchDead, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(33, oTreeLeavesEnd, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(34, oTreeLeavesDeadEnd, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(36, oTreeLeaves, terrain.TYPE_TERRAIN)
+
+    terrain.terrain_tile_assign(5, oLadder, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(26, oTorch, terrain.TYPE_DOODAD)
+    terrain.terrain_tile_assign(10, oGravestone, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(27, oGravestoneAsh, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(11, oDoor, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(7, oDoorMetalic, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(38, oLamp, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(39, oWeb, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(40, oThorns, terrain.TYPE_TERRAIN)
+
+    terrain.terrain_tile_assign(25, oPlayer, terrain.TYPE_INSTANCE)
+    terrain.terrain_tile_assign(14, oSoldier, terrain.TYPE_INSTANCE)
+    terrain.terrain_tile_assign(15, oManBeard, terrain.TYPE_INSTANCE)
+    terrain.terrain_tile_assign(13, oCobra, terrain.TYPE_INSTANCE)
+    terrain.terrain_tile_assign(12, oSnake, terrain.TYPE_INSTANCE)
+    terrain.terrain_tile_assign(16, oToad, terrain.TYPE_INSTANCE)
+
+    global stagelist
     stage_add(StageIntro)
     stage_add(Stage01)
-    stage_add(Stage02)
-    stagelist.reverse()
+    #stage_add(Stage02)
+    #stagelist.reverse()
 
 
 def stage_create() -> GameExecutor:
@@ -251,7 +258,7 @@ def stage_complete():
     stage_number = manager.terrain_generator.get_stage_number()
 
     stage_clear()
-    import stages.game_complete as game_complete
+
     framework.push_state(game_complete)
 
 

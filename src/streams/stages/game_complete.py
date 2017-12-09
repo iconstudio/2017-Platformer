@@ -4,8 +4,8 @@ from module.constants import *
 
 import module.framework as framework
 from stages import game
-from stages.game_executor import stage_clear, stage_get_number
-from module.game.game_containers import killcount_get, killcount_increase, killcount_clear
+
+from module.game.game_containers import killcount_get, killcount_clear
 
 __all__ = [
     "name", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
@@ -62,7 +62,7 @@ def draw(frame_time):
     draw_set_valign(1)
     framework.draw_text("Press X to continue", screen_width - 10, ui_bot - 20)
     draw_set_halign(0)
-    framework.draw_text("Stage %d Complete!" % (stage_get_number() + 1), 20, ui_bot - 60, scale = 1.5)
+    framework.draw_text("Stage %d Complete!" % (framework.stage_number), 20, ui_bot - 60, scale = 1.5)
 
     draw_set_alpha(1)
     draw_set_color(0, 0, 0)

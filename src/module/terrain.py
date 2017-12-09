@@ -1,5 +1,6 @@
 from module.constants import *
 
+from module import framework
 import json
 from module.camera import *
 from module.game.game_item import *
@@ -57,7 +58,6 @@ class TerrainGenerator:
             self.map_grid_w = self.parsed["map_grid_w"]
             self.map_grid_h = self.parsed["map_grid_h"]
             self.time = self.parsed["time"]
-        scene_set_size(self.tile_w * self.map_grid_w)
 
     def get_stage_title(self) -> str:
         return self.parsed["title"]
@@ -171,6 +171,6 @@ class TerrainGenerator:
 
         for inst in rlist:
             instance_list_remove_something(ID_SOLID_EX, inst)
-            # inst.destroy()
 
         scene_set_size(self.tile_w * self.map_grid_w, self.tile_h * self.map_grid_h)
+        framework.stage_number = self.number + 1
