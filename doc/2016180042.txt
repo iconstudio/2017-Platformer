@@ -1,0 +1,219 @@
+Sun Dec 10 23:08:56 2017 +0900 Musics added. modified.
+Sun Dec 10 20:21:49 2017 +0900 Massive Update!     1. Music added.     2. Slideshow modified.     3. Game modules updated.     4. Some terrain bugs fixed.
+Sat Dec 9 21:45:34 2017 +0900 Module chain modified.
+Sat Dec 9 14:45:03 2017 +0900 Stage modified.
+Sat Dec 9 02:04:03 2017 +0900 Modified.
+Sat Dec 9 00:49:49 2017 +0900 Some sprites and Stage 2 added.
+Sat Dec 9 00:27:46 2017 +0900 Sprites added.
+Sat Dec 9 00:27:18 2017 +0900 New Update!     1. audio added.     2. toad added.     3. stage modified.     4. killcount added.
+Fri Dec 8 18:29:34 2017 +0900 __all__ of constants.py and functions.py deleted.
+Fri Dec 8 12:14:47 2017 +0900 Slideshow modified.
+Fri Dec 8 03:45:33 2017 +0900 Stage, Slideshow modified.
+Thu Dec 7 16:20:06 2017 +0900 Modified.
+Thu Dec 7 01:32:12 2017 +0900 Modified.
+Wed Dec 6 19:04:14 2017 +0900 Modified.
+Wed Dec 6 16:27:47 2017 +0900 Slideshow modified.
+Wed Dec 6 14:24:47 2017 +0900 Modified.
+Tue Dec 5 15:24:27 2017 +0900 UI updated.
+Tue Dec 5 12:12:12 2017 +0900 Massive Update!     1. Game stage being split again. game.py manages all stages.
+Tue Dec 5 03:49:39 2017 +0900 Massive Updates!     1. Camera module separated from framework     2. Stage modules is now distinguished from a all-in-one "game.py" file.     3. Game contents updated, optimized.
+Mon Dec 4 19:52:56 2017 +0900 Modified.
+Mon Dec 4 18:23:22 2017 +0900 Modified.
+Mon Dec 4 01:56:36 2017 +0900 A Sound deleted.
+Mon Dec 4 01:55:49 2017 +0900 Sound system modified.
+Sun Dec 3 23:16:35 2017 +0900 Modified.
+Sun Dec 3 17:14:05 2017 +0900 Massive Update!     1. Sound resource added.     2. audio module added.     3. game mechanism improved.
+Sun Dec 3 14:42:17 2017 +0900 Top-through blocks updated.
+Sun Dec 3 01:56:08 2017 +0900 Massive Update!     1. Stage modified.     2. Terrain optimized.     3. Sprite web_0.png added.
+Sat Dec 2 22:58:07 2017 +0900 Massive Update!     1. Stage added.     2. Resource added : tree, player attack     3. Optimization.     4. Terrain and Method location modified, and be more flexible.
+Fri Dec 1 12:14:51 2017 +0900 Game running flow improved.     1. Primary methods be hided.     2. Import optimized.
+Fri Dec 1 02:28:08 2017 +0900 Modified.
+Thu Nov 30 16:22:48 2017 +0900 Game Director Class Slideshow Modified.
+Wed Nov 29 19:01:52 2017 +0900 Player ability template added.
+Wed Nov 29 16:39:52 2017 +0900 Modified.
+Wed Nov 29 00:50:55 2017 +0900 Font drawing improved.     1. Align added.
+Wed Nov 29 00:00:25 2017 +0900 Massive update:     1. Almost all global variables, constants will be able to modified, referenced by through-methods.     2. Sprite loading improved. All importing task will be done by json.     3. So many Warnings removed.
+Tue Nov 28 23:56:33 2017 +0900 Image location moved.
+Tue Nov 28 14:22:28 2017 +0900 Sprite loading improved.
+Tue Nov 28 12:22:42 2017 +0900 Modified.
+Mon Nov 27 20:06:55 2017 +0900 Modified.
+Mon Nov 27 17:12:30 2017 +0900 Laddering update.
+Mon Nov 27 01:35:44 2017 +0900 Modified.
+Sun Nov 26 22:26:41 2017 +0900 code
+Sun Nov 26 22:26:13 2017 +0900 Modified.
+Sun Nov 26 12:56:47 2017 +0900 Terrain Modified.
+Sat Nov 25 20:19:09 2017 +0900 Modified.
+Fri Nov 24 13:21:15 2017 +0900 Pause state added.
+Fri Nov 24 06:22:01 2017 +0900 Modified.
+Thu Nov 23 16:44:33 2017 +0900 Modified.
+Thu Nov 23 14:49:35 2017 +0900 Resource modified.
+Thu Nov 23 13:01:15 2017 +0900 Mass Resources added.
+Thu Nov 23 02:02:53 2017 +0900 Map data added.
+Wed Nov 22 18:57:40 2017 +0900 Modified.
+Tue Nov 21 23:44:06 2017 +0900 Video uploaded.
+Tue Nov 21 22:58:33 2017 +0900 발표 준비
+Tue Nov 21 18:55:19 2017 +0900 발표
+Tue Nov 21 15:13:04 2017 +0900 Modified.
+Tue Nov 21 12:23:22 2017 +0900 Modified.
+Tue Nov 21 12:08:49 2017 +0900 Modified.
+Tue Nov 21 06:04:42 2017 +0900 발표 준비.
+Tue Nov 21 03:43:44 2017 +0900 Presentation preparing.
+Tue Nov 21 01:39:01 2017 +0900 Modified.
+Mon Nov 20 19:54:27 2017 +0900 fullscreen.
+Mon Nov 20 18:22:46 2017 +0900 Modified.
+Mon Nov 20 18:07:08 2017 +0900 Modified.
+Mon Nov 20 16:45:34 2017 +0900 Terrain Generation Almost completed.
+Mon Nov 20 13:30:11 2017 +0900 Modified.
+Mon Nov 20 05:01:17 2017 +0900 Modified.
+Mon Nov 20 02:39:01 2017 +0900 2차 발표 자료 커밋.
+Mon Nov 20 02:01:54 2017 +0900 Modified.
+Sun Nov 19 18:45:12 2017 +0900 Modified.
+Sun Nov 19 00:20:39 2017 +0900 Modified.
+Sat Nov 18 21:39:18 2017 +0900 Map data moved.
+Sat Nov 18 21:37:00 2017 +0900 Modified.
+Sat Nov 18 20:18:40 2017 +0900 Modified.
+Sat Nov 18 17:54:53 2017 +0900 Modified.
+Sat Nov 18 15:16:43 2017 +0900 Modified.
+Sat Nov 18 14:17:30 2017 +0900 Resource update.
+Sat Nov 18 13:23:12 2017 +0900 Modified.
+Sat Nov 18 03:55:52 2017 +0900 Map generation update:
+Sat Nov 18 00:37:22 2017 +0900 Many Resources added.
+Fri Nov 17 01:47:15 2017 +0900 Modified.
+Thu Nov 16 21:54:34 2017 +0900 Modified.
+Thu Nov 16 16:49:14 2017 +0900 Big update!
+Thu Nov 16 06:20:25 2017 +0900 Main menu modified.
+Thu Nov 16 06:04:59 2017 +0900 Big UI Update!
+Wed Nov 15 19:15:38 2017 +0900 Modified.
+Wed Nov 15 17:16:55 2017 +0900 Modified.
+Tue Nov 14 14:59:37 2017 +0900 1. Resource added. 2. Physics optimization improved. 3. Object interaction modified.
+Tue Nov 14 12:19:04 2017 +0900 Modified.
+Tue Nov 14 00:58:35 2017 +0900 m
+Mon Nov 13 20:09:07 2017 +0900 Modified.
+Mon Nov 13 17:01:20 2017 +0900 Moving view added.
+Mon Nov 13 16:51:48 2017 +0900 Resources updated.
+Mon Nov 13 13:33:45 2017 +0900 Modified.
+Mon Nov 13 13:33:13 2017 +0900 Merge branch 'master' of https://github.com/iconstudio/Platformer_2017_10
+Mon Nov 13 13:32:54 2017 +0900 Modified.
+Mon Nov 13 12:14:36 2017 +0900 Merge pull request #11 from iconstudio/add-license-1
+Mon Nov 13 12:13:23 2017 +0900 Create LICENSE
+Mon Nov 13 12:07:42 2017 +0900 NPC updated.
+Mon Nov 13 07:31:30 2017 +0900 Modified
+Sun Nov 12 20:42:32 2017 +0900 Physics system improved. now works within real-scale unit.
+Fri Nov 10 12:35:10 2017 +0900 Merge branch 'master' of https://github.com/iconstudio/Platformer_2017_10
+Fri Nov 10 12:33:25 2017 +0900 Squashed commit of the following:
+Fri Nov 10 00:45:05 2017 +0900 Modified.
+Thu Nov 9 21:34:19 2017 +0900 Physics fixed.
+Thu Nov 9 16:59:23 2017 +0900 Game physics(collisions) modified, but needs more fixes.
+Thu Nov 9 13:11:35 2017 +0900 Modified.
+Thu Nov 9 00:07:57 2017 +0900 Graviton fixed.
+Wed Nov 8 23:09:18 2017 +0900 Graphical changes.
+Wed Nov 8 21:22:51 2017 +0900 Big improvement. Delta timing, enhanced Sprite drawing, ...
+Wed Nov 8 18:12:57 2017 +0900 Pico2d Updated.
+Wed Nov 8 16:22:11 2017 +0900 1. Pause works. 2. Movement fixed. 3. Framework modified.
+Tue Nov 7 15:08:23 2017 +0900 Modified.
+Tue Nov 7 14:07:33 2017 +0900 Resource loc modified.
+Tue Nov 7 12:13:03 2017 +0900 Modified.
+Tue Nov 7 11:55:24 2017 +0900 Player movement completely working well.
+Tue Nov 7 11:38:49 2017 +0900 Player movement fixed.
+Tue Nov 7 11:20:05 2017 +0900 Modified.
+Tue Nov 7 11:18:17 2017 +0900 Merge branch 'master' of https://github.com/iconstudio/Platformer_2017_10
+Tue Nov 7 11:16:43 2017 +0900 Modified.
+Tue Nov 7 11:14:29 2017 +0900 Squashed commit of the following:
+Tue Nov 7 02:59:21 2017 +0900 Modified.
+Tue Nov 7 02:00:19 2017 +0900 Resource added.
+Mon Nov 6 18:55:47 2017 +0900 Player fixed.
+Mon Nov 6 16:36:44 2017 +0900 Movement fixed.
+Mon Nov 6 13:47:26 2017 +0900 IO module modified.
+Mon Nov 6 13:14:06 2017 +0900 Background added. Res load location is modified.
+Mon Nov 6 13:04:10 2017 +0900 Background color, player i/o fixed.
+Mon Nov 6 12:13:28 2017 +0900 Modified.
+Mon Nov 6 01:22:33 2017 +0900 Modified.
+Sun Nov 5 17:49:19 2017 +0900 Page number added.
+Sun Nov 5 17:41:28 2017 +0900 Attendance number added.
+Sun Nov 5 17:37:13 2017 +0900 Modified.
+Sun Nov 5 14:33:09 2017 +0900 Slideshow completed.
+Sun Nov 5 01:59:23 2017 +0900 Test
+Sun Nov 5 01:54:42 2017 +0900 Modified.
+Sun Nov 5 01:48:41 2017 +0900 Modified.
+Sat Nov 4 13:26:45 2017 +0900 Player movement fixed. 이제 게임메이커 식으로 코딩할 수 있다!!
+Sat Nov 4 13:02:25 2017 +0900 Source format Modified for compatibility.
+Sat Nov 4 12:40:03 2017 +0900 Merge branch 'master' of https://github.com/iconstudio/Platformer_2017_10
+Sat Nov 4 12:37:48 2017 +0900 Explicit Types
+Sat Nov 4 12:36:06 2017 +0900 *Modified.
+Fri Nov 3 21:33:07 2017 +0900 Delete key_public.putty
+Fri Nov 3 21:30:39 2017 +0900 Add files via upload
+Thu Nov 2 19:29:51 2017 +0900 Movement fixed. *Need more
+Thu Nov 2 18:33:22 2017 +0900 Modified.
+Thu Nov 2 13:13:59 2017 +0900 Constant separated. font added.
+Wed Nov 1 21:59:24 2017 +0900 Modified.
+Wed Nov 1 18:53:00 2017 +0900 Modified.
+Tue Oct 31 23:53:29 2017 +0900 Modified.
+Tue Oct 31 12:24:06 2017 +0900 Sprite engine improved: optimization, enhanced external algorithms
+Mon Oct 30 19:56:14 2017 +0900 Modified.
+Mon Oct 30 19:28:44 2017 +0900 Modified. Font Added.
+Mon Oct 30 17:41:44 2017 +0900 Merge branch 'master' of https://github.com/iconstudio/Platformer_2017_10
+Mon Oct 30 17:40:35 2017 +0900 Modified.
+Mon Oct 30 17:39:31 2017 +0900 Modified.
+Mon Oct 30 17:38:59 2017 +0900 Modified. error so again.
+Mon Oct 30 17:37:38 2017 +0900 Modified.
+Mon Oct 30 16:15:03 2017 +0900 Modified.
+Mon Oct 30 12:15:57 2017 +0900 Black mask no longer needs.
+Mon Oct 30 03:02:30 2017 +0900 Modified.
+Sun Oct 29 21:18:49 2017 +0900 Modified.
+Sun Oct 29 18:00:06 2017 +0900 Slideshow modified and grp resources added.
+Sun Oct 29 16:35:23 2017 +0900 Modified.
+Sun Oct 29 15:07:08 2017 +0900 Modified.
+Sat Oct 28 23:07:11 2017 +0900 Modified. and A Slideshow added.
+Fri Oct 27 11:56:10 2017 +0900 Add a player image.
+Fri Oct 27 11:53:59 2017 +0900 Modified.
+Fri Oct 27 11:08:53 2017 +0900 Modified.
+Wed Oct 25 17:30:51 2017 +0900 Modified.
+Tue Oct 24 15:01:47 2017 +0900 Modified.
+Tue Oct 24 15:00:32 2017 +0900 Modified.
+Mon Oct 23 20:18:37 2017 +0900 Modified.
+Mon Oct 23 17:59:48 2017 +0900 Slideshow modified.
+Mon Oct 23 16:28:02 2017 +0900 added
+Mon Oct 23 10:51:49 2017 +0900 Tile added.
+Fri Oct 20 17:50:24 2017 +0900 Slideshow modified.
+Fri Oct 20 16:10:45 2017 +0900 Modified.
+Thu Oct 19 14:49:11 2017 +0900 Modified.
+Thu Oct 19 05:36:30 2017 +0900 Slideshow modified.
+Thu Oct 19 05:27:40 2017 +0900 Slideshow modified.
+Thu Oct 19 04:22:08 2017 +0900 Framework modified.
+Tue Oct 17 19:36:48 2017 +0900 Slideshow Modified.
+Tue Oct 17 19:05:17 2017 +0900 Slideshow Modified. The Framework Fixed.
+Tue Oct 17 15:55:28 2017 +0900 Separated core files. Now work in framework
+Tue Oct 17 13:03:47 2017 +0900 Modified.
+Mon Oct 16 19:06:31 2017 +0900 Modified.
+Mon Oct 16 18:35:43 2017 +0900 Modified.
+Mon Oct 16 18:27:22 2017 +0900 Merge branch 'master' of https://github.com/iconstudio/Platformer_2017_10
+Mon Oct 16 18:27:05 2017 +0900 A Slideshow added.
+Mon Oct 16 18:26:22 2017 +0900 A Slide Added. Modified.
+Mon Oct 16 04:27:53 2017 +0900 Update README.md
+Thu Oct 12 16:16:03 2017 +0900 Modified.
+Thu Oct 12 01:22:21 2017 +0900 Modified.
+Wed Oct 11 20:45:25 2017 +0900 Modified.
+Wed Oct 11 17:31:17 2017 +0900 Modified.
+Tue Oct 10 21:30:08 2017 +0900 Modified.
+Tue Oct 10 14:42:46 2017 +0900 Add Some resources.
+Mon Oct 9 15:37:38 2017 +0900 Modified
+Sun Oct 8 10:50:47 2017 +0900 First Successfully working.
+Sat Oct 7 20:46:04 2017 +0900 Test
+Fri Oct 6 06:33:22 2017 +0900 Game object Added.
+Fri Oct 6 04:38:32 2017 +0900 The Main method Added.
+Fri Oct 6 04:36:47 2017 +0900 Main
+Fri Oct 6 04:35:01 2017 +0900 Merge branch 'master' of https://github.com/iconstudio/Platformer_2017_10
+Fri Oct 6 04:33:53 2017 +0900 The main method Added.
+Fri Oct 6 03:57:09 2017 +0900 Create .gitignore
+Fri Oct 6 03:41:46 2017 +0900 Modified.
+Thu Oct 5 21:04:39 2017 +0900 Add Global, treating Pre-input, data structures.
+Thu Oct 5 19:12:25 2017 +0900 Modified
+Thu Oct 5 18:33:26 2017 +0900 first-test
+Thu Oct 5 18:26:54 2017 +0900 Merge branch 'master' of https://github.com/iconstudio/Platformer_2017_10
+Thu Oct 5 18:25:20 2017 +0900 Move a code file.
+Thu Oct 5 18:24:17 2017 +0900 Move a code file.
+Thu Oct 5 18:13:16 2017 +0900 Create README.md
+Thu Oct 5 18:10:29 2017 +0900 Core file Added.
+Tue Oct 3 22:49:18 2017 +0900 Delete README.md
+Tue Oct 3 22:49:09 2017 +0900 Delete .gitignore
+Tue Oct 3 22:23:53 2017 +0900 Initial commit
