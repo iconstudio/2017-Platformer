@@ -203,9 +203,11 @@ class oTreeLeavesEnd(Solid):
         self.image_speed = 0
 
     def tile_correction(self):
-        if instance_place(oTreeTop, self.x + 21, self.y) \
-                or instance_place(oTreeLeaves, self.x + 21, self.y):
-            self.image_xscale = -1
+        # if #instance_place(oTreeTop, self.x + 21, self.y) \
+        #         or instance_place(oTreeLeaves, self.x + 26, self.y):
+        # if self.tile_right != 0:
+        #    self.image_xscale = -1
+        pass
 
 
 # Died Leaves of Tree at End
@@ -223,6 +225,11 @@ class oTreeBranch(Solid):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sTreeBranches")
+
+    def tile_correction(self):
+        # if self.tile_right != 0:
+        #    self.image_xscale = -1
+        pass
 
 
 # Body of Tree

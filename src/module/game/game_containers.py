@@ -123,6 +123,7 @@ class oPlayer(GObject):
         Camera.set_taget(self)
 
         print("Player Created!")
+        Camera.set_pos(self.x, self.y)
 
     def __del__(self):
         global container_player
@@ -165,6 +166,8 @@ class oPlayer(GObject):
             audio_play("sndHurt")
 
     def event_step(self, frame_time) -> None:
+        Camera.set_pos(self.x - get_screen_width() / 2,
+                       self.y - get_screen_height() / 2)
         if self.oStatus is oStatusContainer.LADDERING:
             self.gravity_default = 0
             self.gravity = 0
@@ -172,7 +175,7 @@ class oPlayer(GObject):
             self.gravity_default = delta_gravity()
             self.yFric = 0
         super().event_step(frame_time)
-        self.x = clamp(0, self.x, scene_get_width())
+        self.x = clamp(0, self.x, Camera.get_width())
 
         # Fall through void
         if self.y <= 15:
@@ -279,8 +282,7 @@ class oPlayer(GObject):
                         instl, cl = instance_place(oLadder, self.x, self.y)
                         if cl > 0:  # get stick to the ladder
                             if abs(instl[0].x + 10 - self.x) <= 4 and abs(instl[0].y + 10 - self.y) <= 6:
-                                self.wladder = instl[0]
-                                self.x = self.wladder.x + 10
+                                self.x = instl[0].x + 10
                                 # self.y = self.wladder.y + 10
                                 self.xVel, self.yVel = 0, 0
                                 self.status_change(oStatusContainer.LADDERING)
@@ -310,7 +312,7 @@ class oPlayer(GObject):
                             self.yVel = 90
                             audio_play("sndJump")
 
-                    # ===============================================================================================
+                    # ==========================================================================================
                     if not self.onAir:  # Play Moving sprite
                         if self.xVel != 0:
                             self.image_speed = 0.8

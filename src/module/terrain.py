@@ -73,11 +73,11 @@ class TerrainGenerator:
             return
 
         currln, prevln = [], []
-        nx, ny = 0, self.map_grid_h * self.tile_h
+        nx, ny = 0, self.map_grid_h * self.tile_h - 20
         for i in range(length):
             current = self.data[i]
 
-            if current is not '0':
+            if current is not 0:
                 try:
                     def icreate(ty, depth, x, y):
                         ninst = ty(depth, x, y)
@@ -113,7 +113,7 @@ class TerrainGenerator:
                             else:
                                 obj.tile_down = 1
 
-                            if i > 0:  # check left
+                            if i > 0 and self.tile_w <= nx:  # check left
                                 getl = self.data[i - 1]
                                 whattocheck: str = get_createtype(getl)[0].identify
                                 if getl == current:
@@ -123,7 +123,7 @@ class TerrainGenerator:
                             else:
                                 obj.tile_left = 1
 
-                            if i <= length - 1:  # check right
+                            if i <= length - 1 and (self.map_grid_w - 1) * self.tile_w >= nx:  # check right
                                 getr = self.data[i + 1]
                                 whattocheck: str = get_createtype(getr)[0].identify
                                 if getr == current:
@@ -131,9 +131,10 @@ class TerrainGenerator:
                                 elif getr != 0 and whattocheck is ID_SOLID:
                                     obj.tile_right = 2
 
-                                if 30 <= current <= 36:
-                                    # if getr == 28: # Tree Trunk
-                                    obj.image_xscale = -1
+                                if obj.name in ("Tree Branches", "End of Tree Leaves"):
+                                    #if getr in (28, 29, 30):  # Tree Trunk
+                                        obj.image_xscale = -1
+                                        print("tree parts invert " + str(obj))
                             else:
                                 obj.tile_right = 1
                         except IndexError:
@@ -172,5 +173,4 @@ class TerrainGenerator:
         for inst in rlist:
             instance_list_remove_something(ID_SOLID_EX, inst)
 
-        scene_set_size(self.tile_w * self.map_grid_w, self.tile_h * self.map_grid_h)
         framework.stage_number = self.number + 1

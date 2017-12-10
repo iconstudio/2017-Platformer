@@ -9,7 +9,8 @@ from module.sprite import *
 from module.audio import *
 
 __all__ = [
-    "oStatusContainer", "instance_place", "instance_list_remove_something", "instance_list_clear", "instance_clear_all",
+    "oStatusContainer", "instance_place", "instance_list_remove_something", "instance_list_clear",
+    "instance_clear_all",
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
     "get_instance_list", "draw_list_sort",
     "container_player", "GObject", "Solid", "oPlayerDamage", "oEnemyDamage", "oItemParent", "oDoodadParent",
@@ -383,8 +384,8 @@ class GObject(object):
         dx, dy = self.x - data.xoffset, self.y - data.yoffset
         if self.name == "Player":
             self.visible = true
-        elif dx <= Camera.x + get_screen_width() and Camera.x <= dx + data.width \
-                and Camera.y <= dy + data.height and dy <= Camera.y + get_screen_height():
+        elif dx <= Camera.x + Camera.get_width() and Camera.x <= dx + data.width \
+                and Camera.y <= dy + data.height and dy <= Camera.y + Camera.get_height():
             self.visible = true
         else:
             self.visible = false

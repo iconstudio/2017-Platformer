@@ -18,16 +18,11 @@ from module.game.gobject_header import *
 from module.game.game_containers import *
 
 __all__ = [
-    "stage_init", "stage_add", "stage_complete", "stage_get_number",
+    "stage_init", "stage_complete", "stage_get_number",
     "stage_create", "game_update", "game_draw", "stage_clear",
     "game_handle_events", "killcount_get", "killcount_increase"
 ]
 
-time_local = 0  # a Timer of current stage
-time_total = 0
-manager = None
-stagelist = []
-stage_number: int = 0
 
 class ui_PopupStage(GObject):
     sprite_index = sprite_get("sPopupStage")
@@ -160,6 +155,9 @@ class GameExecutor:
         self.terrain_generator.generate()
         self.update_begin()
 
+        tgen = self.terrain_generator
+        Camera.set_size(tgen.tile_w * tgen.map_grid_w, tgen.tile_h * tgen.map_grid_h)
+
 
 class StageIntro(GameExecutor):
     def __init__(self):
@@ -190,7 +188,6 @@ class Stage02(GameExecutor):
 
         self.background_sprite = None
         self.where = "stage02"
-        Camera.set_pos(ny = 0)
 
 
 def stage_add(arg):
@@ -235,22 +232,31 @@ def stage_init():
     terrain.terrain_tile_assign(12, oSnake, terrain.TYPE_INSTANCE)
     terrain.terrain_tile_assign(16, oToad, terrain.TYPE_INSTANCE)
 
-    global stagelist
+    global stagelist, manager, time_local, time_total, stage_number
+    stagelist = []
     stage_add(StageIntro)
     stage_add(Stage01)
-    #stage_add(Stage02)
-    #stagelist.reverse()
+    stage_add(Stage02)
+    stagelist.reverse()
+
+    time_local = 0  # a Timer of current stage
+    time_total = 0
+    manager = None
+    stage_number = 0
 
 
-def stage_create() -> GameExecutor:
+def stage_create():
     global stagelist
-    stg_type = stagelist.pop()
-    global manager
-    if manager is None:
-        manager = stg_type()
-    manager.generate()
-    manager.update_begin()
-    return manager
+    if len(stagelist) > 0:
+        stg_type = stagelist[-1]
+        stagelist.pop()
+        global manager
+        if manager is None:
+            manager = stg_type()
+        manager.generate()
+        return manager
+    else:
+        raise RuntimeError("남은 스테이지가 없습니다!")
 
 
 def stage_complete():
