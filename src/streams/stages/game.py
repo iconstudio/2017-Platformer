@@ -1,6 +1,7 @@
 from module.pico2d import *
 
 import stages.game_executor as stages
+from module.audio import *
 
 __all__ = [
     "name", "draw_clean", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
@@ -20,7 +21,7 @@ def enter():
 
 
 def exit():
-    pass
+    audio_stream_stop()
 
 
 def update(frame_time):

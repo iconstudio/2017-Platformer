@@ -12,6 +12,7 @@ class oCamera:
     x: float = 0
     y: float = 0
     width, height = screen_width, screen_height
+    width_scene, height_scene = screen_width, screen_height
     target_object = None
     lock: bool = false
 
@@ -22,24 +23,39 @@ class oCamera:
         self.width = w
         self.height = h
 
+    def set_scene_size(self, w = screen_width, h = screen_height):
+        self.width_scene = w
+        self.height_scene = h
+
     def get_width(self):
         return self.width
 
     def get_height(self):
         return self.height
 
+    def get_scene_width(self):
+        return self.width_scene
+
+    def get_scene_height(self):
+        return self.height_scene
+
+    def get_bbox(self) -> tuple:
+        return int(self.x), int(self.y), self.width, self.height
+
     def limit(self):
-        self.x = clamp(0, int(self.x), self.width - get_screen_width())
-        self.y = clamp(00, int(self.y), self.height - get_screen_height() + 20)
+        self.x = clamp(0, int(self.x), self.width_scene - self.width)
+        self.y = clamp(0, int(self.y), self.height_scene - self.height + 40)
 
     def set_pos(self, nx: float = None, ny: float = None):
         if nx is not None:
-            if abs(nx - self.x) < 2:
-                self.x = nx
-            elif self.x != nx:
-                self.x += (nx - self.x) / 5
+            dx = nx - self.width / 2
+            if abs(dx - self.x) < 2:
+                self.x = dx
+            elif self.x != dx:
+                self.x += (dx - self.x) / 5
         if ny is not None:
-            self.y = ny
+            dy = ny - self.height / 2
+            self.y = dy
         self.limit()
 
     def add_pos(self, ax: float = None, ay: float = None):

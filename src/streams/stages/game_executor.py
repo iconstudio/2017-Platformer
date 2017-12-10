@@ -156,7 +156,7 @@ class GameExecutor:
         self.update_begin()
 
         tgen = self.terrain_generator
-        Camera.set_size(tgen.tile_w * tgen.map_grid_w, tgen.tile_h * tgen.map_grid_h)
+        Camera.set_scene_size(tgen.tile_w * tgen.map_grid_w, tgen.tile_h * tgen.map_grid_h)
 
 
 class StageIntro(GameExecutor):
@@ -188,11 +188,6 @@ class Stage02(GameExecutor):
 
         self.background_sprite = None
         self.where = "stage02"
-
-
-def stage_add(arg):
-    global stagelist
-    stagelist.append(arg)
 
 
 def stage_init():
@@ -234,9 +229,9 @@ def stage_init():
 
     global stagelist, manager, time_local, time_total, stage_number
     stagelist = []
-    stage_add(StageIntro)
-    stage_add(Stage01)
-    stage_add(Stage02)
+    stagelist.append(StageIntro)
+    stagelist.append(Stage01)
+    stagelist.append(Stage02)
     stagelist.reverse()
 
     time_local = 0  # a Timer of current stage
@@ -254,6 +249,7 @@ def stage_create():
         if manager is None:
             manager = stg_type()
         manager.generate()
+        audio_stream_play("musGame" + str(irandom_range(1, 3)))
         return manager
     else:
         raise RuntimeError("남은 스테이지가 없습니다!")
@@ -266,6 +262,7 @@ def stage_complete():
     stage_clear()
 
     framework.push_state(game_complete)
+    audio_stream_stop()
 
 
 def stage_clear():

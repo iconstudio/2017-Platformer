@@ -43,8 +43,8 @@ def audio_get(name: str) -> Wav or Music:
 
 def audio_play(name: str):
     sfx: Wav = audio_get(name)
-    sfx.play()
     sfx.set_volume(audio_get_volume_sfx_global())
+    sfx.play()
 
 
 def audio_stream_play(name: str):
@@ -87,7 +87,7 @@ def audio_json_loads():
             parsed = json.load(wavfile)
 
             for content in parsed:
-                if content["muse"]:
+                if content["muse"] is true:
                     audio_stream_load(content["path"], content["name"])
                 else:
                     audio_load(content["path"], content["name"])

@@ -8,6 +8,7 @@ from stages import game
 from stages.game_executor import stage_init
 
 from module.sprite import *
+from module.audio import *
 
 __all__ = [
     "name", "MainMenu", "MenuEnumerator", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"
@@ -110,6 +111,7 @@ def enter():
         mn_opt = mainmenu.menu_add("option")
         mn_credit = mainmenu.menu_add("credit")
         mn_end = mainmenu.menu_add("end game")
+        audio_stream_play("musTitle")
 
 
 def exit():
@@ -118,6 +120,7 @@ def exit():
     if mainmenu is not None:
         del mainmenu
         mainmenu = None
+        audio_stream_stop()
 
 
 def update(frame_time):

@@ -1,8 +1,28 @@
 [
   {
+	"name": "musTitle",
+	"path": "..\\res\\music\\Title.ogg",
+	"muse": true
+  },
+  {
+	"name": "musGame1",
+	"path": "..\\res\\music\\A02_A.ogg",
+	"muse": true
+  },
+  {
+	"name": "musGame2",
+	"path": "..\\res\\music\\A02_B.ogg",
+	"muse": true
+  },
+  {
+	"name": "musGame3",
+	"path": "..\\res\\music\\A02_C.ogg",
+	"muse": true
+  },
+  {
 	"name": "sndPopup",
 	"path": "..\\res\\audio\\popup.ogg",
-	"muse": false
+	"muse": true
   },
   {
 	"name": "sndMsgUp",

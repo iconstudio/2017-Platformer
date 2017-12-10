@@ -573,7 +573,10 @@ class Music:
         Mix_ResumeMusic()
 
     def __del__(self):
-        Mix_FreeMusic(self.music)
+        try:
+            Mix_FreeMusic(self.music)
+        except OSError:
+            pass
 
 
 class Wav:

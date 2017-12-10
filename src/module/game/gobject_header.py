@@ -218,7 +218,7 @@ class GObject(object):
 
     # Below methods are common-functions for all object that inherits graviton.
     def instance_collide(self, othero) -> bool:
-        if not self.visible:
+        if othero is not Camera and not self.visible:
             return false
 
         sx, sy, sw, sh = self.get_bbox()
@@ -380,12 +380,9 @@ class GObject(object):
                         self.image_alpha)
 
     def event_step(self, frame_time) -> None:  # The basic mechanisms of objects.
-        data = self.sprite_index
-        dx, dy = self.x - data.xoffset, self.y - data.yoffset
         if self.name == "Player":
             self.visible = true
-        elif dx <= Camera.x + Camera.get_width() and Camera.x <= dx + data.width \
-                and Camera.y <= dy + data.height and dy <= Camera.y + Camera.get_height():
+        elif self.instance_collide(Camera):
             self.visible = true
         else:
             self.visible = false

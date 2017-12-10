@@ -166,8 +166,7 @@ class oPlayer(GObject):
             audio_play("sndHurt")
 
     def event_step(self, frame_time) -> None:
-        Camera.set_pos(self.x - get_screen_width() / 2,
-                       self.y - get_screen_height() / 2)
+        Camera.set_pos(self.x, self.y)
         if self.oStatus is oStatusContainer.LADDERING:
             self.gravity_default = 0
             self.gravity = 0
@@ -175,7 +174,7 @@ class oPlayer(GObject):
             self.gravity_default = delta_gravity()
             self.yFric = 0
         super().event_step(frame_time)
-        self.x = clamp(0, self.x, Camera.get_width())
+        self.x = clamp(0, self.x, Camera.get_scene_width())
 
         # Fall through void
         if self.y <= 15:
