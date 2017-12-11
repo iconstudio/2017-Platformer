@@ -2,6 +2,8 @@ from module.pico2d import *
 from module.functions import *
 from module.constants import *
 
+import math
+from cmath import *
 from module import framework
 from module.camera import *
 from module.framework import io
@@ -44,10 +46,14 @@ def player_get_lives() -> int:
 
 
 player_ability = {}
-PLAYER_AB_DOUBLEJUMP = "DoubleJump"
-PLAYER_AB_SPIKESHOES = "SpikeShoes"
-PLAYER_AB_SPRINSHOES = "SprinShoes"
-PLAYER_AB_DASH = "Dash"
+PLAYER_AB_DOUBLEJUMP = "DoubleJump"  # 더블 점프
+PLAYER_AB_SPIKESHOES = "SpikeShoes"  # 밟기 피해량 증가
+PLAYER_AB_SPRINSHOES = "SprinShoes"  # 높이 점프
+PLAYER_AB_DASH = "Dash"  # 고속 이동
+player_ability[PLAYER_AB_DOUBLEJUMP] = false
+player_ability[PLAYER_AB_SPIKESHOES] = false
+player_ability[PLAYER_AB_SPRINSHOES] = false
+player_ability[PLAYER_AB_DASH] = false
 
 
 def player_ability_get_status(what: str) -> bool:
@@ -147,14 +153,18 @@ class oPlayer(GObject):
     def status_change(self, what):
         self.oStatus = what
 
+    def die(self):
+        io.clear()
+        audio_play("sndDie")
+        framework.change_state(game_over)
+
     def get_dmg(self, how: int = 1, dir = 1):
         player_got_damage(how)
         if player_get_lives() <= 0:  # GAME OVER
             self.status_change(oStatusContainer.DEAD)
             self.xVel = 0
 
-            audio_play("sndDie")
-            framework.change_state(game_over)
+            self.die()
         else:
             if self.oStatus is oStatusContainer.LADDERING:
                 self.status_change(oStatusContainer.IDLE)
@@ -176,16 +186,22 @@ class oPlayer(GObject):
         super().event_step(frame_time)
         self.x = clamp(0, self.x, Camera.get_scene_width())
 
+        # Pinned by spike trap
+        if self.yVel < 0:
+            thlist, thcount = instance_place(oThorns, self.x, self.y)
+            if thcount > 0:
+                if self.y > thlist[0].y + 10:
+                    self.die()
+                    return
+
         # Fall through void
         if self.y <= 15:
-            io.clear()
-            audio_play("sndDie")
-            framework.change_state(game_over)
+            self.die()
             return
 
         # Use cheat of death
         if io.key_check_pressed(ord('9')):
-            self.get_dmg(3)
+            self.die()
             return
 
         # Use cheat of going exit
@@ -624,7 +640,7 @@ class oSoldier(oEnemyParent):
 class oSnake(oEnemyParent):
     hp, maxhp = 1, 1
     name = "Snake"
-    count = 0
+    count = 5
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -665,15 +681,19 @@ class oSnake(oEnemyParent):
         if self.image_xscale == 1:
             if self.place_free(distance + 5, 0) and not self.place_free(distance + 5, -10):
                 self.xVel = vel
-            else:
+            elif self.place_free(-distance - 5, 0):
                 self.image_xscale = -1
                 self.xVel = -vel
-        else:
-            if self.place_free(distance - 5, 0) and not self.place_free(distance - 5, -10):
-                self.xVel = -vel
             else:
+                self.xVel = 0
+        else:
+            if self.place_free(-distance - 5, 0) and not self.place_free(-distance - 5, -10):
+                self.xVel = -vel
+            elif self.place_free(distance + 5, 0):
                 self.image_xscale = 1
                 self.xVel = vel
+            else:
+                self.xVel = 0
 
         if self.count >= 20:
             if probability_test(100):
@@ -718,7 +738,7 @@ class oToad(oEnemyParent):
             if self.xVel >= 3:
                 self.xVel *= -0.3
             else:
-                self.xVel = 0
+                self.xVel = -sign(self.xVel) * 10
         self.x = math.floor(self.x)
 
     def handle_be_idle(self):
