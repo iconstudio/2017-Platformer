@@ -6,53 +6,62 @@ import json
 from module.framework import audio_get_volume_sfx_global, audio_get_volume_music_global
 
 __all__ = [
-    "audio_list",
+    "audio_dict",
     "audio_load", "audio_stream_load", "audio_get", "audio_json_loads",
     "audio_play", "audio_stream_play", "audio_stream_pause", "audio_stream_resume", "audio_stream_stop",
     "audio_volume", "audio_stream_volume"
 ]
 
-audio_list: dict = {}
+audio_list = set()
+audio_dict: dict = {}
 music_last: Music = None
 
 
 def audio_load(filepaths, name = str("default")) -> Wav:
-    global audio_list
+    global audio_dict
     new = load_wav(filepaths)
     new.name = name
-    audio_list[name] = new
+    audio_dict[name] = new
     return new
 
 
 def audio_stream_load(filepaths, name = str("default")) -> Music:
-    global audio_list
+    global audio_dict
     new = load_music(filepaths)
     new.name = name
-    audio_list[name] = new
+    audio_dict[name] = new
     return new
 
 
 def audio_get(name: str) -> Wav or Music:
-    global audio_list
+    global audio_dict
     try:
-        val = audio_list[name]
+        val = audio_dict[name]
     except KeyError as e:
         raise RuntimeError("오디오 " + str(e) + " 는 존재하지 않습니다!")
     return val
 
 
-def audio_play(name: str):
+def audio_play(name: str) -> Wav:
     sfx: Wav = audio_get(name)
     sfx.set_volume(audio_get_volume_sfx_global())
     sfx.play()
 
+    global audio_list
+    audio_list.add(sfx)
+    return sfx
 
-def audio_stream_play(name: str):
+
+def audio_stream_play(name: str) -> Music:
     sfx: Music = audio_get(name)
     global music_last
     music_last = sfx
     sfx.set_volume(audio_get_volume_music_global())
     sfx.repeat_play()
+
+    global audio_list
+    audio_list.add(sfx)
+    return sfx
 
 
 # 0 ~ 128

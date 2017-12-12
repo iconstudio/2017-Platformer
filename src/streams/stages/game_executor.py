@@ -173,6 +173,8 @@ class StageIntro(GameExecutor):
         terrain.terrain_tile_assign(21, oMillHousechipR, terrain.TYPE_BG)
         terrain.terrain_tile_assign(22, oMillHousechipM, terrain.TYPE_BG)
 
+        audio_stream_play("musGame" + str(irandom_range(1, 3)))
+
 
 class Stage01(GameExecutor):
     def __init__(self):
@@ -181,6 +183,8 @@ class Stage01(GameExecutor):
         self.background_sprite = None
         self.where = "stage01"
 
+        audio_stream_play("musGame" + str(irandom_range(1, 3)))
+
 
 class Stage02(GameExecutor):
     def __init__(self):
@@ -188,6 +192,8 @@ class Stage02(GameExecutor):
 
         self.background_sprite = None
         self.where = "stage02"
+
+        audio_stream_play("musGame" + str(irandom_range(1, 3)))
 
 
 def stage_init():
@@ -249,7 +255,6 @@ def stage_create():
         if manager is None:
             manager = stg_type()
         manager.generate()
-        audio_stream_play("musGame" + str(irandom_range(1, 3)))
         return manager
     else:
         raise RuntimeError("남은 스테이지가 없습니다!")

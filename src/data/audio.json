@@ -20,9 +20,49 @@
 	"muse": true
   },
   {
+	"name": "musGame4",
+	"path": "..\\res\\music\\A01_A.ogg",
+	"muse": true
+  },
+  {
+	"name": "musGame5",
+	"path": "..\\res\\music\\A01_B.ogg",
+	"muse": true
+  },
+  {
+	"name": "musBoss",
+	"path": "..\\res\\music\\boss.ogg",
+	"muse": true
+  },
+  {
+	"name": "musBossIntro",
+	"path": "..\\res\\music\\boss_intro.ogg",
+	"muse": false
+  },
+  {
+	"name": "musAmbientUnderground",
+	"path": "..\\res\\music\\amb_mines.ogg",
+	"muse": false
+  },
+  {
+	"name": "musAmbientForest",
+	"path": "..\\res\\music\\amb_jungle.ogg",
+	"muse": false
+  },
+  {
 	"name": "sndPopup",
 	"path": "..\\res\\audio\\popup.ogg",
-	"muse": true
+	"muse": false
+  },
+  {
+	"name": "sndMenuSelect",
+	"path": "..\\res\\audio\\menu_selection.ogg",
+	"muse": false
+  },
+  {
+	"name": "sndMenuSwipe",
+	"path": "..\\res\\audio\\menu_swipe.ogg",
+	"muse": false
   },
   {
 	"name": "sndMsgUp",

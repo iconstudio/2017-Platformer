@@ -70,6 +70,16 @@ def game_end():
     del hFont, hFontLrg
 
 
+def audio_set_volume_sfx(v):
+    global volsfx
+    volsfx = v
+
+
+def audio_set_volume_music(v):
+    global volmus
+    volmus = v
+
+
 def audio_get_volume_sfx_global():
     global volsfx
     return int(volsfx / 10 * 128)

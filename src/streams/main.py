@@ -132,13 +132,14 @@ def update(frame_time):
         io.clear()
     elif io.key_check_pressed(SDLK_RETURN) or io.key_check_pressed(ord('x')):
         io.clear()
+        audio_play("sndMenuSelect")
 
         if mn_begin == menum.menusel:
             framework.change_state(game)
         elif mn_opt == menum.menusel:
-            pass
+            io.clear()
         elif mn_credit == menum.menusel:
-            pass
+            io.clear()
         elif mn_end == menum.menusel:
             framework.quit()
     elif io.key_check_pressed(SDLK_UP):
