@@ -8,7 +8,7 @@
  "margin":0,
  "name":"Vampire Exodus Tileset v0.1",
  "spacing":0,
- "tilecount":39,
+ "tilecount":40,
  "tileheight":32,
  "tiles":
     {
@@ -216,6 +216,12 @@
          "image":"..\/..\/res\/img\/theme\/Ladder_0.png",
          "imageheight":20,
          "imagewidth":20
+        },
+     "40":
+        {
+         "image":"..\/..\/res\/img\/entity\/SpiderHang_0.png",
+         "imageheight":16,
+         "imagewidth":16
         },
      "5":
         {

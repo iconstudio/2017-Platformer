@@ -279,13 +279,17 @@ class oPlayer(GObject):
             # ===============================================================================================
             mx, my = 0, 0
             if self.controllable <= 0:  # Player can controllable
-                if io.key_check_pressed(ord('c')):
-                    if not self.onAir and instance_place(oDoor, self.x, self.y)[1] > 0:
+                if not self.onAir and io.key_check_pressed(ord('c')):
+                    if instance_place(oDoor, self.x, self.y)[1] > 0:
                         audio_play("sndEnterDoor")
                         self.destroy()
                         from stages.game_executor import stage_complete
                         stage_complete()
                         return
+                    else:
+                        ln, cnt = instance_place(oDoorMetalic, self.x, self.y)[1]
+                        if cnt > 0:
+                            pass
 
                 if io.key_check(SDLK_LEFT): mx -= 1
                 if io.key_check(SDLK_RIGHT): mx += 1
