@@ -115,7 +115,7 @@ class oBlock(Solid):
 
 # Block (Metal)
 class oBlockMetal(Solid):
-    name = "Block"
+    name = "Iron Block"
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)

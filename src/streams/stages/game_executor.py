@@ -77,10 +77,8 @@ class GameExecutor:
 
         for inst in get_instance_list(ID_OVERALL):
             inst.x = -10000
-            inst.y = 100
         instance_clear_all()
         for inst in get_instance_list(ID_OVERALL):
-            inst.x = 100
             print(inst)
             del inst
 

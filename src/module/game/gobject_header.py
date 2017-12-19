@@ -206,6 +206,7 @@ class GObject(object):
     def destroy(self):
         self.step_enable = false
         self.depth = 1000000
+        self.x = -10000
         self.image_xscale = 0
         global instance_list, instance_list_spec, instance_update, instance_draw_list
         instance_update = true

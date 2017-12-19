@@ -188,7 +188,7 @@ class oPlayer(GObject):
 
         # Pinned by spike trap
         if self.yVel < 0:
-            thlist, thcount = instance_place(oThorns, self.x, self.y)
+            thlist, thcount = instance_place(oThorns, self.x, self.y + self.yVel + 1)
             if thcount > 0:
                 if self.y > thlist[0].y + 10:
                     self.die()
@@ -287,9 +287,13 @@ class oPlayer(GObject):
                         stage_complete()
                         return
                     else:
-                        ln, cnt = instance_place(oDoorMetalic, self.x, self.y)[1]
+                        ln, cnt = instance_place(oDoorMetalic, self.x, self.y)
                         if cnt > 0:
-                            pass
+                            clist = get_instance_list(ID_DOODAD)
+                            for inst in clist:
+                                if inst.name == "Iron Block":  # isinstance(inst, oDoor):
+                                    inst.destroy()
+                            return
 
                 if io.key_check(SDLK_LEFT): mx -= 1
                 if io.key_check(SDLK_RIGHT): mx += 1

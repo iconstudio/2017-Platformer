@@ -22,7 +22,7 @@ class oDoor(oDoodadParent):
 
 
 # Metal Door
-class oDoorMetalic(oDoor):
+class oDoorMetalic(oDoodadParent):
     name = "Metal Door"
     depth = 1000
 
