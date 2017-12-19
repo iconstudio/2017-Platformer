@@ -49,7 +49,9 @@ def handle_events(frame_time):
             if event.type == SDL_KEYDOWN:
                 if event.key in (SDLK_p, SDLK_ESCAPE):
                     framework.pop_state()
-                    audio_play("sndPauseIn")
+                    audio_play("sndPauseOut")
+                elif event.key is ord('x'):
+                    framework.quit()
 
 
 def pause():

@@ -156,6 +156,7 @@ class oPlayer(GObject):
     def die(self):
         io.clear()
         audio_play("sndDie")
+        self.destroy()
         framework.change_state(game_over)
 
     def get_dmg(self, how: int = 1, dir = 1):
@@ -188,7 +189,8 @@ class oPlayer(GObject):
 
         # Pinned by spike trap
         if self.yVel < 0:
-            thlist, thcount = instance_place(oThorns, self.x, self.y + self.yVel + 1)
+            ydist = delta_velocity(self.yVel) * frame_time
+            thlist, thcount = instance_place(oThorns, self.x, self.y + ydist)
             if thcount > 0:
                 if self.y > thlist[0].y + 10:
                     self.die()
