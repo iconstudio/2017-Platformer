@@ -19,6 +19,9 @@ name = "option_state"
 time: float = 0
 alpha: float = 0
 hfont = None
+
+# 0: Music, 1: Sfx, -1: None
+choice_state = 0
 option = {
     "volume_sfx": 8,
     "volume_mus": 5,
@@ -64,7 +67,6 @@ def exit():
 
 def update(frame_time):
     global time, alpha
-
     if time < 2:
         alpha = ease_out_elastic(time / 2)
         time += frame_time

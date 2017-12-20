@@ -6,6 +6,8 @@ from module import framework
 from module.framework import io
 from stages import game
 from stages.game_executor import stage_init
+import main_option
+
 
 from module.sprite import *
 from module.audio import *
@@ -138,6 +140,7 @@ def update(frame_time):
             framework.change_state(game)
         elif mn_opt == menum.menusel:
             io.clear()
+            framework.push_state(main_option)
         elif mn_credit == menum.menusel:
             io.clear()
         elif mn_end == menum.menusel:
