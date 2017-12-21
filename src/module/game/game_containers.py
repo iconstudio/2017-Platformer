@@ -12,82 +12,19 @@ from streams import game_over
 from module.game.game_doodad import *
 from module.game.game_item import *
 from module.game.gobject_header import *
+from module.game.game_variables import *
 
 from module.sprite import *
 from module.audio import *
 
 __all__ = [
-    "player_got_damage", "player_lives_clear", "player_get_lives", "killcount_get", "killcount_increase",
-    "kill_local",
     "oPlayer", "oSoldier", "oManBeard", "oSnake", "oCobra", "oToad"
 ]
+
 
 # ==================================================================================================
 #                                               게임
 # ==================================================================================================
-
-
-player_lives = 3
-
-
-def player_got_damage(how: int):
-    global player_lives
-    player_lives -= how
-
-
-def player_lives_clear(how: int = 3):
-    global player_lives
-    player_lives = how
-
-
-def player_get_lives() -> int:
-    global player_lives
-    return player_lives
-
-
-player_ability = {}
-PLAYER_AB_DOUBLEJUMP = "DoubleJump"  # 더블 점프
-PLAYER_AB_SPIKESHOES = "SpikeShoes"  # 밟기 피해량 증가
-PLAYER_AB_SPRINSHOES = "SprinShoes"  # 높이 점프
-PLAYER_AB_DASH = "Dash"  # 고속 이동
-player_ability[PLAYER_AB_DOUBLEJUMP] = false
-player_ability[PLAYER_AB_SPIKESHOES] = false
-player_ability[PLAYER_AB_SPRINSHOES] = false
-player_ability[PLAYER_AB_DASH] = false
-
-
-def player_ability_get_status(what: str) -> bool:
-    global player_ability
-    try:
-        return player_ability[what]
-    except KeyError:
-        return false
-
-
-def player_ability_activate(what: str) -> None:
-    global player_ability
-    player_ability[what] = true
-
-
-kill_local = 0  # Count of killed enemy
-kill_total = 0
-
-
-# Killing count be treated with methods
-def killcount_get() -> (int, int):
-    global kill_local, kill_total
-    return kill_local, kill_total
-
-
-def killcount_increase():
-    global kill_local, kill_total
-    kill_local += 1
-    kill_total += 1
-
-
-def killcount_clear():
-    global kill_local
-    kill_local = 0
 
 
 # ==================================================================================================
@@ -295,6 +232,7 @@ class oPlayer(GObject):
                             for inst in clist:
                                 if inst.name == "Iron Block":  # isinstance(inst, oDoor):
                                     inst.destroy()
+                                    inst.x = -100000
                             return
 
                 if io.key_check(SDLK_LEFT): mx -= 1

@@ -78,6 +78,9 @@ class MainMenu:
         ddy = menusy + menum.menupos + 10
 
         draw_sprite(bg, 0, 0, 0)
+
+        draw_set_halign(0)
+        draw_set_valign(1)
         for j in range(menum.menucnt):
             dhfont = self.hfont
             if j == menum.menusel:
@@ -101,8 +104,6 @@ def enter():
     global mainmenu
 
     draw_set_color(255, 255, 255)
-    draw_set_halign(0)
-    draw_set_valign(1)
 
     if mainmenu is None:
         draw_set_alpha(1)

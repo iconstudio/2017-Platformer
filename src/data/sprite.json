@@ -600,5 +600,19 @@
 	"xoffset": 8,
 	"yoffset": 8,
 	"number": 1
+  },
+  {
+	"name": "sSpikeShoes",
+	"path": "..\\res\\img\\item\\spikeshoes_0.png",
+	"xoffset": 4,
+	"yoffset": 4,
+	"number": 1
+  },
+  {
+	"name": "sCape",
+	"path": "..\\res\\img\\item\\rock_0.png",
+	"xoffset": 4,
+	"yoffset": 4,
+	"number": 1
   }
 ]

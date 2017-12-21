@@ -16,11 +16,12 @@ from module.game.game_solid import *
 
 from module.game.gobject_header import *
 from module.game.game_containers import *
+from module.game.game_variables import *
 
 __all__ = [
     "stage_init", "stage_complete", "stage_get_number",
     "stage_create", "game_update", "game_draw", "stage_clear",
-    "game_handle_events", "killcount_get", "killcount_increase"
+    "game_handle_events"
 ]
 
 
@@ -63,18 +64,11 @@ class GameExecutor:
     popup = None
 
     def __init__(self):
-        global time_local, kill_local
-
         Camera.set_pos(0, 0)
         self.background_sprite = "bgCave"
-        time_local = 0
-        kill_local = 0
+        timer_clear()
 
     def clear(self):
-        global time_local, kill_local
-        time_local = 0
-        kill_local = 0
-
         for inst in get_instance_list(ID_OVERALL):
             inst.x = -10000
         instance_clear_all()
@@ -89,9 +83,7 @@ class GameExecutor:
         self.popup.caption = self.terrain_generator.get_stage_title()
 
     def update(self, frame_time):
-        global time_local, time_total
-        time_local += frame_time
-        time_total += frame_time
+        timer_increase(frame_time)
         if len(get_instance_list(ID_OVERALL)) > 0:
             for inst in get_instance_list(ID_OVERALL):
                 inst.event_step(frame_time)
@@ -127,9 +119,6 @@ class GameExecutor:
             draw_set_halign(0)
             draw_set_valign(1)
             framework.draw_text(str(player_get_lives()), screen_width - 50, screen_height - 38, scale = 2)
-            draw_set_halign(0)
-            draw_set_valign(0)
-            framework.draw_text("Time: %0.1f / %.0f" % (time_local, time_total), 10, screen_height - 10)
 
     def handle_events(self, frame_time):
         event_queue = get_events()
@@ -238,8 +227,6 @@ def stage_init():
     stagelist.append(Stage02)
     stagelist.reverse()
 
-    time_local = 0  # a Timer of current stage
-    time_total = 0
     manager = None
     stage_number = 0
 

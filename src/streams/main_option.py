@@ -2,9 +2,11 @@ from module.pico2d import *
 from module.constants import *
 
 import module.framework as framework
+from module.keycode import *
 
 from module.audio import *
 
+import math
 import json
 
 __all__ = [
@@ -79,15 +81,15 @@ def draw(frame_time):
     global alpha, hfont
 
     clear_canvas()
-    draw_set_alpha(alpha * 2)
+    draw_set_alpha(min(1, alpha * 2))
     draw_set_color(255, 255, 255)
     draw_set_halign(1)
     draw_set_valign(1)
     framework.draw_text("Option", screen_width / 2, screen_height - 32, font = 2, scale = 2)
 
     draw_set_alpha(alpha)
-    hfont.draw()
-    framework.draw_text("Option", screen_width / 2, screen_height - 32, font = 2, scale = 2)
+    hfont.draw(screen_width / 2 - 200, screen_height / 2, "Sound")
+    hfont.draw(screen_width / 2 + 200, screen_height / 2, "Music")
 
     update_canvas()
 
@@ -99,7 +101,7 @@ def handle_events(frame_time):
             framework.quit()
         elif time > 1:
             if event.type == SDL_KEYDOWN:
-                if event.key in (SDLK_z, SDLK_ESCAPE):
+                if event.key in (ord('z'), SDLK_ESCAPE):
                     framework.pop_state()
                     audio_play("sndMenuSelect")
 
