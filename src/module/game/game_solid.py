@@ -7,7 +7,8 @@ from module.game.game_doodad import oLushDecoration, oDirtBrickDecoration
 __all__ = [
     "oBrickCastle", "oLush", "oBrickDirt", "oStonewall", "oLushFlat", "oDirtBrickFlat", "oBlock", "oBlockMetal",
     "oBlockBlack", "oGravestone", "oGravestoneAsh", "oTreeTrunk", "oTreeTop", "oTreeTopDead", "oTreeLeaves",
-    "oTreeLeavesEnd", "oTreeLeavesDeadEnd", "oTreeBranch", "oTreeBranchDead"
+    "oTreeLeavesEnd", "oTreeLeavesDeadEnd", "oTreeBranch", "oTreeBranchDead",
+    "oTreeLeavesEndLeft", "oTreeLeavesDeadEndLeft", "oTreeBranchLeft", "oTreeBranchDeadLeft",
 ]
 
 
@@ -202,19 +203,26 @@ class oTreeLeavesEnd(Solid):
         self.image_index = 0
         self.image_speed = 0
 
-    def tile_correction(self):
-        # if #instance_place(oTreeTop, self.x + 21, self.y) \
-        #         or instance_place(oTreeLeaves, self.x + 26, self.y):
-        # if self.tile_right != 0:
-        #    self.image_xscale = -1
-        pass
-
 
 # Died Leaves of Tree at End
 class oTreeLeavesDeadEnd(oTreeLeavesEnd):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.image_index = 1
+
+
+# Died Leaves of Tree at End
+class oTreeLeavesEndLeft(oTreeLeavesEnd):
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.image_index = 3
+
+
+# Died Leaves of Tree at End
+class oTreeLeavesDeadEndLeft(oTreeLeavesEnd):
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.image_index = 4
 
 
 # Branch of Tree
@@ -226,14 +234,23 @@ class oTreeBranch(Solid):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sTreeBranches")
 
-    def tile_correction(self):
-        # if self.tile_right != 0:
-        #    self.image_xscale = -1
-        pass
 
-
-# Body of Tree
+# Dead Branch of Tree
 class oTreeBranchDead(oTreeBranch):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.image_index = 1
+
+
+# Branch of Tree
+class oTreeBranchLeft(oTreeBranch):
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.image_index = 2
+
+
+# Branch of Tree
+class oTreeBranchDeadLeft(oTreeBranch):
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.image_index = 3

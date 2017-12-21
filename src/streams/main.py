@@ -79,6 +79,7 @@ class MainMenu:
 
         draw_sprite(bg, 0, 0, 0)
 
+        draw_set_color(255, 255, 255)
         draw_set_halign(0)
         draw_set_valign(1)
         for j in range(menum.menucnt):
@@ -102,9 +103,6 @@ def enter():
     stage_init()
 
     global mainmenu
-
-    draw_set_color(255, 255, 255)
-
     if mainmenu is None:
         draw_set_alpha(1)
         global mn_begin, mn_opt, mn_credit, mn_end

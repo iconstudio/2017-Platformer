@@ -17,6 +17,7 @@ from module.game.game_solid import *
 from module.game.gobject_header import *
 from module.game.game_containers import *
 from module.game.game_variables import *
+from module.game.game_item import *
 
 __all__ = [
     "stage_init", "stage_complete", "stage_get_number",
@@ -199,9 +200,13 @@ def stage_init():
     terrain.terrain_tile_assign(30, oTreeTopDead, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(31, oTreeBranch, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(32, oTreeBranchDead, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(46, oTreeBranchLeft, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(47, oTreeBranchDeadLeft, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(33, oTreeLeavesEnd, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(34, oTreeLeavesDeadEnd, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(36, oTreeLeaves, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(48, oTreeLeavesEndLeft, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(49, oTreeLeavesDeadEndLeft, terrain.TYPE_TERRAIN)
 
     terrain.terrain_tile_assign(5, oLadder, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(26, oTorch, terrain.TYPE_DOODAD)
@@ -218,7 +223,12 @@ def stage_init():
     terrain.terrain_tile_assign(15, oManBeard, terrain.TYPE_INSTANCE)
     terrain.terrain_tile_assign(13, oCobra, terrain.TYPE_INSTANCE)
     terrain.terrain_tile_assign(12, oSnake, terrain.TYPE_INSTANCE)
+    terrain.terrain_tile_assign(41, oSpider, terrain.TYPE_INSTANCE)
     terrain.terrain_tile_assign(16, oToad, terrain.TYPE_INSTANCE)
+
+    terrain.terrain_tile_assign(43, oCape, terrain.TYPE_INSTANCE)
+    terrain.terrain_tile_assign(44, oSpikeShoes, terrain.TYPE_INSTANCE)
+    terrain.terrain_tile_assign(45, oSpringShoes, terrain.TYPE_INSTANCE)
 
     global stagelist, manager, time_local, time_total, stage_number
     stagelist = []

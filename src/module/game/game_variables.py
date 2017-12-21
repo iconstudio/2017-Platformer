@@ -3,14 +3,15 @@ from module.functions import *
 from module.constants import *
 
 __all__ = [
-    "player_got_damage", "player_lives_clear", "player_get_lives",
+    "player_got_damage", "player_lives_clear", "player_get_lives", "container_player",
     "player_ability_get_status", "player_ability_activate", "PLAYER_AB_DOUBLEJUMP",
     "PLAYER_AB_SPIKESHOES", "PLAYER_AB_SPRINSHOES", "PLAYER_AB_DASH",
-    "time_local", "time_total", "timer_get", "timer_set_all", "timer_clear", "timer_increase",
+    "timer_get", "timer_set_all", "timer_clear", "timer_increase",
     "killcount_get", "killcount_increase", "kill_local", "killcount_get", "killcount_increase", "killcount_clear"
 ]
 
 player_lives = 3
+container_player = None
 
 
 def player_got_damage(how: int):

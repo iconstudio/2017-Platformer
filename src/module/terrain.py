@@ -130,11 +130,6 @@ class TerrainGenerator:
                                     obj.tile_right = 1
                                 elif getr != 0 and whattocheck is ID_SOLID:
                                     obj.tile_right = 2
-
-                                if obj.name in ("Tree Branches", "End of Tree Leaves"):
-                                    #if getr in (28, 29, 30):  # Tree Trunk
-                                        obj.image_xscale = -1
-                                        print("tree parts invert " + str(obj))
                             else:
                                 obj.tile_right = 1
                         except IndexError:

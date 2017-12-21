@@ -61,8 +61,6 @@ def draw(frame_time):
     draw_set_halign(2)
     draw_set_valign(1)
     framework.draw_text("Press X to continue", screen_width - 10, ui_bot - 20)
-    draw_set_halign(1)
-    framework.draw_text("Stage %d Complete!" % framework.stage_number, screen_width / 2, ui_bot + 60, scale = 1.5)
     draw_set_halign(0)
 
     draw_set_alpha(1)
@@ -71,6 +69,8 @@ def draw(frame_time):
     draw_set_alpha(alpha)
     framework.draw_text("Kills: %d / %d" % killcount_get(), ui_left + 20, ui_bot + 30)
     framework.draw_text("Time: %0.1f / %.0f" % timer_get(), ui_left + 20, ui_bot + 50)
+    draw_set_halign(1)
+    framework.draw_text("Stage %d Complete!" % framework.stage_number, screen_width / 2, ui_bot + 90, scale = 1.5)
     update_canvas()
 
 

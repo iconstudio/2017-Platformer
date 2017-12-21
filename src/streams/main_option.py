@@ -22,8 +22,9 @@ time: float = 0
 alpha: float = 0
 hfont = None
 
+selected = 0
 # 0: Music, 1: Sfx, -1: None
-choice_state = 0
+choice_state = -1
 option = {
     "volume_sfx": 8,
     "volume_mus": 5,
@@ -31,7 +32,7 @@ option = {
 }
 
 
-def ease_out_elastic(arg0):
+def ease_out_sine(arg0):
     """
     :param arg0: 0 ~ 1
     :return: 0 ~ 1
@@ -41,10 +42,7 @@ def ease_out_elastic(arg0):
     elif arg0 is 1:
         return 1
 
-    p = 0.3
-    s = p / 4
-
-    return 2 ** (-10 * arg0 * math.sin((arg0 - s) * (2 * math.pi) / p) + 1)
+    return math.sin(arg0 * math.pi / 2)
 
 
 def rewrite_option():
@@ -70,7 +68,7 @@ def exit():
 def update(frame_time):
     global time, alpha
     if time < 2:
-        alpha = ease_out_elastic(time / 2)
+        alpha = ease_out_sine(time / 2)
         time += frame_time
     else:
         alpha = 1
@@ -78,32 +76,66 @@ def update(frame_time):
 
 
 def draw(frame_time):
-    global alpha, hfont
+    global alpha, hfont, choice_state, selected
 
+    hw, hh = screen_width / 2, screen_height / 2
     clear_canvas()
     draw_set_alpha(min(1, alpha * 2))
     draw_set_color(255, 255, 255)
     draw_set_halign(1)
     draw_set_valign(1)
-    framework.draw_text("Option", screen_width / 2, screen_height - 32, font = 2, scale = 2)
+    framework.draw_text("Option", hw, screen_height - 32, font = 2, scale = 2)
 
+    dcol_sfx = (255, 255, 255)
+    dcol_mus = (0, 0, 0)
     draw_set_alpha(alpha)
-    hfont.draw(screen_width / 2 - 200, screen_height / 2, "Sound")
-    hfont.draw(screen_width / 2 + 200, screen_height / 2, "Music")
+    dx1, dy1, dx2, dy2 = hw - 225, hh - 20, hw - 75, hh + 20
+
+    if selected == 1:
+        dx1 += 300
+        dx2 += 300
+    else:
+        dcol_sfx = (0, 0, 0)
+        dcol_mus = (255, 255, 255)
+    draw_rectangle(dx1, dy1, dx2, dy2)
+
+    draw_set_color(*dcol_sfx)
+    hfont.draw(hw - 150, hh, "Sound")
+    draw_set_color(*dcol_mus)
+    hfont.draw(hw + 150, hh, "Music")
+
+    if choice_state != -1:
+        draw_set_color(255, 255, 255)
+        draw_rectangle(hw - 150, hh + 60, hw + 150, hh + 100)
+        draw_set_color(0, 0, 0)
+        draw_rectangle(hw - 148, hh + 62, hw + 148, hh + 98)
 
     update_canvas()
 
 
 def handle_events(frame_time):
+    global time, choice_state, selected
+
     bevents = get_events()
     for event in bevents:
         if event.type == SDL_QUIT:
             framework.quit()
         elif time > 1:
             if event.type == SDL_KEYDOWN:
-                if event.key in (ord('z'), SDLK_ESCAPE):
-                    framework.pop_state()
-                    audio_play("sndMenuSelect")
+                if choice_state == -1:
+                    if event.key in (ord('z'), SDLK_ESCAPE):
+                        framework.pop_state()
+                        audio_play("sndMenuSelect")
+                    elif event.key in (SDLK_LEFT, SDLK_RIGHT):
+                        selected = 1 - selected
+                        audio_play("sndMenuEnter")
+                    elif event.key in (ord('x'), SDLK_RETURN):
+                        choice_state = selected
+                        audio_play("sndMenuEnter")
+                else:
+                    if event.key in (ord('z'), SDLK_ESCAPE):
+                        choice_state = -1
+                        audio_play("sndMenuSelect")
 
 
 def pause():

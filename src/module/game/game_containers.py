@@ -18,7 +18,7 @@ from module.sprite import *
 from module.audio import *
 
 __all__ = [
-    "oPlayer", "oSoldier", "oManBeard", "oSnake", "oCobra", "oToad"
+    "oPlayer", "oSoldier", "oManBeard", "oSnake", "oCobra", "oSpider", "oToad"
 ]
 
 
@@ -668,6 +668,89 @@ class oCobra(oSnake):
 
 
 # =======================================================
+class oSpider(oEnemyParent):
+    hp, maxhp = 1, 1
+    name = "Spider"
+    count = 0
+    xFric = 1
+    gravity_default = 0
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.idlespr = sprite_get("SpiderHang")
+        self.flipspr = sprite_get("SpiderFlipping")
+        self.attkspr = sprite_get("SpiderIdle")
+        self.sprite_set(self.idlespr)
+        self.image_speed = 0.1
+        self.y -= 4
+        self.y = math.floor(self.y)
+
+    def phy_collide(self, how: float or int):
+        if self.xVel != 0:
+            self.move_contact_x(abs(how), how > 0)
+            if self.xVel >= 3:
+                self.xVel *= -0.3
+            else:
+                self.xVel = -sign(self.xVel) * 12
+        self.x = math.floor(self.x)
+
+    def handle_be_track(self, *args):
+        self.sprite_set(self.flipspr)
+        self.yVel = -30
+        self.gravity_default = delta_gravity()
+
+    def handle_be_attack(self, *args):
+        self.sprite_set(self.attkspr)
+        self.gravity_default = delta_gravity()
+        self.image_speed = 0.7
+
+    def handle_idle(self, *args):
+        self.yVel = 0
+
+        global container_player
+        if container_player is None:
+            return
+
+        if container_player.y <= self.y and self.y - container_player.y < 320 \
+                and abs(self.x - container_player.x) <= 16:
+            self.status_change(oStatusContainer.TRACKING)
+            self.y -= 2
+
+    def handle_track(self, *args):
+        if round(self.image_index) >= self.sprite_index.number:
+            self.image_speed = 0
+            self.sprite_set(self.attkspr)
+
+        if not self.onAir:
+            self.status_change(oStatusContainer.ATTACKING)
+
+    def handle_attack(self, *args):
+        global container_player
+        if container_player is None:
+            return
+
+        if not self.onAir:
+            self.count += args[0]
+            if self.count >= 3:
+                defVel = 30
+                if probability_test(5):
+                    defVel = 15
+                    self.count = 2.5
+                else:
+                    self.count = 0
+
+                self.yVel = 80
+                audio_play("sndSpiderJump")
+                if container_player.x > self.x:
+                    self.xVel = defVel
+                elif container_player.x < self.x:
+                    self.xVel = -defVel
+
+    def handle_be_dead(self, *args):
+        self.destroy()
+
+
+# =======================================================
 class oToad(oEnemyParent):
     hp, maxhp = 1, 1
     name = "Toad"
@@ -712,7 +795,7 @@ class oToad(oEnemyParent):
             if self.count >= 4:
                 self.status_change(oStatusContainer.ATTACKING)
                 self.count = 0
-                self.yVel = 80
+                self.yVel = 70
                 if container_player.x > self.x:
                     self.xVel = 40
                 elif container_player.x < self.x:

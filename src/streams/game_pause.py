@@ -50,7 +50,7 @@ def handle_events(frame_time):
                 if event.key in (SDLK_p, SDLK_ESCAPE):
                     framework.pop_state()
                     audio_play("sndPauseOut")
-                elif event.key is ord('x'):
+                elif event.key is ord('z'):
                     framework.quit()
 
 

@@ -8,7 +8,7 @@
  "margin":0,
  "name":"Vampire Exodus Tileset v0.1",
  "spacing":0,
- "tilecount":40,
+ "tilecount":48,
  "tileheight":32,
  "tiles":
     {
@@ -222,6 +222,54 @@
          "image":"..\/..\/res\/img\/entity\/SpiderHang_0.png",
          "imageheight":16,
          "imagewidth":16
+        },
+     "41":
+        {
+         "image":"..\/..\/res\/img\/item\/ankh_0.png",
+         "imageheight":16,
+         "imagewidth":16
+        },
+     "42":
+        {
+         "image":"..\/..\/res\/img\/item\/cape_0.png",
+         "imageheight":16,
+         "imagewidth":16
+        },
+     "43":
+        {
+         "image":"..\/..\/res\/img\/item\/spikeshoes_0.png",
+         "imageheight":12,
+         "imagewidth":16
+        },
+     "44":
+        {
+         "image":"..\/..\/res\/img\/item\/springshoes_0.png",
+         "imageheight":12,
+         "imagewidth":16
+        },
+     "45":
+        {
+         "image":"..\/..\/res\/img\/theme\/tree_branch_left_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "46":
+        {
+         "image":"..\/..\/res\/img\/theme\/tree_branch_left_1.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "47":
+        {
+         "image":"..\/..\/res\/img\/theme\/tree_leaves_left_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "48":
+        {
+         "image":"..\/..\/res\/img\/theme\/tree_leaves_left_1.png",
+         "imageheight":20,
+         "imagewidth":20
         },
      "5":
         {

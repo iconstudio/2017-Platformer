@@ -65,6 +65,11 @@
 	"muse": false
   },
   {
+	"name": "sndMenuEnter",
+	"path": "..\\res\\audio\\menu_enter.ogg",
+	"muse": false
+  },
+  {
 	"name": "sndMsgUp",
 	"path": "..\\res\\audio\\msgup.ogg",
 	"muse": false
@@ -168,5 +173,11 @@
 	"name": "sndFrogJump",
 	"path": "..\\res\\audio\\sr_frog.ogg",
 	"muse": false
+  },
+  {
+	"name": "sndSpiderJump",
+	"path": "..\\res\\audio\\spider_jump.ogg",
+	"muse": false
   }
+
 ]

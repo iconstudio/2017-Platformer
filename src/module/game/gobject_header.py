@@ -491,7 +491,6 @@ class oEnemyDamage(GObject):
 class oItemParent(GObject):
     name = "Item"
     identify = ID_ITEM
-    gravity_default = 0
     depth = 400
     image_speed = 0
 

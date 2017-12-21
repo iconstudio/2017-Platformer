@@ -14,6 +14,13 @@
 	"number": 1
   },
   {
+	"name": "sPopupHotkeyC",
+	"path": "..\\res\\img\\ui\\msg_C.png",
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
+  },
+  {
 	"name": "sHeart",
 	"path": "..\\res\\img\\ui\\heart.png",
 	"xoffset": 16,
@@ -311,7 +318,9 @@
 	"name": "sTreeBranches",
 	"path": [
 	  "..\\res\\img\\theme\\tree_branch_0.png",
-	  "..\\res\\img\\theme\\tree_branch_1.png"
+	  "..\\res\\img\\theme\\tree_branch_1.png",
+	  "..\\res\\img\\theme\\tree_branch_left_0.png",
+	  "..\\res\\img\\theme\\tree_branch_left_1.png"
 	],
 	"xoffset": 0,
 	"yoffset": 0,
@@ -322,7 +331,9 @@
 	"path": [
 	  "..\\res\\img\\theme\\tree_leaves_0.png",
 	  "..\\res\\img\\theme\\tree_leaves_1.png",
-	  "..\\res\\img\\theme\\tree_leaves_2.png"
+	  "..\\res\\img\\theme\\tree_leaves_2.png",
+	  "..\\res\\img\\theme\\tree_leaves_left_0.png",
+	  "..\\res\\img\\theme\\tree_leaves_left_1.png"
 	],
 	"xoffset": 0,
 	"yoffset": 0,
@@ -511,6 +522,42 @@
 	"number": 1
   },
   {
+	"name": "SpiderHang",
+	"path": "..\\res\\img\\entity\\SpiderHang_0.png",
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
+  },
+  {
+	"name": "SpiderFlipping",
+	"path": [
+	  "..\\res\\img\\entity\\SpiderFlip_0.png",
+	  "..\\res\\img\\entity\\SpiderFlip_1.png",
+	  "..\\res\\img\\entity\\SpiderFlip_2.png",
+	  "..\\res\\img\\entity\\SpiderFlip_3.png",
+	  "..\\res\\img\\entity\\SpiderFlip_4.png",
+	  "..\\res\\img\\entity\\SpiderFlip_5.png",
+	  "..\\res\\img\\entity\\SpiderFlip_6.png",
+	  "..\\res\\img\\entity\\SpiderFlip_7.png",
+	  "..\\res\\img\\entity\\SpiderFlip_8.png"
+	],
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
+  },
+  {
+	"name": "SpiderIdle",
+	"path": [
+	  "..\\res\\img\\entity\\Spider_0.png",
+	  "..\\res\\img\\entity\\Spider_1.png",
+	  "..\\res\\img\\entity\\Spider_2.png",
+	  "..\\res\\img\\entity\\Spider_3.png"
+	],
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
+  },
+  {
 	"name": "BloodyBatIdle",
 	"path": "..\\res\\img\\entity\\BloodyBatHang_0.png",
 	"xoffset": 8,
@@ -604,15 +651,15 @@
   {
 	"name": "sSpikeShoes",
 	"path": "..\\res\\img\\item\\spikeshoes_0.png",
-	"xoffset": 4,
-	"yoffset": 4,
+	"xoffset": 8,
+	"yoffset": 8,
 	"number": 1
   },
   {
 	"name": "sCape",
-	"path": "..\\res\\img\\item\\rock_0.png",
-	"xoffset": 4,
-	"yoffset": 4,
+	"path": "..\\res\\img\\item\\cape_0.png",
+	"xoffset": 8,
+	"yoffset": 8,
 	"number": 1
   }
 ]
