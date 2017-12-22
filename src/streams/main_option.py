@@ -25,11 +25,6 @@ hfont = None
 selected = 0
 # 0: Music, 1: Sfx, -1: None
 choice_state = -1
-option = {
-    "volume_sfx": framework.volsfx,
-    "volume_mus": framework.volmus,
-    "effect": True
-}
 
 
 def ease_out_sine(arg0):
@@ -46,10 +41,14 @@ def ease_out_sine(arg0):
 
 
 def rewrite_option():
-    global option
+    option = {
+        "volume_sfx": framework.volsfx,
+        "volume_mus": framework.volmus,
+        "effect": True
+    }
+
     with open(path_data + "option.json", 'w', encoding = "utf-8") as make_file:
         json.dump(option, make_file, ensure_ascii = False, indent = "\t")
-    framework.option_load()
 
 
 # noinspection PyGlobalUndefined
@@ -64,7 +63,6 @@ def exit():
     del hfont
 
     framework.unpause()
-    framework.option_load()
 
 
 def update(frame_time):
@@ -92,12 +90,12 @@ def draw(frame_time):
     dcol_mus = (0, 0, 0)
     draw_set_alpha(alpha)
     dx1, dy1, dx2, dy2 = hw - 225, hh - 20, hw - 75, hh + 20
-    draw_value = option["volume_sfx"]
+    draw_value = framework.volsfx
 
     if selected == 1:
         dx1 += 300
         dx2 += 300
-        draw_value = option["volume_mus"]
+        draw_value = framework.volmus
     else:
         dcol_sfx = (0, 0, 0)
         dcol_mus = (255, 255, 255)
@@ -120,7 +118,7 @@ def draw(frame_time):
 
 
 def handle_events(frame_time):
-    global option, time, choice_state, selected
+    global time, choice_state, selected
 
     bevents = get_events()
     for event in bevents:
@@ -146,14 +144,14 @@ def handle_events(frame_time):
                         audio_play("sndMenuSelect")
                     elif event.key is SDLK_LEFT:
                         if selected == 0:  # Sound effect Volume
-                            option["volume_sfx"] = max(0, option["volume_sfx"] - 1)
+                            framework.volsfx = max(0, framework.volsfx - 1)
                         elif selected == 1:  # Music Volume
-                            option["volume_mus"] = max(0, option["volume_mus"] - 1)
+                            framework.volmus = max(0, framework.volmus - 1)
                     elif event.key is SDLK_RIGHT:
                         if selected == 0:  # Sound effect Volume
-                            option["volume_sfx"] = min(10, option["volume_sfx"] + 1)
+                            framework.volsfx = min(10, framework.volsfx + 1)
                         elif selected == 1:  # Music Volume
-                            option["volume_mus"] = min(10, option["volume_mus"] + 1)
+                            framework.volmus = min(10, framework.volmus + 1)
 
 
 def pause():
