@@ -26,8 +26,8 @@ selected = 0
 # 0: Music, 1: Sfx, -1: None
 choice_state = -1
 option = {
-    "volume_sfx": 8,
-    "volume_mus": 5,
+    "volume_sfx": framework.volsfx,
+    "volume_mus": framework.volmus,
     "effect": True
 }
 
@@ -49,6 +49,7 @@ def rewrite_option():
     global option
     with open(path_data + "option.json", 'w', encoding = "utf-8") as make_file:
         json.dump(option, make_file, ensure_ascii = False, indent = "\t")
+    framework.option_load()
 
 
 # noinspection PyGlobalUndefined
@@ -63,6 +64,7 @@ def exit():
     del hfont
 
     framework.unpause()
+    framework.option_load()
 
 
 def update(frame_time):
@@ -90,10 +92,12 @@ def draw(frame_time):
     dcol_mus = (0, 0, 0)
     draw_set_alpha(alpha)
     dx1, dy1, dx2, dy2 = hw - 225, hh - 20, hw - 75, hh + 20
+    draw_value = option["volume_sfx"]
 
     if selected == 1:
         dx1 += 300
         dx2 += 300
+        draw_value = option["volume_mus"]
     else:
         dcol_sfx = (0, 0, 0)
         dcol_mus = (255, 255, 255)
@@ -109,23 +113,27 @@ def draw(frame_time):
         draw_rectangle(hw - 150, hh + 60, hw + 150, hh + 100)
         draw_set_color(0, 0, 0)
         draw_rectangle(hw - 148, hh + 62, hw + 148, hh + 98)
+        draw_set_color(255, 255, 255)
+        draw_rectangle_sized(hw - 150, hh + 60, (draw_value / 10) * 300, 40)
 
     update_canvas()
 
 
 def handle_events(frame_time):
-    global time, choice_state, selected
+    global option, time, choice_state, selected
 
     bevents = get_events()
     for event in bevents:
         if event.type == SDL_QUIT:
             framework.quit()
+            rewrite_option()
         elif time > 1:
             if event.type == SDL_KEYDOWN:
                 if choice_state == -1:
                     if event.key in (ord('z'), SDLK_ESCAPE):
                         framework.pop_state()
                         audio_play("sndMenuSelect")
+                        rewrite_option()
                     elif event.key in (SDLK_LEFT, SDLK_RIGHT):
                         selected = 1 - selected
                         audio_play("sndMenuEnter")
@@ -136,6 +144,16 @@ def handle_events(frame_time):
                     if event.key in (ord('z'), SDLK_ESCAPE):
                         choice_state = -1
                         audio_play("sndMenuSelect")
+                    elif event.key is SDLK_LEFT:
+                        if selected == 0:  # Sound effect Volume
+                            option["volume_sfx"] = max(0, option["volume_sfx"] - 1)
+                        elif selected == 1:  # Music Volume
+                            option["volume_mus"] = max(0, option["volume_mus"] - 1)
+                    elif event.key is SDLK_RIGHT:
+                        if selected == 0:  # Sound effect Volume
+                            option["volume_sfx"] = min(10, option["volume_sfx"] + 1)
+                        elif selected == 1:  # Music Volume
+                            option["volume_mus"] = min(10, option["volume_mus"] + 1)
 
 
 def pause():

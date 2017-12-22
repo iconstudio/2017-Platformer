@@ -7,7 +7,7 @@ import json
 from module.sprite import *
 
 __all__ = [
-    "GameState", "change_state", "push_state", "pop_state", "quit", "run",
+    "GameState", "change_state", "push_state", "pop_state", "quit", "run", "option_load",
     "io", "game_begin", "game_end", "current_time", "game_realtime", "uiframe",
     "audio_get_volume_sfx_global", "audio_get_volume_music_global",
     "hFont", "hFontLrg", "hFontRetro", "draw_text", "stage_number"
@@ -18,6 +18,15 @@ hFont, hFontLrg = None, None
 hFontRetro = None
 volsfx, volmus, optefx = 10, 8, true
 stage_number = 0
+
+
+def option_load():
+    with open(path_data + "option.json") as opfile:
+        global volsfx, volmus, optefx
+        data = json.load(opfile)
+        volsfx = data["volume_sfx"]
+        volmus = data["volume_mus"]
+        optefx = data["effect"]
 
 
 # noinspection PyUnusedLocal
@@ -45,12 +54,7 @@ def game_begin():
     tempstr = str('!"' + "#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ")
     hFontRetro = Font_sprite(ft, tempstr)
 
-    with open(path_data + "option.json") as opfile:
-        global volsfx, volmus, optefx
-        data = json.load(opfile)
-        volsfx = data["volume_sfx"]
-        volmus = data["volume_mus"]
-        optefx = data["effect"]
+    option_load()
 
 
 def draw_text(caption: str, dx, dy, font: int = 2, scale: float = 1.0):
