@@ -31,7 +31,7 @@ def option_load():
 
 # noinspection PyUnusedLocal
 def game_begin():
-    HWND = open_canvas(screen_width, screen_height, full = false)
+    HWND = open_canvas(screen_width, screen_height, full = truezzz)
     SDL_SetWindowTitle(HWND, "Vampire Exodus".encode("UTF-8"))
     # icon = load_texture(path_image + "icon.png")
     # SDL_SetWindowIcon(hwnd, icon)
