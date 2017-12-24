@@ -106,6 +106,9 @@ class oThorns(oDoodadParent):
         self.sprite_set("sThorns")
         self.image_speed = 0
 
+    def get_bbox(self):
+        return self.x + 2, self.y, 16, 12
+
 
 # A tile of mil at intro
 class oMillHousechip(oDoodadParent):

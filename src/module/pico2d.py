@@ -554,7 +554,7 @@ class Music:
 
     @staticmethod
     def set_volume(v):
-        Mix_VolumeMusic(v)
+        Mix_VolumeMusic(int(v))
 
     @staticmethod
     def get_volume():
@@ -590,7 +590,7 @@ class Wav:
         Mix_PlayChannel(-1, self.wav, n - 1)
 
     def set_volume(self, v):
-        Mix_VolumeChunk(self.wav, v)
+        Mix_VolumeChunk(self.wav, int(v))
 
     def get_volume(self):
         return Mix_VolumeChunk(self.wav, -1)

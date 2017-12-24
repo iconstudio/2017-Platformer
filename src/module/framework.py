@@ -5,33 +5,36 @@ from module.constants import *
 import json
 
 from module.sprite import *
+from module.audio import *
 
 __all__ = [
     "GameState", "change_state", "push_state", "pop_state", "quit", "run", "option_load",
     "io", "game_begin", "game_end", "current_time", "game_realtime", "uiframe",
-    "audio_get_volume_sfx_global", "audio_get_volume_music_global",
     "hFont", "hFontLrg", "hFontRetro", "draw_text", "stage_number"
 ]
 
 keylogger_list = []
 hFont, hFontLrg = None, None
 hFontRetro = None
-volsfx, volmus, optefx = 10, 8, true
 stage_number = 0
+optefx = true
 
 
 def option_load():
     with open(path_data + "option.json") as opfile:
-        global volsfx, volmus, optefx
+        global optefx
         data = json.load(opfile)
         volsfx = data["volume_sfx"]
         volmus = data["volume_mus"]
         optefx = data["effect"]
 
+        audio_set_volume_sfx_global(volsfx)
+        audio_set_volume_music_global(volmus)
+
 
 # noinspection PyUnusedLocal
 def game_begin():
-    HWND = open_canvas(screen_width, screen_height, full = truezzz)
+    HWND = open_canvas(screen_width, screen_height, full = false)
     SDL_SetWindowTitle(HWND, "Vampire Exodus".encode("UTF-8"))
     # icon = load_texture(path_image + "icon.png")
     # SDL_SetWindowIcon(hwnd, icon)
@@ -72,26 +75,6 @@ def game_end():
 
     global hFont, hFontLrg
     del hFont, hFontLrg
-
-
-def audio_set_volume_sfx(v):
-    global volsfx
-    volsfx = v
-
-
-def audio_set_volume_music(v):
-    global volmus
-    volmus = v
-
-
-def audio_get_volume_sfx_global():
-    global volsfx
-    return int(volsfx / 10 * 128)
-
-
-def audio_get_volume_music_global():
-    global volmus
-    return int(volmus / 10 * 128)
 
 
 # Object : IO procedure

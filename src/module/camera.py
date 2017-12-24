@@ -11,10 +11,15 @@ __all__ = [
 class oCamera:
     x: float = 0
     y: float = 0
+    sx: float = 0
+    sy: float = 0
     width, height = screen_width, screen_height
     width_scene, height_scene = screen_width, screen_height
     target_object = None
     lock: bool = false
+
+    shake_rot = 0
+    shake = 0
 
     def set_taget(self, arg):
         self.target_object = arg
@@ -43,8 +48,8 @@ class oCamera:
         return int(self.x), int(self.y), self.width, self.height
 
     def limit(self):
-        self.x = clamp(0, int(self.x), self.width_scene - self.width)
-        self.y = clamp(0, int(self.y), self.height_scene - self.height + 40)
+        self.x = clamp(0, int(self.x), self.width_scene - self.width) + self.sx
+        self.y = clamp(0, int(self.y), self.height_scene - self.height + 10) + self.sy
 
     def set_pos(self, nx: float = None, ny: float = None):
         if nx is not None:
@@ -65,11 +70,20 @@ class oCamera:
             self.y += ay
         self.limit()
 
+    def screen_shake(self, value):
+        self.shake = max(self.shake, value)
+        self.shake_rot = irandom(360)
+
     def event_step(self):
-        # if self.target_object is not None:
-        #    self.set_pos(self.target_object.x - get_screen_width() / 2,
-        #                 self.target_object.y - get_screen_height() / 2)
-        pass
+        if self.shake != 0 and self.shake > 0.02:
+            self.sx = math.cos(degtorad(self.shake_rot)) * self.shake
+            self.sy = math.sin(degtorad(self.shake_rot)) * self.shake
+
+            self.shake_rot = (self.shake_rot + 50 + irandom(140)) % 360
+            self.shake -= self.shake / 12
+        else:
+            self.sx, self.sy = 0, 0
+            self.shake = 0
 
 
 Camera = oCamera()

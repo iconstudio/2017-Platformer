@@ -3,7 +3,7 @@ from module.functions import *
 from module.constants import *
 
 __all__ = [
-    "player_got_damage", "player_lives_clear", "player_get_lives", "container_player",
+    "player_got_damage", "player_lives_clear", "player_get_lives", "player_instance_set", "player_instance_get",
     "player_ability_get_status", "player_ability_activate", "PLAYER_AB_DOUBLEJUMP",
     "PLAYER_AB_SPIKESHOES", "PLAYER_AB_SPRINSHOES", "PLAYER_AB_DASH",
     "timer_get", "timer_set_all", "timer_clear", "timer_increase",
@@ -12,6 +12,16 @@ __all__ = [
 
 player_lives = 3
 container_player = None
+
+
+def player_instance_set(arg):
+    global container_player
+    container_player = arg
+
+
+def player_instance_get():
+    global container_player
+    return container_player
 
 
 def player_got_damage(how: int):

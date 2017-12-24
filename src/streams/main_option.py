@@ -42,8 +42,8 @@ def ease_out_sine(arg0):
 
 def rewrite_option():
     option = {
-        "volume_sfx": framework.volsfx,
-        "volume_mus": framework.volmus,
+        "volume_sfx": audio_get_volume_sfx_global(),
+        "volume_mus": audio_get_volume_music_global(),
         "effect": True
     }
 
@@ -90,12 +90,12 @@ def draw(frame_time):
     dcol_mus = (0, 0, 0)
     draw_set_alpha(alpha)
     dx1, dy1, dx2, dy2 = hw - 225, hh - 20, hw - 75, hh + 20
-    draw_value = framework.volsfx
+    draw_value = audio_get_volume_sfx_global()
 
     if selected == 1:
         dx1 += 300
         dx2 += 300
-        draw_value = framework.volmus
+        draw_value = audio_get_volume_music_global()
     else:
         dcol_sfx = (0, 0, 0)
         dcol_mus = (255, 255, 255)
@@ -113,6 +113,7 @@ def draw(frame_time):
         draw_rectangle(hw - 148, hh + 62, hw + 148, hh + 98)
         draw_set_color(255, 255, 255)
         draw_rectangle_sized(hw - 150, hh + 60, (draw_value / 10) * 300, 40)
+        hfont.draw(hw, hh + 40, str(draw_value))
 
     update_canvas()
 
@@ -139,19 +140,21 @@ def handle_events(frame_time):
                         choice_state = selected
                         audio_play("sndMenuEnter")
                 else:
+                    volsfx = audio_get_volume_sfx_global()
+                    volmus = audio_get_volume_music_global()
                     if event.key in (ord('z'), SDLK_ESCAPE):
                         choice_state = -1
                         audio_play("sndMenuSelect")
                     elif event.key is SDLK_LEFT:
                         if selected == 0:  # Sound effect Volume
-                            framework.volsfx = max(0, framework.volsfx - 1)
+                            audio_set_volume_sfx_global(volsfx - 1)
                         elif selected == 1:  # Music Volume
-                            framework.volmus = max(0, framework.volmus - 1)
+                            audio_set_volume_music_global(volmus - 1)
                     elif event.key is SDLK_RIGHT:
                         if selected == 0:  # Sound effect Volume
-                            framework.volsfx = min(10, framework.volsfx + 1)
+                            audio_set_volume_sfx_global(volsfx + 1)
                         elif selected == 1:  # Music Volume
-                            framework.volmus = min(10, framework.volmus + 1)
+                            audio_set_volume_music_global(volmus + 1)
 
 
 def pause():

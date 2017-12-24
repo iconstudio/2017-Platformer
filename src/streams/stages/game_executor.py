@@ -28,7 +28,7 @@ __all__ = [
 
 class ui_PopupStage(GObject):
     sprite_index = sprite_get("sPopupStage")
-    life = 4
+    life = 3
     dmode = 0
     caption = "Stage"
     identify = ID_UI
@@ -63,10 +63,10 @@ class GameExecutor:
     terrain_generator = None
     where: str = ""
     popup = None
+    background_sprite = None
 
     def __init__(self):
         Camera.set_pos(0, 0)
-        self.background_sprite = "bgCave"
         timer_clear()
 
     def clear(self):
@@ -115,6 +115,23 @@ class GameExecutor:
 
         if not self.popup.visible:
             draw_set_alpha(1)
+            varp = player_instance_get()
+            if varp != None and varp.door_popup != None:
+                draw_sprite(sprite_get("sPopupHotkeyC"), 0, varp.door_popup.x + 10, varp.door_popup.y + 27)
+
+            tdx, tdy = 10, get_screen_height() - 40
+            if player_ability_get_status(PLAYER_AB_DOUBLEJUMP):
+                draw_sprite(sprite_get("sIconCape"), 0, tdx, tdy, 2, 2, alpha = 0.6)
+                tdx += 36
+
+            if player_ability_get_status(PLAYER_AB_SPIKESHOES):
+                draw_sprite(sprite_get("sIconSpike"), 0, tdx, tdy, 2, 2, alpha = 0.6)
+                tdx += 36
+
+            if player_ability_get_status(PLAYER_AB_SPRINSHOES):
+                draw_sprite(sprite_get("sIconSpring"), 0, tdx, tdy, 2, 2, alpha = 0.6)
+                tdx += 36
+
             heart = sprite_get("sHeart")
             draw_sprite(heart, 0, screen_width - 94, screen_height - 48)
             draw_set_halign(0)
@@ -168,7 +185,7 @@ class Stage01(GameExecutor):
     def __init__(self):
         super().__init__()
 
-        self.background_sprite = None
+        self.background_sprite = "bgCave"
         self.where = "stage01"
 
         audio_stream_play("musGame" + str(irandom_range(1, 3)))

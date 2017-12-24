@@ -10,7 +10,7 @@ from module.audio import *
 
 __all__ = [
     "oStatusContainer", "instance_place", "instance_list_remove_something", "instance_list_clear",
-    "instance_clear_all",
+    "instance_clear_all", "instance_place_single",
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
     "get_instance_list", "draw_list_sort",
     "container_player", "GObject", "Solid", "oPlayerDamage", "oEnemyDamage", "oItemParent", "oDoodadParent",
@@ -493,6 +493,16 @@ class oItemParent(GObject):
     identify = ID_ITEM
     depth = 400
     image_speed = 0
+    rot = 0
+
+    def __init__(self, nd, nx, ny):
+        super().__init__(nd, nx, ny)
+        self.starty = ny
+
+    def event_step(self, frame_time):
+        if self.gravity_default == 0:
+            self.y = self.starty + 12 + math.sin(self.rot * math.pi / 180) * 3
+            self.rot = (self.rot + 1) % 360
 
 
 # Parent of Terrain Doodads
@@ -546,3 +556,22 @@ def instance_place(Ty, fx, fy) -> (list, int):
                 __returns.append(inst)
 
     return __returns, len(__returns)
+
+
+def instance_place_single(Ty, fx, fy):
+    try:
+        ibj = Ty.identify
+    except AttributeError:
+        raise RuntimeError("Cannot find variable 'identify' in %s" % (str(Ty)))
+
+    if ibj == "":
+        clist = get_instance_list(ID_OVERALL)
+    else:
+        clist = get_instance_list(ibj)
+    length = len(clist)
+    if length > 0:
+        for inst in clist:
+            if isinstance(inst, Ty) and point_in_rectangle(fx, fy, *inst.get_bbox()):
+                return inst
+
+    return None

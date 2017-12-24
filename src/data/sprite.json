@@ -28,6 +28,41 @@
 	"number": 1
   },
   {
+	"name": "sIconAnkh",
+	"path": "..\\res\\img\\ui\\icon_ankh.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sIconCape",
+	"path": "..\\res\\img\\ui\\icon_cape.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sIconSpike",
+	"path": "..\\res\\img\\ui\\icon_spikeshoes.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sIconSpring",
+	"path": "..\\res\\img\\ui\\icon_springshoes.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sIconTimer",
+	"path": "..\\res\\img\\ui\\icon_timer.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
 	"name": "sMainTitle",
 	"path": "..\\res\\img\\ui\\mainmenu.png",
 	"xoffset": 0,

@@ -9,6 +9,7 @@ from module.camera import *
 from module.framework import io
 from streams import game_over
 
+from module.game.game_solid import *
 from module.game.game_doodad import *
 from module.game.game_item import *
 from module.game.gobject_header import *
@@ -39,16 +40,22 @@ class oPlayer(GObject):
     name = "Player"
     depth = 0
     image_speed = 0
+
     # anitem what to hold on
     held: object = None
+
+    # time of invincible (seconds)
     invincible: float = 0
+    # time of uncontrollable (seconds)
     controllable: float = 0
     laddercount: float = 0
     attack_delay: float = 0
+    pin_index = 0
+    door_popup = None
 
     ability_jump_count = 1
     ability_dash_count = 1
-    ability_blink_count = 1
+    ability_jump_velocity = 90
 
     key_jump = ord('z')
     key_attack = ord('x')
@@ -61,16 +68,14 @@ class oPlayer(GObject):
         super().__init__(ndepth, nx, ny)
         self.sprite_index = sprite_get("Player")
 
-        global container_player
-        container_player = self
+        player_instance_set(self)
         Camera.set_taget(self)
 
         print("Player Created!")
         Camera.set_pos(self.x, self.y)
 
     def __del__(self):
-        global container_player
-        container_player = None
+        player_instance_set(None)
         Camera.set_taget(None)
 
         print("Player Destroyed!")
@@ -93,7 +98,6 @@ class oPlayer(GObject):
     def die(self):
         io.clear()
         audio_play("sndDie")
-        self.destroy()
         framework.change_state(game_over)
 
     def get_dmg(self, how: int = 1, dir = 1):
@@ -127,9 +131,9 @@ class oPlayer(GObject):
         # Pinned by spike trap
         if self.yVel < 0:
             ydist = delta_velocity(self.yVel) * frame_time
-            thlist, thcount = instance_place(oThorns, self.x, self.y + ydist)
-            if thcount > 0:
-                if self.y > thlist[0].y + 10:
+            thornsObj = instance_place_single(oThorns, self.x, self.y + ydist)
+            if thornsObj != None:
+                if self.y > thornsObj.y + 10:
                     self.die()
                     return
 
@@ -179,6 +183,7 @@ class oPlayer(GObject):
                         self.get_dmg(1, enemy.image_xscale)
                     elif self.invincible <= 0 and self.y <= enemy.y:
                         self.get_dmg(1, enemy.image_xscale)
+                        Camera.screen_shake(6)
                     enemy.collide_with_player = true
 
         # ===============================================================================================
@@ -190,7 +195,10 @@ class oPlayer(GObject):
                     if enemy.oStatus < oStatusContainer.STUNNED:
                         if enemy.name not in ("ManEater", "Lavaman",):  # Cannot stomping these kind of enemies.
                             self.yVel = 60
-                            enemy.hp -= 1
+                            if player_ability_get_status(PLAYER_AB_SPIKESHOES):
+                                enemy.hp -= 3
+                            else:
+                                enemy.hp -= 1
                             enemy.yVel = 30
                             enemy.collide_with_player = false
                             if enemy.hp <= 0:  # Kzill the enemy
@@ -218,23 +226,49 @@ class oPlayer(GObject):
             # ===============================================================================================
             mx, my = 0, 0
             if self.controllable <= 0:  # Player can controllable
-                if not self.onAir and io.key_check_pressed(ord('c')):
-                    if instance_place(oDoor, self.x, self.y)[1] > 0:
+                instCape: oItemParent = instance_place_single(oCape, self.x, self.y)
+                if instCape != None:
+                    instCape.destroy()
+                    player_ability_activate(PLAYER_AB_DOUBLEJUMP)
+                    Camera.screen_shake(10)
+
+                instSpringShoes: oItemParent = instance_place_single(oSpringShoes, self.x, self.y)
+                if instSpringShoes != None:
+                    instSpringShoes.destroy()
+                    player_ability_activate(PLAYER_AB_SPRINSHOES)
+                    oPlayer.ability_jump_velocity = 105
+                    Camera.screen_shake(10)
+
+                instSpikeShoes: oItemParent = instance_place_single(oSpikeShoes, self.x, self.y)
+                if instSpikeShoes != None:
+                    instSpikeShoes.destroy()
+                    player_ability_activate(PLAYER_AB_SPIKESHOES)
+                    Camera.screen_shake(10)
+
+                instdoor = instance_place_single(oDoor, self.x, self.y)
+                self.door_popup = instdoor
+                if instdoor != None:
+                    if not self.onAir and io.key_check_pressed(ord('c')):
                         audio_play("sndEnterDoor")
                         self.destroy()
                         from stages.game_executor import stage_complete
                         stage_complete()
                         return
-                    else:
-                        ln, cnt = instance_place(oDoorMetalic, self.x, self.y)
-                        if cnt > 0:
-                            clist = get_instance_list(ID_DOODAD)
-                            for inst in clist:
-                                if inst.name == "Iron Block":  # isinstance(inst, oDoor):
-                                    inst.destroy()
-                                    inst.x = -100000
-                            return
+                    self.pin_index = (self.pin_index + 0.5) % 4
+                else:
+                    isOn = false
+                    ln, cnt = instance_place(oDoorMetalic, self.x, self.y)
+                    if cnt > 0:
+                        clist = get_instance_list(ID_SOLID)
+                        for inst in clist:
+                            if isinstance(inst, oBlockMetal):  # isinstance(inst, oDoor):
+                                inst.destroy()
+                                inst.x = -100000
+                                isOn = true
+                        if isOn:
+                            Camera.screen_shake(30)
 
+                # Move
                 if io.key_check(SDLK_LEFT): mx -= 1
                 if io.key_check(SDLK_RIGHT): mx += 1
                 if io.key_check(SDLK_UP): my += 1
@@ -272,7 +306,7 @@ class oPlayer(GObject):
                                 do_jump = true
 
                         if do_jump:
-                            self.yVel = 90
+                            self.yVel = oPlayer.ability_jump_velocity
                             audio_play("sndJump")
 
                     # ==========================================================================================
@@ -289,14 +323,14 @@ class oPlayer(GObject):
                     if mx != 0:
                         self.image_xscale = mx
 
-                    if io.key_check_pressed(self.key_jump):  # Jump
+                    if io.key_check_pressed(self.key_jump):  # Jump on Ladder
                         if self.place_free(0, my + 4):
                             if mx != 0:
                                 distance = delta_velocity(self.xVelMax / 2) * mx
                                 if self.place_free(distance, 0):
                                     self.xVel = self.xVelMax / 2 * mx
                             if my != -1:
-                                self.yVel = 70  # Jumps higher
+                                self.yVel = oPlayer.ability_jump_velocity * 0.75  # Jumps lower
                             self.status_change(oStatusContainer.IDLE)
                             self.sprite_set("PlayerJump")
                             audio_play("sndJump")
@@ -311,8 +345,9 @@ class oPlayer(GObject):
                         self.yFric = 1
 
                     if self.yVel != 0:  # Get off the ladder
-                        instl, cl = instance_place(oLadder, self.x, self.y)
-                        if cl <= 0 or (my <= 0 and not self.onAir):  # If there is no ladder or it is grounded.
+                        instl = instance_place_single(oLadder, self.x, self.y)
+                        if instl is None \
+                                or (my <= 0 and not self.onAir):  # If there is no ladder or it is grounded.
                             self.status_change(oStatusContainer.IDLE)
                             self.sprite_set("Player")
                             self.y += 1
@@ -707,12 +742,12 @@ class oSpider(oEnemyParent):
     def handle_idle(self, *args):
         self.yVel = 0
 
-        global container_player
-        if container_player is None:
+        cplayer = player_instance_get()
+        if cplayer is None:
             return
 
-        if container_player.y <= self.y and self.y - container_player.y < 320 \
-                and abs(self.x - container_player.x) <= 16:
+        if cplayer.y <= self.y and self.y - cplayer.y < 320 \
+                and abs(self.x - cplayer.x) <= 16:
             self.status_change(oStatusContainer.TRACKING)
             self.y -= 2
 
@@ -725,8 +760,8 @@ class oSpider(oEnemyParent):
             self.status_change(oStatusContainer.ATTACKING)
 
     def handle_attack(self, *args):
-        global container_player
-        if container_player is None:
+        cplayer = player_instance_get()
+        if cplayer is None:
             return
 
         if not self.onAir:
@@ -741,9 +776,9 @@ class oSpider(oEnemyParent):
 
                 self.yVel = 80
                 audio_play("sndSpiderJump")
-                if container_player.x > self.x:
+                if cplayer.x > self.x:
                     self.xVel = defVel
-                elif container_player.x < self.x:
+                elif cplayer.x < self.x:
                     self.xVel = -defVel
 
     def handle_be_dead(self, *args):
@@ -777,17 +812,19 @@ class oToad(oEnemyParent):
         self.image_speed = 0.6
 
     def handle_be_attack(self, *args):
+        cplayer = player_instance_get()
+
         self.sprite_set(self.jumpspr)
-        if container_player.x > self.x:
+        if cplayer.x > self.x:
             self.image_xscale = 1
-        elif container_player.x < self.x:
+        elif cplayer.x < self.x:
             self.image_xscale = -1
         self.image_speed = 0
         audio_play("sndFrogJump")
 
     def handle_idle(self, *args):
-        global container_player
-        if container_player is None:
+        cplayer = player_instance_get()
+        if cplayer is None:
             return
 
         if not self.onAir:
@@ -796,9 +833,9 @@ class oToad(oEnemyParent):
                 self.status_change(oStatusContainer.ATTACKING)
                 self.count = 0
                 self.yVel = 70
-                if container_player.x > self.x:
+                if cplayer.x > self.x:
                     self.xVel = 40
-                elif container_player.x < self.x:
+                elif cplayer.x < self.x:
                     self.xVel = -40
             elif self.sound_attack_delay <= 0 and probability_test(200):
                 audio_play("sndFrog")

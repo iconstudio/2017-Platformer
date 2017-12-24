@@ -22,6 +22,7 @@ class oRock(oItemParent):
 class oSpringShoes(oItemParent):
     name = "Spring Shoes"
     depth = 1000
+    gravity_default = 0
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -32,6 +33,7 @@ class oSpringShoes(oItemParent):
 class oSpikeShoes(oItemParent):
     name = "Spike Shoes"
     depth = 1000
+    gravity_default = 0
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -42,6 +44,7 @@ class oSpikeShoes(oItemParent):
 class oCape(oItemParent):
     name = "Cape"
     depth = 1000
+    gravity_default = 0
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
