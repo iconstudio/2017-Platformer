@@ -4,7 +4,7 @@ from module.constants import *
 from module.game.gobject_header import *
 
 __all__ = [
-    "oRock", "oSpringShoes", "oSpikeShoes", "oCape"
+    "oRock", "oSpringShoes", "oSpikeShoes", "oCape", "oAnkh"
 ]
 
 
@@ -29,7 +29,7 @@ class oSpringShoes(oItemParent):
         self.sprite_set("sSpringShoes")
 
 
-# Object : Shoes with Spring
+# Object : Shoes with Spike
 class oSpikeShoes(oItemParent):
     name = "Spike Shoes"
     depth = 1000
@@ -40,7 +40,7 @@ class oSpikeShoes(oItemParent):
         self.sprite_set("sSpikeShoes")
 
 
-# Object : Shoes with Spring
+# Object : Cape which can double jump
 class oCape(oItemParent):
     name = "Cape"
     depth = 1000
@@ -49,3 +49,14 @@ class oCape(oItemParent):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sCape")
+
+
+# Object : Ankh that adds one life
+class oAnkh(oItemParent):
+    name = "Ankh"
+    depth = 1000
+    gravity_default = 0
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sAnkh")

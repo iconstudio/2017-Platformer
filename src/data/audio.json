@@ -135,6 +135,11 @@
 	"muse": false
   },
   {
+	"name": "sndCollect",
+	"path": "..\\res\\audio\\collect.wav",
+	"muse": false
+  },
+  {
 	"name": "sndKnifePickup",
 	"path": "..\\res\\audio\\knifepickup.ogg",
 	"muse": false

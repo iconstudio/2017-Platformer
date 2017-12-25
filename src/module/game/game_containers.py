@@ -73,6 +73,7 @@ class oPlayer(GObject):
 
         print("Player Created!")
         Camera.set_pos(self.x, self.y)
+        self.startx, self.starty = self.x, self.y
 
     def __del__(self):
         player_instance_set(None)

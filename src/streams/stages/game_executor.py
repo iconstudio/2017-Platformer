@@ -195,15 +195,29 @@ class Stage02(GameExecutor):
     def __init__(self):
         super().__init__()
 
-        self.background_sprite = None
+        self.background_sprite = "bgCave"
         self.where = "stage02"
 
         audio_stream_play("musGame" + str(irandom_range(1, 3)))
 
 
+class Stage03(GameExecutor):
+    def __init__(self):
+        super().__init__()
+
+        self.background_sprite = "bgCave"
+        self.where = "stage03"
+
+        audio_stream_play("musGame" + str(irandom_range(4, 5)))
+
+
 def stage_init():
     # 아래의 타일들은 모든 스테이지에서 적용됨
+
+    # Block
     terrain.terrain_tile_assign(1, oBrickCastle, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(50, oBrickCastleTop, terrain.TYPE_TERRAIN)
+    terrain.terrain_tile_assign(52, oBrickCastleSewer, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(2, oBrickDirt, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(3, oLush, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(23, oDirtBrickFlat, terrain.TYPE_TERRAIN)
@@ -212,6 +226,7 @@ def stage_init():
     terrain.terrain_tile_assign(9, oBlockMetal, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(6, oBlockBlack, terrain.TYPE_TERRAIN)
 
+    # Tree
     terrain.terrain_tile_assign(28, oTreeTrunk, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(29, oTreeTop, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(30, oTreeTopDead, terrain.TYPE_TERRAIN)
@@ -225,6 +240,7 @@ def stage_init():
     terrain.terrain_tile_assign(48, oTreeLeavesEndLeft, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(49, oTreeLeavesDeadEndLeft, terrain.TYPE_TERRAIN)
 
+    # Doodad & Traps
     terrain.terrain_tile_assign(5, oLadder, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(26, oTorch, terrain.TYPE_DOODAD)
     terrain.terrain_tile_assign(10, oGravestone, terrain.TYPE_TERRAIN)
@@ -235,6 +251,7 @@ def stage_init():
     terrain.terrain_tile_assign(39, oWeb, terrain.TYPE_TERRAIN)
     terrain.terrain_tile_assign(40, oThorns, terrain.TYPE_TERRAIN)
 
+    # Entity
     terrain.terrain_tile_assign(25, oPlayer, terrain.TYPE_INSTANCE)
     terrain.terrain_tile_assign(14, oSoldier, terrain.TYPE_INSTANCE)
     terrain.terrain_tile_assign(15, oManBeard, terrain.TYPE_INSTANCE)
@@ -243,15 +260,19 @@ def stage_init():
     terrain.terrain_tile_assign(41, oSpider, terrain.TYPE_INSTANCE)
     terrain.terrain_tile_assign(16, oToad, terrain.TYPE_INSTANCE)
 
+    # Item
+    terrain.terrain_tile_assign(18, oRock, terrain.TYPE_INSTANCE)
     terrain.terrain_tile_assign(43, oCape, terrain.TYPE_INSTANCE)
     terrain.terrain_tile_assign(44, oSpikeShoes, terrain.TYPE_INSTANCE)
     terrain.terrain_tile_assign(45, oSpringShoes, terrain.TYPE_INSTANCE)
+    terrain.terrain_tile_assign(42, oAnkh, terrain.TYPE_INSTANCE)
 
     global stagelist, manager, time_local, time_total, stage_number
     stagelist = []
     stagelist.append(StageIntro)
     stagelist.append(Stage01)
     stagelist.append(Stage02)
+    stagelist.append(Stage03)
     stagelist.reverse()
 
     manager = None

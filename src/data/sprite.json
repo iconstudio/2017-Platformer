@@ -132,6 +132,27 @@
 	"number": 1
   },
   {
+	"name": "sCastleBrickSewer",
+	"path": [
+	  "..\\res\\img\\theme\\brick_castle_sewer_0.png",
+	  "..\\res\\img\\theme\\brick_castle_sewer_1.png",
+	  "..\\res\\img\\theme\\brick_castle_sewer_2.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
+	"name": "sCastleBrickDirectional",
+	"path": [
+	  "..\\res\\img\\theme\\brick_castle_top_0.png",
+	  "..\\res\\img\\theme\\brick_castle_top_1.png"
+	],
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
 	"name": "sLush",
 	"path": [
 	  "..\\res\\img\\theme\\lush_0.png",
@@ -696,5 +717,13 @@
 	"xoffset": 8,
 	"yoffset": 8,
 	"number": 1
+  },
+  {
+	"name": "sAnkh",
+	"path": "..\\res\\img\\item\\ankh_0.png",
+	"xoffset": 8,
+	"yoffset": 8,
+	"number": 1
   }
 ]
+

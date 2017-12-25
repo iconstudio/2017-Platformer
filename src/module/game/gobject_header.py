@@ -208,6 +208,7 @@ class GObject(object):
         self.depth = 1000000
         self.x = -10000
         self.image_xscale = 0
+        self.xVel, self.yVel = 0, 0
         global instance_list, instance_list_spec, instance_update, instance_draw_list
         instance_update = true
 
@@ -312,7 +313,7 @@ class GObject(object):
         self.x = math.floor(self.x)
 
     def move_contact_y(self, dist: float or int = 1, up: bool = false) -> bool:
-        tdist = math.ceil(dist)
+        tdist = math.floor(dist)
         if dist < 0:
             tdist = 1000000
         if dist == 0:
@@ -336,7 +337,7 @@ class GObject(object):
                     self.y += cy
                     return true
                 if up:
-                    cy += 1
+                    cy -= 1
                 else:
                     cy -= 1
                 yprog += 1
@@ -365,6 +366,7 @@ class GObject(object):
                     self.y = math.floor(self.y)
                     if self.onAir:
                         self.onAir = false
+                        self.y += 0.1
                         audio_play("sndLand")
                 else:
                     self.yVel *= -0.3
@@ -422,10 +424,7 @@ class GObject(object):
         else:  # Going down
             yc = ydist - 1
         if self.place_free(0, yc):
-            if frame_time < 0.05:
-                self.y += ydist  # let it moves first.
-            else:
-                self.move_contact_y(ydist, self.yVel > 0)
+            self.y += ydist  # let it moves first.
             self.gravity = self.gravity_default
             self.yVel -= self.gravity * frame_time
             self.onAir = true
@@ -500,6 +499,7 @@ class oItemParent(GObject):
         self.starty = ny
 
     def event_step(self, frame_time):
+        super().event_step(frame_time)
         if self.gravity_default == 0:
             self.y = self.starty + 12 + math.sin(self.rot * math.pi / 180) * 3
             self.rot = (self.rot + 1) % 360

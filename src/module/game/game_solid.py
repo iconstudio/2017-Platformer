@@ -5,7 +5,8 @@ from module.game.gobject_header import *
 from module.game.game_doodad import oLushDecoration, oDirtBrickDecoration
 
 __all__ = [
-    "oBrickCastle", "oLush", "oBrickDirt", "oStonewall", "oLushFlat", "oDirtBrickFlat", "oBlock", "oBlockMetal",
+    "oBrickCastle", "oBrickCastleSewer", "oLush", "oBrickDirt", "oStonewall", "oLushFlat", "oDirtBrickFlat",
+    "oBlock", "oBlockMetal", "oBrickCastleTop",
     "oBlockBlack", "oGravestone", "oGravestoneAsh", "oTreeTrunk", "oTreeTop", "oTreeTopDead", "oTreeLeaves",
     "oTreeLeavesEnd", "oTreeLeavesDeadEnd", "oTreeBranch", "oTreeBranchDead",
     "oTreeLeavesEndLeft", "oTreeLeavesDeadEndLeft", "oTreeBranchLeft", "oTreeBranchDeadLeft",
@@ -20,6 +21,29 @@ class oBrickCastle(Solid):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sCastleBrick")
         self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3)
+
+
+# Castle Top Brick
+class oBrickCastleTop(Solid):
+    name = "Top Brick of Castle"
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sCastleBrickDirectional")
+        if self.tile_down != 1:
+            self.image_index = choose(0, 0, 0, 0, 0, 0, 0, 1, 1, 1)
+        else:
+            self.image_index = 0
+
+
+# Castle Sewer Brick
+class oBrickCastleSewer(Solid):
+    name = "Sewer Brick of Castle"
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sCastleBrickSewer")
+        self.image_index = choose(0, 0, 0, 1, 1, 2, 2)
 
 
 # Lush
