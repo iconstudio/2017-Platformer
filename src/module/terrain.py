@@ -2,9 +2,9 @@ from module.constants import *
 
 from module import framework
 import json
-from module.camera import *
-from module.game.game_item import *
+
 from module.game.gobject_header import *
+from module.game.game_solid import *
 
 __all__ = [
     "terrain_tile_assign", "terrain_tile_clear", "TerrainGenerator",
@@ -37,8 +37,6 @@ class TerrainGenerator:
     parsed: dict = {}
     data: list = []
     number: int = 0
-    grid_w: int = 32
-    grid_h: int = 18
     tile_w: int = 20
     tile_h: int = 20
     map_grid_w: int = 32
@@ -49,21 +47,15 @@ class TerrainGenerator:
         # Parsing
         with open(path_data + paths + ".json") as mapfile:
             self.parsed = json.load(mapfile)
-            self.data = self.parsed["data"]
-            self.number = self.parsed["number"]
-            self.grid_w = self.parsed["grid_w"]
-            self.grid_h = self.parsed["grid_h"]
-            self.tile_w = self.parsed["tile_w"]
-            self.tile_h = self.parsed["tile_h"]
-            self.map_grid_w = self.parsed["map_grid_w"]
-            self.map_grid_h = self.parsed["map_grid_h"]
-            self.time = self.parsed["time"]
+            self.data = self.parsed["layers"][0]["data"]
+            self.floors = self.parsed["layers"][1]["data"]
+            self.tile_w = self.parsed["tilewidth"]
+            self.tile_h = self.parsed["tileheight"]
+            self.map_grid_w = self.parsed["width"]
+            self.map_grid_h = self.parsed["height"]
 
     def get_stage_title(self) -> str:
         return self.parsed["title"]
-
-    def get_stage_number(self) -> int:
-        return self.parsed["number"]
 
     def generate(self):
         print("Generating a chunk.")
@@ -91,14 +83,14 @@ class TerrainGenerator:
                     # obj_identify = obj.identify
                     # print(str(obj) + "<" + str(current) + "> (x = " + str(nx) + ", y = " + str(ny) + ")")
 
-                    if obj.identify == ID_SOLID:
+                    if obj.identify == ID_TILE:
                         try:
                             if i >= self.map_grid_w:  # check top
                                 getu = self.data[i - self.map_grid_w]
                                 whattocheck: str = get_createtype(getu)[0].identify
                                 if getu == current:
                                     obj.tile_up = 1
-                                elif getu != 0 and whattocheck is ID_SOLID:
+                                elif getu != 0 and whattocheck is ID_TILE:
                                     obj.tile_up = 2
                             else:
                                 obj.tile_up = 1
@@ -108,7 +100,7 @@ class TerrainGenerator:
                                 whattocheck: str = get_createtype(getd)[0].identify
                                 if getd == current:
                                     obj.tile_down = 1
-                                elif getd != 0 and whattocheck is ID_SOLID:
+                                elif getd != 0 and whattocheck is ID_TILE:
                                     obj.tile_down = 2
                             else:
                                 obj.tile_down = 1
@@ -118,7 +110,7 @@ class TerrainGenerator:
                                 whattocheck: str = get_createtype(getl)[0].identify
                                 if getl == current:
                                     obj.tile_left = 1
-                                elif getl != 0 and whattocheck is ID_SOLID:
+                                elif getl != 0 and whattocheck is ID_TILE:
                                     obj.tile_left = 2
                             else:
                                 obj.tile_left = 1
@@ -128,7 +120,7 @@ class TerrainGenerator:
                                 whattocheck: str = get_createtype(getr)[0].identify
                                 if getr == current:
                                     obj.tile_right = 1
-                                elif getr != 0 and whattocheck is ID_SOLID:
+                                elif getr != 0 and whattocheck is ID_TILE:
                                     obj.tile_right = 2
                             else:
                                 obj.tile_right = 1
@@ -156,16 +148,26 @@ class TerrainGenerator:
                 nx = 0
                 ny -= self.tile_h
 
-        clist = get_instance_list(ID_SOLID)
+        nx, ny = 0, self.map_grid_h * self.tile_h - 20
+        for i in range(length):
+            current = self.floors[i]
 
-        # Optimization
-        rlist = []
+            if current is 53:  # floor
+                oFloor(0, nx, ny)
+            elif current is 54:  # platform
+                oPlatform(0, nx, ny)
+
+            nx += self.tile_w
+            if nx >= self.map_grid_w * self.tile_w:
+                del prevln
+                prevln = currln.copy()  # push current line back to previous line
+                currln.clear()  # make new list
+
+                nx = 0
+                ny -= self.tile_h
+
+        clist = get_instance_list(ID_TILE)
         for inst in clist:
             inst.tile_correction()
-            if inst.tile_left != 0 and inst.tile_up != 0 and inst.tile_right != 0 and inst.tile_down != 0:
-                rlist.append(inst)
 
-        for inst in rlist:
-            instance_list_remove_something(ID_SOLID_EX, inst)
-
-        framework.stage_number = self.number + 1
+        framework.stage_number += 1

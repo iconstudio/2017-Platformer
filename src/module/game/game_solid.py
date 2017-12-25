@@ -5,12 +5,34 @@ from module.game.gobject_header import *
 from module.game.game_doodad import oLushDecoration, oDirtBrickDecoration
 
 __all__ = [
+    "oFloor", "oPlatform",
     "oBrickCastle", "oBrickCastleSewer", "oLush", "oBrickDirt", "oStonewall", "oLushFlat", "oDirtBrickFlat",
     "oBlock", "oBlockMetal", "oBrickCastleTop",
     "oBlockBlack", "oGravestone", "oGravestoneAsh", "oTreeTrunk", "oTreeTop", "oTreeTopDead", "oTreeLeaves",
     "oTreeLeavesEnd", "oTreeLeavesDeadEnd", "oTreeBranch", "oTreeBranchDead",
     "oTreeLeavesEndLeft", "oTreeLeavesDeadEndLeft", "oTreeBranchLeft", "oTreeBranchDeadLeft",
 ]
+
+
+# Real Solids
+class oFloor(Solid):
+    name = "Floor Hard"
+    identify = ID_SOLID
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sBlank")
+
+
+# Real Solids
+class oPlatform(Solid):
+    name = "Floor Soft"
+    identify = ID_SOLID
+    isPlatform = true
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sBlank")
 
 
 # Castle Brick
@@ -141,10 +163,15 @@ class oBlock(Solid):
 # Block (Metal)
 class oBlockMetal(Solid):
     name = "Iron Block"
+    coll = None
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sBlockMetal")
+        self.coll = oFloor(0, nx, ny)
+
+    def __del__(self):
+        self.coll.destroy()
 
 
 # Block (Black)

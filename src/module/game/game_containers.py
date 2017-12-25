@@ -76,7 +76,6 @@ class oPlayer(GObject):
         self.startx, self.starty = self.x, self.y
 
     def __del__(self):
-        player_instance_set(None)
         Camera.set_taget(None)
 
         print("Player Destroyed!")
@@ -173,10 +172,8 @@ class oPlayer(GObject):
 
         # ===============================================================================================
         elist, ecount = instance_place(oEnemyParent, self.x, self.y)
-        dlist, dcount = instance_place(oEnemyDamage, self.x, self.y)
-        tlist, tcount = elist + dlist, ecount + dcount
-        if tcount > 0:
-            for enemy in tlist:
+        if ecount > 0:
+            for enemy in elist:
                 if not enemy.collide_with_player and enemy.oStatus < oStatusContainer.STUNNED:
                     enemy.collide_with_player = true
                     if enemy.name in (

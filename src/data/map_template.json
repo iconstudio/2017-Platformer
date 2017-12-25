@@ -3,8 +3,8 @@
   "number": 0,
   "data": [
   ],
-  "grid_w": 32,
-  "grid_h": 18,
+  "platform": [
+  ],
   "tile_w": 20,
   "tile_h": 20,
   "map_grid_w": 128,

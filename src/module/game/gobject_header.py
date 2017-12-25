@@ -13,10 +13,10 @@ __all__ = [
     "instance_clear_all", "instance_place_single",
     "instance_last", "instance_list_spec", "instance_draw_list", "instance_update", "instance_list",
     "get_instance_list", "draw_list_sort",
-    "container_player", "GObject", "Solid", "oPlayerDamage", "oEnemyDamage", "oItemParent", "oDoodadParent",
+    "container_player", "GObject", "Solid", "oItemParent", "oDoodadParent",
     "oEffectParent",
-    "ID_OVERALL", "ID_DRAW", "ID_OTHERS", "ID_SOLID", "ID_DMG_PLAYER", "ID_DMG_ENEMY", "ID_ENEMY", "ID_ITEM",
-    "ID_PARTICLE", "ID_DOODAD", "ID_EFFECT", "ID_SOLID_EX", "ID_UI"
+    "ID_OVERALL", "ID_DRAW", "ID_OTHERS", "ID_SOLID", "ID_TILE", "ID_ENEMY", "ID_ITEM",
+    "ID_PARTICLE", "ID_DOODAD", "ID_EFFECT", "ID_UI", "ID_DOODAD_DECO", "ID_TRAP"
 ]
 
 # Global : Variables
@@ -41,23 +41,26 @@ ID_OVERALL: str = "All"
 ID_DRAW: str = "Draw"
 #
 ID_OTHERS: str = "Objects"
-ID_SOLID: str = "Solid"
-ID_SOLID_EX: str = "Solid_Explicit"
+
 ID_PARTICLE: str = "Particle"
 ID_DOODAD: str = "Doodad"
-ID_DMG_PLAYER: str = "HurtPlayer"
-ID_DMG_ENEMY: str = "HurtEnemy"
+ID_DOODAD_DECO: str = "DoodadDecoration"
+ID_TRAP: str = "Trap"
+
+ID_TILE: str = "Tile"
+ID_SOLID: str = "Solid"
+
 ID_ENEMY: str = "Enemy"
 ID_ITEM: str = "Items"
 ID_EFFECT: str = "Effect"
 ID_UI: str = "UI"
 instance_list_spec[ID_OTHERS] = []
-instance_list_spec[ID_SOLID] = []
-instance_list_spec[ID_SOLID_EX] = []
 instance_list_spec[ID_PARTICLE] = []
 instance_list_spec[ID_DOODAD] = []
-instance_list_spec[ID_DMG_PLAYER] = []
-instance_list_spec[ID_DMG_ENEMY] = []
+instance_list_spec[ID_DOODAD_DECO] = []
+instance_list_spec[ID_TRAP] = []
+instance_list_spec[ID_TILE] = []
+instance_list_spec[ID_SOLID] = []
 instance_list_spec[ID_ENEMY] = []
 instance_list_spec[ID_ITEM] = []
 instance_list_spec[ID_EFFECT] = []
@@ -185,8 +188,6 @@ class GObject(object):
         instance_update = true
         if self.identify != "":
             instance_list_spec[self.identify].append(self)
-            if self.identify is ID_SOLID:
-                instance_list_spec[ID_SOLID_EX].append(self)
 
     def __str__(self):
         return self.name
@@ -254,7 +255,7 @@ class GObject(object):
         clist = olist
         if clist is None:
             global instance_list_spec
-            clist = instance_list_spec[ID_SOLID_EX]  # 고체 개체 목록 불러오기
+            clist = instance_list_spec[ID_SOLID]  # 고체 개체 목록 불러오기
 
         toUp = false
         if vy > 0:
@@ -285,7 +286,7 @@ class GObject(object):
             return false
 
         global instance_list_spec
-        clist = instance_list_spec[ID_SOLID_EX]
+        clist = instance_list_spec[ID_SOLID]
         length = len(clist)
         xprog = 0
         cx = 0
@@ -320,7 +321,7 @@ class GObject(object):
             return false
 
         global instance_list_spec
-        clist = instance_list_spec[ID_SOLID_EX]
+        clist = instance_list_spec[ID_SOLID]
         length = len(clist)
         yprog = 0
         cy = 0
@@ -450,7 +451,7 @@ class GObject(object):
 class Solid(GObject):
     # reset some inherited variables
     name = "Solid"
-    identify = ID_SOLID
+    identify = ID_TILE  # It is not real collidable
 
     # 아래에서 통과가능한지의 여부
     isPlatform: bool = false
@@ -468,22 +469,6 @@ class Solid(GObject):
 
     def tile_correction(self):
         pass
-
-
-# Damage caused by Player
-class oPlayerDamage(GObject):
-    name = "DamageP"
-    identify = ID_DMG_PLAYER
-    gravity_default = 0
-    life = fps_target
-
-
-# Damage caused by Enemy
-class oEnemyDamage(GObject):
-    name = "DamageE"
-    identify = ID_DMG_ENEMY
-    gravity_default = 0
-    life = fps_target
 
 
 # Parent of Items

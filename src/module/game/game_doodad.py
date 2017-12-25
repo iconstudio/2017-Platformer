@@ -25,6 +25,7 @@ class oDoor(oDoodadParent):
 class oDoorMetalic(oDoodadParent):
     name = "Metal Door"
     depth = 1000
+    identify = ID_DOODAD_DECO
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -34,6 +35,7 @@ class oDoorMetalic(oDoodadParent):
 # A Decorator of Dirt
 class oDirtBrickDecoration(oDoodadParent):
     name = "Dirt Decoration"
+    identify = ID_DOODAD_DECO
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -44,6 +46,7 @@ class oDirtBrickDecoration(oDoodadParent):
 # A Decorator of Lush
 class oLushDecoration(oDoodadParent):
     name = "Lush Decoration"
+    identify = ID_DOODAD_DECO
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -89,6 +92,7 @@ class oLamp(oDoodadParent):
 class oWeb(oDoodadParent):
     name = "Web"
     depth = 10
+    identify = ID_TRAP
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
@@ -100,6 +104,7 @@ class oWeb(oDoodadParent):
 class oThorns(oDoodadParent):
     name = "Lamp"
     depth = -50
+    identify = ID_TRAP
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)

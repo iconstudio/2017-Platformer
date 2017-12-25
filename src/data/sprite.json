@@ -7,6 +7,13 @@
 	"number": 1
   },
   {
+	"name": "sBlank",
+	"path": "..\\res\\img\\ui\\blank.png",
+	"xoffset": 0,
+	"yoffset": 0,
+	"number": 1
+  },
+  {
 	"name": "sPopupStage",
 	"path": "..\\res\\img\\ui\\popup_stage.png",
 	"xoffset": 10,

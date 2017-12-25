@@ -61,6 +61,7 @@ class ui_PopupStage(GObject):
 
 class GameExecutor:
     terrain_generator = None
+    title = ""
     where: str = ""
     popup = None
     background_sprite = None
@@ -81,7 +82,7 @@ class GameExecutor:
         draw_list_sort()
 
         self.popup = ui_PopupStage(-10000)
-        self.popup.caption = self.terrain_generator.get_stage_title()
+        self.popup.caption = self.title
 
     def update(self, frame_time):
         timer_increase(frame_time)
@@ -168,6 +169,7 @@ class StageIntro(GameExecutor):
     def __init__(self):
         super().__init__()
 
+        self.title = "Stage 1 - Game Begins!"
         self.background_sprite = "bgNight"
         self.where = "stage00"
 
@@ -185,6 +187,7 @@ class Stage01(GameExecutor):
     def __init__(self):
         super().__init__()
 
+        self.title = "Stage 2 - Pit"
         self.background_sprite = "bgCave"
         self.where = "stage01"
 
@@ -195,6 +198,7 @@ class Stage02(GameExecutor):
     def __init__(self):
         super().__init__()
 
+        self.title = "Stage 3 - Cave"
         self.background_sprite = "bgCave"
         self.where = "stage02"
 
@@ -205,6 +209,7 @@ class Stage03(GameExecutor):
     def __init__(self):
         super().__init__()
 
+        self.title = "Stage 4 - Bottom Up"
         self.background_sprite = "bgCave"
         self.where = "stage03"
 
@@ -267,7 +272,7 @@ def stage_init():
     terrain.terrain_tile_assign(45, oSpringShoes, terrain.TYPE_INSTANCE)
     terrain.terrain_tile_assign(42, oAnkh, terrain.TYPE_INSTANCE)
 
-    global stagelist, manager, time_local, time_total, stage_number
+    global stagelist, manager, time_local, time_total
     stagelist = []
     stagelist.append(StageIntro)
     stagelist.append(Stage01)
@@ -276,7 +281,6 @@ def stage_init():
     stagelist.reverse()
 
     manager = None
-    stage_number = 0
 
 
 def stage_create():
@@ -294,9 +298,6 @@ def stage_create():
 
 
 def stage_complete():
-    global manager, stage_number
-    stage_number = manager.terrain_generator.get_stage_number()
-
     stage_clear()
 
     framework.push_state(game_complete)
