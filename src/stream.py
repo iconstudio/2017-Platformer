@@ -1,3 +1,11 @@
+import platform
+import os
+
+if platform.architecture()[0] == '32bit':
+    os.environ["PYSDL2_DLL_PATH"] = "./SDL2/x86"
+else:
+    os.environ["PYSDL2_DLL_PATH"] = "./SDL2/x64"
+
 from module import framework
 
 from module.sprite import *
@@ -62,9 +70,8 @@ if __name__ == "__main__":
     audio_json_loads()
 
     from streams import main
-    from stages import game
     from streams import begin
 
-    framework.run(main)
+    framework.run(begin)
 
     framework.game_end()

@@ -628,10 +628,12 @@ def load_wav(name):
 # for pytmx
 import pytmx
 
+# for pytmx
+from functools import partial
 
 def pico2d_image_loader(filename, colorkey, **kwargs):
-    def extract_image(crect = None, flags = None):
-        if crect:
+    def extract_image(rect = None, flags = None):
+        if rect:
             try:
                 flip = ''
                 if flags.flipped_horizontally:
@@ -641,7 +643,7 @@ def pico2d_image_loader(filename, colorkey, **kwargs):
                 if flags.flipped_diagonally:
                     flip = 'hv'
 
-                return image, crect, flip
+                return image, rect, flip
 
             except ValueError:
                 print('Tile bounds outside bounds of tileset image')
