@@ -9,10 +9,10 @@ else:
 # os.environ["PYSDL2_DLL_PATH"] = os.path.dirname(__file__) + "/SDL2/"
 print("env: " + os.getenv("PYSDL2_DLL_PATH"))
 
-from module import framework
+import framework
 
-from module.sprite import *
-from module.audio import *
+from sprite import *
+from audio import *
 
 """
         비고:
@@ -72,8 +72,7 @@ if __name__ == "__main__":
     sprite_json_loads()
     audio_json_loads()
 
-    from streams import main
-    from streams import begin
+    import begin
 
     framework.run(begin)
 

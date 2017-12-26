@@ -1,10 +1,10 @@
-from module.pico2d import *
-from module.constants import *
+from pico2d import *
+from constants import *
 
-import module.framework as framework
-from stages import game
+import framework as framework
+import game
 
-from module.audio import *
+from audio import *
 
 __all__ = [
     "name", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"

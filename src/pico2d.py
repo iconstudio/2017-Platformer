@@ -1,5 +1,4 @@
 import ctypes
-import cmath
 import math
 import sys
 
@@ -19,8 +18,8 @@ except ImportError:
     print("Error: cannot import pysdl2 - probably not installed")
     sys.exit(-1)  # abort program execution
 
-import module.keycode as keycode
-from module.constants import *
+import keycode as keycode
+from constants import *
 
 window, renderer, debug_font = None, None, None
 canvas_width, canvas_height = 0, 0
@@ -629,7 +628,6 @@ def load_wav(name):
 import pytmx
 
 # for pytmx
-from functools import partial
 
 def pico2d_image_loader(filename, colorkey, **kwargs):
     def extract_image(rect = None, flags = None):

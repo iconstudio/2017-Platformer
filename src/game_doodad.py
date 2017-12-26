@@ -1,7 +1,7 @@
-from module.functions import *
-from module.constants import *
+from functions import *
+from constants import *
 
-from module.game.gobject_header import *
+from gobject_header import *
 
 __all__ = [
     "oDoor", "oDoorMetalic", "oLushDecoration", "oDirtBrickDecoration",

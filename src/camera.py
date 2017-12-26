@@ -1,6 +1,6 @@
-from module.pico2d import *
-from module.functions import *
-from module.constants import *
+from pico2d import *
+from functions import *
+from constants import *
 
 __all__ = [
     "Camera"

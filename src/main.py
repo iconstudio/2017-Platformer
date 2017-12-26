@@ -1,16 +1,15 @@
-from module.pico2d import *
-from module.functions import *
-from module.constants import *
+from pico2d import *
+from functions import *
+from constants import *
 
-from module import framework
-from module.framework import io
-from stages import game
-from stages.game_executor import stage_init
+import framework
+from framework import io
+import game
+from game_executor import stage_init
 import main_option
 
-
-from module.sprite import *
-from module.audio import *
+from sprite import *
+from audio import *
 
 __all__ = [
     "name", "MainMenu", "MenuEnumerator", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"

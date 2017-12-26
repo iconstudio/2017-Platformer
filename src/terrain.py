@@ -1,10 +1,10 @@
-from module.constants import *
+from constants import *
 
-from module import framework
+import framework
 import json
 
-from module.game.gobject_header import *
-from module.game.game_solid import *
+from gobject_header import *
+from game_solid import *
 
 __all__ = [
     "terrain_tile_assign", "terrain_tile_clear", "TerrainGenerator",

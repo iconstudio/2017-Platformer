@@ -5,7 +5,7 @@ import sdl2.pixels as px
 import sdl2.rect as rect
 from sdl2.rect import SDL_Rect
 
-import module.constants as constants
+import constants as constants
 
 
 # Global : Functions

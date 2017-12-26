@@ -1,12 +1,12 @@
-from module.pico2d import *
-from module.functions import *
-from module.constants import *
+from pico2d import *
+from functions import *
+from constants import *
 
 import math
-from module.camera import *
+from camera import *
 
-from module.sprite import *
-from module.audio import *
+from sprite import *
+from audio import *
 
 __all__ = [
     "oStatusContainer", "instance_place", "instance_list_remove_something", "instance_list_clear",

@@ -1,8 +1,8 @@
-from module.constants import *
-from module.functions import *
+from constants import *
+from functions import *
 
-from module.game.gobject_header import *
-from module.game.game_doodad import oLushDecoration, oDirtBrickDecoration
+from gobject_header import *
+from game_doodad import oLushDecoration, oDirtBrickDecoration
 
 __all__ = [
     "oFloor", "oPlatform",

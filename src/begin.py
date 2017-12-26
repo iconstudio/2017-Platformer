@@ -1,11 +1,10 @@
-from module.pico2d import *
-from module.functions import *
-from module.constants import *
+from pico2d import *
+from constants import *
 
-from module import framework
-from streams import main
+import framework
+import main
 
-from module.sprite import *
+from sprite import *
 
 __all__ = [
     "name", "enter", "exit", "update", "handle_events", "draw", "pause", "resume"

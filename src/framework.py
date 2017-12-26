@@ -1,11 +1,10 @@
-from module.pico2d import *
-from module.functions import *
-from module.constants import *
+from pico2d import *
+from constants import *
 
 import json
 
-from module.sprite import *
-from module.audio import *
+from sprite import *
+from audio import *
 
 __all__ = [
     "GameState", "change_state", "push_state", "pop_state", "quit", "run", "option_load",

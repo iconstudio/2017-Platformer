@@ -1,5 +1,5 @@
-from module.pico2d import *
-from module.constants import *
+from pico2d import *
+from constants import *
 
 import json
 

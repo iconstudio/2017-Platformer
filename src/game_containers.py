@@ -1,22 +1,21 @@
-from module.pico2d import *
-from module.functions import *
-from module.constants import *
+from pico2d import *
+from functions import *
+from constants import *
 
 import math
-from cmath import *
-from module import framework
-from module.camera import *
-from module.framework import io
-from streams import game_over
+import framework
+from camera import *
+from framework import io
+import game_over
 
-from module.game.game_solid import *
-from module.game.game_doodad import *
-from module.game.game_item import *
-from module.game.gobject_header import *
-from module.game.game_variables import *
+from game_solid import *
+from game_doodad import *
+from game_item import *
+from gobject_header import *
+from game_variables import *
 
-from module.sprite import *
-from module.audio import *
+from sprite import *
+from audio import *
 
 __all__ = [
     "oPlayer", "oSoldier", "oManBeard", "oSnake", "oCobra", "oSpider", "oToad"
@@ -261,7 +260,7 @@ class oPlayer(GObject):
                     if not self.onAir and io.key_check_pressed(ord('c')):
                         audio_play("sndEnterDoor")
                         self.destroy()
-                        from stages.game_executor import stage_complete
+                        from game_executor import stage_complete
                         stage_complete()
                         return
                     self.pin_index = (self.pin_index + 0.5) % 4

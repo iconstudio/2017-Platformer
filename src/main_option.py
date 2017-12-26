@@ -1,10 +1,10 @@
-from module.pico2d import *
-from module.constants import *
+from pico2d import *
+from constants import *
 
-import module.framework as framework
-from module.keycode import *
+import framework as framework
+from keycode import *
 
-from module.audio import *
+from audio import *
 
 import math
 import json

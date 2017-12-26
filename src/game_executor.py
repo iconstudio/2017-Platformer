@@ -1,23 +1,23 @@
-from module.pico2d import *
-from module.functions import *
-from module.constants import *
+from pico2d import *
+from functions import *
+from constants import *
 
-from module import framework
-from module.framework import io
+import framework
+from framework import io
 import game_pause
-import stages.game_complete as game_complete
+import game_complete as game_complete
 
-from module.camera import *
-from module.sprite import *
-from module.audio import *
-import module.terrain as terrain
-from module.game.game_doodad import *
-from module.game.game_solid import *
+from camera import *
+from sprite import *
+from audio import *
+import terrain as terrain
+from game_doodad import *
+from game_solid import *
 
-from module.game.gobject_header import *
-from module.game.game_containers import *
-from module.game.game_variables import *
-from module.game.game_item import *
+from gobject_header import *
+from game_containers import *
+from game_variables import *
+from game_item import *
 
 __all__ = [
     "stage_init", "stage_complete", "stage_get_number",

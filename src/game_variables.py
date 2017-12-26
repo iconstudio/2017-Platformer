@@ -1,6 +1,4 @@
-from module.pico2d import *
-from module.functions import *
-from module.constants import *
+from constants import *
 
 __all__ = [
     "player_got_damage", "player_lives_clear", "player_get_lives", "player_instance_set", "player_instance_get",
