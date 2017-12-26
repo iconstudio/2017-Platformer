@@ -163,16 +163,12 @@ class oBlock(Solid):
 # Block (Metal)
 class oBlockMetal(Solid):
     name = "Iron Block"
+    identify = ID_SOLID
     coll = None
 
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.sprite_set("sBlockMetal")
-        self.coll = oFloor(0, nx, ny)
-
-    def destroy(self):
-        self.coll.destroy()
-        super().destroy()
 
 
 # Block (Black)

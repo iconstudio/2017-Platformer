@@ -268,7 +268,7 @@ class oPlayer(GObject):
                 instdoor = instance_place_single(oDoorMetalic, self.x, self.y)
                 if instdoor != None:
                     isOn = false
-                    clist = get_instance_list(ID_TILE)
+                    clist = get_instance_list(ID_SOLID)
                     for inst in clist:
                         if isinstance(inst, oBlockMetal):  # isinstance(inst, oDoor):
                             inst.destroy()
