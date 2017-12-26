@@ -109,8 +109,10 @@ def enter():
         mainmenu = MainMenu()
         mainmenu.menu_init()
         mn_begin = mainmenu.menu_add("begin game")
-        mn_opt = mainmenu.menu_add("option")
-        mn_credit = mainmenu.menu_add("credit")
+        #mn_opt = mainmenu.menu_add("option")
+        #mn_credit = mainmenu.menu_add("credit")
+        mn_opt = None
+        mn_credit = None
         mn_end = mainmenu.menu_add("end game")
         audio_stream_play("musTitle")
 

@@ -4,6 +4,7 @@ from module.constants import *
 
 __all__ = [
     "player_got_damage", "player_lives_clear", "player_get_lives", "player_instance_set", "player_instance_get",
+    "player_lives_increase",
     "player_ability_get_status", "player_ability_activate", "PLAYER_AB_DOUBLEJUMP",
     "PLAYER_AB_SPIKESHOES", "PLAYER_AB_SPRINSHOES", "PLAYER_AB_DASH",
     "timer_get", "timer_set_all", "timer_clear", "timer_increase",
@@ -28,6 +29,10 @@ def player_got_damage(how: int):
     global player_lives
     player_lives -= how
 
+
+def player_lives_increase():
+    global player_lives
+    player_lives += 1
 
 def player_lives_clear(how: int = 3):
     global player_lives

@@ -1,187 +1,187 @@
 [
   {
 	"name": "musTitle",
-	"path": "..\\res\\music\\Title.ogg",
+	"path": "res\\music\\Title.ogg",
 	"muse": true
   },
   {
 	"name": "musGame1",
-	"path": "..\\res\\music\\A02_A.ogg",
+	"path": "res\\music\\A02_A.ogg",
 	"muse": true
   },
   {
 	"name": "musGame2",
-	"path": "..\\res\\music\\A02_B.ogg",
+	"path": "res\\music\\A02_B.ogg",
 	"muse": true
   },
   {
 	"name": "musGame3",
-	"path": "..\\res\\music\\A02_C.ogg",
+	"path": "res\\music\\A02_C.ogg",
 	"muse": true
   },
   {
 	"name": "musGame4",
-	"path": "..\\res\\music\\A01_A.ogg",
+	"path": "res\\music\\A01_A.ogg",
 	"muse": true
   },
   {
 	"name": "musGame5",
-	"path": "..\\res\\music\\A01_B.ogg",
+	"path": "res\\music\\A01_B.ogg",
 	"muse": true
   },
   {
 	"name": "musBoss",
-	"path": "..\\res\\music\\boss.ogg",
+	"path": "res\\music\\boss.ogg",
 	"muse": true
   },
   {
 	"name": "musBossIntro",
-	"path": "..\\res\\music\\boss_intro.ogg",
+	"path": "res\\music\\boss_intro.ogg",
 	"muse": false
   },
   {
 	"name": "musAmbientUnderground",
-	"path": "..\\res\\music\\amb_mines.ogg",
+	"path": "res\\music\\amb_mines.ogg",
 	"muse": false
   },
   {
 	"name": "musAmbientForest",
-	"path": "..\\res\\music\\amb_jungle.ogg",
+	"path": "res\\music\\amb_jungle.ogg",
 	"muse": false
   },
   {
 	"name": "sndPopup",
-	"path": "..\\res\\audio\\popup.ogg",
+	"path": "res\\audio\\popup.ogg",
 	"muse": false
   },
   {
 	"name": "sndMenuSelect",
-	"path": "..\\res\\audio\\menu_selection.ogg",
+	"path": "res\\audio\\menu_selection.ogg",
 	"muse": false
   },
   {
 	"name": "sndMenuSwipe",
-	"path": "..\\res\\audio\\menu_swipe.ogg",
+	"path": "res\\audio\\menu_swipe.ogg",
 	"muse": false
   },
   {
 	"name": "sndMenuEnter",
-	"path": "..\\res\\audio\\menu_enter.ogg",
+	"path": "res\\audio\\menu_enter.ogg",
 	"muse": false
   },
   {
 	"name": "sndMsgUp",
-	"path": "..\\res\\audio\\msgup.ogg",
+	"path": "res\\audio\\msgup.ogg",
 	"muse": false
   },
   {
 	"name": "sndPauseIn",
-	"path": "..\\res\\audio\\pause_in.ogg",
+	"path": "res\\audio\\pause_in.ogg",
 	"muse": false
   },
   {
 	"name": "sndPauseOut",
-	"path": "..\\res\\audio\\pause_out.ogg",
+	"path": "res\\audio\\pause_out.ogg",
 	"muse": false
   },
   {
 	"name": "sndEnterDoor",
-	"path": "..\\res\\audio\\intodoor.ogg",
+	"path": "res\\audio\\intodoor.ogg",
 	"muse": false
   },
   {
 	"name": "sndJump",
-	"path": "..\\res\\audio\\jump.ogg",
+	"path": "res\\audio\\jump.ogg",
 	"muse": false
   },
   {
 	"name": "sndLand",
-	"path": "..\\res\\audio\\land.ogg",
+	"path": "res\\audio\\land.ogg",
 	"muse": false
   },
   {
 	"name": "sndPickup",
-	"path": "..\\res\\audio\\pickup.ogg",
+	"path": "res\\audio\\pickup.ogg",
 	"muse": false
   },
   {
 	"name": "sndThud",
-	"path": "..\\res\\audio\\thud.ogg",
+	"path": "res\\audio\\thud.ogg",
 	"muse": false
   },
   {
 	"name": "sndDropItem",
-	"path": "..\\res\\audio\\item_drop.ogg",
+	"path": "res\\audio\\item_drop.ogg",
 	"muse": false
   },
   {
 	"name": "sndDropItemOnWater",
-	"path": "..\\res\\audio\\item_splash.ogg",
+	"path": "res\\audio\\item_splash.ogg",
 	"muse": false
   },
   {
 	"name": "sndBounce",
-	"path": "..\\res\\audio\\bounce.ogg",
+	"path": "res\\audio\\bounce.ogg",
 	"muse": false
   },
   {
 	"name": "sndBounceLit",
-	"path": "..\\res\\audio\\bounce_light.ogg",
+	"path": "res\\audio\\bounce_light.ogg",
 	"muse": false
   },
   {
 	"name": "sndThrow",
-	"path": "..\\res\\audio\\throw_item.ogg",
+	"path": "res\\audio\\throw_item.ogg",
 	"muse": false
   },
   {
 	"name": "sndCollect",
-	"path": "..\\res\\audio\\collect.wav",
+	"path": "res\\audio\\collect.wav",
 	"muse": false
   },
   {
 	"name": "sndKnifePickup",
-	"path": "..\\res\\audio\\knifepickup.ogg",
+	"path": "res\\audio\\knifepickup.ogg",
 	"muse": false
   },
   {
 	"name": "sndKnifeAttack",
-	"path": "..\\res\\audio\\knifeattack.ogg",
+	"path": "res\\audio\\knifeattack.ogg",
 	"muse": false
   },
   {
 	"name": "sndHurt",
-	"path": "..\\res\\audio\\hurt.ogg",
+	"path": "res\\audio\\hurt.ogg",
 	"muse": false
   },
   {
 	"name": "sndHit",
-	"path": "..\\res\\audio\\hit.ogg",
+	"path": "res\\audio\\hit.ogg",
 	"muse": false
   },
   {
 	"name": "sndDie",
-	"path": "..\\res\\audio\\die.ogg",
+	"path": "res\\audio\\die.ogg",
 	"muse": false
   },
   {
 	"name": "sndSnakeAttack",
-	"path": "..\\res\\audio\\snakebite.ogg",
+	"path": "res\\audio\\snakebite.ogg",
 	"muse": false
   },
   {
 	"name": "sndFrog",
-	"path": "..\\res\\audio\\sr_frogburp.ogg",
+	"path": "res\\audio\\sr_frogburp.ogg",
 	"muse": false
   },
   {
 	"name": "sndFrogJump",
-	"path": "..\\res\\audio\\sr_frog.ogg",
+	"path": "res\\audio\\sr_frog.ogg",
 	"muse": false
   },
   {
 	"name": "sndSpiderJump",
-	"path": "..\\res\\audio\\spider_jump.ogg",
+	"path": "res\\audio\\spider_jump.ogg",
 	"muse": false
   }
 

@@ -49,7 +49,7 @@ class oCamera:
 
     def limit(self):
         self.x = clamp(0, int(self.x), self.width_scene - self.width) + self.sx
-        self.y = clamp(0, int(self.y), self.height_scene - self.height + 10) + self.sy
+        self.y = clamp(0, int(self.y), self.height_scene - self.height) + self.sy
 
     def set_pos(self, nx: float = None, ny: float = None):
         if nx is not None:

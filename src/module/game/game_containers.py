@@ -224,24 +224,36 @@ class oPlayer(GObject):
             # ===============================================================================================
             mx, my = 0, 0
             if self.controllable <= 0:  # Player can controllable
+                itemget = false
+
                 instCape: oItemParent = instance_place_single(oCape, self.x, self.y)
                 if instCape != None:
                     instCape.destroy()
                     player_ability_activate(PLAYER_AB_DOUBLEJUMP)
-                    Camera.screen_shake(10)
+                    itemget = true
 
                 instSpringShoes: oItemParent = instance_place_single(oSpringShoes, self.x, self.y)
                 if instSpringShoes != None:
                     instSpringShoes.destroy()
                     player_ability_activate(PLAYER_AB_SPRINSHOES)
                     oPlayer.ability_jump_velocity = 105
-                    Camera.screen_shake(10)
+                    itemget = true
 
                 instSpikeShoes: oItemParent = instance_place_single(oSpikeShoes, self.x, self.y)
                 if instSpikeShoes != None:
                     instSpikeShoes.destroy()
                     player_ability_activate(PLAYER_AB_SPIKESHOES)
-                    Camera.screen_shake(10)
+                    itemget = true
+
+                instAnkh: oItemParent = instance_place_single(oAnkh, self.x, self.y)
+                if instAnkh != None:
+                    instAnkh.destroy()
+                    player_lives_increase()
+                    itemget = true
+
+                if itemget:
+                    Camera.screen_shake(5)
+                    audio_play("sndCollect")
 
                 instdoor = instance_place_single(oDoor, self.x, self.y)
                 self.door_popup = instdoor
@@ -253,18 +265,18 @@ class oPlayer(GObject):
                         stage_complete()
                         return
                     self.pin_index = (self.pin_index + 0.5) % 4
-                else:
+
+                instdoor = instance_place_single(oDoorMetalic, self.x, self.y)
+                if instdoor != None:
                     isOn = false
-                    ln, cnt = instance_place(oDoorMetalic, self.x, self.y)
-                    if cnt > 0:
-                        clist = get_instance_list(ID_SOLID)
-                        for inst in clist:
-                            if isinstance(inst, oBlockMetal):  # isinstance(inst, oDoor):
-                                inst.destroy()
-                                inst.x = -100000
-                                isOn = true
-                        if isOn:
-                            Camera.screen_shake(30)
+                    clist = get_instance_list(ID_TILE)
+                    for inst in clist:
+                        if isinstance(inst, oBlockMetal):  # isinstance(inst, oDoor):
+                            inst.destroy()
+                            inst.x = -100000
+                            isOn = true
+                    if isOn:
+                        Camera.screen_shake(30)
 
                 # Move
                 if io.key_check(SDLK_LEFT): mx -= 1

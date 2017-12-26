@@ -16,7 +16,7 @@ phy_mess = 10.0 / 1
 phy_velocity = (((1000.0 / 60.0) / 60.0) * phy_mess)
 phy_gravity = phy_velocity * 100
 
-path_resource = "..\\res\\"
+path_resource = "res\\"
 path_image = path_resource + "img\\"
 path_font = path_resource + "font\\"
 path_theme = path_image + "theme\\"
