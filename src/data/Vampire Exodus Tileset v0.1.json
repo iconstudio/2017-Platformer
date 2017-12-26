@@ -8,7 +8,7 @@
  "margin":0,
  "name":"Vampire Exodus Tileset v0.1",
  "spacing":0,
- "tilecount":52,
+ "tilecount":55,
  "tileheight":32,
  "tiles":
     {
@@ -301,6 +301,24 @@
          "imageheight":20,
          "imagewidth":20
         },
+     "54":
+        {
+         "image":"..\/res\/img\/entity\/YetiKing.png",
+         "imageheight":32,
+         "imagewidth":32
+        },
+     "55":
+        {
+         "image":"..\/res\/img\/theme\/ice_0.png",
+         "imageheight":20,
+         "imagewidth":20
+        },
+     "56":
+        {
+         "image":"..\/res\/img\/theme\/block_ice_0.png",
+         "imageheight":16,
+         "imagewidth":16
+        },
      "6":
         {
          "image":"..\/..\/res\/img\/theme\/door_metalic_0.png",
@@ -326,6 +344,6 @@
          "imagewidth":20
         }
     },
- "tilewidth":20,
+ "tilewidth":32,
  "type":"tileset"
 }

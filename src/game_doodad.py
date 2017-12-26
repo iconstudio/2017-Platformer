@@ -6,7 +6,8 @@ from gobject_header import *
 __all__ = [
     "oDoor", "oDoorMetalic", "oLushDecoration", "oDirtBrickDecoration",
     "oMillHousechip", "oMillHousestone", "oMillHousechipL", "oMillHousechipR",
-    "oMillHousechipM", "oTorch", "oLadder", "oLamp", "oWeb", "oThorns"
+    "oMillHousechipM", "oTorch", "oLadder", "oLamp", "oWeb", "oThorns",
+    "oIce", "oIceBlock",
 ]
 
 
@@ -156,3 +157,23 @@ class oMillHousechipM(oMillHousechip):
     def __init__(self, ndepth, nx, ny):
         super().__init__(ndepth, nx, ny)
         self.image_index = 3
+
+
+# Ice at boss
+class oIce(oDoodadParent):
+    name = "Ice"
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sIce")
+
+
+class oIceBlock(oEffectParent):
+    name = "Ice Block"
+    depth = 900
+    image_index = 0
+    gravity_default = delta_gravity()
+
+    def __init__(self, ndepth, nx, ny):
+        super().__init__(ndepth, nx, ny)
+        self.sprite_set("sBlockIce")

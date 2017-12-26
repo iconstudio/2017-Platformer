@@ -118,3 +118,4 @@ ENV/
 /*.lnk
 /s.h
 /slides/res/*.jpg
+/res

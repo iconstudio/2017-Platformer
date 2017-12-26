@@ -5,6 +5,11 @@
 	"muse": true
   },
   {
+	"name": "musCredit",
+	"path": "res\\music\\credit.ogg",
+	"muse": false
+  },
+  {
 	"name": "musGame1",
 	"path": "res\\music\\A02_A.ogg",
 	"muse": true

@@ -23,25 +23,25 @@ from audio import *
                 1. hFontSml, hFont, hFontLrg 이외의 폰트는 모두 소문자로 쓴다. (e.g. hfontsmall)
             4. 파일 별 설명:
                 01. stream.py : 실행부
-                02. streams\begin.py : 로고 표시
-                03. streams\main.py : 메인 메뉴
-                04. streams\stage_intro.py : 게임
-                05. streams\game_pause.py : 게임 일시 정지
-                06. streams\game_over.py : 게임 오버
-                07. module\pico2d.py : 수정된 PICO2D 파일
-                08. module\keycode.py : 수정된 키코드 파일
-                09. module\functions.py : 모든 곳에서 공통적으로 사용하는 함수 모음
+                02. begin.py : 로고 표시
+                03. main.py : 메인 메뉴
+                04. stage_intro.py : 게임
+                05. game_pause.py : 게임 일시 정지
+                06. game_over.py : 게임 오버
+                07. pico2d.py : 수정된 PICO2D 파일
+                08. keycode.py : 수정된 키코드 파일
+                09. functions.py : 모든 곳에서 공통적으로 사용하는 함수 모음
                     1. 계산 등
-                10. module\constants.py : 모든 곳에서 공통적으로 사용하는 상수 모음
+                10. onstants.py : 모든 곳에서 공통적으로 사용하는 상수 모음
                     1. 전역 상수들 (색, 물리 상수 / 함수 등)
                     2.
-                11. module\framework.py : 프레임워크
+                11. framework.py : 프레임워크
                     1. 유저 입출력 관리 객체 io
                     2. 카메라 객체 Camera
                     3. 기타 전역 변수들
-                12. module\sprite.py : 스프라이트 관리 담당
-                13. module\terrain.py : 지형 생성 담당
-                14. module\game : 본 게임에 쓰이는 파일 모음
+                12. sprite.py : 스프라이트 관리 담당
+                13. terrain.py : 지형 생성 담당
+                14. game_* : 본 게임에 쓰이는 파일들
                 15. data\map_template.json : 지도 틀
                 16. data\option.json : 옵션 파일
                 17. data\sprite.json : 불러올 스프라이트 목록 파일

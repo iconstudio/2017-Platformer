@@ -170,8 +170,9 @@ class oBlockMetal(Solid):
         self.sprite_set("sBlockMetal")
         self.coll = oFloor(0, nx, ny)
 
-    def __del__(self):
+    def destroy(self):
         self.coll.destroy()
+        super().destroy()
 
 
 # Block (Black)

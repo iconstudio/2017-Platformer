@@ -5,7 +5,8 @@ from constants import *
 import framework
 from framework import io
 import game_pause
-import game_complete as game_complete
+import game_complete
+import game_clear_all
 
 from camera import *
 from sprite import *
@@ -216,6 +217,17 @@ class Stage03(GameExecutor):
         audio_stream_play("musGame" + str(irandom_range(4, 5)))
 
 
+class Stage04(GameExecutor):
+    def __init__(self):
+        super().__init__()
+
+        self.title = "Stage 5 - The End"
+        self.background_sprite = "bgCave"
+        self.where = "stage04"
+
+        audio_stream_play("musBoss")
+
+
 def stage_init():
     # 아래의 타일들은 모든 스테이지에서 적용됨
 
@@ -278,6 +290,7 @@ def stage_init():
     stagelist.append(Stage01)
     stagelist.append(Stage02)
     stagelist.append(Stage03)
+    stagelist.append(Stage04)
     stagelist.reverse()
 
     manager = None
@@ -293,15 +306,19 @@ def stage_create():
             manager = stg_type()
         manager.generate()
         return manager
-    else:
-        raise RuntimeError("남은 스테이지가 없습니다!")
+    else:  # Game complete!
+        pass
 
 
 def stage_complete():
     stage_clear()
 
-    framework.push_state(game_complete)
     audio_stream_stop()
+    global stagelist
+    if len(stagelist) > 0:
+        framework.push_state(game_complete)
+    else:
+        framework.change_state(game_clear_all)
 
 
 def stage_clear():

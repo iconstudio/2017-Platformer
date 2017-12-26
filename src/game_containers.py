@@ -190,7 +190,7 @@ class oPlayer(GObject):
             if howmany > 0 > self.yVel and self.onAir:
                 for enemy in whothere:
                     if enemy.oStatus < oStatusContainer.STUNNED:
-                        if enemy.name not in ("ManEater", "Lavaman",):  # Cannot stomping these kind of enemies.
+                        if enemy.name not in ("ManEater", "Yeti",):  # Cannot stomping these kind of enemies.
                             self.yVel = 60
                             if player_ability_get_status(PLAYER_AB_SPIKESHOES):
                                 enemy.hp -= 3

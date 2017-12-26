@@ -159,10 +159,6 @@ class TerrainGenerator:
 
             nx += self.tile_w
             if nx >= self.map_grid_w * self.tile_w:
-                del prevln
-                prevln = currln.copy()  # push current line back to previous line
-                currln.clear()  # make new list
-
                 nx = 0
                 ny -= self.tile_h
 
