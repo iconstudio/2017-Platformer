@@ -1,9 +1,12 @@
 import platform
 import os
 
-os.environ["PYSDL2_DLL_PATH"] = os.path.dirname(__file__) + "/SDL2/"
+if platform.architecture()[0] == '32bit':
+    os.environ["PYSDL2_DLL_PATH"] = "SDL2/x86"
+else:
+    os.environ["PYSDL2_DLL_PATH"] = "SDL2/x64"
 
-
+#os.environ["PYSDL2_DLL_PATH"] = os.path.dirname(__file__) + "/SDL2/"
 print("env: " + os.getenv("PYSDL2_DLL_PATH"))
 
 from module import framework
